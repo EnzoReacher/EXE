@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f6f2" />
+    <meta
+      name="description"
+      content="Prototype giúp sinh viên đối chiếu CV với một mô tả công việc và xem bằng chứng đang có trong hồ sơ."
+    />
+    <title>CV Compass — Đọc rõ khoảng cách CV và công việc</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./src/app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="CV Compass, về đầu trang">
+        <span class="brand-mark" aria-hidden="true">c</span>
+        <span>CV Compass <span class="brand-tag">PROTOTYPE</span></span>
+      </a>
+      <nav class="header-links" aria-label="Điều hướng chính">
+        <a href="#how-it-works">Cách hoạt động</a>
+        <a href="#privacy">Quyền riêng tư</a>
+      </nav>
+      <span class="audience-pill">Dành cho sinh viên &amp; người mới tốt nghiệp</span>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> BƯỚC ĐẦU TRÊN HÀNH TRÌNH NGHỀ NGHIỆP</p>
+          <h1 id="hero-title">CV của bạn đang <em>chứng minh được</em> điều gì?</h1>
+          <p class="hero-lede">
+            Đối chiếu hồ sơ với một vị trí cụ thể. Xem yêu cầu nào đã có bằng chứng,
+            điều gì chưa được thể hiện và nên cải thiện phần nào trước.
+          </p>
+          <div class="hero-notes">
+            <span><span class="check-icon" aria-hidden="true">✓</span> Bám theo nội dung bạn cung cấp</span>
+            <span><span class="check-icon" aria-hidden="true">✓</span> Không biến thiếu thông tin thành thiếu năng lực</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="spark spark-one">✳</div>
+          <div class="spark spark-two">✳</div>
+          <div class="mini-card card-cv">
+            <span class="mini-label">CV HIỆN TẠI</span>
+            <span class="mini-line line-long"></span>
+            <span class="mini-line line-mid"></span>
+            <span class="mini-line line-short"></span>
+            <span class="mini-chip">Kinh nghiệm</span>
+          </div>
+          <div class="connector"><span></span></div>
+          <div class="match-bubble"><span>CV</span><span class="bubble-arrow">↔</span><span>JD</span></div>
+          <div class="mini-card card-job">
+            <span class="mini-label">VỊ TRÍ MỤC TIÊU</span>
+            <span class="mini-line line-long"></span>
+            <span class="mini-line line-mid"></span>
+            <span class="mini-tag">Yêu cầu công việc</span>
+          </div>
+          <div class="hero-caption">Từ hồ sơ hiện tại đến bước tiếp theo rõ ràng hơn.</div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Công cụ đối chiếu CV với công việc">
+        <div class="section-heading" id="how-it-works">
+          <div>
+            <p class="eyebrow">THỬ LUỒNG GIÁ TRỊ CỐT LÕI</p>
+            <h2>Một hồ sơ. Một công việc. Một góc nhìn rõ hơn.</h2>
+          </div>
+          <button class="text-button" id="load-sample" type="button">Điền dữ liệu mẫu <span aria-hidden="true">↗</span></button>
+        </div>
+
+        <div class="prototype-banner" role="note">
+          <span class="prototype-icon" aria-hidden="true">i</span>
+          <p>
+            <strong>Bản thử nghiệm ban đầu:</strong> công cụ dùng đối chiếu từ khóa minh bạch,
+            chưa kết nối AI và chưa đánh giá năng lực thật. Kết quả chỉ cho biết điều gì
+            đang được nêu trong CV.
+          </p>
+        </div>
+
+        <form id="analysis-form" class="input-grid">
+          <section class="input-panel" aria-labelledby="cv-panel-title">
+            <div class="panel-title-row">
+              <span class="step-number">01</span>
+              <div>
+                <h3 id="cv-panel-title">CV hiện tại</h3>
+                <p>Dán nội dung CV hoặc dùng hồ sơ mẫu hư cấu.</p>
+              </div>
+            </div>
+            <label class="field-label" for="cv-text">Nội dung hồ sơ</label>
+            <textarea id="cv-text" name="cv" rows="15" required minlength="30" placeholder="Dán phần học vấn, kỹ năng, dự án và kinh nghiệm của bạn…"></textarea>
+            <div class="field-footer">
+              <span id="cv-count">0 ký tự</span>
+              <span>Không cần thông tin liên hệ</span>
+            </div>
+          </section>
+
+          <section class="input-panel job-panel" aria-labelledby="job-panel-title">
+            <div class="panel-title-row">
+              <span class="step-number">02</span>
+              <div>
+                <h3 id="job-panel-title">Công việc bạn quan tâm</h3>
+                <p>Thêm vị trí và dán yêu cầu tuyển dụng.</p>
+              </div>
+            </div>
+            <label class="field-label" for="role-title">Tên vị trí</label>
+            <input id="role-title" name="role" type="text" required maxlength="100" placeholder="Ví dụ: Backend Developer Intern" />
+            <label class="field-label jd-label" for="jd-text">Mô tả công việc (JD)</label>
+            <textarea id="jd-text" name="jd" rows="10" required minlength="30" placeholder="Dán mô tả công việc hoặc các yêu cầu chính…"></textarea>
+            <div class="field-footer">
+              <span id="jd-count">0 ký tự</span>
+              <span>Ưu tiên yêu cầu kỹ năng cụ thể</span>
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <p class="privacy-inline"><span aria-hidden="true">◈</span> Dữ liệu chỉ được xử lý trong trình duyệt này.</p>
+            <button class="primary-button" id="analyze-button" type="submit">
+              <span>Đối chiếu CV với JD</span><span class="button-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </form>
+
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+
+        <section id="results" class="results-section" aria-labelledby="results-title" hidden>
+          <div class="results-header">
+            <div>
+              <p class="eyebrow">BÁO CÁO THAM KHẢO</p>
+              <h2 id="results-title">Những gì CV đang thể hiện</h2>
+              <p id="results-subtitle" class="results-subtitle"></p>
+            </div>
+            <button class="secondary-button" id="clear-results" type="button">Xóa kết quả</button>
+          </div>
+          <div class="summary-grid" id="summary-grid" aria-label="Tóm tắt kết quả"></div>
+          <div class="findings-layout">
+            <div class="findings-panel">
+              <div class="findings-heading">
+                <h3>Đối chiếu từng yêu cầu</h3>
+                <span id="requirement-count" class="count-pill"></span>
+              </div>
+              <p class="findings-intro">“Chưa thấy trong CV” nghĩa là văn bản bạn dán chưa nêu điều đó; không kết luận bạn không có kỹ năng.</p>
+              <div id="findings-list" class="findings-list"></div>
+            </div>
+            <aside class="actions-panel" aria-labelledby="actions-title">
+              <div class="actions-icon" aria-hidden="true">↗</div>
+              <p class="eyebrow">BƯỚC TIẾP THEO</p>
+              <h3 id="actions-title">Có thể làm gì?</h3>
+              <p class="actions-intro">Ưu tiên làm rõ bằng chứng thật trước khi viết lại CV.</p>
+              <ol id="action-list" class="action-list"></ol>
+            </aside>
+          </div>
+          <p class="results-disclaimer">Đây là bản đối chiếu từ khóa thử nghiệm, không phải chấm điểm tuyển dụng, đánh giá năng lực hay dự đoán khả năng được nhận việc.</p>
+        </section>
+      </section>
+
+      <section id="privacy" class="privacy-section" aria-labelledby="privacy-title">
+        <div class="privacy-symbol" aria-hidden="true">◎</div>
+        <div>
+          <p class="eyebrow">THIẾT KẾ CÓ Ý THỨC VỀ QUYỀN RIÊNG TƯ</p>
+          <h2 id="privacy-title">CV của bạn không rời khỏi trình duyệt.</h2>
+          <p>Prototype này không gửi, lưu hoặc tải CV lên máy chủ. Hãy chỉ dùng dữ liệu mẫu hoặc dữ liệu bạn được phép sử dụng.</p>
+        </div>
+        <div class="privacy-points">
+          <span><b>01</b> Không đăng nhập</span>
+          <span><b>02</b> Không lưu hồ sơ</span>
+          <span><b>03</b> Không gọi dịch vụ AI</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true">c</span><span>CV Compass</span></a>
+      <span>Prototype môn EXE101 · Chưa phải sản phẩm tuyển dụng hoàn chỉnh</span>
+    </footer>
+  </body>
+</html>
