@@ -1,11 +1,11 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-01
-**Status:** First local web-app slice implemented; product backend and private CV processing have not started.
+**Status:** M0 web-app slice is on a GitHub review branch; product backend and private CV processing have not started.
 
 ## Completed in this build part
 
-- Cloned the clean `main` baseline and created the local branch `codex/exe-web-app-m0`.
+- Cloned the clean `main` baseline and created `codex/exe-web-app-m0` locally and on GitHub for source review.
 - Added the Next.js App Router and TypeScript application foundation.
 - Built a responsive workspace overview with the project's core value proposition and assessment path.
 - Added a clearly labeled fictional report preview using supported, partial, and missing-evidence examples; it has no match score.
@@ -27,10 +27,10 @@
 - Next.js and TypeScript are used as a reversible UI baseline. The team still needs to confirm the complete stack before persistent storage, authentication, or AI integration.
 - PDF/DOCX and the first job-family examples remain prototype assumptions; confirm them through team discussion and CP2 research.
 - The sample report is fictional and does not represent an analysis of user-provided information.
-- No code was committed or pushed, and nothing was deployed or published.
+- Committed as [`a19d72e`](https://github.com/EnzoReacher/EXE/commit/a19d72e553a6e334400bde507903b944e3b0d3eb) on the review branch. `main` is unchanged; no merge or deployment was initiated.
 
 ## Resume from here
 
-1. Review the local overview and assessment form.
+1. Review the overview and assessment form on the M0 branch.
 2. Confirm the engineering direction and the intake data/privacy decisions in `docs/DECISIONS.md`.
 3. Continue with the next part in `docs/APP_BUILD_TRACKER.md`: secure CV/JD intake, ownership, and deletion behavior.

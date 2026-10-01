@@ -1,10 +1,10 @@
 # EXE Web App Build Tracker
 
-This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. Do not publish or deploy without the project owner's approval.
+This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. The GitHub feature branch is for source review; do not merge to `main` or deploy without the project owner's approval.
 
 | Part | Status | Scope | Exit criteria |
 |---|---|---|---|
-| M0 — Local app shell | Complete, awaiting owner review | Next.js + TypeScript shell, responsive overview, fictional report example, CV/JD intake UI, browser-only validation | App builds; lint and type checks pass; no file or job data leaves the browser; no deployment |
+| M0 — Web app shell | Complete, awaiting owner review | Next.js + TypeScript shell, responsive overview, fictional report example, CV/JD intake UI, browser-only validation | App builds; lint and type checks pass; no file or job data leaves the browser; no deployment |
 | M1 — Secure intake and identity | Pending decisions | Minimal identity, private CV storage, PDF/DOCX parsing, target role/JD persistence, replace/delete controls | Ownership enforced on reads/writes/deletes; parse failures recover; CV and derived text can be deleted |
 | M2 — Evidence-based analysis | Pending | Requirement extraction, supported/partial/unclear/missing findings, CV evidence excerpts, caveats | Each supported finding points to source evidence; no unsupported skill claims; provider output validated |
 | M3 — Roadmap and grounded CV draft | Pending | Prioritized next steps and editable job-specific CV draft with source provenance | Actions connect to gaps; draft claims trace to user facts; user reviews changes before use |
@@ -14,7 +14,8 @@ This tracks engineering work separately from course grading checkpoints. Mark a 
 
 ## M0 review notes
 
-- Working branch: `codex/exe-web-app-m0` (local only).
+- Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.
+- `main` remains unchanged; the branch has not been merged or deployed.
 - Review routes: `/` and `/assessment`.
 - Commands: `pnpm dev`, `pnpm lint`, `pnpm typecheck`, `pnpm build`.
 - The form only validates fields in the browser. It does not upload, save, parse, or analyze selected content.
@@ -25,4 +26,4 @@ This tracks engineering work separately from course grading checkpoints. Mark a 
 - Use fictional or explicitly consented test content only.
 - Never invent user skills, experience, survey results, quotes, market facts, or hiring outcomes.
 - Keep CVs private, make sharing user-controlled, and include deletion of both source and derived data before accepting real CVs.
-- Keep the app local until the project owner explicitly approves publication or deployment.
+- Keep changes on the review branch until the project owner approves a merge or deployment. Do not accept real CVs until private processing, ownership, and deletion are implemented and reviewed.

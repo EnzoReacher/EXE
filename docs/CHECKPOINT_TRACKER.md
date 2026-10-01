@@ -39,4 +39,4 @@ Keep one dated evidence item per file in `docs/evidence/`: interview guide, anon
 
 ## App implementation status
 
-Course checkpoint completion remains unchanged. Track engineering parts, checks, and remaining product work in [`APP_BUILD_TRACKER.md`](APP_BUILD_TRACKER.md); the current local slice is not yet a completed CP1 MVP demo.
+Course checkpoint completion remains unchanged. Track engineering parts, checks, and remaining product work in [`APP_BUILD_TRACKER.md`](APP_BUILD_TRACKER.md); the M0 app slice is not yet a completed CP1 MVP demo.

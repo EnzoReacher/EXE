@@ -40,4 +40,4 @@ Open `http://localhost:3000`. The overview and assessment-intake screens are UI-
 
 ## Current project state
 
-The repository now contains the first local web-app slice on branch `codex/exe-web-app-m0`: a responsive workspace overview, a fictional evidence-report preview, and a CV/JD intake form with browser-only validation. No real CV processing, database, authentication, or AI integration is connected. See the [current state](docs/CURRENT_STATE.md) and [app build tracker](docs/APP_BUILD_TRACKER.md).
+The repository now contains the first M0 web-app slice on [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed to GitHub for source review. It includes a responsive workspace overview, a fictional evidence-report preview, and a CV/JD intake form with browser-only validation. The branch has not been merged or deployed. No real CV processing, database, authentication, or AI integration is connected. See the [current state](docs/CURRENT_STATE.md) and [app build tracker](docs/APP_BUILD_TRACKER.md).
