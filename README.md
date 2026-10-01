@@ -17,7 +17,7 @@ Upload a CV, provide a target job description, receive an evidence-based fit and
 
 ## Working architecture proposal
 
-The repository proposes a single modular web app using Next.js and TypeScript, with Supabase for authentication, Postgres, and private CV storage, plus a server-side AI provider adapter. The local UI shell uses Next.js and TypeScript as a reversible starting point. Supabase and AI provider choices still need team confirmation before integration; the course materials do not mandate a stack.
+The repository uses a single modular web app with Next.js, TypeScript, and Supabase Auth/Postgres/private Storage. An AI provider is still unselected. M2 therefore uses a server-side, deterministic wording prototype: no CV or job text is sent to an external AI service, and its categories are not a measure of proficiency or hiring likelihood.
 
 ## Run the local prototype
 
@@ -26,7 +26,7 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and private, owner-scoped CV/job intake when the placeholder values in `.env.example` are configured for a reviewed Supabase project. It accepts PDF/DOCX CVs up to 5 MiB and does not call an AI provider. Until local Supabase policy tests and provider retention settings are reviewed, use fictional/sample information only.
+Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and private, owner-scoped CV/job intake when placeholder values are configured for a reviewed Supabase project. It accepts PDF/DOCX CVs up to 5 MiB. Select a saved CV and job to create an evidence report. M2 uses local text matching only and does not call an AI provider. Use fictional/sample information until the team reviews Supabase backup, retention, deletion, and the M2 database policies.
 
 ## Course checkpoints
 
@@ -40,4 +40,4 @@ Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and
 
 ## Current project state
 
-The repository contains an M1 secure-intake implementation on `codex/exe-web-app-m1`, based on M0 commit `5852f10`. It adds Supabase Auth, private owner-scoped CV and job intake, server-side PDF/DOCX parsing, and replace/delete states without selecting or using an AI provider. The branch has not been merged or deployed. See the [current state](docs/CURRENT_STATE.md) and [app build tracker](docs/APP_BUILD_TRACKER.md) for the required Supabase policy-review limitation.
+The repository's M2 review branch is `codex/exe-web-app-m2`, based on M1 commit `7909dc8`. It adds an owner-scoped evidence report with a local wording matcher, schema validation, traceable CV excerpts, and retryable analysis runs. M1 local two-user Supabase policy checks passed. M2 unit checks are part of `pnpm test:supabase:local`, but the M2 Supabase integration check still needs to be run. No branch has been merged and no deployment was initiated. Review [current state](docs/CURRENT_STATE.md) and the [app build tracker](docs/APP_BUILD_TRACKER.md) for details.

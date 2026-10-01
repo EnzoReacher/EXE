@@ -18,6 +18,7 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | D-010 | M1 has a 5 MiB (`5,242,880` bytes) upload limit. Server validation uses filename, PDF signature, and DOCX archive markers; browser MIME type is not trusted. | Implementation decision, 2026-10-01 | Limits resource use and blocks simple file-type spoofing. |
 | D-011 | M1 private deletion removes the live Supabase Storage object first, then its row and extracted text. A storage failure leaves a `delete_failed` record for retry. | Implementation decision, 2026-10-01 | Avoids falsely reporting deletion while the original remains. |
 | D-012 | The selected parsers produce normalized raw text in M1; stable page/section locations are not persisted because the parser output does not reliably expose them across both supported formats. | Implementation limit, 2026-10-01 | Preserve source-location context in a later parser upgrade before evidence analysis begins. |
+| D-013 | M2 uses a deterministic local evidence adapter while the team has not selected an AI provider. It returns wording-based findings only and sends no CV/JD text to an external service. | Reversible M2 prototype decision, 2026-10-01 | Lets the team review the end-to-end report safely; does not approve an AI vendor or make a proficiency/hiring claim. |
 
 ## Proposed technical/product choices — team confirmation needed
 
@@ -40,6 +41,7 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | 2026-10-01 | Push M0 to `codex/exe-web-app-m0` for source review; keep `main` and deployment unchanged. | Project owner | User requested automatic GitHub updates and stated that nothing goes live without approval. | Get explicit approval before merging or deploying. |
 | 2026-10-01 | Approve M1 secure CV and target-job intake: Supabase Auth/Postgres/private Storage; PDF and DOCX only; AI unselected and out of scope. | Project owner | Explicit M1 direction. | Implement ownership policies, server-side parsing, replace/delete, and target-job persistence only. |
 | 2026-10-01 | Set M1 CV upload maximum to 5 MiB and preserve only server-extracted document text in the owner-scoped CV record. | Implementation | Explicit, configurable resource boundary; no AI provider receives CV or job content. | Review Supabase project backup/retention settings before accepting real CVs. |
+| 2026-10-01 | Start M2 from the accepted M1 branch and use a server-side local wording matcher until an AI provider and its data handling are approved. | Project owner / implementation | Owner requested the next milestone; the M1 branch records passing local two-user policy acceptance. | Review M2 output and run the M2 local Supabase RLS/cascade acceptance script. Do not merge or deploy without owner approval. |
 
 ## Instructor questions
 

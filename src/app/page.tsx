@@ -93,7 +93,7 @@ export default function Home() {
               <div className="report-footnote"><span aria-hidden="true">ⓘ</span>This fictional example demonstrates evidence labels; it is not based on your CV.</div>
             </div>
           </section>
-          <footer className="page-footer"><span>EXE · Career readiness platform</span><span>Prototype data only · No CVs are uploaded or analyzed yet</span></footer>
+          <footer className="page-footer"><span>EXE · Career readiness platform</span><span>Fictional preview · M2 reports use local wording checks; no AI provider is connected</span></footer>
         </div>
       </main>
     </div>

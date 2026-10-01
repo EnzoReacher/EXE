@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 type Cv = { id: string; originalFilename: string; byteSize: number; processingStatus: "processing" | "ready" | "failed" | "deleting" | "delete_failed"; parseErrorCode: string | null };
 type Job = { id: string; roleTitle: string; companyName: string | null };
@@ -15,20 +16,28 @@ async function responseJson(response: Response) {
 }
 
 export default function AssessmentForm() {
+  const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [cvs, setCvs] = useState<Cv[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedCvId, setSelectedCvId] = useState("");
+  const [selectedJobId, setSelectedJobId] = useState("");
+  const [clientRequestId, setClientRequestId] = useState<string | null>(null);
   const [fileError, setFileError] = useState("");
   const [notice, setNotice] = useState<Notice>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
   const [replaceCvId, setReplaceCvId] = useState<string | null>(null);
 
   async function loadWorkspace() {
     setLoading(true);
     try {
       const [cvData, jobData] = await Promise.all([fetch("/api/intake/cv").then(responseJson), fetch("/api/intake/jobs").then(responseJson)]);
-      setCvs(cvData.cvs); setJobs(jobData.jobs); setNotice(null);
+      setCvs(cvData.cvs); setJobs(jobData.jobs);
+      setSelectedCvId((current) => current || cvData.cvs.find((cv: Cv) => cv.processingStatus === "ready")?.id || "");
+      setSelectedJobId((current) => current || jobData.jobs[0]?.id || "");
+      setNotice(null);
     } catch (error) { setNotice({ tone: "error", text: error instanceof Error ? error.message : "Sign in to access your private workspace." }); }
     finally { setLoading(false); }
   }
@@ -55,11 +64,27 @@ export default function AssessmentForm() {
     try {
       const data = new FormData(); data.set("file", selectedFile); if (replaceCvId) data.set("replaceCvId", replaceCvId);
       const cvResult = await fetch("/api/intake/cv", { method: "POST", body: data }).then(responseJson);
-      const jobResult = await fetch("/api/intake/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ roleTitle: new FormData(form).get("roleTitle"), companyName: new FormData(form).get("companyName"), jobDescription: new FormData(form).get("jobDescription") }) }).then(responseJson);
+      const formData = new FormData(form);
+      const jobResult = await fetch("/api/intake/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ roleTitle: formData.get("roleTitle"), companyName: formData.get("companyName"), jobDescription: formData.get("jobDescription") }) }).then(responseJson);
       setCvs((current) => [cvResult.cv, ...current.filter((cv) => cv.id !== replaceCvId)]); setJobs((current) => [jobResult.job, ...current]); setSelectedFile(null); setReplaceCvId(null);
+      setSelectedCvId(cvResult.cv.id); setSelectedJobId(jobResult.job.id); setClientRequestId(null);
       form.reset(); setNotice({ tone: cvResult.cv.processingStatus === "ready" ? "success" : "info", text: cvResult.cv.processingStatus === "ready" ? `Your ${replaceCvId ? "replacement " : ""}CV was stored privately and its text was extracted. Your target job was saved.` : "Your CV was stored privately, but it could not be read. Retry processing below." });
     } catch (error) { setNotice({ tone: "error", text: error instanceof Error ? error.message : "We could not save your intake. Try again." }); }
     finally { setSubmitting(false); }
+  }
+
+  async function createReport() {
+    setNotice(null);
+    const requestId = clientRequestId ?? crypto.randomUUID();
+    setClientRequestId(requestId);
+    setAnalyzing(true);
+    try {
+      const result = await fetch("/api/analysis", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cvId: selectedCvId, jobId: selectedJobId, clientRequestId: requestId }) }).then(responseJson);
+      setClientRequestId(null);
+      router.push(`/analysis/${result.runId}`);
+    } catch (error) {
+      setNotice({ tone: "error", text: error instanceof Error ? error.message : "We could not prepare the report. Try again." });
+    } finally { setAnalyzing(false); }
   }
 
   async function retryCv(id: string) {
@@ -71,7 +96,13 @@ export default function AssessmentForm() {
   async function deleteCv(id: string, name: string) {
     if (!window.confirm(`Delete ${name}? This permanently removes the private file and extracted text.`)) return;
     setCvs((items) => items.map((item) => item.id === id ? { ...item, processingStatus: "deleting" } : item));
-    try { await fetch(`/api/intake/cv/${id}`, { method: "DELETE" }).then(responseJson); setCvs((items) => items.filter((item) => item.id !== id)); setNotice({ tone: "success", text: "Your CV file and extracted text were deleted. Target jobs were kept." }); }
+    try {
+      await fetch(`/api/intake/cv/${id}`, { method: "DELETE" }).then(responseJson);
+      const remaining = cvs.filter((item) => item.id !== id);
+      setCvs(remaining);
+      if (selectedCvId === id) setSelectedCvId(remaining.find((item) => item.processingStatus === "ready")?.id ?? "");
+      setNotice({ tone: "success", text: "Your CV, extracted text, and saved evidence reports were deleted. Target jobs were kept." });
+    }
     catch (error) { await loadWorkspace(); setNotice({ tone: "error", text: error instanceof Error ? error.message : "The CV was not deleted. Retry deletion." }); }
   }
 
@@ -91,6 +122,19 @@ export default function AssessmentForm() {
         {notice && <p className={`form-notice ${notice.tone}`} aria-live="polite" role={notice.tone === "error" ? "alert" : "status"}>{notice.text}</p>}
       </form>
       {!loading && cvs.length > 0 && <section className="saved-intake" aria-labelledby="saved-cvs-title"><h2 id="saved-cvs-title">Your saved CVs</h2>{cvs.map((cv) => <article className="saved-cv" key={cv.id}><div><strong>{cv.originalFilename}</strong><span className={`cv-status ${cv.processingStatus}`}>{cv.processingStatus === "ready" ? "Processed" : cv.processingStatus === "failed" ? "Parse failed" : cv.processingStatus === "delete_failed" ? "Deletion failed" : cv.processingStatus === "deleting" ? "Deleting" : "Processing"}</span>{cv.processingStatus === "failed" && <p>We could not read this file. The original remains private; retry or delete it.</p>}</div><div className="cv-actions">{cv.processingStatus === "failed" && <button type="button" className="text-button" onClick={() => void retryCv(cv.id)}>Retry processing</button>}<button type="button" className="text-button" onClick={() => { setReplaceCvId(cv.id); document.getElementById("cv-file")?.focus(); }}>Replace</button><button type="button" className="text-button danger" disabled={cv.processingStatus === "deleting"} onClick={() => void deleteCv(cv.id, cv.originalFilename)}>Delete CV</button></div></article>)}</section>}
+      {!loading && (cvs.length > 0 || jobs.length > 0) && <section className="saved-intake report-launcher" aria-labelledby="report-launcher-title">
+        <div><p className="eyebrow">MILESTONE 2 · LOCAL PROTOTYPE</p><h2 id="report-launcher-title">Create an evidence report</h2><p>Choose one processed CV and one saved job. Your text stays on this server; no AI provider is connected.</p></div>
+        <div className="report-launcher-fields">
+          <div className="form-field"><label htmlFor="analysis-cv">CV</label><select id="analysis-cv" value={selectedCvId} onChange={(event) => { setSelectedCvId(event.target.value); setClientRequestId(null); }}>
+            <option value="">Choose a processed CV</option>{cvs.filter((cv) => cv.processingStatus === "ready").map((cv) => <option key={cv.id} value={cv.id}>{cv.originalFilename}</option>)}
+          </select></div>
+          <div className="form-field"><label htmlFor="analysis-job">Target job</label><select id="analysis-job" value={selectedJobId} onChange={(event) => { setSelectedJobId(event.target.value); setClientRequestId(null); }}>
+            <option value="">Choose a target job</option>{jobs.map((job) => <option key={job.id} value={job.id}>{job.roleTitle}{job.companyName ? ` · ${job.companyName}` : ""}</option>)}
+          </select></div>
+        </div>
+        <div className="form-actions"><button className="button button-primary" type="button" onClick={() => void createReport()} disabled={analyzing || !selectedCvId || !selectedJobId}>{analyzing ? "Preparing report…" : "Create evidence report"}<span aria-hidden="true"> →</span></button><span className="form-action-note">No hiring score. Each finding is tied to CV text.</span></div>
+        {cvs.every((cv) => cv.processingStatus !== "ready") && <p className="field-help">A processed CV is needed before you can create a report.</p>}
+      </section>}
     </>
   );
 }

@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-01
-**Status:** M1 secure-intake implementation and local Supabase policy acceptance are complete on `codex/exe-web-app-m1`; it awaits owner/source review.
+**Status:** M1 is accepted as the M2 baseline. M2 evidence analysis is implemented on `codex/exe-web-app-m2`; automated code checks pass, while M2 local Supabase integration and owner review remain pending.
 
 ## Completed in this build part
 
@@ -17,6 +17,11 @@
 - Added saved-CV processing states, parse retry, replace, delete confirmation, safe partial-deletion status, and persisted target-role/company/job-description records.
 - Added unit tests for allowed/rejected file validation, target-job validation, PDF/DOCX extraction, and safe malformed/empty parser errors. Test fixtures contain fictional content only.
 - Applied `20261001_m1_secure_intake.sql` to an isolated Docker-based local Supabase stack and passed an authenticated two-user RLS/private-Storage acceptance test using only temporary fictional accounts/files.
+- Started M2 from M1 commit `7909dc8` in a separate feature worktree; the original M0 workspace was left untouched.
+- Added a server-side local wording adapter, labeled requirement extraction, four evidence states, self-reported claim vs example-context labels, excerpt/offset validation, saved analysis runs, and a private report UI.
+- Added retry-safe request IDs, run retry handling, owner-scoped analysis/finding tables and RLS, and CV-delete cascades for derived excerpts.
+- The AI provider is still unselected. M2 sends no CV/JD text to an external AI provider; the local wording adapter can miss context and cannot assess proficiency.
+- Added unit coverage for direct/partial/ambiguous/missing/contradictory wording, excerpt traceability, malformed output, injection-like text as data, transient provider failure/retry, authentication, cross-user inputs, and CV readiness.
 
 ## Checks run for M1
 
@@ -27,16 +32,19 @@
 - `git diff --check` — passed.
 - Secrets/personal-data diff scan — passed; only configuration placeholders and fictional test strings are present.
 - `pnpm test:supabase:local` — passed against a local Docker Supabase stack after `pnpm dlx supabase start`. The test confirms own-user CRUD/replacement/deletion, cross-user and unauthenticated denial, owner-scoped private paths, private-bucket access, extracted-text removal, and retryable deletion-failure state. No hosted Supabase project, production data, or deployment was used.
+- M2 local code checks — `pnpm test` passed (5 files, 33 tests); `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, and `git diff --check` passed. The current environment has no Docker or Supabase CLI executable, so the M2 Supabase integration script has not been run here.
 
 ## Current limits and open decisions
 
 - A reviewed Supabase project/environment is still required for any real user data. Use only placeholder values in `.env`; never commit credentials or real CVs.
 - Supabase Storage deletion removes the live object, but project-level backup and retention behavior must be reviewed and documented before real CVs are accepted.
-- No AI provider, analysis, scoring, roadmap, rewriting, sharing, job links, payments, or mobile work is included. The existing overview’s report preview remains fictional.
-- The current M1 branch starts at M0 commit [`5852f10`](https://github.com/EnzoReacher/EXE/commit/5852f100b9d214ba36c367a173ed968c716eba5a); `main` remains unchanged and no deployment was initiated.
+- No AI provider has been selected. The M2 local matcher is not AI, is not independently validating skills, and does not produce a hiring score. Roadmap, CV rewriting, sharing, job links, payments, and mobile work remain out of scope for M2.
+- Supabase backup/retention settings still need review before using real CVs. M2 migration and two-user RLS/cascade checks have not yet been run in the current environment.
+- M1 branch `codex/exe-web-app-m1` was approved as M2's base. `main` remains unchanged; no merge or deployment was initiated.
 
 ## Resume from here
 
-1. Review provider backup/retention settings and approve private-data handling before any real CV is accepted.
-2. Obtain owner review of the M1 feature branch; do not merge or deploy without approval.
-3. After M1 owner review, proceed only to M2 evidence-based analysis.
+1. Run `pnpm test:supabase:local` against local Docker Supabase to verify M2 RLS, retry-safe request IDs, and deletion cascades.
+2. Review the M2 report and its local-matcher limitations; confirm whether the UX is clear for students and recent graduates.
+3. Choose and review an AI provider only after the team evaluates cost, privacy, retention, and consent; until then, keep local mode clearly labeled.
+4. Review Supabase backup/retention settings before using real CVs. Do not merge to `main` or deploy without explicit owner approval.
