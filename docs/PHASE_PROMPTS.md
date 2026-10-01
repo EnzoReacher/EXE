@@ -11,7 +11,7 @@ Before acting:
 1. Read README.md, docs/PROJECT_SCOPE_AND_PLAN.md, docs/CHECKPOINT_TRACKER.md, docs/DECISIONS.md, docs/CURRENT_STATE.md, and any AGENTS.md present.
 2. Inspect the repository tree, current branch, and git status. Preserve existing work and report pre-existing changes.
 3. Identify the active phase prompt and its exit criteria. Do only that phase; do not silently expand into later phases.
-4. Treat the documented stack as a working proposal: Next.js + TypeScript, Supabase Auth/Postgres/private Storage, and a server-side AI-provider adapter. Do not switch stacks without recording the reason and impact in a decision entry.
+4. Treat Next.js + TypeScript as the approved production foundation. Supabase Auth/Postgres/private Storage and a server-side AI-provider adapter remain later proposals. Do not add or switch services without recording PM approval, reason, and impact in a decision entry.
 
 Project guardrails:
 - Keep one modular web application; no microservices, desktop app, mobile client, marketplace, payment system, large-scale job crawler, or social network in the course MVP.
@@ -78,7 +78,7 @@ Tasks:
 4. Draw the main flow and identify what can be omitted from the Slot 8 demo without breaking the value proposition.
 5. Define the smallest data model and server/API boundaries needed for the first vertical slice. Include ownership, deletion, file processing state, analysis status, evidence provenance, and CV draft source mapping.
 6. Write the structured analysis contract: requirement, status (supported/partial/unclear/missing), evidence excerpt/source location, rationale, uncertainty, and recommendation.
-7. Record an architecture decision for the chosen stack. The current proposal is Next.js + TypeScript, Supabase Auth/Postgres/private Storage, and server-only AI adapter. Evaluate course time, team skills, deployment, privacy, cost, and parser feasibility; do not select tools solely because they are fashionable.
+7. Maintain the architecture decision for the approved Next.js + TypeScript foundation. Evaluate Supabase Auth/Postgres/private Storage and a server-only AI adapter separately against course time, team skills, deployment, privacy, cost, and parser feasibility; do not select tools solely because they are fashionable.
 8. Add a concise threat/privacy checklist for CV upload, AI provider calls, share links, and demo data.
 
 Deliver UX flow, wireframe descriptions or low-fidelity screens, data/API contracts, acceptance criteria, and a decision entry. Do not invent research findings or start later-phase features.

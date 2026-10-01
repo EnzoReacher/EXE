@@ -91,9 +91,9 @@ The team approved a narrower course MVP on 2026-10-01. The first implementation 
 
 ## 5. Proposed technical architecture
 
-The course materials do not prescribe a stack. The working proposal is a **single modular web application**, not a set of microservices:
+The course materials do not prescribe a stack. On 2026-10-01, the PM approved **Next.js + TypeScript as a single modular web application** for the production foundation. The later service choices remain proposals:
 
-- **Web app and server endpoints:** Next.js with TypeScript. Keep the user interface and server-side orchestration in one repository/app for the MVP.
+- **Web app and server endpoints:** Next.js with TypeScript, implemented in `web/`. Keep the user interface and future server-side orchestration in this one app for the MVP.
 - **Authentication, relational data, and file storage:** Supabase Auth, Postgres, and private Storage buckets. Enforce user ownership in both application code and database/storage policies.
 - **AI calls:** a server-side provider adapter. Keep API credentials on the server; validate provider outputs against application schemas before storing or rendering them.
 - **Document parsing:** a server-side parser module for the supported file types. Preserve section/page context when available so findings can reference source evidence.
@@ -204,7 +204,7 @@ Do not create every table before the first vertical slice. Keep the schema minim
 - The target segment and MVP scope are updated from evidence.
 - A competitor/value-proposition comparison is ready to present.
 
-### Phase 3 — UX, architecture, and implementation foundation (after scope validation)
+### Phase 3 — UX, architecture, and implementation foundation (foundation implemented; PM review pending)
 
 **Tasks**
 - Draw screen flows and low-fidelity screens for upload, job input, report, roadmap, and CV editing.

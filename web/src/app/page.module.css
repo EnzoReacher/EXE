@@ -1,0 +1,72 @@
+.skipLink { position: fixed; z-index: 100; top: 12px; left: 12px; padding: 10px 14px; color: white; background: var(--green-dark); border-radius: 7px; transform: translateY(-150%); }
+.skipLink:focus { transform: translateY(0); }
+.siteHeader { width: min(1180px, calc(100% - 48px)); min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 0 auto; border-bottom: 1px solid rgb(31 53 43 / 8%); }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 760; letter-spacing: -.04em; white-space: nowrap; }
+.brandMark { width: 31px; height: 31px; display: grid; place-items: center; color: white; background: var(--green); border-radius: 10px 10px 10px 3px; font: italic 22px/1 var(--font-serif); }
+.brandTag { margin-left: 6px; color: var(--green); font-size: 9px; font-weight: 800; letter-spacing: .12em; vertical-align: 2px; }
+.headerLinks { display: flex; gap: 30px; color: var(--muted); font-size: 13px; }
+.headerLinks a:hover { color: var(--green); }
+.audiencePill { padding: 9px 13px; color: #486355; border: 1px solid #dae4dc; border-radius: 999px; font-size: 11px; font-weight: 650; white-space: nowrap; }
+.hero { width: min(1180px, calc(100% - 48px)); min-height: 490px; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 38px; margin: 0 auto; padding: 56px 0 62px; }
+.heroCopy { position: relative; z-index: 2; max-width: 570px; }
+.eyebrow { margin: 0 0 15px; color: var(--green); font-size: 10px; font-weight: 800; letter-spacing: .14em; }
+.eyebrowDot { width: 7px; height: 7px; display: inline-block; margin-right: 8px; background: #75a987; border-radius: 50%; box-shadow: 0 0 0 4px #e4eee6; vertical-align: 1px; }
+.hero h1 { max-width: 590px; margin: 0 0 21px; font: 500 clamp(42px, 5.2vw, 66px) / .99 var(--font-serif); letter-spacing: -.055em; }
+.hero h1 em { color: var(--green); font-weight: 500; }
+.heroLede { max-width: 495px; margin: 0 0 24px; color: #5f6a64; font-size: 15px; line-height: 1.8; }
+.heroNotes { display: flex; flex-direction: column; gap: 9px; color: #4a6155; font-size: 12px; }
+.checkIcon { margin-right: 6px; color: var(--green); font-weight: 900; }
+.heroArt { position: relative; width: 100%; max-width: 510px; height: 360px; justify-self: end; }
+.heroArt::before { position: absolute; inset: 35px 4px 20px 28px; content: ""; background: radial-gradient(ellipse at 52% 42%, #e6eee3 0%, #edf0e6 38%, rgb(239 241 232 / 15%) 70%); border-radius: 48% 52% 42% 58%; transform: rotate(-6deg); }
+.orbit { position: absolute; border: 1px solid rgb(64 116 85 / 16%); border-radius: 50%; transform: rotate(-19deg); }
+.orbitOne { inset: 41px 4px 15px 30px; }
+.orbitTwo { inset: 22px 25px 36px 9px; transform: rotate(14deg); }
+.spark { position: absolute; color: #de9c57; font-size: 22px; }
+.sparkOne { top: 45px; right: 71px; }
+.sparkTwo { bottom: 56px; left: 42px; color: #83a783; font-size: 14px; }
+.miniCard { position: absolute; z-index: 2; width: 215px; min-height: 165px; padding: 20px; background: rgb(255 255 255 / 94%); border: 1px solid rgb(218 226 218 / 90%); border-radius: 15px; box-shadow: 0 19px 45px rgb(31 53 43 / 12%); }
+.cardCv { top: 53px; left: 14px; transform: rotate(-5deg); }
+.cardJob { right: 1px; bottom: 46px; transform: rotate(4deg); }
+.miniLabel { display: block; margin-bottom: 15px; color: #748078; font-size: 8px; font-weight: 800; letter-spacing: .12em; }
+.miniLine { display: block; height: 6px; margin: 9px 0; background: #e6ebe5; border-radius: 9px; }
+.lineLong { width: 90%; }
+.lineMid { width: 69%; }
+.lineShort { width: 48%; }
+.miniChip, .miniTag { display: inline-block; margin-top: 8px; padding: 6px 9px; color: #317252; background: #eaf3eb; border-radius: 999px; font-size: 9px; font-weight: 700; }
+.miniTag { color: #a06736; background: #fbefe4; }
+.connector { position: absolute; z-index: 3; top: 131px; left: 176px; width: 154px; border-top: 1px dashed #7da18a; transform: rotate(19deg); }
+.connector span { position: absolute; top: -4px; right: -1px; width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
+.matchBubble { position: absolute; z-index: 4; top: 132px; left: 199px; width: 105px; height: 105px; display: flex; align-items: center; justify-content: center; gap: 6px; color: white; background: var(--green); border: 8px solid rgb(255 255 255 / 85%); border-radius: 50%; box-shadow: 0 10px 25px rgb(29 102 73 / 22%); font-size: 12px; font-weight: 800; }
+.bubbleArrow { color: #c8e4d2; font-size: 17px; }
+.heroCaption { position: absolute; right: 12px; bottom: 7px; color: #839087; font: italic 13px var(--font-serif); }
+.privacySection { width: min(1120px, calc(100% - 48px)); display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 19px; margin: 42px auto 60px; padding: 25px 27px; background: #e9f0e8; border: 1px solid #dfe9de; border-radius: 13px; }
+.privacySymbol { width: 45px; height: 45px; display: grid; place-items: center; color: #43805a; background: #d6e8d7; border-radius: 50%; font-size: 25px; }
+.privacySection .eyebrow { margin-bottom: 6px; font-size: 9px; }
+.privacySection h2 { margin: 0 0 6px; font: 500 23px var(--font-serif); letter-spacing: -.04em; }
+.privacySection p:last-child { max-width: 540px; margin: 0; color: #6c7c6e; font-size: 11px; line-height: 1.6; }
+.privacyPoints { display: flex; flex-direction: column; gap: 8px; color: #4b6452; font-size: 10px; white-space: nowrap; }
+.privacyPoints b { margin-right: 8px; color: #7a9d7e; font-size: 9px; }
+.siteFooter { width: min(1180px, calc(100% - 48px)); display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: 0 auto; padding: 0 0 25px; color: #8a948e; font-size: 10px; }
+.footerBrand { color: #526058; font-size: 12px; }
+.footerBrand .brandMark { width: 24px; height: 24px; border-radius: 7px 7px 7px 2px; font-size: 17px; }
+
+@media (max-width: 850px) {
+  .headerLinks { display: none; }
+  .hero { grid-template-columns: 1fr .85fr; gap: 5px; }
+  .heroArt { margin-left: -25px; transform: scale(.88); transform-origin: center right; }
+}
+@media (max-width: 650px) {
+  .siteHeader { width: calc(100% - 32px); min-height: 66px; gap: 8px; }
+  .brand { font-size: 13px; }
+  .brandTag { display: none; }
+  .audiencePill { max-width: 160px; padding: 7px 9px; font-size: 9px; text-align: center; white-space: normal; }
+  .hero { width: calc(100% - 36px); display: block; padding: 52px 0 38px; }
+  .hero h1 { font-size: clamp(43px, 12vw, 57px); }
+  .heroLede { font-size: 13px; }
+  .heroArt { height: 270px; max-width: 430px; margin: 5px auto 0; transform: scale(.8); transform-origin: top center; }
+  .privacySection { width: calc(100% - 36px); grid-template-columns: 42px 1fr; gap: 13px; margin: 26px auto 38px; padding: 19px; }
+  .privacySymbol { width: 39px; height: 39px; font-size: 22px; }
+  .privacySection h2 { font-size: 21px; }
+  .privacyPoints { grid-column: 2; display: grid; font-size: 9px; }
+  .siteFooter { width: calc(100% - 36px); align-items: flex-start; flex-direction: column; padding-bottom: 20px; }
+}

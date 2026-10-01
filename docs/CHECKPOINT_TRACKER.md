@@ -6,7 +6,7 @@ Use this file as the team's working checklist. Mark an item complete only when i
 |---|---:|---:|---|---|---|
 | CP1 — idea lock | 3 | Part of 10% | Review draft prepared; prior submission status unconfirmed | Team | Draft in `docs/CP1_IDEA_LOCK_DRAFT.md`; record accepted decisions and confirm whether Slot 3 was submitted |
 | CP2 — market research | 5 | 20% | Planning materials prepared separately; primary fieldwork pending | TBD | Reconcile course guide/research pack, confirm requirements with instructor, then collect and analyze actual evidence |
-| CP1 — MVP demo | 8 | Part of 10% | Browser prototype v0.2 started | TBD | End-to-end demo plus accurate product/service and technology descriptions |
+| CP1 — MVP demo | 8 | Part of 10% | Production foundation implemented; grounded CV improvement pending | TBD | End-to-end demo plus accurate product/service and technology descriptions |
 | CP3 — BMC | 8 | 15% | Not started | TBD | Business Model Canvas supported by research or assumptions clearly labeled |
 | CP4 — pitch deck | 10 | 40% | Not started | TBD | Option 1 working rubric: Team profile 10%; Product-market fit 40%; Business model 20%; Operations 20%; Fundraising plan 10% |
 | Constructivism presentation | No limit stated | 15% | Not started | TBD | Rubric and evidence format not included in the guide; keep a learning/decision log and ask instructor |
@@ -31,8 +31,10 @@ Use this file as the team's working checklist. Mark an item complete only when i
 - [x] Show the CV passage used for each non-missing finding.
 - [x] Produce up to three evidence-linked next actions.
 - [x] Add validation and analyzer tests.
-- [ ] Obtain PM review of prototype v0.2.
-- [ ] Approve the production stack and migration plan.
+- [x] Obtain PM approval to continue from prototype v0.2.
+- [x] Approve Next.js + TypeScript and migrate the core workflow.
+- [x] Add strict types, linting, production build, eight tests, and CI checks.
+- [x] Add architecture and OpenCode setup documentation.
 - [ ] Add grounded CV improvement after the report behavior is accepted.
 - [ ] Add persistence, upload, authentication, and external AI only when approved and needed.
 

@@ -15,12 +15,13 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | D-007 | Use a reduced course MVP: pasted CV text + one role/JD + four-state evidence report + three priority actions + grounded CV improvement. | Approved working baseline on 2026-10-01 | PM approval in project session |
 | D-008 | Build and review the product as a web application first. | Approved on 2026-10-01 | PM approval in project session |
 | D-009 | Keep the first functional prototype browser-only, with fictional demo data and no external AI or persistence. | Approved implementation stage; revisit at the production-foundation gate | Scope-control decision |
+| D-010 | Use Next.js + TypeScript for the production web foundation while retaining browser-local analysis during Stage 2. | Approved on 2026-10-01 | PM approval to continue Stage 2 |
 
 ## Proposed technical/product choices — team confirmation needed
 
 | ID | Proposal | Why it is proposed | Status |
 |---|---|---|---|
-| P-001 | Build a single modular web app with Next.js and TypeScript. | Fits the browser-based student service and keeps the course MVP in one app. | Proposed production stack; approval required before migration from the browser prototype |
+| P-001 | Build a single modular web app with Next.js and TypeScript. | Fits the browser-based student service and keeps the course MVP in one app. | Approved and implemented in `web/` during Stage 2 |
 | P-002 | Use Supabase Auth, Postgres, and private Storage for the first version. | Provides a compact path for identity, relational records, and private CV uploads. | Proposed; validate cost, team familiarity, and data handling |
 | P-003 | Call AI only through a server-side adapter and validate structured output. | Protects credentials and lets the team change providers without changing the product flow. | Proposed; provider not selected |
 | P-004 | Accept PDF and DOCX CVs first; let users paste the JD. | Keeps the MVP intake flow narrow and demonstrable. | Proposed; confirm after format needs are researched |
@@ -34,6 +35,7 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | Date | Decision | Owner(s) | Evidence / reason | Follow-up |
 |---|---|---|---|---|
 | 2026-10-01 | Approved the reduced MVP and authorized web implementation to begin. | Project manager | Keeps the course criteria and core audience while reducing delivery risk. | Build the browser prototype first; keep target segment/job family provisional until CP2 evidence. |
+| 2026-10-01 | Approved Stage 2 and the Next.js + TypeScript production foundation. | Project manager | Continue from the reviewed reduced-scope workflow without expanding into later services. | Review the typed web foundation, then approve the grounded CV-improvement slice. |
 
 ## Instructor questions
 

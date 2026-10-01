@@ -1,7 +1,7 @@
 # CP1 Idea Lock — Team Review Draft
 
 **Prepared:** 2026-09-28  
-**Status:** Discussion draft only. The team has not recorded approval of the target segment, value proposition, or technology stack. This file also does not establish whether a Slot 3 submission has already been accepted.
+**Status:** Discussion draft only. The team has approved the reduced MVP and Next.js + TypeScript foundation, but has not recorded approval of the target segment or value proposition. This file also does not establish whether a Slot 3 submission has already been accepted.
 
 ## Problem hypothesis
 
@@ -46,13 +46,13 @@ Do not claim that the project is the first CV-matching product or that market fi
 
 **Product/service:** A browser-based career-readiness tool that helps a student compare one CV with one internship or junior-role description, understand which requirements have supporting evidence, identify gaps, and improve the application using only verified information supplied by the student.
 
-**Technology/tools:** The planning proposal is one modular web app using Next.js and TypeScript, Supabase Auth/Postgres/private Storage, and a server-side AI adapter. These choices remain proposals until the team approves them. The first prototype should use fictional or consented data, keep CVs private, and never place provider secrets in browser code.
+**Technology/tools:** The approved foundation is one modular web app using Next.js and TypeScript. Supabase Auth/Postgres/private Storage and a server-side AI adapter remain later proposals requiring approval. The current foundation uses fictional data, keeps analysis in the browser, and has no provider secrets.
 
 ## Team decisions to record
 
 - Confirm the initial research cohort and later choose one first segment/job family from CP2 evidence.
 - Confirm whether expert review and curated job links belong in the course demo or remain optional.
-- Approve or replace the proposed technical stack before the application scaffold is created.
+- Review the implemented Next.js + TypeScript foundation before approving the next product slice.
 - Confirm that the core product must show evidence and user-visible uncertainty, and must not invent CV facts.
 - Confirm the status of the earlier CP1 Slot 3 submission.
 

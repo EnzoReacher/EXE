@@ -14,19 +14,21 @@ A course project for helping students and recent graduates understand how their 
 
 Upload a CV, provide a target job description, receive an evidence-based fit and gap report, get a prioritized learning/project roadmap, and draft a job-specific CV without inventing qualifications.
 
-## Run the current web prototype
+## Run the production web foundation
 
-The approved reduced-scope browser prototype is in [`prototype/`](prototype/). It uses pasted CV/JD text and fictional demo data, shows four evidence states, and makes no external AI or storage call.
+The production foundation is a Next.js and TypeScript application in [`web/`](web/). It uses pasted CV/JD text and fictional demo data, shows four evidence states with exact CV excerpts, and makes no external AI or storage call.
 
 ```bash
-python3 -m http.server 4173 --directory prototype
+cd web
+npm ci
+npm run dev
 ```
 
-Open `http://localhost:4173`, then select **Điền dữ liệu mẫu**.
+Open `http://localhost:3000`, then select **Điền dữ liệu mẫu**. The original static implementation remains in [`prototype/`](prototype/) as a fallback.
 
-## Working architecture proposal
+## Current architecture
 
-The planning baseline proposes a single modular web app using Next.js and TypeScript, with Supabase for authentication, Postgres, and private CV storage, plus a server-side AI provider adapter. This is a working recommendation to validate with the team before implementation; the course materials do not mandate a stack.
+Next.js and TypeScript are approved and implemented as a single modular web app. Supabase, authentication, persistence, file upload, and a server-side AI provider adapter remain later proposals and require separate approval. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/OPENCODE_SETUP.md`](docs/OPENCODE_SETUP.md).
 
 ## Course checkpoints
 
@@ -40,4 +42,4 @@ The planning baseline proposes a single modular web app using Next.js and TypeSc
 
 ## Current project state
 
-Planning documents and browser prototype v0.2 are present. CP2 fieldwork, the final audience/job-family decision, the production stack, persistence, file upload, and external AI integration remain pending. See [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) for the exact status.
+Planning documents, browser prototype v0.2, and the tested production web foundation are present. CP2 fieldwork, the final audience/job-family decision, grounded CV improvement, persistence, file upload, and external AI integration remain pending. See [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) for the exact status.

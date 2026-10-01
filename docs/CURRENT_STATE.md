@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-01
-**Status:** Reduced course MVP approved and web implementation started. A functional browser prototype exists; CP2 fieldwork, final audience/job-family selection, production-stack approval, persistence, file upload, and AI integration remain pending.
+**Status:** Stage 2 production web foundation implemented on `codex/production-web-foundation`. CP2 fieldwork, final audience/job-family selection, grounded CV improvement, persistence, file upload, and AI integration remain pending.
 
 ## Completed
 
@@ -14,6 +14,11 @@
 - Implemented pasted CV text, target role/JD input, fictional demo data, four evidence states, cited CV passages, and priority actions.
 - Kept prototype processing inside the browser with no login, storage, external AI call, or real participant data.
 - Added analyzer checks covering requirement extraction, all four evidence states, missing evidence, input validation, and absence of hiring-prediction scores.
+- Approved Next.js and TypeScript for the production foundation.
+- Created the `web/` App Router application with a responsive shell, metadata, 404/error boundaries, strict TypeScript, ESLint, Vitest, and GitHub Actions checks.
+- Migrated the complete browser workflow into typed analysis and UI modules without adding accounts, persistence, uploads, or AI.
+- Added eight production-app tests covering extraction, classification, strongest-evidence selection, missing evidence, validation, score guardrails, and the interactive sample/report flow.
+- Added `docs/ARCHITECTURE.md` and `docs/OPENCODE_SETUP.md`.
 
 ## Current product baseline
 
@@ -21,7 +26,7 @@
 - First specific segment and job family remain hypotheses until CP2 evidence is analyzed.
 - Core flow: CV text + one target JD → supported/partial/unclear/missing report → up to three priority actions → later grounded CV improvement.
 - The current analyzer is a transparent keyword baseline. It is useful for UX validation but is not the final AI analysis engine.
-- Next.js + TypeScript, Supabase, and a server-side AI adapter remain production proposals. Approval is required before the prototype is migrated.
+- Next.js + TypeScript is the approved production foundation. Supabase and a server-side AI adapter remain unapproved later proposals.
 
 ## Research status
 
@@ -31,8 +36,8 @@
 
 ## Next actions
 
-1. Have the project manager review browser prototype v0.2.
-2. Approve or revise the production stack before migration.
+1. Have the project manager review the Stage 2 production web foundation.
+2. Approve or revise the next slice: grounded, user-reviewed CV improvement based only on source facts.
 3. Reconcile the original course files and CP2 pack into the project evidence workflow.
 4. Confirm CP2 ambiguities, finalize research ownership, and conduct consent-safe fieldwork.
 5. Use analyzed evidence to approve or revise the first segment, job family, and value proposition.
