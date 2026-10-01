@@ -17,6 +17,8 @@ const SKILLS = [
 ];
 
 const ACTION_VERBS = /\b(built|developed|implemented|designed|created|tested|analyzed|analysed|improved|maintained|deployed|collaborated|delivered|automated|wrote|led|managed|tối ưu|xây dựng|phát triển|thiết kế|kiểm thử|triển khai|phân tích|hợp tác|thực hiện)\b/i;
+const LIMITED_EVIDENCE = /\b(familiar with|basic knowledge|knowledge of|learning|coursework|exposure to|đang học|kiến thức cơ bản|làm quen với)\b/i;
+const SKILL_LIST_HEADING = /^skills?\s*[:\-]?$/i;
 
 function normalize(text) {
   return String(text ?? "")
@@ -35,10 +37,28 @@ function containsTerm(text, term) {
 }
 
 function splitEvidence(text) {
-  return String(text ?? "")
-    .split(/\n+|(?<=[.!?])\s+/u)
-    .map((part) => part.trim().replace(/^[-*•\d.)\s]+/, ""))
-    .filter(Boolean);
+  const lines = String(text ?? "").split(/\n+/u);
+  const parts = [];
+  let inSkillsSection = false;
+
+  for (const line of lines) {
+    const cleanLine = line.trim().replace(/^[-*•\d.)\s]+/, "");
+    if (!cleanLine) continue;
+    if (SKILL_LIST_HEADING.test(cleanLine)) {
+      inSkillsSection = true;
+      continue;
+    }
+    if (/^(education|projects?|experience|employment|certifications?|học vấn|dự án|kinh nghiệm)\s*[:\-]?$/i.test(cleanLine)) {
+      inSkillsSection = false;
+      continue;
+    }
+
+    for (const sentence of cleanLine.split(/(?<=[.!?])\s+/u).filter(Boolean)) {
+      parts.push({ text: sentence, inSkillsSection });
+    }
+  }
+
+  return parts;
 }
 
 function findMatches(text, terms) {
@@ -69,30 +89,42 @@ export function analyzeCvAgainstJob({ cvText, jobDescription, roleTitle }) {
 
   const cvParts = splitEvidence(cv);
   const findings = requirements.map((requirement) => {
-    const evidence = cvParts.find((part) => findMatches(part, requirement.terms)) ?? null;
+    const matchedPart = cvParts.find((part) => findMatches(part.text, requirement.terms)) ?? null;
+    const evidence = matchedPart?.text ?? null;
     if (!evidence) {
-      return { requirement: requirement.name, status: "not-stated", evidence: null };
+      return { requirement: requirement.name, status: "missing", evidence: null };
     }
+    let status = "unclear";
+    if (ACTION_VERBS.test(evidence)) status = "supported";
+    else if (!matchedPart.inSkillsSection && LIMITED_EVIDENCE.test(evidence)) status = "partial";
+
     return {
       requirement: requirement.name,
-      status: ACTION_VERBS.test(evidence) ? "evidence" : "listed",
+      status,
       evidence,
     };
   });
 
   const summary = {
-    evidence: findings.filter((item) => item.status === "evidence").length,
-    listed: findings.filter((item) => item.status === "listed").length,
-    notStated: findings.filter((item) => item.status === "not-stated").length,
+    supported: findings.filter((item) => item.status === "supported").length,
+    partial: findings.filter((item) => item.status === "partial").length,
+    unclear: findings.filter((item) => item.status === "unclear").length,
+    missing: findings.filter((item) => item.status === "missing").length,
     total: findings.length,
   };
 
   const actions = findings
-    .filter((item) => item.status !== "evidence")
+    .filter((item) => item.status !== "supported")
     .slice(0, 3)
-    .map((item) => item.status === "listed"
-      ? `Nếu bạn đã áp dụng ${item.requirement}, hãy thêm một ví dụ thật về dự án, môn học hoặc công việc có liên quan.`
-      : `Nếu bạn có kinh nghiệm về ${item.requirement}, hãy nêu ví dụ thật trong CV. Nếu chưa, cân nhắc một bài tập hoặc dự án nhỏ để học và tạo bằng chứng.`);
+    .map((item) => {
+      if (item.status === "partial") {
+        return `Bằng chứng về ${item.requirement} còn hạn chế. Hãy bổ sung việc bạn đã làm, phạm vi và kết quả thật nếu có.`;
+      }
+      if (item.status === "unclear") {
+        return `CV có nhắc đến ${item.requirement} nhưng chưa cho thấy cách áp dụng. Hãy thêm một ví dụ thật từ môn học, dự án hoặc công việc.`;
+      }
+      return `Chưa thấy ${item.requirement} trong CV. Nếu bạn có kinh nghiệm, hãy nêu ví dụ thật; nếu chưa, cân nhắc một bài tập hoặc dự án nhỏ để tạo bằng chứng.`;
+    });
 
   if (actions.length === 0) {
     actions.push("Đọc lại từng trích dẫn để chắc chắn chúng mô tả đúng việc bạn đã làm; nhờ giảng viên hoặc người hướng dẫn góp ý nếu cần.");
@@ -101,6 +133,6 @@ export function analyzeCvAgainstJob({ cvText, jobDescription, roleTitle }) {
   return { roleTitle: role, findings, summary, actions };
 }
 
-export const SAMPLE_CV = `EDUCATION\nBachelor of Information Technology — Example University (fictional)\n\nPROJECTS\nCampus Events API | Coursework project\n- Built a Node.js and TypeScript REST API for event registration using PostgreSQL.\n- Wrote Jest unit tests for input validation and error handling.\n- Collaborated with three classmates using Git and reviewed pull requests.\n\nSKILLS\nJavaScript, TypeScript, Node.js, PostgreSQL, REST APIs, Git, Jest, communication.`;
+export const SAMPLE_CV = `EDUCATION\nBachelor of Information Technology — Example University (fictional)\n\nPROJECTS\nCampus Events API | Coursework project\n- Built a Node.js and TypeScript REST API for event registration using PostgreSQL.\n- Wrote Jest unit tests for input validation and error handling.\n- Collaborated with three classmates using Git and reviewed pull requests.\n- Basic knowledge of Docker from a local deployment exercise.\n\nSKILLS\nJavaScript, TypeScript, Node.js, PostgreSQL, REST APIs, Git, Jest, communication.`;
 
-export const SAMPLE_JD = `Backend Developer Intern — Example Company (fictional)\n\nWhat you will do\n- Build and maintain REST APIs with Node.js.\n- Collaborate with engineers to design reliable services.\n\nRequirements\n- Familiarity with JavaScript or TypeScript.\n- Basic SQL and relational database knowledge.\n- Experience writing unit tests.\n- Comfortable using Git and version control.\n- Clear communication skills.\n\nNice to have: Docker.`;
+export const SAMPLE_JD = `Backend Developer Intern — Example Company (fictional)\n\nWhat you will do\n- Build and maintain REST APIs with Node.js.\n- Collaborate with engineers to design reliable services.\n\nRequirements\n- Familiarity with JavaScript or TypeScript.\n- Basic SQL and relational database knowledge.\n- Experience writing unit tests.\n- Comfortable using Git and version control.\n- Clear communication skills.\n\nNice to have: Docker and React.`;

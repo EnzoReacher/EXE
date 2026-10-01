@@ -115,7 +115,7 @@ textarea:focus, input[type="text"]:focus { border-color: #8bb29a; box-shadow: 0 
 .results-header { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 22px; }
 .results-header .eyebrow { margin-bottom: 8px; }
 .results-subtitle { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
-.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+.summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
 .summary-card { padding: 16px 18px; border: 1px solid var(--line); border-radius: 10px; background: #fcfdfb; }
 .summary-label { display: block; margin-bottom: 7px; color: #77827b; font-size: 10px; font-weight: 700; }
 .summary-value { display: block; color: #2d4135; font-family: Georgia, serif; font-size: 26px; line-height: 1; }
@@ -131,9 +131,10 @@ textarea:focus, input[type="text"]:focus { border-color: #8bb29a; box-shadow: 0 
 .finding-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .finding-title { margin: 0; color: #27342e; font-size: 12px; font-weight: 750; }
 .status-badge { flex: 0 0 auto; padding: 5px 8px; border-radius: 99px; font-size: 9px; font-weight: 750; }
-.status-evidence { color: #2c6949; background: #e8f3e9; }
-.status-listed { color: #875a26; background: #fff1dd; }
-.status-absent { color: #7b6258; background: #f3eeeb; }
+.status-supported { color: #2c6949; background: #e8f3e9; }
+.status-partial { color: #866020; background: #fff1d9; }
+.status-unclear { color: #596779; background: #eaf0f5; }
+.status-missing { color: #7b6258; background: #f3eeeb; }
 .finding-evidence { margin: 9px 0 0; padding-left: 10px; border-left: 2px solid #bdd8c3; color: #66726a; font-size: 11px; line-height: 1.6; }
 .no-evidence { color: #89928d; font-style: italic; }
 .actions-panel { padding: 19px; background: #f4f8f2; border-color: #e5ece1; }
@@ -182,7 +183,7 @@ textarea:focus, input[type="text"]:focus { border-color: #8bb29a; box-shadow: 0 
   .form-actions { align-items: stretch; flex-direction: column; gap: 12px; }
   .primary-button { width: 100%; }
   .results-header { align-items: flex-start; }
-  .summary-grid { gap: 7px; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 7px; }
   .summary-card { padding: 12px 9px; }
   .summary-label { min-height: 28px; font-size: 8px; }
   .summary-value { font-size: 22px; }

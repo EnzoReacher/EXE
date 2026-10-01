@@ -26,7 +26,7 @@ npm test
 
 - Accepts pasted CV text, a role title, and a pasted job description.
 - Detects a small set of common skills/requirements and shows exact CV text that mentions each one.
-- Distinguishes an example described in the CV, a skill merely listed, and a requirement not stated in the CV.
+- Uses the four planned evidence states: supported, partial, unclear, and missing from the CV.
 - Suggests honest next steps without treating absent CV text as proof that the user lacks a skill.
 - Includes fictional sample CV/JD content for a quick demo.
 - Processes text in the browser only. It does not upload, save, or send CV text to an AI provider.

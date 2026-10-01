@@ -91,7 +91,7 @@
               </div>
             </div>
             <label class="field-label" for="cv-text">Nội dung hồ sơ</label>
-            <textarea id="cv-text" name="cv" rows="15" required minlength="30" placeholder="Dán phần học vấn, kỹ năng, dự án và kinh nghiệm của bạn…"></textarea>
+            <textarea id="cv-text" name="cv" rows="15" required minlength="30" maxlength="20000" placeholder="Dán phần học vấn, kỹ năng, dự án và kinh nghiệm của bạn…"></textarea>
             <div class="field-footer">
               <span id="cv-count">0 ký tự</span>
               <span>Không cần thông tin liên hệ</span>
@@ -109,7 +109,7 @@
             <label class="field-label" for="role-title">Tên vị trí</label>
             <input id="role-title" name="role" type="text" required maxlength="100" placeholder="Ví dụ: Backend Developer Intern" />
             <label class="field-label jd-label" for="jd-text">Mô tả công việc (JD)</label>
-            <textarea id="jd-text" name="jd" rows="10" required minlength="30" placeholder="Dán mô tả công việc hoặc các yêu cầu chính…"></textarea>
+            <textarea id="jd-text" name="jd" rows="10" required minlength="30" maxlength="15000" placeholder="Dán mô tả công việc hoặc các yêu cầu chính…"></textarea>
             <div class="field-footer">
               <span id="jd-count">0 ký tự</span>
               <span>Ưu tiên yêu cầu kỹ năng cụ thể</span>
@@ -142,7 +142,7 @@
                 <h3>Đối chiếu từng yêu cầu</h3>
                 <span id="requirement-count" class="count-pill"></span>
               </div>
-              <p class="findings-intro">“Chưa thấy trong CV” nghĩa là văn bản bạn dán chưa nêu điều đó; không kết luận bạn không có kỹ năng.</p>
+              <p class="findings-intro">Các trạng thái mô tả mức độ bằng chứng trong văn bản. “Chưa thấy trong CV” không có nghĩa là bạn không có kỹ năng.</p>
               <div id="findings-list" class="findings-list"></div>
             </div>
             <aside class="actions-panel" aria-labelledby="actions-title">

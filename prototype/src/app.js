@@ -23,9 +23,10 @@ function renderSummary(summary) {
   const root = document.querySelector("#summary-grid");
   root.replaceChildren();
   const cards = [
-    ["Có ví dụ mô tả cách áp dụng", summary.evidence],
-    ["Chỉ được liệt kê trong CV", summary.listed],
-    ["Chưa thấy trong nội dung CV", summary.notStated],
+    ["Có bằng chứng mô tả", summary.supported],
+    ["Bằng chứng một phần", summary.partial],
+    ["Có nhắc nhưng chưa rõ", summary.unclear],
+    ["Chưa thấy trong CV", summary.missing],
   ];
   for (const [label, value] of cards) {
     const card = createElement("div", "summary-card");
@@ -46,9 +47,10 @@ function renderFindings(findings) {
     top.append(createElement("h4", "finding-title", finding.requirement));
 
     const labels = {
-      evidence: ["Có ví dụ", "status-evidence"],
-      listed: ["Được liệt kê", "status-listed"],
-      "not-stated": ["Chưa thấy trong CV", "status-absent"],
+      supported: ["Có bằng chứng", "status-supported"],
+      partial: ["Một phần", "status-partial"],
+      unclear: ["Chưa rõ", "status-unclear"],
+      missing: ["Chưa thấy trong CV", "status-missing"],
     };
     const [label, statusClass] = labels[finding.status];
     top.append(createElement("span", `status-badge ${statusClass}`, label));

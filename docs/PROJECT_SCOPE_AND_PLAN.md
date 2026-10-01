@@ -1,8 +1,10 @@
 # EXE Project Scope and Build Plan
 
-**Project:** AI Career Readiness Platform  
-**Course:** EXE101  
-**Status:** Planning baseline, awaiting the team's idea lock and research validation  
+**Project:** AI Career Readiness Platform
+
+**Course:** EXE101
+
+**Status:** Reduced course-MVP baseline approved for web implementation; market assumptions still require CP2 validation
 **Source documents:** `EXE.docx` and `HƯỚNG DẪN CÁC CHECKPOINT_EXE101.docx`
 
 ## 1. Product definition
@@ -42,24 +44,25 @@ For the first pilot, choose one segment and one job family after customer resear
 
 ### MVP — required end-to-end value flow
 
-- Minimal sign-in and career profile sufficient to save the user's work.
-- Upload a CV in supported formats (initially PDF and DOCX), show file and extraction status, and provide understandable error states.
-- Enter a target role and paste a JD. For the demo, a manually entered JD is sufficient.
-- Extract and organize relevant CV and JD content.
+The team approved a narrower course MVP on 2026-10-01. The first implementation proves one complete flow before accounts, storage, integrations, or marketplace features are added.
+
+- Paste CV text. File upload remains conditional until the team confirms it is needed for the course demo.
+- Enter one target role and paste one JD.
+- Extract a small, validated set of requirements from the JD.
 - Produce a report containing:
   - requirements identified in the JD;
-  - supported, partly supported, unclear, or missing status for each requirement;
+  - supported, partial, unclear, or missing-from-the-CV status for each requirement;
   - a CV evidence excerpt or an explicit “no evidence found” note;
-  - CV clarity or completeness issues;
-  - caveats where the source document is ambiguous.
-- Produce a short, prioritized learning or project roadmap connected to identified gaps.
-- Generate an editable CV draft for the target role based only on the user's source information; show changes and let the user accept or edit them.
-- Keep a small analysis history or one saved result so the user can return to the demo.
-- Provide privacy controls appropriate for the prototype, including deletion of uploaded CV data and the associated extracted data.
-- Include a clear loading state, retryable error state, and a demo-safe sample CV/JD with consent or fictional data.
+  - caveats explaining that absent CV text is not proof of absent ability.
+- Produce up to three prioritized learning, project, or CV-clarification actions connected to the findings.
+- Suggest grounded CV improvements only from user-provided facts and require user review before use.
+- Include clear validation/error states and a demo-safe fictional CV/JD.
+- Keep the first browser prototype local-only: no login, persistence, file upload, or external AI call.
 
 ### Optional thin features — only after the core loop works
 
+- Minimal sign-in, one saved result, and private storage if the approved demonstration requires persistence.
+- PDF/DOCX upload, parsing status, retry, and deletion if research or the demo requires file intake.
 - A shareable expert-review page with a user-created, revocable link and a simple feedback form.
 - A small curated set of job-board or employer links relevant to the target role. Links can be manually curated for a class prototype.
 - Download/export of the edited CV, if time and implementation choices allow.

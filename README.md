@@ -14,6 +14,16 @@ A course project for helping students and recent graduates understand how their 
 
 Upload a CV, provide a target job description, receive an evidence-based fit and gap report, get a prioritized learning/project roadmap, and draft a job-specific CV without inventing qualifications.
 
+## Run the current web prototype
+
+The approved reduced-scope browser prototype is in [`prototype/`](prototype/). It uses pasted CV/JD text and fictional demo data, shows four evidence states, and makes no external AI or storage call.
+
+```bash
+python3 -m http.server 4173 --directory prototype
+```
+
+Open `http://localhost:4173`, then select **Điền dữ liệu mẫu**.
+
 ## Working architecture proposal
 
 The planning baseline proposes a single modular web app using Next.js and TypeScript, with Supabase for authentication, Postgres, and private CV storage, plus a server-side AI provider adapter. This is a working recommendation to validate with the team before implementation; the course materials do not mandate a stack.
@@ -30,4 +40,4 @@ The planning baseline proposes a single modular web app using Next.js and TypeSc
 
 ## Current project state
 
-The GitHub repository was empty when this documentation baseline was prepared. These files establish scope and execution prompts; no application scaffold or product code has been added.
+Planning documents and browser prototype v0.2 are present. CP2 fieldwork, the final audience/job-family decision, the production stack, persistence, file upload, and external AI integration remain pending. See [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md) for the exact status.

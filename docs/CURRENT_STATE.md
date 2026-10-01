@@ -1,33 +1,42 @@
 # EXE Project Current State
 
-**Last updated:** 2026-09-28  
-**Status:** Initial planning and research work is underway. A CP1 idea-lock discussion draft and CP2 desk-research/fieldwork pack are prepared. Primary research, team decisions, and application implementation remain pending.
+**Last updated:** 2026-10-01
+**Status:** Reduced course MVP approved and web implementation started. A functional browser prototype exists; CP2 fieldwork, final audience/job-family selection, production-stack approval, persistence, file upload, and AI integration remain pending.
 
 ## Completed
 
-- Reviewed the project brief and course checkpoint guide.
-- Mapped the concept, proposed architecture, product boundaries, course phases, and reusable phase prompts.
-- Prepared a CP1 idea-lock discussion draft in docs/CP1_IDEA_LOCK_DRAFT.md. It is not marked as a team decision, and the status of any earlier Slot 3 submission is unconfirmed.
-- Prepared an editable CP2 market-research pack for the team. It contains sourced desk research, a competitor/pricing comparison, a survey and interview instruments, consent and analysis guidance, a presentation outline, and a checklist.
-- Identified CP2 course ambiguities about the “hub” wording, supplier definition, participant counts/overlap, and the two-expert alternative.
+- Reviewed the project brief and checkpoint guide.
+- Mapped the concept, architecture proposal, checkpoint work, scope boundaries, risks, and phase prompts.
+- Prepared the CP1 idea-lock discussion draft; prior Slot 3 submission status remains unconfirmed.
+- Prepared a separate editable CP2 market-research pack; real fieldwork has not started.
+- Approved a reduced course MVP focused on one CV-to-JD evidence flow.
+- Built browser prototype v0.2 in `prototype/` for students and recent graduates.
+- Implemented pasted CV text, target role/JD input, fictional demo data, four evidence states, cited CV passages, and priority actions.
+- Kept prototype processing inside the browser with no login, storage, external AI call, or real participant data.
+- Added analyzer checks covering requirement extraction, all four evidence states, missing evidence, input validation, and absence of hiring-prediction scores.
 
-## Current baseline
+## Current product baseline
 
-- CP2 secondary research and research instruments are prepared; the survey and interviews have not been conducted.
-- No respondent count, customer quote, willingness-to-pay result, or validated product-market-fit claim is available.
-- The first segment and job family remain hypotheses.
-- Next.js + TypeScript and Supabase remain technical proposals; the team has not approved a stack.
-- No application source code, database, authentication, or AI integration has been implemented.
-- Do not add real CVs, names, contact details, recordings, or API secrets to this repository.
+- Broad audience: university students and recent graduates preparing for internships or early-career roles.
+- First specific segment and job family remain hypotheses until CP2 evidence is analyzed.
+- Core flow: CV text + one target JD → supported/partial/unclear/missing report → up to three priority actions → later grounded CV improvement.
+- The current analyzer is a transparent keyword baseline. It is useful for UX validation but is not the final AI analysis engine.
+- Next.js + TypeScript, Supabase, and a server-side AI adapter remain production proposals. Approval is required before the prototype is migrated.
+
+## Research status
+
+- No survey or interview has been conducted for this project work.
+- There are no verified respondent counts, customer quotes, willingness-to-pay findings, or product-market-fit claims.
+- The guide's “hub,” customer/supplier counts, supplier definition, and two-expert alternative still need instructor clarification.
 
 ## Next actions
 
-1. Confirm whether the Slot 3 idea-lock deliverable was already accepted; review or adapt the CP1 draft as needed.
-2. Ask the instructor to clarify the CP2 participant counts, “hub,” supplier definition, and two-expert alternative.
-3. Conduct the instructor-confirmed survey/interviews and document sample, consent, results, and limitations.
-4. Update the target segment, value proposition, and MVP from actual evidence.
-5. Record the team’s stack decision before beginning the implementation foundation.
+1. Have the project manager review browser prototype v0.2.
+2. Approve or revise the production stack before migration.
+3. Reconcile the original course files and CP2 pack into the project evidence workflow.
+4. Confirm CP2 ambiguities, finalize research ownership, and conduct consent-safe fieldwork.
+5. Use analyzed evidence to approve or revise the first segment, job family, and value proposition.
 
 ## Resume guidance
 
-Use docs/CHECKPOINT_TRACKER.md for checkpoint status and docs/DECISIONS.md for accepted team decisions. Keep proposals labeled as proposals. The next coding phase begins after the team has confirmed the scope and stack.
+Use `docs/CHECKPOINT_TRACKER.md` for checkpoint status and `docs/DECISIONS.md` for accepted decisions. Keep market claims labeled as hypotheses until evidence exists. Do not add real CVs, participant identities, recordings, or secrets to the repository.

@@ -12,25 +12,28 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | D-004 | Expert review and job opportunity links are part of the broader idea; full marketplace and automated integrations are not needed to prove the first core loop. | Optional/thin MVP only | `EXE.docx` and prior scope planning |
 | D-005 | Course checkpoint slots/weights are CP1 at Slots 3 and 8 (10%), CP2 Slot 5 (20%), CP3 Slot 8 (15%), CP4 Slot 10 (40%), and Constructivism presentation (15%; no slot limit stated). | Captured from guide | `HƯỚNG DẪN CÁC CHECKPOINT_EXE101.docx` |
 | D-006 | CP4 Option 1 is the working rubric: Team profile 10%, Product-market fit 40%, Business model 20%, Operations 20%, Fundraising plan 10%. | Working interpretation; ask instructor about Option 2 | Checkpoint guide |
+| D-007 | Use a reduced course MVP: pasted CV text + one role/JD + four-state evidence report + three priority actions + grounded CV improvement. | Approved working baseline on 2026-10-01 | PM approval in project session |
+| D-008 | Build and review the product as a web application first. | Approved on 2026-10-01 | PM approval in project session |
+| D-009 | Keep the first functional prototype browser-only, with fictional demo data and no external AI or persistence. | Approved implementation stage; revisit at the production-foundation gate | Scope-control decision |
 
 ## Proposed technical/product choices — team confirmation needed
 
 | ID | Proposal | Why it is proposed | Status |
 |---|---|---|---|
-| P-001 | Build a single modular web app with Next.js and TypeScript. | Fits the browser-based student service and keeps the course MVP in one app. | Proposed; not yet approved |
+| P-001 | Build a single modular web app with Next.js and TypeScript. | Fits the browser-based student service and keeps the course MVP in one app. | Proposed production stack; approval required before migration from the browser prototype |
 | P-002 | Use Supabase Auth, Postgres, and private Storage for the first version. | Provides a compact path for identity, relational records, and private CV uploads. | Proposed; validate cost, team familiarity, and data handling |
 | P-003 | Call AI only through a server-side adapter and validate structured output. | Protects credentials and lets the team change providers without changing the product flow. | Proposed; provider not selected |
 | P-004 | Accept PDF and DOCX CVs first; let users paste the JD. | Keeps the MVP intake flow narrow and demonstrable. | Proposed; confirm after format needs are researched |
-| P-005 | Use supported / partial / unclear / missing categories and show CV evidence. | Makes the analysis explainable and reduces misleading certainty. | Proposed acceptance behavior |
-| P-006 | Do not make an opaque numeric hiring score central to the MVP. | The score could be mistaken for a hiring probability; categories and evidence are clearer. | Proposed guardrail |
+| P-005 | Use supported / partial / unclear / missing categories and show CV evidence. | Makes the analysis explainable and reduces misleading certainty. | Approved MVP behavior; implemented in browser prototype v0.2 |
+| P-006 | Do not make an opaque numeric hiring score central to the MVP. | The score could be mistaken for a hiring probability; categories and evidence are clearer. | Approved guardrail; covered by prototype tests |
 | P-007 | Choose one initial customer segment/job family after CP2 research. | Prevents building a broad system before demand is understood. | Open; decide from evidence |
-| P-008 | Expert review links and curated job links are optional thin features after the core analysis loop. | Protects the Slot 8 demo from scope growth. | Proposed scope boundary |
+| P-008 | Expert review links and curated job links are optional thin features after the core analysis loop. | Protects the Slot 8 demo from scope growth. | Approved scope boundary |
 
 ## Decision log
 
 | Date | Decision | Owner(s) | Evidence / reason | Follow-up |
 |---|---|---|---|---|
-| TBD | Team decisions will be recorded here. | TBD | TBD | TBD |
+| 2026-10-01 | Approved the reduced MVP and authorized web implementation to begin. | Project manager | Keeps the course criteria and core audience while reducing delivery risk. | Build the browser prototype first; keep target segment/job family provisional until CP2 evidence. |
 
 ## Instructor questions
 

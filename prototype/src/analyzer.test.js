@@ -8,6 +8,7 @@ test("extracts unique known requirements from a job description", () => {
     "JavaScript",
     "TypeScript",
     "Node.js",
+    "React",
     "SQL / relational databases",
     "REST APIs",
     "Git / version control",
@@ -18,16 +19,19 @@ test("extracts unique known requirements from a job description", () => {
   ]);
 });
 
-test("links a requirement to the CV text and distinguishes a listed skill", () => {
+test("classifies supported, partial, unclear, and missing evidence", () => {
   const report = analyzeCvAgainstJob({ cvText: SAMPLE_CV, jobDescription: SAMPLE_JD, roleTitle: "Backend Intern" });
   const node = report.findings.find((item) => item.requirement === "Node.js");
   const docker = report.findings.find((item) => item.requirement === "Docker");
   const communication = report.findings.find((item) => item.requirement === "Communication");
+  const react = report.findings.find((item) => item.requirement === "React");
 
-  assert.equal(node.status, "evidence");
+  assert.equal(node.status, "supported");
   assert.match(node.evidence, /Built a Node\.js/i);
-  assert.equal(docker.status, "not-stated");
-  assert.equal(communication.status, "listed");
+  assert.equal(docker.status, "partial");
+  assert.equal(communication.status, "unclear");
+  assert.equal(react.status, "missing");
+  assert.deepEqual(report.summary, { supported: 7, partial: 1, unclear: 1, missing: 2, total: 11 });
 });
 
 test("does not infer ability from a requirement missing in the CV", () => {
@@ -37,9 +41,9 @@ test("does not infer ability from a requirement missing in the CV", () => {
     roleTitle: "Data Intern",
   });
 
-  assert.equal(report.findings.find((item) => item.requirement === "Python").status, "not-stated");
-  assert.equal(report.findings.find((item) => item.requirement === "SQL / relational databases").status, "not-stated");
-  assert.ok(report.actions.every((action) => action.includes("Nếu")));
+  assert.equal(report.findings.find((item) => item.requirement === "Python").status, "missing");
+  assert.equal(report.findings.find((item) => item.requirement === "SQL / relational databases").status, "missing");
+  assert.ok(report.actions.every((action) => action.includes("Chưa thấy")));
 });
 
 test("rejects short input and job descriptions without recognized skills", () => {

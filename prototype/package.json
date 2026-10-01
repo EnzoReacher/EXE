@@ -1,7 +1,7 @@
 {
   "name": "exe101-cv-readiness-prototype",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "check": "node --check src/app.js && node --check src/analyzer.js",
