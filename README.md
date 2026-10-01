@@ -26,7 +26,7 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000`. The overview and assessment-intake screens are UI-only. They do not upload or store CVs, call an AI provider, or expose a public deployment. Use fictional/sample information until private processing is implemented and approved.
+Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and private, owner-scoped CV/job intake when the placeholder values in `.env.example` are configured for a reviewed Supabase project. It accepts PDF/DOCX CVs up to 5 MiB and does not call an AI provider. Until local Supabase policy tests and provider retention settings are reviewed, use fictional/sample information only.
 
 ## Course checkpoints
 
@@ -40,4 +40,4 @@ Open `http://localhost:3000`. The overview and assessment-intake screens are UI-
 
 ## Current project state
 
-The repository now contains the first M0 web-app slice on [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed to GitHub for source review. It includes a responsive workspace overview, a fictional evidence-report preview, and a CV/JD intake form with browser-only validation. The branch has not been merged or deployed. No real CV processing, database, authentication, or AI integration is connected. See the [current state](docs/CURRENT_STATE.md) and [app build tracker](docs/APP_BUILD_TRACKER.md).
+The repository contains an M1 secure-intake implementation on `codex/exe-web-app-m1`, based on M0 commit `5852f10`. It adds Supabase Auth, private owner-scoped CV and job intake, server-side PDF/DOCX parsing, and replace/delete states without selecting or using an AI provider. The branch has not been merged or deployed. See the [current state](docs/CURRENT_STATE.md) and [app build tracker](docs/APP_BUILD_TRACKER.md) for the required Supabase policy-review limitation.

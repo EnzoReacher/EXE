@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Untracked nested Next.js build left by local tooling; it is not application source.
+/web/

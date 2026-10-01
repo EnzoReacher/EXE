@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-01
-**Status:** M0 web-app slice is on a GitHub review branch; product backend and private CV processing have not started.
+**Status:** M1 secure-intake implementation is complete locally on `codex/exe-web-app-m1`; it awaits Supabase policy review and feature-branch source review.
 
 ## Completed in this build part
 
@@ -12,25 +12,30 @@
 - Built the first CV/JD intake screen with PDF/DOCX selection, role/company/JD fields, and browser-only form validation.
 - Added privacy and advisory notices. The selected file and job text are not uploaded, persisted, or analyzed.
 - Updated setup instructions and added an app-build tracker.
+- Added server-only Supabase Auth session access, owner-scoped Postgres/Storage migration policies, and a private `cv-private` Storage bucket definition.
+- Added PDF/DOCX CV intake with server-side 5 MiB, extension, signature, and DOCX archive checks; PDF/DOCX parsing stays server-side and uses no AI provider.
+- Added saved-CV processing states, parse retry, replace, delete confirmation, safe partial-deletion status, and persisted target-role/company/job-description records.
+- Added unit tests for allowed/rejected file validation, target-job validation, PDF/DOCX extraction, and safe malformed/empty parser errors. Test fixtures contain fictional content only.
 
-## Checks run
+## Checks run for M1
 
+- `pnpm test` — passed: 3 test files and 13 tests (validation, PDF/DOCX parsing, owner/unauthenticated/partial-delete repository behavior).
 - `pnpm lint` — passed.
-- `pnpm typecheck` — passed after replacing the generated route helper with an explicit React children type.
-- `pnpm build` — passed; `/`, `/assessment`, and `/icon.svg` were generated as static routes.
-- Static route content check — expected overview and assessment copy is present in the generated HTML.
-- Local HTTP smoke check — the server reported ready, but a separate loopback request could not connect; route output was verified from the build artifacts instead.
+- `pnpm typecheck` — passed.
+- `pnpm build` — passed: `/`, `/assessment`, `/api/intake/cv`, `/api/intake/cv/[id]`, `/api/intake/jobs`, and `/icon.svg` built successfully.
+- `git diff --check` — passed.
+- Secrets/personal-data diff scan — passed; only configuration placeholders and fictional test strings are present.
+- No local Supabase CLI/project was available, so database RLS and private Storage policy behavior could not be integration-tested. This is a release blocker for accepting real CVs, not a reason to create hosted resources.
 
 ## Current limits and open decisions
 
-- No account system, database, private object storage, CV parser, AI provider, analysis result, or deletion workflow is connected.
-- Next.js and TypeScript are used as a reversible UI baseline. The team still needs to confirm the complete stack before persistent storage, authentication, or AI integration.
-- PDF/DOCX and the first job-family examples remain prototype assumptions; confirm them through team discussion and CP2 research.
-- The sample report is fictional and does not represent an analysis of user-provided information.
-- Committed as [`a19d72e`](https://github.com/EnzoReacher/EXE/commit/a19d72e553a6e334400bde507903b944e3b0d3eb) on the review branch. `main` is unchanged; no merge or deployment was initiated.
+- A reviewed Supabase project/environment is still required. Use only placeholder values in `.env`; never commit credentials or real CVs.
+- Supabase Storage deletion removes the live object, but project-level backup and retention behavior must be reviewed and documented before real CVs are accepted.
+- No AI provider, analysis, scoring, roadmap, rewriting, sharing, job links, payments, or mobile work is included. The existing overview’s report preview remains fictional.
+- The current M1 branch starts at M0 commit [`5852f10`](https://github.com/EnzoReacher/EXE/commit/5852f100b9d214ba36c367a173ed968c716eba5a); `main` remains unchanged and no deployment was initiated.
 
 ## Resume from here
 
-1. Review the overview and assessment form on the M0 branch.
-2. Confirm the engineering direction and the intake data/privacy decisions in `docs/DECISIONS.md`.
-3. Continue with the next part in `docs/APP_BUILD_TRACKER.md`: secure CV/JD intake, ownership, and deletion behavior.
+1. Apply the reviewed migration to a local Supabase environment and run RLS/Storage cross-user integration tests.
+2. Review provider backup/retention settings and approve private-data handling before any real CV is accepted.
+3. After M1 policy review, proceed only to M2 evidence-based analysis.

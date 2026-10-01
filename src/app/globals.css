@@ -208,6 +208,28 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
 .form-action-note { color: #8c99a1; font-size: 9px; }
 .form-notice:empty { display: none; }
 .form-notice { margin: 14px 0 0; padding: 10px 12px; border: 1px solid #d8ebe5; border-radius: 8px; background: #f3faf7; color: #397c70; font-size: 9px; line-height: 1.55; }
+.form-notice.error { border-color: #efd5d2; background: #fff6f5; color: #a7544c; }
+.form-notice.info { border-color: #dce8ef; background: #f5fafc; color: #527887; }
+.button:disabled { cursor: not-allowed; opacity: .66; transform: none; }
+.workspace-status, .saved-intake { margin: 0 0 16px; padding: 13px 15px; border: 1px solid #e1ebeb; border-radius: 11px; background: #f4f9f8; color: #547078; font-size: 10px; }
+.auth-controls { display: flex; align-items: end; flex-wrap: wrap; gap: 9px; margin: 23px auto 0; padding: 12px; border: 1px solid #e4ebed; border-radius: 10px; background: #fff; }
+.auth-controls label { display: grid; gap: 5px; color: #64747d; font-size: 9px; font-weight: 700; }
+.auth-controls input { width: 150px; height: 34px; padding: 0 8px; border: 1px solid #dfe6e8; border-radius: 7px; font-size: 10px; }
+.auth-controls .button { min-height: 34px; }
+.auth-controls p { flex: 1 0 100%; margin: 0; color: #788891; font-size: 9px; }
+.workspace-status strong { margin-right: 8px; color: #326e68; }
+.workspace-status p { margin: 0; }
+.saved-intake { margin-top: 16px; background: #fff; }
+.saved-intake h2 { margin: 0 0 10px; font-size: 13px; }
+.saved-cv { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid #edf1f2; }
+.saved-cv strong { display: block; color: #405460; font-size: 10px; }
+.saved-cv p { margin: 5px 0 0; color: #985a52; font-size: 9px; }
+.cv-status { display: inline-block; margin-top: 5px; padding: 3px 6px; border-radius: 8px; background: #eaf5f1; color: #368276; font-size: 8px; font-weight: 700; }
+.cv-status.failed, .cv-status.delete_failed { background: #fff1ef; color: #a85d55; }
+.cv-status.processing, .cv-status.deleting { background: #eff4f5; color: #647b85; }
+.cv-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.text-button { padding: 0; border: 0; background: none; color: #087b73; cursor: pointer; font-size: 9px; font-weight: 700; }
+.text-button.danger { color: #a7544c; }
 .assessment-privacy { display: flex; align-items: flex-start; gap: 12px; margin-top: 16px; padding: 14px 15px; border: 1px solid #e7ecee; border-radius: 11px; background: #fff; }
 .privacy-lock { display: grid; place-items: center; flex: 0 0 29px; width: 29px; height: 29px; border-radius: 9px; background: #edf5f4; color: #4d8982; }
 .privacy-lock svg { width: 16px; height: 16px; }
@@ -291,4 +313,8 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
   .browse-button { padding: 7px; font-size: 8px; }
   .form-fields-row { grid-template-columns: 1fr; gap: 12px; }
   .form-actions { align-items: flex-start; flex-direction: column; gap: 9px; }
+  .saved-cv { align-items: flex-start; flex-direction: column; }
+  .cv-actions { justify-content: flex-start; }
+  .auth-controls { align-items: stretch; flex-direction: column; }
+  .auth-controls input { width: 100%; }
 }
