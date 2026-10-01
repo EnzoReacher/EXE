@@ -30,7 +30,7 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 
 | Date | Decision | Owner(s) | Evidence / reason | Follow-up |
 |---|---|---|---|---|
-| TBD | Team decisions will be recorded here. | TBD | TBD | TBD |
+| 2026-10-01 | Begin the local web-app foundation using the repository's Next.js + TypeScript proposal for the UI shell only. | Project owner | User directed the project to focus on building the web app. | Confirm the full stack with the team before adding persistent storage, authentication, or AI services. |
 
 ## Instructor questions
 

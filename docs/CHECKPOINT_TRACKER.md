@@ -36,3 +36,7 @@ Use this file as the team's working checklist. Mark an item complete only when i
 ## Evidence folder suggestion
 
 Keep one dated evidence item per file in `docs/evidence/`: interview guide, anonymized survey export, consent-safe interview notes, market source log, competitor matrix, prototype/demo screenshots, BMC, pitch-deck source notes, and decision log. Do not commit raw CVs, names, phone numbers, email addresses, interview recordings, or API secrets.
+
+## App implementation status
+
+Course checkpoint completion remains unchanged. Track engineering parts, checks, and remaining product work in [`APP_BUILD_TRACKER.md`](APP_BUILD_TRACKER.md); the current local slice is not yet a completed CP1 MVP demo.

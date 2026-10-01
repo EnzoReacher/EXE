@@ -1,27 +1,36 @@
 # EXE Project Current State
 
-**Last prepared:** 2026-09-28  
-**Status:** Planning baseline prepared; application implementation has not started.
+**Last updated:** 2026-10-01
+**Status:** First local web-app slice implemented; product backend and private CV processing have not started.
 
-## Completed in this planning pass
+## Completed in this build part
 
-- Reviewed the project brief and course checkpoint guide.
-- Mapped the product's full concept and separated the course MVP from deferred expansion.
-- Proposed a modular web architecture and initial data/domain structure.
-- Mapped project phases to the Slot 3, 5, 8, and 10 checkpoints.
-- Generated reusable prompts for discovery, research, design, implementation, demo, BMC, pitch, and Constructivism presentation.
-- Recorded unresolved course instructions and proposed decisions separately.
+- Cloned the clean `main` baseline and created the local branch `codex/exe-web-app-m0`.
+- Added the Next.js App Router and TypeScript application foundation.
+- Built a responsive workspace overview with the project's core value proposition and assessment path.
+- Added a clearly labeled fictional report preview using supported, partial, and missing-evidence examples; it has no match score.
+- Built the first CV/JD intake screen with PDF/DOCX selection, role/company/JD fields, and browser-only form validation.
+- Added privacy and advisory notices. The selected file and job text are not uploaded, persisted, or analyzed.
+- Updated setup instructions and added an app-build tracker.
 
-## Current baseline
+## Checks run
 
-- The first segment/job family is not yet validated; choose it using CP2 evidence.
-- Next.js + TypeScript and Supabase are a technical proposal, not a team-approved stack.
-- No application source code, database, authentication, or AI integration is implemented.
-- Course-specific ambiguities remain in `CHECKPOINT_TRACKER.md`.
+- `pnpm lint` — passed.
+- `pnpm typecheck` — passed after replacing the generated route helper with an explicit React children type.
+- `pnpm build` — passed; `/`, `/assessment`, and `/icon.svg` were generated as static routes.
+- Static route content check — expected overview and assessment copy is present in the generated HTML.
+- Local HTTP smoke check — the server reported ready, but a separate loopback request could not connect; route output was verified from the build artifacts instead.
+
+## Current limits and open decisions
+
+- No account system, database, private object storage, CV parser, AI provider, analysis result, or deletion workflow is connected.
+- Next.js and TypeScript are used as a reversible UI baseline. The team still needs to confirm the complete stack before persistent storage, authentication, or AI integration.
+- PDF/DOCX and the first job-family examples remain prototype assumptions; confirm them through team discussion and CP2 research.
+- The sample report is fictional and does not represent an analysis of user-provided information.
+- No code was committed or pushed, and nothing was deployed or published.
 
 ## Resume from here
 
-1. Check which course slot/checkpoint is currently next for the group.
-2. Review `PROJECT_SCOPE_AND_PLAN.md`, `DECISIONS.md`, and `CHECKPOINT_TRACKER.md` together.
-3. Assign owners and complete the first incomplete checkpoint prompt in `PHASE_PROMPTS.md`.
-4. Update this file after each accepted milestone: completed work, remaining work, checks/evidence, risks, and next phase.
+1. Review the local overview and assessment form.
+2. Confirm the engineering direction and the intake data/privacy decisions in `docs/DECISIONS.md`.
+3. Continue with the next part in `docs/APP_BUILD_TRACKER.md`: secure CV/JD intake, ownership, and deletion behavior.
