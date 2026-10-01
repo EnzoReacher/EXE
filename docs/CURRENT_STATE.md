@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-01
-**Status:** M1 secure-intake implementation is complete locally on `codex/exe-web-app-m1`; it awaits Supabase policy review and feature-branch source review.
+**Status:** M1 secure-intake implementation and local Supabase policy acceptance are complete on `codex/exe-web-app-m1`; it awaits owner/source review.
 
 ## Completed in this build part
 
@@ -16,6 +16,7 @@
 - Added PDF/DOCX CV intake with server-side 5 MiB, extension, signature, and DOCX archive checks; PDF/DOCX parsing stays server-side and uses no AI provider.
 - Added saved-CV processing states, parse retry, replace, delete confirmation, safe partial-deletion status, and persisted target-role/company/job-description records.
 - Added unit tests for allowed/rejected file validation, target-job validation, PDF/DOCX extraction, and safe malformed/empty parser errors. Test fixtures contain fictional content only.
+- Applied `20261001_m1_secure_intake.sql` to an isolated Docker-based local Supabase stack and passed an authenticated two-user RLS/private-Storage acceptance test using only temporary fictional accounts/files.
 
 ## Checks run for M1
 
@@ -25,17 +26,17 @@
 - `pnpm build` — passed: `/`, `/assessment`, `/api/intake/cv`, `/api/intake/cv/[id]`, `/api/intake/jobs`, and `/icon.svg` built successfully.
 - `git diff --check` — passed.
 - Secrets/personal-data diff scan — passed; only configuration placeholders and fictional test strings are present.
-- No local Supabase CLI/project was available, so database RLS and private Storage policy behavior could not be integration-tested. This is a release blocker for accepting real CVs, not a reason to create hosted resources.
+- `pnpm test:supabase:local` — passed against a local Docker Supabase stack after `pnpm dlx supabase start`. The test confirms own-user CRUD/replacement/deletion, cross-user and unauthenticated denial, owner-scoped private paths, private-bucket access, extracted-text removal, and retryable deletion-failure state. No hosted Supabase project, production data, or deployment was used.
 
 ## Current limits and open decisions
 
-- A reviewed Supabase project/environment is still required. Use only placeholder values in `.env`; never commit credentials or real CVs.
+- A reviewed Supabase project/environment is still required for any real user data. Use only placeholder values in `.env`; never commit credentials or real CVs.
 - Supabase Storage deletion removes the live object, but project-level backup and retention behavior must be reviewed and documented before real CVs are accepted.
 - No AI provider, analysis, scoring, roadmap, rewriting, sharing, job links, payments, or mobile work is included. The existing overview’s report preview remains fictional.
 - The current M1 branch starts at M0 commit [`5852f10`](https://github.com/EnzoReacher/EXE/commit/5852f100b9d214ba36c367a173ed968c716eba5a); `main` remains unchanged and no deployment was initiated.
 
 ## Resume from here
 
-1. Apply the reviewed migration to a local Supabase environment and run RLS/Storage cross-user integration tests.
-2. Review provider backup/retention settings and approve private-data handling before any real CV is accepted.
-3. After M1 policy review, proceed only to M2 evidence-based analysis.
+1. Review provider backup/retention settings and approve private-data handling before any real CV is accepted.
+2. Obtain owner review of the M1 feature branch; do not merge or deploy without approval.
+3. After M1 owner review, proceed only to M2 evidence-based analysis.
