@@ -1,0 +1,5 @@
+data_kind,collection_start,collection_end,responses_started,responses_eligible,responses_completed,recruitment_channel,limitations,question_id,question_type,response_label,count,unanswered_count,theme_category
+synthetic_aggregate,2030-01-01,2030-01-02,6,5,4,student_network,Synthetic test only; fictional convenience sampling and no population inference.,Q1,single_choice,manual_reading,3,0,workflow_category
+synthetic_aggregate,2030-01-01,2030-01-02,6,5,4,student_network,Synthetic test only; fictional convenience sampling and no population inference.,Q1,single_choice,mentor_guidance,1,0,workflow_category
+synthetic_aggregate,2030-01-01,2030-01-02,6,5,4,student_network,Synthetic test only; fictional convenience sampling and no population inference.,Q2,multiple_choice,effort,2,1,concern_category
+synthetic_aggregate,2030-01-01,2030-01-02,6,5,4,student_network,Synthetic test only; fictional convenience sampling and no population inference.,Q2,multiple_choice,source_clarity,2,1,concern_category

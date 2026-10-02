@@ -1,0 +1,17 @@
+[
+  {
+    "data_kind": "synthetic_aggregate",
+    "collection_start": "2030-01-01",
+    "collection_end": "2030-01-02",
+    "responses_started": 6,
+    "responses_eligible": 5,
+    "responses_completed": 4,
+    "recruitment_channel": "student_network",
+    "limitations": "Synthetic test only; fictional convenience sampling and no population inference.",
+    "question_id": "Q1",
+    "question_type": "single_choice",
+    "response_label": "manual_reading",
+    "count": 4,
+    "unanswered_count": 0
+  }
+]

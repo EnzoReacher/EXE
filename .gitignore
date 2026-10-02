@@ -42,3 +42,7 @@ next-env.d.ts
 
 # Untracked nested Next.js build left by local tooling; it is not application source.
 /web/
+
+# Local research drafts/exports only; reviewed anonymized evidence remains trackable.
+/research/private/
+/docs/evidence/private/

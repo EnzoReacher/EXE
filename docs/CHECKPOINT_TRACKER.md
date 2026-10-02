@@ -13,6 +13,8 @@ Use this file as the team's working checklist. Mark an item complete only when i
 
 ## CP2 research checklist
 
+M10.3 local research operations tooling is prepared; see `M10_3_OWNER_HANDOFF.md`. Synthetic validator/summary/source-log passes are not actual survey/expert/market evidence or CP2 acceptance. The working course requirements and open instructor questions below are unchanged; M11 remains blocked and M7/M10.2 owner reviews remain pending.
+
 - [x] Prepare consent-safe M8 research plan, interview guides, anonymous survey template, blank evidence register, current-source comparison template, and owner checklist.
 - [x] Prepare M9 evidence-register validator, evidence-review template, product decision gate, next-feature matrix, and unchecked owner status.
 - [x] Initialize M10 CP2 execution workspace with blank status, session-log, and product-direction records.

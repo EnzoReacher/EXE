@@ -21,6 +21,10 @@ This tracks engineering work separately from course grading checkpoints. Mark a 
 
 Engineering hardening checks passed on `codex/exe-web-app-m10-2-hardening` from exact M10 commit `4af832c`: 115 tests in 22 files, lint/typecheck/build, both script syntax checks, CP2 template validation, diff check and local fictional Supabase acceptance. Scope: current-route clarity, forms/keyboard support, shared responsive/readability safeguards, safe asynchronous/error behavior, privacy audit and meaningful regressions. Actual outcomes are recorded in `M10_2_HARDENING_ACCEPTANCE.md`; connected browser was unavailable and manual owner review is required. CP2 remains pending and no M11 feature is selected. No claim, merge or deployment is authorized.
 
+## M10.3 research operations toolkit
+
+Prepared on `codex/exe-web-app-m10-3-research-ops` from M10.2 `bd34743`: local-only aggregate/source validation and neutral summaries, ignored private directories, synthetic regression fixtures and owner schemas/handoff. Final 175 tests in 23 files and required quality/local fictional checks passed. No application workflow change or automated collection. CP2 remains pending, target segment/job family open, price/competitor claims blocked and M11 blocked. M7/M10.2 owner browser review remains pending; no merge or deployment. See `M10_3_RESEARCH_OPS_ACCEPTANCE.md`.
+
 ## M0 review notes
 
 - Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.

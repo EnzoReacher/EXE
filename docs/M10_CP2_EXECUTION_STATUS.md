@@ -26,6 +26,8 @@ This file is a live checklist. An unchecked item is not complete. Do not mark an
 
 ## Exact inputs required next
 
+M10.3 prepares local operations only: use `M10_3_OWNER_HANDOFF.md` and the survey/source schemas to manually anonymize, validate and summarize actual owner-supplied evidence before safe register entry. Private drafts go in ignored `research/private/` or `docs/evidence/private/`; identities/raw files stay separate. No research was collected automatically or entered; CP2 remains **Evidence collection pending**. Target segment/job family remain open, price/competitor claims blocked and M11 blocked. M7/M10.2 fictional owner browser reviews remain pending. No merge or deployment occurred.
+
 1. Documented fictional-data results for every M7/M5 owner review item above.
 2. Actual collection dates, anonymized category, consent-safe summary, related hypothesis, signal, limitations, and owner-review status for each target-user or expert activity.
 3. Aggregate anonymous survey counts/results and sampling limitations, if a survey is used.

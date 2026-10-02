@@ -12,7 +12,10 @@
     "test:supabase:local": "node scripts/m1-local-policy-check.mjs",
     "cp2:validate": "node scripts/validate-cp2-evidence.mjs --file docs/CP2_EVIDENCE_REGISTER.md --mode template",
     "cp2:validate:template": "node scripts/validate-cp2-evidence.mjs --file docs/CP2_EVIDENCE_REGISTER.md --mode template",
-    "cp2:validate:collected": "node scripts/validate-cp2-evidence.mjs --file docs/CP2_EVIDENCE_REGISTER.md --mode collected"
+    "cp2:validate:collected": "node scripts/validate-cp2-evidence.mjs --file docs/CP2_EVIDENCE_REGISTER.md --mode collected",
+    "cp2:survey:validate": "node scripts/validate-cp2-survey.mjs",
+    "cp2:survey:summarize": "node scripts/summarize-cp2-survey.mjs",
+    "cp2:sources:validate": "node scripts/validate-cp2-source-log.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

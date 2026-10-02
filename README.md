@@ -41,4 +41,16 @@ Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and
 
 ## Current project state
 
+### Local CP2 research operations
+
+M10.3 tooling is on `codex/exe-web-app-m10-3-research-ops` from M10.2 commit `bd34743`. Place private drafts in ignored `research/private/` or `docs/evidence/private/`; keep identity/contact/raw research material separate and never force-add it. See the [owner handoff](docs/M10_3_OWNER_HANDOFF.md), [data boundary](docs/M10_3_RESEARCH_DATA_BOUNDARY.md) and [acceptance record](docs/M10_3_RESEARCH_OPS_ACCEPTANCE.md).
+
+```bash
+pnpm cp2:survey:validate -- --file research/private/cp2-survey-aggregate.csv
+pnpm cp2:survey:summarize -- --file research/private/cp2-survey-aggregate.csv --output docs/evidence/private/survey-draft.md
+pnpm cp2:sources:validate -- --file docs/evidence/private/cp2-public-source-log.md
+```
+
+Local structure/sensitive-pattern checks and count-only summaries do not collect evidence, verify facts/research quality, approve claims or select M11. CP2 remains pending; M7/M10.2 owner browser review and release decisions remain pending. No application workflow changes, merge or deployment.
+
 M10.2 hardening is on `codex/exe-web-app-m10-2-hardening`, based on M10 commit `4af832c`. It improves the existing fictional-data workflow, accessibility, responsive safeguards and error handling; it does not select a new product feature. CP2 evidence remains pending and M11 is blocked. No merge or deployment is authorized. See the [hardening acceptance record](docs/M10_2_HARDENING_ACCEPTANCE.md), [fictional-data owner checklist](docs/M10_2_OWNER_REVIEW.md), [current state](docs/CURRENT_STATE.md) and [app build tracker](docs/APP_BUILD_TRACKER.md).

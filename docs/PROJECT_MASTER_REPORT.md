@@ -3,7 +3,7 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-02
-**Working branch:** `codex/exe-web-app-m10-2-hardening`
+**Working branch:** `codex/exe-web-app-m10-3-research-ops`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -94,6 +94,12 @@ flowchart TD
 | **M10 — CP2 research execution workspace** | CP2 execution status, research-session log, product-direction decision record, and owner gate | Evidence collection pending | M10 repository review found only example/template material: no participant/source evidence, owner-review result, product direction, or product feature is recorded. M11 remains blocked until reviewed evidence and the documented decision gate are complete. No merge or deployment occurred. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 | **M10.2 — Existing-experience hardening** | Existing route clarity, keyboard/form access, responsive safeguards, safe errors and regression coverage | Engineering checks passed — owner manual review pending | From exact M10 baseline `4af832c`; 115 tests in 22 files, lint/typecheck/build, script syntax, CP2 template/diff and local fictional Supabase acceptance passed. Seven routes hardened; browser disconnected, so viewport/zoom/keyboard/assistive-technology review remains owner follow-up. See `M10_2_HARDENING_ACCEPTANCE.md`. CP2 remains pending, M11 remains blocked, and no price, market, competitor, validation, privacy-superiority or ease-of-use claim is unlocked. No merge or deployment occurred. |
+
+## M10.3 research operations status — 2026-10-02
+
+Toolkit prepared from verified M10.2 `bd34743`: root-anchored private research ignore rules, local survey CSV/JSON aggregate validator, deterministic neutral summary, public-source log completeness validator, synthetic fixtures/tests, schemas, data-boundary/analysis guide and owner handoff. Final 175 tests in 23 files, lint/typecheck/build, all required syntax/template/synthetic CLI/diff checks and fictional local Supabase acceptance passed; see `M10_3_RESEARCH_OPS_ACCEPTANCE.md`.
+
+No evidence was collected automatically or entered in the register. Target segment/job family remain open; no price, competitor, market, validation, privacy-superiority or ease claim is unlocked. CP2 remains pending and M11 blocked. M7/M10.2 owner browser reviews remain pending. The job-seeker app workflow is unchanged. No merge or deployment occurred.
 
 ## 4. M2 status and acceptance record
 

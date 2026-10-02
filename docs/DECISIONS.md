@@ -56,6 +56,10 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 
 ## Instructor questions
 
+### M10.3 research operations scope — 2026-10-02
+
+Owner requested local-only intake/analysis preparation from M10.2 `bd34743` on `codex/exe-web-app-m10-3-research-ops`. Standard-library scripts reject sensitive/malformed input without printing cell values or rewriting raw data; summaries only format actual supplied aggregate counts. Source logs are checked for completeness, never fetched or fact-verified. Synthetic tests remain distinct from evidence. CP2, target segment/job family, pricing/competitor claims, M11, M7/M10.2 manual review and release gates remain pending. No application feature, merge or deployment is authorized.
+
 ### M10.2 scope decision — 2026-10-02
 
 The owner explicitly requested parallel hardening of the existing app on `codex/exe-web-app-m10-2-hardening` from `4af832c`. This authorizes engineering usability/accessibility/quality work within existing scope, not evidence-based product validation or M11 feature selection. CP2, target segment/job family, pricing, competitor position, privacy/retention and release approvals remain pending. No schema/RLS/Storage/token redesign was required by the narrow API fixes. Production CSP remains deferred until a reviewed deployed-origin plan exists.

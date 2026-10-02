@@ -5,6 +5,8 @@
 
 ## Completed in this build part
 
+- M10.3 local CP2 research operations toolkit prepared on `codex/exe-web-app-m10-3-research-ops` from M10.2 `bd34743`: ignored private drafts, aggregate survey validation/neutral summaries, source-log completeness checks, schemas, synthetic fixtures and owner handoff. No app workflow changes or collected evidence. Checks passed: final 175 tests in 23 files, lint/typecheck/build, all required script syntax/template/synthetic CLI/diff checks and fictional local Supabase acceptance. See `M10_3_RESEARCH_OPS_ACCEPTANCE.md`.
+
 - Cloned the clean `main` baseline and created `codex/exe-web-app-m0` locally and on GitHub for source review.
 - Added the Next.js App Router and TypeScript application foundation.
 - Built a responsive workspace overview with the project's core value proposition and assessment path.
