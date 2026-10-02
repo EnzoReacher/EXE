@@ -220,8 +220,9 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 4 | Build M3 roadmap and source-grounded CV draft | Complete 2026-10-02 | Code checks passed; local policy acceptance and owner review remain |
 | 5 | Run CP2 research and approve target segment/value/pricing | Parallel product work | Team evidence and instructor guidance |
 | 6 | Build M4 saved work and integration polish | Complete 2026-10-02 | Full quality gate and local acceptance passed; owner review remains |
-| 7 | Prepare M5 CP1 Slot 8 demo readiness | Next milestone | Use fictional data; include known limits and product/technology description |
-| 8 | Decide whether to merge/deploy | Owner decision only | Requires explicit approval |
+| 7 | Prepare M5 CP1 Slot 8 demo readiness | Complete — owner/course review pending | Fictional demo data and DOCX fixture, local setup checklist, 3–5 minute runbook, product/service and technology descriptions, failure plan, owner checklist, and final automated checks are complete; owner must still rehearse/review before CP1 is marked complete |
+| 8 | Run CP2 evidence collection | Next stage | Validate segment, value, alternatives, competitor positioning, and willingness to pay; no pricing/lower-price claim before this research |
+| 9 | Final owner review, then decide whether to merge/deploy | Owner decision only | Requires explicit privacy/security and backup/retention review plus explicit approval; no deployment or merge in M5 |
 
 ## 11. Progress log
 
@@ -234,12 +235,15 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 2026-10-02 | M3 roadmap and CV draft | Built private roadmap, source-grounded draft, editing/acceptance controls, owner-scoped storage, and deletion cascade migration | 35 unit tests; lint, typecheck, build, syntax, and diff checks passed |
 | 2026-10-02 | M2/M3 local Supabase acceptance | Passed using temporary fictional accounts, CVs, and JDs only | Fixed duplicate Supabase migration versions by renaming M2 to `20261002` and M3 to `20261003`; ran `pnpm dlx supabase start` and `SUPABASE_URL="$API_URL" SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY" pnpm test:supabase:local` |
 | 2026-10-02 | M4 saved work and integration polish | Completed private saved-work history, return links, responsive/accessibility refinements, and plain-language loading/empty/error states | 40 unit tests, lint, typecheck, build, syntax/diff checks, and a repeated local Supabase acceptance passed; no merge or deployment |
+| 2026-10-02 | M5 Section 2 — fictional demo material | Completed demo persona, deterministic expected findings, local environment checklist, and upload fixture | `docs/demo/FICTIONAL_DEMO_DATA.md`; `docs/demo/DEMO_ENVIRONMENT_CHECKLIST.md`; parser-verified 1,489-byte fictional DOCX fixture |
+| 2026-10-02 | M5 Section 3 — CP1 Slot 8 package | Completed 3–5 minute core-flow runbook, product/service and technology descriptions, failure plan, and owner review checklist | `docs/demo/CP1_SLOT8_DEMO_RUNBOOK.md`; `docs/demo/PRODUCT_SERVICE_DESCRIPTION.md`; `docs/demo/TECHNOLOGY_TOOLS_DESCRIPTION.md`; `docs/demo/CP1_SLOT8_OWNER_REVIEW_CHECKLIST.md` |
+| 2026-10-02 | M5 Section 4 — final verification and tracking | Passed final code gate and fictional-data local Supabase acceptance; demo package marked ready for owner/course review | 40 unit tests, lint, typecheck, build, script syntax/diff checks, and two-user local RLS/Storage/analysis/roadmap/draft/cascade acceptance passed; live browser pixel review remains an owner checklist item because a connected browser was unavailable |
 
 ## 12. How to resume
 
-1. Begin **M5 CP1 Slot 8 demo readiness**: prepare a 3–5 minute fictional-data demo, sample CV/JD, known-limit notes, and product/technology description.
-2. Obtain owner review of the M2–M4 feature branch. Do not merge or deploy without explicit owner approval.
-3. Complete CP2 research before making pricing or lower-price claims.
+1. Have the owner rehearse and review the **M5 CP1 Slot 8 fictional-data demo package**, including a desktop and narrow-mobile visual pass. Do not mark CP1 complete without team/course evidence.
+2. Begin **CP2 evidence collection** before claims about segment, pricing, lower price, competitors, or market demand.
+3. Complete final owner privacy/security and Supabase backup/retention review before any merge, deployment, or real CV use.
 
 ## 13. Source documents
 

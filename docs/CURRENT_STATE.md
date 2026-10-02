@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M1–M4 are implemented on `codex/exe-web-app-m2`. M2/M3 and the repeated M4 local Supabase acceptance pass; owner review remains pending.
+**Status:** M1–M5 are implemented on `codex/exe-web-app-m2`. M2/M3 and the repeated M4/M5 local Supabase acceptance pass; the M5 CP1 Slot 8 fictional-data demo package is ready for owner/course review.
 
 ## Completed in this build part
 
@@ -43,6 +43,8 @@
 - M2/M3 local code checks — `pnpm test` passed (6 files, 35 tests); `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, and `git diff --check` passed.
 - M2/M3 local Supabase acceptance — passed on 2026-10-02: `pnpm dlx supabase start`, then `set -a; eval "$(pnpm dlx supabase status -o env | grep -E '^(API_URL|PUBLISHABLE_KEY)=')"; set +a; SUPABASE_URL="$API_URL" SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY" pnpm test:supabase:local`. The check used only temporary fictional accounts and fictional source content.
 - M4 checks — passed on 2026-10-02: `pnpm test` (7 test files, 40 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, and `git diff --check`. The available local stack also reran and passed `pnpm test:supabase:local` with fictional data only.
+- M5 demo package — completed on 2026-10-02: `docs/demo/` contains the fictional Aria Vale CV/JD material, parser-verified 1,489-byte DOCX fixture, local environment checklist, CP1 Slot 8 runbook, product/service description, technology/tools description, and owner review checklist. All names, company, qualifications, and achievements are fictional.
+- M5 final checks — passed on 2026-10-02: `pnpm test` (7 files, 40 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and repeated `pnpm test:supabase:local` with temporary fictional local accounts/content only.
 
 ## Current limits and open decisions
 
@@ -52,9 +54,10 @@
 - Saved work is a minimal private index, not a data-export or source-text browsing feature. It deliberately excludes sensitive source content and internal records from list responses.
 - Supabase backup/retention settings still need review before using real CVs. The local M2/M3 migration and two-user RLS/cascade checks now pass; this does not replace an owner security/privacy review.
 - M1 branch `codex/exe-web-app-m1` was approved as M2's base. `main` remains unchanged; no merge or deployment was initiated.
+- The M5 package supports a fictional-data local demo, not a completed CP1 course checkpoint. A connected-browser pixel review was unavailable during the final implementation session; the owner must complete the desktop and narrow-mobile visual review in the M5 checklist before presenting.
 
 ## Resume from here
 
-1. Begin M5 CP1 Slot 8 demo readiness using fictional data: demo script, sample CV/JD, product/technology description, and known limits.
-2. Choose and review an AI provider only after the team evaluates cost, privacy, retention, and consent; until then, keep local mode clearly labeled.
-3. Review Supabase backup/retention settings before using real CVs. Do not merge to `main` or deploy without explicit owner approval.
+1. Have the owner rehearse and review the M5 CP1 Slot 8 fictional-data package, including the required desktop and narrow-mobile visual check. Do not mark CP1 complete without team/course evidence.
+2. Begin CP2 evidence collection: validate the segment, value, alternatives, competitor positioning, and willingness to pay before any pricing or lower-price claim.
+3. Complete owner privacy/security and Supabase backup/retention review before real CVs. Do not merge to `main` or deploy without explicit owner approval.

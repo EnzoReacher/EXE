@@ -6,7 +6,7 @@ Use this file as the team's working checklist. Mark an item complete only when i
 |---|---:|---:|---|---|---|
 | CP1 — idea lock | 3 | Part of 10% | Not started | TBD | Product/service description, target-user hypothesis, problem, value proposition, MVP boundary |
 | CP2 — market research | 5 | 20% | Not started | TBD | Survey >100 **or** two industry experts; 5–10 video customer interviews; market/competitor analysis and value proposition |
-| CP1 — MVP demo | 8 | Part of 10% | Not started | TBD | End-to-end demo plus product/service and technology-tools descriptions |
+| CP1 — MVP demo | 8 | Part of 10% | Demo package ready — team/course review pending | TBD | Fictional local end-to-end runbook and product/technology descriptions in `docs/demo/`; complete rehearsal, owner review, and course evidence before marking CP1 complete |
 | CP3 — BMC | 8 | 15% | Not started | TBD | Business Model Canvas supported by research or assumptions clearly labeled |
 | CP4 — pitch deck | 10 | 40% | Not started | TBD | Option 1 working rubric: Team profile 10%; Product-market fit 40%; Business model 20%; Operations 20%; Fundraising plan 10% |
 | Constructivism presentation | No limit stated | 15% | Not started | TBD | Rubric and evidence format not included in the guide; keep a learning/decision log and ask instructor |
@@ -39,4 +39,4 @@ Keep one dated evidence item per file in `docs/evidence/`: interview guide, anon
 
 ## App implementation status
 
-Course checkpoint completion remains unchanged. Track engineering parts, checks, and remaining product work in [`APP_BUILD_TRACKER.md`](APP_BUILD_TRACKER.md); the M0 app slice is not yet a completed CP1 MVP demo.
+The M5 fictional-data demo package is ready for review, but CP1 is not complete until the team performs the demo and records the required course evidence. Track engineering parts, checks, and remaining product work in [`APP_BUILD_TRACKER.md`](APP_BUILD_TRACKER.md).
