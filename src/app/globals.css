@@ -1,10 +1,10 @@
 :root {
   --ink: #1d2a35;
-  --muted: #71808d;
+  --muted: #526572;
   --line: #e8edf0;
   --canvas: #f7f9fa;
   --navy: #183548;
-  --teal: #0d8a83;
+  --teal: #08756f;
   --teal-dark: #08756f;
   --teal-soft: #e7f5f2;
   --shadow: 0 16px 48px rgba(35, 61, 76, 0.07);
@@ -20,6 +20,7 @@ body {
   color: var(--ink);
   font-family: Inter, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-wrap: anywhere;
 }
 button, input, textarea { font: inherit; }
 a { color: inherit; text-decoration: none; }
@@ -239,7 +240,7 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
 .assessment-privacy p { margin: 0; color: #87939a; font-size: 9px; line-height: 1.55; }
 .assessment-disclaimer { margin: 13px 0 0; color: #9aa5ac; font-size: 8px; text-align: center; }
 
-:focus-visible { outline: 3px solid rgba(13,138,131,.42); outline-offset: 3px; }
+:focus-visible { outline: 3px solid #183548; outline-offset: 3px; box-shadow: 0 0 0 6px #fff; }
 @media (max-width: 1120px) {
   .page-content { padding-right: 32px; padding-left: 32px; }
   .topbar { padding-right: 32px; padding-left: 32px; }
@@ -518,6 +519,69 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
 .button-danger:hover { background: #fff1ef; box-shadow: none; }
 .delete-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: #8e625e; font-size: 10px; font-weight: 700; }
 
+/* M10.2: shared readability, keyboard and long-text safeguards. */
+.skip-link { position: fixed; z-index: 100; top: 12px; left: 12px; padding: 14px 18px; border-radius: 8px; background: var(--navy); color: #fff; transform: translateY(-160%); }
+.skip-link:focus { transform: none; }
+main { scroll-margin-top: 90px; }
+main:focus { outline: none; }
+button, input, textarea, select { max-width: 100%; }
+select { font: inherit; }
+.button, .text-button, .nav-item, .back-link, .text-link, .hero-link, .saved-work-link { min-height: 44px; white-space: normal; overflow-wrap: anywhere; }
+.button { padding: 10px 16px; text-align: center; }
+.text-button, .back-link, .text-link, .saved-work-link { display: inline-flex; align-items: center; }
+.form-field, .saved-cv > div, .process-step > div, .report-summary > div, .analysis-finding, .review-share-card, .roadmap-item { min-width: 0; }
+.form-field input, .form-field textarea, .form-field select, .auth-controls input, .opportunity-form input, .opportunity-form select, .opportunity-form textarea, .draft-editor { font-size: 16px; min-height: 44px; }
+.form-field label, .auth-controls label, .opportunity-form label, .review-link-controls label { font-size: 14px; color: #405460; }
+.field-help, .field-error, .textarea-hint, .form-notice, .analysis-rationale, .analysis-caveat, .draft-intro, .review-links-intro, .external-disclosure, .assessment-privacy p, .assessment-disclaimer { font-size: 13px; line-height: 1.6; }
+.field-help, .textarea-hint, .analysis-rationale, .analysis-caveat, .draft-intro, .review-links-intro, .external-disclosure, .assessment-privacy p, .assessment-disclaimer { color: #526572; }
+.field-error, .form-notice.error { color: #8a3630; }
+.form-notice { font-size: 14px; }
+.saved-cv strong, .saved-cv p, .file-drop-copy strong, .file-drop-copy span, .process-step p, .analysis-finding blockquote q, .analysis-no-evidence p, .roadmap-item > p, .review-feedback p, .reviewer-notice p, .opportunity-note { font-size: 13px; line-height: 1.6; }
+.analysis-subtitle, .analysis-empty p, .analysis-failure p, .analysis-status-card p, .opportunity-guidance p { font-size: 14px; color: #526572; }
+.analysis-finding blockquote small, .draft-provenance small, .review-feedback small, .saved-work-details dd { font-size: 12px; color: #526572; }
+.finding-status, .cv-status, .saved-report-status, .opportunity-status, .draft-review, .draft-accepted, .roadmap-count { font-size: 12px; white-space: normal; overflow-wrap: anywhere; }
+.finding-status.supported, .draft-accepted { color: #246457; }
+.finding-status.partial, .draft-review { color: #795419; }
+.finding-status.missing { color: #8a3630; }
+.finding-status.unclear { background: #f1eef6; color: #67517d; }
+.form-field input:focus-visible, .form-field textarea:focus-visible, .form-field select:focus-visible, .draft-editor:focus-visible, .opportunity-form input:focus-visible, .opportunity-form select:focus-visible, .opportunity-form textarea:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+.file-drop:focus-within { outline: 3px solid var(--navy); outline-offset: 3px; }
+.file-drop { flex-wrap: wrap; }
+.file-drop-copy { flex: 1 1 120px; }
+.file-drop-copy strong { max-width: none; white-space: normal; overflow-wrap: anywhere; }
+.topbar, .assessment-topbar, .analysis-topbar { height: auto; min-height: 72px; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; gap: 12px; }
+.topbar-links { min-width: 0; }
+.process-list { padding: 0; list-style: none; }
+.process-step { padding-block: 12px; }
+.analysis-finding blockquote, .draft-provenance li, .review-feedback, .reviewer-wrap, .saved-intake, .workspace-status { overflow-wrap: anywhere; }
+.roadmap-progress { flex-wrap: wrap; }
+.roadmap-progress select, .review-link-controls select { min-height: 44px; }
+.review-checkbox { min-height: 44px; }
+.review-checkbox input { flex-shrink: 0; }
+.review-url input { font-size: 14px; min-height: 44px; }
+.analysis-counts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.analysis-count { min-width: 0; }
+.analysis-count small { font-size: 12px; }
+.stepper { flex-wrap: wrap; }
+.stepper-item strong { white-space: normal; }
+.auth-controls .button, .report-launcher .button, .analysis-retry .button, .analysis-next-step .button, .next-steps-intro .button, .draft-actions .button, .saved-work-actions .button, .review-url .button, .opportunity-form .button, .opportunity-actions .button { min-height: 44px; font-size: 14px; white-space: normal; }
+.analysis-finding .finding-status, .roadmap-item .finding-status { font-size: 12px; }
+.nav-item { height: auto; padding-block: 10px; font-size: 14px; }
+.back-link, .text-link, .saved-work-link, .hero-link, .text-button, .auth-controls p, .form-action-note, .optional-label { font-size: 13px; }
+.auth-controls p, .form-action-note, .optional-label { color: #526572; }
+.roadmap-progress select { font-size: 14px; }
+.topbar-right, .breadcrumb, .brand-copy { min-width: 0; }
+.brand-mark, .report-role-icon, .step-number { flex-shrink: 0; }
+.report-summary { flex-wrap: wrap; }
+.reviewer-draft pre { font-size: 14px; }
+.review-link-controls select { max-width: 100%; font-size: 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .button:hover, .hero-link:hover span { transform: none; }
+}
+
 @media (max-width: 680px) {
   .topbar-links { max-width: 52%; gap: 8px; }
   .topbar-links .back-link, .saved-work-link { font-size: 9px; }
@@ -547,4 +611,17 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
   .opportunity-card-heading { align-items: flex-start; flex-direction: column; }
   .opportunity-actions, .delete-confirm { align-items: stretch; flex-direction: column; width: 100%; }
   .opportunity-actions .button, .delete-confirm .button { width: 100%; }
+  .side-nav { flex-wrap: wrap; overflow: visible; }
+  .topbar-links { max-width: 100%; }
+  .topbar-links .back-link, .saved-work-link, .back-link { font-size: 13px; }
+  .finding-row { flex-wrap: wrap; }
+  .analysis-counts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form-field label, .opportunity-form label { font-size: 14px; }
+  .button, .text-button, .saved-work-actions .button, .opportunity-actions .button, .draft-actions .button, .review-url .button, .auth-controls .button, .report-launcher .button, .analysis-retry .button, .analysis-next-step .button { min-height: 44px; font-size: 14px; white-space: normal; }
+  .file-drop-copy strong, .file-drop-copy span { font-size: 13px; max-width: none; }
+  .field-help, .field-error { font-size: 13px; }
+  .finding-status, .analysis-finding .finding-status { font-size: 12px; }
+  .stepper-line { display: none; }
+  .stepper-item { flex: 1 1 80px; }
+  .stepper-item strong { font-size: 12px; }
 }

@@ -5,17 +5,11 @@ import { IntakeError } from "@/lib/intake/types";
 import { AnalysisStatus, RetryAnalysis } from "./analysis-status";
 import ReviewLinks from "./review-links";
 import type { FindingStatus } from "@/lib/analysis/types";
+import { evidenceLabels as labels } from "@/components/evidence-labels";
 
 export const metadata = {
   title: "Evidence report | EXE",
   description: "Review CV evidence against one saved target job.",
-};
-
-const labels: Record<FindingStatus, string> = {
-  supported: "Text found",
-  partly_supported: "Some wording found",
-  unclear: "Needs your review",
-  missing: "No CV text found",
 };
 
 const descriptions: Record<FindingStatus, string> = {
@@ -43,11 +37,11 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
     { status: "missing", count: countStatus(findings, "missing") },
   ];
 
-  return <main className="analysis-page">
+  return <main id="main-content" tabIndex={-1} className="analysis-page">
     <header className="analysis-topbar"><Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link><div className="topbar-links"><Link href="/opportunities" className="back-link">Opportunities</Link><Link href="/saved-work" className="back-link">Saved work</Link><Link href="/assessment" className="back-link"><span aria-hidden="true">←</span>Assessment workspace</Link></div></header>
     <div className="analysis-wrap">
       <p className="eyebrow">MILESTONE 2 · EVIDENCE REPORT</p>
-      <h1>{details.roleTitle}</h1>
+      <h1>Evidence report: {details.roleTitle}</h1>
       <p className="analysis-subtitle">{details.companyName ? `${details.companyName} · ` : ""}{details.cvFilename}</p>
 
       {run.status === "processing" && <AnalysisStatus id={id} />}
@@ -57,6 +51,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
         <section className="analysis-method" aria-label="How to read this report"><strong>How to read this report</strong><p>This M2 prototype checks wording from your job description against extracted CV text. The requirement list is heuristic and may miss or combine details, so review it against the job description. It does not call an AI provider, verify skills, or predict hiring outcomes.</p></section>
         {findings.length > 0 ? <>
           <section className="analysis-counts" aria-label="Finding counts">{counts.map(({ status, count }) => <div className={`analysis-count ${status}`} key={status}><span>{count}</span><small>{labels[status]}</small></div>)}</section>
+          <section className="analysis-method" aria-label="Finding status definitions"><h2>What the four finding states mean</h2><dl>{counts.map(({ status }) => <div key={status}><dt>{labels[status]}</dt><dd>{descriptions[status]}</dd></div>)}</dl></section>
           <div className="analysis-findings"><h2>Requirements and CV evidence</h2>{findings.map((finding) => <article className="analysis-finding" key={finding.id}>
             <div className="analysis-finding-heading"><span className={`finding-status ${finding.status === "partly_supported" ? "partial" : finding.status}`}>{labels[finding.status]}</span><span className="analysis-requirement-number">Requirement {finding.ordinal + 1}</span></div>
             <h3>{finding.requirement}</h3>
@@ -70,7 +65,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
         <ReviewLinks analysisId={id} />
       </>}
 
-      <footer className="analysis-footer"><span>Report version {run.schemaVersion} · {run.providerName} {run.providerVersion}</span><span>Private to your account · Advisory only</span></footer>
+       <footer className="analysis-footer"><span>Local wording checks · Review each finding</span><span>Private to your account · Advisory only</span></footer>
     </div>
   </main>;
 }

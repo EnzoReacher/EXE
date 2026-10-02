@@ -5,7 +5,7 @@ import { REVIEW_EXPIRIES, type ReviewExpiry } from "./types";
 export function createReviewToken() { return randomBytes(32).toString("base64url"); }
 export function hashReviewToken(token: string) { return createHash("sha256").update(token, "utf8").digest("hex"); }
 export function isReviewToken(value: unknown): value is string { return typeof value === "string" && /^[A-Za-z0-9_-]{43}$/.test(value); }
-export function isReviewExpiry(value: unknown): value is ReviewExpiry { return typeof value === "string" && value in REVIEW_EXPIRIES; }
+export function isReviewExpiry(value: unknown): value is ReviewExpiry { return typeof value === "string" && Object.hasOwn(REVIEW_EXPIRIES, value); }
 export function expiryDate(expiry: ReviewExpiry, from = new Date()) { return new Date(from.getTime() + REVIEW_EXPIRIES[expiry] * 60 * 60 * 1000); }
 export function validateFeedback(input: { reviewerName?: unknown; reviewerRole?: unknown; feedback?: unknown }) {
   const clean = (value: unknown, maximum: number) => typeof value === "string" ? value.trim().slice(0, maximum) : "";

@@ -1,15 +1,21 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Overview | EXE" };
 
 const findings = [
-  { title: "SQL querying", status: "Partial support", tone: "partial", evidence: "Coursework is listed, but no project example is shown." },
+  { title: "SQL querying", status: "Partly supported", tone: "partial", evidence: "Coursework is listed, but no project example is shown." },
   { title: "Data visualization", status: "Supported", tone: "supported", evidence: "A dashboard project is described in the CV." },
-  { title: "Experiment design", status: "No evidence found", tone: "missing", evidence: "The example CV does not mention an experiment or test." },
+  { title: "Experiment design", status: "Missing", tone: "missing", evidence: "The example CV does not mention an experiment or test. This does not mean the person lacks that skill." },
+  { title: "Stakeholder communication", status: "Unclear", tone: "unclear", evidence: "The example CV mentions teamwork without enough detail to explain this requirement." },
 ];
 
 const steps = [
-  { number: "01", title: "Add your CV", detail: "Start with the experience you already have." },
+  { number: "01", title: "Sign in and add a fictional CV", detail: "Use the local demo account and a PDF or DOCX file, up to 5 MiB." },
   { number: "02", title: "Choose a role", detail: "Paste a job description to set the target." },
   { number: "03", title: "See the evidence", detail: "Understand what is supported and what to build next." },
+  { number: "04", title: "Review roadmap and draft", detail: "Choose actions, check the source text, and review every edit before accepting it." },
+  { number: "05", title: "Return to saved work", detail: "Your saved reports and drafts can be reopened later in your signed-in workspace." },
 ];
 
 export default function Home() {
@@ -21,8 +27,8 @@ export default function Home() {
           <span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span>
         </Link>
         <div className="sidebar-label">WORKSPACE</div>
-        <nav className="side-nav">
-          <a className="nav-item active" href="#overview" aria-current="page"><span className="nav-icon nav-icon-home" aria-hidden="true" />Overview</a>
+        <nav className="side-nav" aria-label="Workspace">
+          <a className="nav-item active" href="#main-content" aria-current="page"><span className="nav-icon nav-icon-home" aria-hidden="true" />Overview</a>
           <a className="nav-item" href="#how-it-works"><span className="nav-icon nav-icon-flow" aria-hidden="true" />How it works</a>
           <a className="nav-item" href="#example-report"><span className="nav-icon nav-icon-report" aria-hidden="true" />Example report</a>
           <Link className="nav-item" href="/saved-work"><span className="nav-icon nav-icon-report" aria-hidden="true" />Saved work</Link>
@@ -35,7 +41,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className="main-column" id="overview">
+      <main className="main-column" id="main-content" tabIndex={-1}>
         <header className="topbar">
           <div className="breadcrumb"><span>Workspace</span><span className="breadcrumb-separator">/</span><strong>Overview</strong></div>
           <div className="topbar-right"><Link className="saved-work-link" href="/saved-work">Saved work</Link><span className="build-badge"><span />Build in progress</span><span className="avatar-placeholder" role="img" aria-label="Demo workspace">D</span></div>
@@ -45,7 +51,7 @@ export default function Home() {
             <div>
               <p className="eyebrow">YOUR CAREER WORKSPACE</p>
               <h1>Make your next application a clearer one.</h1>
-              <p className="welcome-copy">See how your CV lines up with a role, understand the evidence behind each gap, and choose a practical next step.</p>
+               <p className="welcome-copy">Compare CV wording with one job description, check the evidence, and choose what to work on next. This internal prototype uses fictional data only; do not upload your real CV.</p>
             </div>
             <Link href="/assessment" className="button button-primary">Start an assessment <span aria-hidden="true">↗</span></Link>
           </section>
@@ -54,9 +60,9 @@ export default function Home() {
             <div className="hero-copy">
               <div className="hero-kicker"><span className="sparkle" aria-hidden="true">✳</span>FROM CV TO NEXT STEP</div>
               <h2 id="hero-title">Know what to strengthen before you apply.</h2>
-              <p>EXE connects a target job to the experience already in your CV. It helps you separate CV-supported evidence from skills that need more support.</p>
-              <Link className="hero-link" href="/assessment">Prepare a job match <span aria-hidden="true">→</span></Link>
-              <div className="hero-note"><span className="check-ring" aria-hidden="true">✓</span>Your CV draft stays grounded in your real experience.</div>
+               <p>Supported, Partly supported, Unclear, and Missing describe wording found in the submitted CV. They do not verify skills, predict hiring, or guarantee employment.</p>
+               <Link className="hero-link" href="/assessment">Add a fictional CV and job description <span aria-hidden="true">→</span></Link>
+               <div className="hero-note"><span className="check-ring" aria-hidden="true">✓</span>Check each proposed draft statement against its source before using it.</div>
             </div>
             <div className="hero-visual" aria-hidden="true">
               <div className="visual-orbit orbit-one" /><div className="visual-orbit orbit-two" />
@@ -70,10 +76,10 @@ export default function Home() {
 
           <section className="content-grid" id="how-it-works">
             <div className="section-card process-card">
-              <div className="section-heading"><div><p className="eyebrow">A SIMPLE FIRST STEP</p><h2>How your first assessment works</h2></div><span className="small-step-count">3 steps</span></div>
-              <div className="process-list">
-                {steps.map((step) => <div className="process-step" key={step.number}><span className="step-number">{step.number}</span><div><h3>{step.title}</h3><p>{step.detail}</p></div><span className="step-arrow" aria-hidden="true">↗</span></div>)}
-              </div>
+               <div className="section-heading"><div><p className="eyebrow">YOUR EXISTING WORKFLOW</p><h2>How your assessment works</h2></div><span className="small-step-count">5 steps</span></div>
+               <ol className="process-list">
+                 {steps.map((step) => <li className="process-step" key={step.number}><span className="step-number" aria-hidden="true">{step.number}</span><div><h3>{step.title}</h3><p>{step.detail}</p></div></li>)}
+               </ol>
               <Link href="/assessment" className="text-link">Start with your CV <span aria-hidden="true">→</span></Link>
             </div>
             <div className="section-card promise-card">

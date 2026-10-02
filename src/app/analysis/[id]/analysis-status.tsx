@@ -14,7 +14,7 @@ export function AnalysisStatus({ id }: { id: string }) {
       try {
         const response = await fetch(`/api/analysis/${id}`, { cache: "no-store" });
         const body = await response.json();
-        if (response.ok && body.details?.run?.status !== "processing") {
+        if (response.ok && ["completed", "failed"].includes(body.details?.run?.status)) {
           window.clearInterval(timer);
           router.refresh();
         } else if (attempts >= 20) {
@@ -56,5 +56,5 @@ export function RetryAnalysis({ id }: { id: string }) {
     } finally { setBusy(false); }
   }
 
-  return <div className="analysis-retry"><button className="button button-primary" type="button" onClick={() => void retry()} disabled={busy}>{busy ? "Retrying…" : "Retry report"}</button>{error && <p className="field-error" role="alert">{error}</p>}</div>;
+  return <div className="analysis-retry"><button className="button button-primary" type="button" onClick={() => void retry()} disabled={busy} aria-describedby={error ? "retry-error" : undefined}>{busy ? "Retrying…" : "Retry report"}</button><p className="sr-only" role="status">{busy ? "Retrying the report…" : ""}</p>{error && <p id="retry-error" className="field-error" role="alert">{error}</p>}</div>;
 }

@@ -3,7 +3,7 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-02
-**Working branch:** `codex/exe-web-app-m10`
+**Working branch:** `codex/exe-web-app-m10-2-hardening`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -91,8 +91,9 @@ flowchart TD
 | **M7 — Internal release candidate** | Cross-route privacy/security audit, fictional acceptance evidence, CI, and owner-release package | Ready for owner review | Branch `codex/exe-web-app-m7` from clean M6b `4527301`; 54 tests, local M1–M6b fictional Supabase acceptance, security hardening, release checklist, CI, and owner handoff are complete. No deployment occurred. Owner must complete connected-browser desktop/narrow-mobile visual and keyboard review and make every release decision explicitly. |
 | **M8 — Research and owner-review package** | CP2 plan, interview/survey tools, blank evidence register, alternative/pricing template, and owner execution checklist | Prepared — evidence collection pending | Branch `codex/exe-web-app-m8` from M7 `13eab1b`; templates contain no collected participant, competitor, pricing, or market evidence. Pricing, competitive, value, and validation claims remain blocked pending reviewed CP2 evidence. |
 | **M9 — Evidence gate and product-decision workflow** | CP2 register validator, evidence-review template, decision gate, next-feature matrix, and owner status | Evidence gate prepared — CP2 evidence pending | Branch `codex/exe-web-app-m9` from M8 `8755795`; no code feature was selected or built. [Validator](../scripts/validate-cp2-evidence.mjs) checks template/collected-register structure and safety but cannot validate research quality; see the [decision gate](M9_DECISION_GATE.md). M11 feature selection depends on owner/team evidence review. No merge or deployment occurred. |
-| **M10 — CP2 research execution workspace** | Evidence collection pending | CP2 execution status, research-session log, product-direction decision record, and owner gate | M10 repository review found only example/template material: no participant/source evidence, owner-review result, product direction, or product feature is recorded. M11 remains blocked until reviewed evidence and the documented decision gate are complete. No merge or deployment occurred. |
+| **M10 — CP2 research execution workspace** | CP2 execution status, research-session log, product-direction decision record, and owner gate | Evidence collection pending | M10 repository review found only example/template material: no participant/source evidence, owner-review result, product direction, or product feature is recorded. M11 remains blocked until reviewed evidence and the documented decision gate are complete. No merge or deployment occurred. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
+| **M10.2 — Existing-experience hardening** | Existing route clarity, keyboard/form access, responsive safeguards, safe errors and regression coverage | Engineering checks passed — owner manual review pending | From exact M10 baseline `4af832c`; 115 tests in 22 files, lint/typecheck/build, script syntax, CP2 template/diff and local fictional Supabase acceptance passed. Seven routes hardened; browser disconnected, so viewport/zoom/keyboard/assistive-technology review remains owner follow-up. See `M10_2_HARDENING_ACCEPTANCE.md`. CP2 remains pending, M11 remains blocked, and no price, market, competitor, validation, privacy-superiority or ease-of-use claim is unlocked. No merge or deployment occurred. |
 
 ## 4. M2 status and acceptance record
 
@@ -275,8 +276,11 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 
 | 2026-10-02 | M10 initialization — CP2 execution workspace | Prepared — evidence pending | Created `M10_CP2_EXECUTION_STATUS.md`, `M10_RESEARCH_SESSION_LOG.md`, and `M10_PRODUCT_DIRECTION_DECISION.md`; no participant/source evidence or product feature decision was added. |
 | 2026-10-02 | M10 CP2 execution review | Evidence collection pending | Reviewed M7/M5 owner gates, M8/M9/M10 research records, CP2 register, and course tracker. Only example/template rows exist; no owner-review result, actual research evidence, or public source record was supplied. CP2 remains incomplete and M11 remains blocked. Documentation-review checks passed: 65 tests in 12 files, lint, typecheck, production build, validator syntax/template mode, and diff check. |
+| 2026-10-02 | M10.2 existing-experience hardening | Engineering checks passed; owner manual review pending | Seven current routes, shared keyboard/responsive/readability safeguards, truthful async behavior, safe fallback and narrow API fixes. 115 tests in 22 files and required quality checks passed; fictional local Supabase acceptance passed. Browser disconnected; owner checklist remains required. CP2 pending, M11 blocked, no claims or release authorization. |
 
 ## 12. How to resume
+
+M10.2 hardening added skip-link/focus/readability/reduced-motion/responsive safeguards; clearer current-flow labels and field errors; truthful async save/retry/accept/revoke/feedback states; opportunity edit/delete focus handling; shared status/evidence labels; safe route fallback; and narrow API validation/neutral-review-error fixes with behavioral regression tests. Complete `M10_2_OWNER_REVIEW.md` using fictional data; the browser was disconnected, and no manual review is inferred from passing automated checks. See `M10_2_HARDENING_ACCEPTANCE.md` for all results and limitations.
 
 1. Complete the M7 owner review in `OWNER_REVIEW_M7.md` using fictional data, including desktop/narrow-mobile visual and keyboard checks.
 2. Complete the M5 CP1 fictional demo rehearsal and record the required team/course evidence.

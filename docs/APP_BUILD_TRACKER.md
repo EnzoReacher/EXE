@@ -17,6 +17,10 @@ This tracks engineering work separately from course grading checkpoints. Mark a 
 | M9 — Evidence gate and product-decision workflow | Evidence gate prepared — CP2 evidence pending | Template/collected register validator, deterministic tests, review template, decision gate, qualitative next-feature matrix, and owner status | Validator checks structural/safety requirements only; it does not prove research quality. No product feature selected or app workflow changed. M11 selection is blocked until reviewed evidence and the documented decision gate are complete. |
 | M10 — CP2 research execution workspace | Evidence collection pending | CP2 execution status, research-session log, product-direction decision, and owner gate | M10 evidence review found only template/example material. No owner-review result, collected research, public source record, product direction, or M11 feature decision is recorded; M11 remains blocked until reviewed CP2 evidence. |
 
+## M10.2 existing-experience hardening
+
+Engineering hardening checks passed on `codex/exe-web-app-m10-2-hardening` from exact M10 commit `4af832c`: 115 tests in 22 files, lint/typecheck/build, both script syntax checks, CP2 template validation, diff check and local fictional Supabase acceptance. Scope: current-route clarity, forms/keyboard support, shared responsive/readability safeguards, safe asynchronous/error behavior, privacy audit and meaningful regressions. Actual outcomes are recorded in `M10_2_HARDENING_ACCEPTANCE.md`; connected browser was unavailable and manual owner review is required. CP2 remains pending and no M11 feature is selected. No claim, merge or deployment is authorized.
+
 ## M0 review notes
 
 - Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.

@@ -44,4 +44,6 @@ Keep one dated evidence item per file in `docs/evidence/`: interview guide, anon
 
 ## App implementation status
 
+M10.2 engineering hardening does not satisfy a course checkpoint. Its existing-flow accessibility, responsive, safe-error and quality work is tracked in `M10_2_HARDENING_ACCEPTANCE.md`. CP2 evidence collection remains pending; M11 and owner release approval remain blocked. No new price, market, competitor, validation, privacy-superiority or ease-of-use claim is unlocked.
+
 The M5 fictional-data demo package is ready for review, but CP1 is not complete until the team performs the demo and records the required course evidence. Track engineering parts, checks, and remaining product work in [`APP_BUILD_TRACKER.md`](APP_BUILD_TRACKER.md).

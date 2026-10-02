@@ -24,8 +24,13 @@ export async function validateCvFile(file: File): Promise<CvFormat> {
   return candidate;
 }
 
-export function validateTargetJob(input: { roleTitle: string; companyName?: string; jobDescription: string }) {
-  const roleTitle = input.roleTitle.trim(); const companyName = input.companyName?.trim() || null; const jobDescription = input.jobDescription.trim();
+export function validateTargetJob(input: unknown) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) throw new IntakeError("invalid_job", "Enter a valid target job.");
+  const value = input as Record<string, unknown>;
+  if (typeof value.roleTitle !== "string") throw new IntakeError("invalid_role", "Enter a target role between 2 and 120 characters.");
+  if (value.companyName != null && typeof value.companyName !== "string") throw new IntakeError("invalid_company", "Enter a valid company name.");
+  if (typeof value.jobDescription !== "string") throw new IntakeError("invalid_job_description", "Enter a job description between 30 and 15,000 characters.");
+  const roleTitle = value.roleTitle.trim(); const companyName = (value.companyName as string | null | undefined)?.trim() || null; const jobDescription = value.jobDescription.trim();
   if (roleTitle.length < 2 || roleTitle.length > 120) throw new IntakeError("invalid_role", "Enter a target role between 2 and 120 characters.");
   if (companyName && companyName.length > 120) throw new IntakeError("invalid_company", "Company name must be 120 characters or fewer.");
   if (jobDescription.length < 30 || jobDescription.length > 15000) throw new IntakeError("invalid_job_description", "Enter a job description between 30 and 15,000 characters.");

@@ -15,6 +15,10 @@ describe("private review-link security helpers", () => {
     expect(expiryDate("24h", new Date("2026-10-02T00:00:00.000Z")).toISOString()).toBe("2026-10-03T00:00:00.000Z");
   });
 
+  it.each(["constructor", "toString", "__proto__", "hasOwnProperty", null, 24])("rejects inherited or non-string expiry %s", (value) => {
+    expect(isReviewExpiry(value)).toBe(false);
+  });
+
   it("validates optional reviewer fields and bounded plain-text feedback", () => {
     expect(validateFeedback({ reviewerName: " Fictional reviewer ", reviewerRole: "Mentor", feedback: "This fictional feedback has enough detail." })).toEqual({ reviewerName: "Fictional reviewer", reviewerRole: "Mentor", feedback: "This fictional feedback has enough detail." });
     expect(() => validateFeedback({ feedback: "Too short" })).toThrow("20 and 4,000");

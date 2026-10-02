@@ -30,4 +30,6 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm build
       - run: node --check scripts/m1-local-policy-check.mjs
+      - run: node --check scripts/validate-cp2-evidence.mjs
+      - run: pnpm cp2:validate
       - run: git diff --check

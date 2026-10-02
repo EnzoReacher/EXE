@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M10 CP2 execution review confirms evidence collection is pending on `codex/exe-web-app-m10`, based on verified M9 commit `b374f0c`. M7 remains ready for owner review. CP2 is incomplete, the target segment remains open, M11 is blocked, and no merge, deployment, public production environment, or real-data authorization exists.
+**Status:** M10.2 existing-experience engineering hardening passed automated/local fictional checks on `codex/exe-web-app-m10-2-hardening` from exact M10 baseline `4af832c`. M7/M10.2 owner manual review remains pending. CP2 evidence collection is pending, the target segment remains open, M11 is blocked, and no merge, deployment, public production environment, or real-data authorization exists. See `M10_2_HARDENING_ACCEPTANCE.md` for actual checks and owner follow-up.
 
 ## Completed in this build part
 
@@ -64,6 +64,10 @@
 - M9 checks — passed on 2026-10-02: `pnpm test` (**12 files, 65 tests**), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/validate-cp2-evidence.mjs`, `pnpm cp2:validate`, and the explicit template-mode validator command. `git diff --check` passed. `pnpm test:supabase:local` also passed using the available local Supabase stack and two temporary fictional users; it did not access a hosted or production system.
 
 ## Current limits and open decisions
+
+- M10.2 checks passed: 115 tests in 22 files, lint, typecheck, build, both policy/evidence script syntax checks, CP2 template validation and diff check. Local Supabase acceptance passed with temporary fictional users only. CI checks were updated but a remote CI outcome is not claimed.
+- M10.2 hardens existing flows through skip/focus/form/readability/responsive/reduced-motion safeguards, truthful asynchronous states and narrow safe API validation/error fixes. No schema/RLS/token lifecycle changes, research records or major features were added.
+- Connected-browser testing could not run because `browser.disconnected`. Complete `M10_2_OWNER_REVIEW.md` at all listed widths, keyboard/zoom and assistive-technology modes; this remains an owner gate.
 
 - A reviewed Supabase project/environment is still required for any real user data. Use only placeholder values in `.env`; never commit credentials or real CVs.
 - Supabase Storage deletion removes the live object, but project-level backup and retention behavior must be reviewed and documented before real CVs are accepted.
