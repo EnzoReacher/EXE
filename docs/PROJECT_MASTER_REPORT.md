@@ -3,7 +3,7 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-02
-**Working branch:** `codex/exe-web-app-m9`
+**Working branch:** `codex/exe-web-app-m10`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -91,6 +91,7 @@ flowchart TD
 | **M7 — Internal release candidate** | Cross-route privacy/security audit, fictional acceptance evidence, CI, and owner-release package | Ready for owner review | Branch `codex/exe-web-app-m7` from clean M6b `4527301`; 54 tests, local M1–M6b fictional Supabase acceptance, security hardening, release checklist, CI, and owner handoff are complete. No deployment occurred. Owner must complete connected-browser desktop/narrow-mobile visual and keyboard review and make every release decision explicitly. |
 | **M8 — Research and owner-review package** | CP2 plan, interview/survey tools, blank evidence register, alternative/pricing template, and owner execution checklist | Prepared — evidence collection pending | Branch `codex/exe-web-app-m8` from M7 `13eab1b`; templates contain no collected participant, competitor, pricing, or market evidence. Pricing, competitive, value, and validation claims remain blocked pending reviewed CP2 evidence. |
 | **M9 — Evidence gate and product-decision workflow** | CP2 register validator, evidence-review template, decision gate, next-feature matrix, and owner status | Evidence gate prepared — CP2 evidence pending | Branch `codex/exe-web-app-m9` from M8 `8755795`; no code feature was selected or built. [Validator](../scripts/validate-cp2-evidence.mjs) checks template/collected-register structure and safety but cannot validate research quality; see the [decision gate](M9_DECISION_GATE.md). M10 feature selection depends on owner/team evidence review. No merge or deployment occurred. |
+| **M10 — CP2 research execution workspace** | Ready for owner/team execution — evidence pending | CP2 execution status, research-session log, product-direction decision record, and owner gate | No participant/source evidence is recorded; no product feature selected; M11 remains blocked until reviewed evidence and the documented decision gate are complete. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 
 ## 4. M2 status and acceptance record
@@ -272,12 +273,16 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 2026-10-02 | M8 — research and owner-review package | Prepared — real evidence pending | Added CP2 plan, target-user and expert guides, anonymous survey, blank/example-only evidence register, competitor/pricing template, owner checklist, and M8 index. No participant data, research outcome, market/competitor/price fact, or production access was added. Documentation-only quality checks passed: 54 tests in 11 files, lint, typecheck, and production build. |
 | 2026-10-02 | M9 — evidence gate and product-decision workflow | Evidence gate prepared — CP2 evidence pending | Added template/collected CP2 register validator with deterministic tests, evidence-review template, decision gate, qualitative next-feature selection matrix, and unchecked owner status. Checks passed: 65 tests in 12 files, lint, typecheck, production build, validator syntax/template mode, diff check, and existing local Supabase fictional two-user acceptance. No real research data, product claim, product feature, owner approval, merge, or deployment was added. |
 
+| 2026-10-02 | M10 initialization — CP2 execution workspace | Prepared — evidence pending | Created `M10_CP2_EXECUTION_STATUS.md`, `M10_RESEARCH_SESSION_LOG.md`, and `M10_PRODUCT_DIRECTION_DECISION.md`; no participant/source evidence or product feature decision was added. |
+
 ## 12. How to resume
 
-1. Complete the **M7 owner review** in `OWNER_REVIEW_M7.md` using fictional data, including desktop/narrow-mobile visual and keyboard checks. This does not trigger an automatic release.
-2. Execute the consent-safe CP2 plan in `M8_README.md`, enter only actual anonymized evidence in `CP2_EVIDENCE_REGISTER.md`, run the M9 collected-evidence validator, and have the owner/team review limitations and product hypotheses in `M9_EVIDENCE_REVIEW_TEMPLATE.md`.
-3. Have the owner rehearse and review the **M5 CP1 Slot 8 fictional-data demo package**. Do not mark CP1 complete without team/course evidence.
-4. Use `M9_DECISION_GATE.md` and `M9_NEXT_FEATURE_SELECTION.md` to record the decision before choosing M10 work. Keep pricing, lower-price, better-value, competitor, validation, market-demand, privacy-superiority, ease-of-use, and curated-source relevance claims blocked until CP2 evidence is collected and reviewed. Complete privacy/security and Supabase backup/retention review before any merge, deployment, or real CV use.
+1. Complete the M7 owner review in `OWNER_REVIEW_M7.md` using fictional data, including desktop/narrow-mobile visual and keyboard checks.
+2. Complete the M5 CP1 fictional demo rehearsal and record the required team/course evidence.
+3. Execute the M10 CP2 workspace: collect consent-safe evidence, use `M10_RESEARCH_SESSION_LOG.md`, enter only anonymized summaries, and run `pnpm cp2:validate:collected`.
+4. Complete `M10_PRODUCT_DIRECTION_DECISION.md` and `M9_NEXT_FEATURE_SELECTION.md` only after owner/team review of evidence, limitations, and hypothesis classifications.
+5. Keep pricing, lower-price, better-value, competitor, market, privacy, ease-of-use, and validation claims blocked until reviewed CP2 evidence supports the exact claim.
+6. Complete privacy/security, data-retention, backup, and owner approval review before any real CV use, merge, or deployment.
 
 ## 13. Source documents
 
