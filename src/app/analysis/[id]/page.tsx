@@ -44,7 +44,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
   ];
 
   return <main className="analysis-page">
-    <header className="analysis-topbar"><Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link><div className="topbar-links"><Link href="/saved-work" className="back-link">Saved work</Link><Link href="/assessment" className="back-link"><span aria-hidden="true">←</span>Assessment workspace</Link></div></header>
+    <header className="analysis-topbar"><Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link><div className="topbar-links"><Link href="/opportunities" className="back-link">Opportunities</Link><Link href="/saved-work" className="back-link">Saved work</Link><Link href="/assessment" className="back-link"><span aria-hidden="true">←</span>Assessment workspace</Link></div></header>
     <div className="analysis-wrap">
       <p className="eyebrow">MILESTONE 2 · EVIDENCE REPORT</p>
       <h1>{details.roleTitle}</h1>
@@ -65,6 +65,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
             {finding.evidenceExcerpt && <p className="analysis-caveat">{finding.caveat}</p>}
           </article>)}</div>
           <section className="analysis-next-step"><div><strong>Ready to decide what to do next?</strong><p>Create a private roadmap from the gaps in this report and review a source-grounded CV draft.</p></div><Link className="button button-primary" href={`/analysis/${id}/next-steps`}>Open next steps <span aria-hidden="true">→</span></Link></section>
+          <section className="analysis-next-step"><div><strong>Found a job page yourself?</strong><p>Save its private reference link and track your own process. EXE does not check the page or confirm it fits your CV.</p></div><Link className="button button-secondary" href="/opportunities">Save an opportunity <span aria-hidden="true">→</span></Link></section>
         </> : <section className="analysis-empty"><h2>No requirements were extracted</h2><p>This local prototype looks for bullet points and clearly labeled requirements in the job description. Edit the saved job to make the required skills or experience easier to identify.</p><Link className="text-link" href="/assessment">Update your intake <span aria-hidden="true">→</span></Link></section>}
         <ReviewLinks analysisId={id} />
       </>}

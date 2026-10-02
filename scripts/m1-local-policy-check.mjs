@@ -67,6 +67,15 @@ const reviewShare = (ownerId, analysisRunId, draftId, token, patch = {}) => ({
   expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
   ...patch,
 });
+const opportunity = (ownerId, targetJobId, patch = {}) => ({
+  owner_id: ownerId,
+  target_job_id: targetJobId,
+  source_url: "https://careers.example.test/fictional-junior-analyst",
+  company_name: "Fictional Opportunity Co.",
+  note: "Fictional private job-link note used only for local policy testing.",
+  status: "saved",
+  ...patch,
+});
 const client = () => createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
 async function signUp(label) {
@@ -104,6 +113,21 @@ async function run() {
   assert.equal(aJobError, null, "A creates own target job");
   const { data: bJob, error: bJobError } = await b.supabase.from("target_jobs").insert(job(b.user.id)).select().single();
   assert.equal(bJobError, null, "B creates own target job");
+
+  // M6b: saved external references remain private and do not cause any fetch.
+  await expectDenied(() => unauthenticated.from("opportunity_links").select(), "unauthenticated opportunity read");
+  await expectDenied(() => unauthenticated.from("opportunity_links").insert(opportunity(a.user.id, aJob.id)).select(), "unauthenticated opportunity create");
+  const { data: aOpportunity, error: aOpportunityError } = await a.supabase.from("opportunity_links").insert(opportunity(a.user.id, aJob.id)).select().single();
+  assert.equal(aOpportunityError, null, "A saves own fictional HTTPS opportunity reference");
+  const { data: bOpportunity, error: bOpportunityError } = await b.supabase.from("opportunity_links").insert(opportunity(b.user.id, bJob.id)).select().single();
+  assert.equal(bOpportunityError, null, "B saves own fictional HTTPS opportunity reference");
+  await expectDenied(() => a.supabase.from("opportunity_links").insert(opportunity(a.user.id, bJob.id)).select(), "A attaching an opportunity to B target job");
+  const ownOpportunities = await a.supabase.from("opportunity_links").select("id,status");
+  assert.equal(ownOpportunities.error, null, "A reads own private opportunities");
+  assert.equal(ownOpportunities.data?.length, 1, "A sees only own private opportunity");
+  const ownOpportunityUpdate = await a.supabase.from("opportunity_links").update({ status: "preparing", note: "Updated fictional private note." }).eq("id", aOpportunity.id).select().single();
+  assert.equal(ownOpportunityUpdate.error, null, "A updates own opportunity status and note");
+  assert.equal(ownOpportunityUpdate.data.status, "preparing", "A sees own updated private status");
   const { data: aCvRow, error: aCvReadError } = await a.supabase.from("cv_documents").select("id").eq("storage_path", aCv.storage_path).single();
   assert.equal(aCvReadError, null, "A can load own CV id for analysis");
   const { data: bCvRow, error: bCvReadError } = await b.supabase.from("cv_documents").select("id").eq("storage_path", bCv.storage_path).single();
@@ -230,6 +254,7 @@ async function run() {
   await expectDenied(() => a.supabase.from("roadmap_items").select().eq("id", bRoadmap.id), "A reading B roadmap item");
   await expectDenied(() => a.supabase.from("cv_drafts").select().eq("id", bDraft.id), "A reading B CV draft");
   await expectDenied(() => a.supabase.from("cv_draft_claims").select().eq("cv_draft_id", bDraft.id), "A reading B draft provenance");
+  await expectDenied(() => a.supabase.from("opportunity_links").select().eq("id", bOpportunity.id), "A reading B opportunity");
   await expectDenied(() => unauthenticated.from("analysis_runs").select().eq("id", aRun.id), "unauthenticated analysis read");
   await expectDenied(() => unauthenticated.from("cv_drafts").select().eq("id", aDraft.id), "unauthenticated CV draft read");
   await expectDenied(() => a.supabase.from("analysis_runs").insert(analysisRun(a.user.id, bCvRow.id, bJob.id)).select(), "A linking another user's CV and job");
@@ -251,6 +276,7 @@ async function run() {
   await expectDenied(() => a.supabase.from("target_jobs").update({ company_name: "forbidden" }).eq("id", bJob.id).select(), "A updating B target job");
   await expectDenied(() => a.supabase.from("roadmap_items").update({ progress_status: "completed" }).eq("id", bRoadmap.id).select(), "A updating B roadmap item");
   await expectDenied(() => a.supabase.from("cv_drafts").update({ accepted_at: new Date().toISOString() }).eq("id", bDraft.id).select(), "A updating B CV draft");
+  await expectDenied(() => a.supabase.from("opportunity_links").update({ status: "dismissed" }).eq("id", bOpportunity.id).select(), "A updating B opportunity");
   await expectDenied(() => a.supabase.storage.from("cv-private").update(bCv.storage_path, fictionalPdf), "A replacing B private object");
 
   // Exercise the application's retryable failed-deletion state using fictional
@@ -293,6 +319,10 @@ async function run() {
   await expectDenied(() => a.supabase.from("cv_documents").delete().eq("storage_path", bCv.storage_path).select(), "A deleting B CV row");
   await expectDenied(() => a.supabase.storage.from("cv-private").remove([bCv.storage_path]), "A deleting B object");
   await expectDenied(() => a.supabase.from("target_jobs").delete().eq("id", bJob.id).select(), "A deleting B target job");
+  await expectDenied(() => a.supabase.from("opportunity_links").delete().eq("id", bOpportunity.id).select(), "A deleting B opportunity");
+
+  const deletedBOpp = await b.supabase.from("opportunity_links").delete().eq("id", bOpportunity.id).select();
+  assert.equal(deletedBOpp.error, null, "B deletes own private opportunity");
 
   assert.equal((await b.supabase.storage.from("cv-private").remove([bCv.storage_path])).error, null, "B deletes own object");
   const deletedBCv = await b.supabase.from("cv_documents").delete().eq("storage_path", bCv.storage_path).select();
@@ -301,11 +331,13 @@ async function run() {
   const deletedAJob = await a.supabase.from("target_jobs").delete().eq("id", aJob.id).select();
   assert.equal(deletedAJob.error, null, "A deletes own target job");
   assert.equal(deletedAJob.data?.length, 1, "A deletes exactly one own target job");
+  const deletedAOpportunity = await a.supabase.from("opportunity_links").select("id").eq("id", aOpportunity.id);
+  assert.equal(deletedAOpportunity.data?.length, 0, "deleting A target job removes its private opportunity");
   const deletedBJob = await b.supabase.from("target_jobs").delete().eq("id", bJob.id).select();
   assert.equal(deletedBJob.error, null, "B deletes own target job");
   assert.equal(deletedBJob.data?.length, 1, "B deletes exactly one own target job");
 
-  console.log("M1–M6a local Supabase RLS, private Storage, analysis, roadmap, draft, private review-link, feedback, and cascade checks passed for two fictional users.");
+  console.log("M1–M6b local Supabase RLS, private Storage, analysis, roadmap, draft, review-link, feedback, opportunity-link, and cascade checks passed for two fictional users.");
 }
 
 await run();

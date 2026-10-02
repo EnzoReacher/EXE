@@ -488,6 +488,35 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
 .reviewer-unavailable { max-width: 600px; padding: 35px; border: 1px solid #e3ebed; border-radius: 12px; background: #fff; }
 .reviewer-unavailable h1 { font-size: 26px; }
 .reviewer-unavailable > p:last-child { color: #71828c; font-size: 12px; line-height: 1.6; }
+.opportunity-guidance, .opportunity-form-card, .opportunity-card { padding: 18px; border: 1px solid #e3ebed; border-radius: 12px; background: #fff; }
+.opportunity-guidance { border-color: #dceae7; background: #f2f8f6; }
+.opportunity-guidance strong, .opportunity-form-card h2, .opportunity-list > h2 { color: #3d6969; font-size: 13px; }
+.opportunity-guidance p, .opportunity-form-card > div > p, .opportunity-date, .external-disclosure, .field-help { margin: 6px 0 0; color: #71828c; font-size: 10px; line-height: 1.6; }
+.opportunity-form-card { margin-top: 16px; }
+.opportunity-form-card h2, .opportunity-list > h2 { margin: 0; }
+.opportunity-form { display: grid; gap: 8px; margin-top: 16px; }
+.opportunity-form label { color: #53636d; font-size: 10px; font-weight: 700; }
+.opportunity-form label span { color: #84929a; font-weight: 400; }
+.opportunity-form input, .opportunity-form select, .opportunity-form textarea { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid #dbe4e7; border-radius: 7px; background: #fff; color: #485e69; font: inherit; font-size: 11px; }
+.opportunity-form textarea { line-height: 1.5; resize: vertical; }
+.opportunity-form input:focus, .opportunity-form select:focus, .opportunity-form textarea:focus { border-color: #78b1a8; outline: none; box-shadow: 0 0 0 3px rgba(39,142,129,.11); }
+.opportunity-form .field-help { margin: -2px 0 2px; }
+.opportunity-form .form-actions { margin-top: 5px; }
+.opportunity-form .button, .opportunity-actions .button { min-height: 37px; padding: 0 13px; font-size: 10px; }
+.external-url-readonly { min-width: 0; margin: 5px 0; color: #647982; font-size: 10px; line-height: 1.55; }
+.external-url-readonly span { overflow-wrap: anywhere; }
+.opportunity-list { display: grid; gap: 11px; margin-top: 22px; }
+.opportunity-card { padding: 16px; }
+.opportunity-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.opportunity-role { margin: 0; color: #82919a; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.opportunity-card h3 { margin: 5px 0 0; color: #304854; font-size: 15px; overflow-wrap: anywhere; }
+.opportunity-status { flex: 0 0 auto; padding: 5px 8px; border-radius: 7px; background: #eff4f5; color: #52727d; font-size: 9px; font-weight: 700; }
+.opportunity-note { margin: 10px 0 0; overflow-wrap: anywhere; color: #586e78; font-size: 11px; line-height: 1.55; white-space: pre-wrap; }
+.external-disclosure { margin-top: 11px; }
+.opportunity-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 13px; }
+.button-danger { border: 1px solid #e6c5c0; background: #fff9f8; color: #a35d55; box-shadow: none; }
+.button-danger:hover { background: #fff1ef; box-shadow: none; }
+.delete-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: #8e625e; font-size: 10px; font-weight: 700; }
 
 @media (max-width: 680px) {
   .topbar-links { max-width: 52%; gap: 8px; }
@@ -514,4 +543,8 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
   .review-url .button { width: 100%; }
   .reviewer-page { padding: 22px 16px 30px; }
   .reviewer-unavailable { padding: 24px 18px; }
+  .opportunity-guidance, .opportunity-form-card, .opportunity-card { padding: 15px; }
+  .opportunity-card-heading { align-items: flex-start; flex-direction: column; }
+  .opportunity-actions, .delete-confirm { align-items: stretch; flex-direction: column; width: 100%; }
+  .opportunity-actions .button, .delete-confirm .button { width: 100%; }
 }
