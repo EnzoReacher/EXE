@@ -9,6 +9,10 @@ No product-direction decision is permitted at this time. No real evidence IDs, s
 
 **M11 status:** blocked. Do not select a feature until the evidence basis, observation/interpretation separation, limitations, classifications, and explicit owner/team decision below are completed with actual reviewed evidence.
 
+## M10.1 evidence intake result — 2026-10-02
+
+No evidence was received for a direction decision. The M10.1 intake check found no real anonymized evidence IDs or source IDs, no collected-mode validator result, no reviewed limitations/bias record, and no owner/team decision. The blank fields and M11 authorization checkboxes below remain intentionally incomplete.
+
 ## Evidence basis
 
 - Review date:

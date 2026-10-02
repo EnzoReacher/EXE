@@ -16,7 +16,7 @@ Use this file as the team's working checklist. Mark an item complete only when i
 - [x] Prepare consent-safe M8 research plan, interview guides, anonymous survey template, blank evidence register, current-source comparison template, and owner checklist.
 - [x] Prepare M9 evidence-register validator, evidence-review template, product decision gate, next-feature matrix, and unchecked owner status.
 - [x] Initialize M10 CP2 execution workspace with blank status, session-log, and product-direction records.
-- [x] Review the repository evidence state for M10; confirmed no actual CP2 evidence, owner review, or M11 decision is recorded.
+- [x] Review the repository evidence state for M10/M10.1; confirmed no actual CP2 evidence, anonymized note, owner review, or M11 decision is recorded.
 - [ ] Decide primary segment and sampling method.
 - [ ] Survey target: more than 100 responses, or document interviews with at least two qualified industry experts.
 - [ ] Separately plan 5–10 target-customer video interviews.

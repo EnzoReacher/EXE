@@ -24,6 +24,16 @@ This file is a live checklist. An unchecked item is not complete. Do not mark an
 
 **Status change:** none. CP2 remains pending; no M11 feature is authorized. This review does not replace owner/team review or collect evidence.
 
+## M10.1 evidence intake review — 2026-10-02
+
+- **Section completed:** repository intake check for owner-supplied evidence or anonymized notes.
+- **Evidence IDs or source IDs received:** none.
+- **What was checked:** tracked documentation, untracked repository files, and evidence/research/interview/survey/market/competitor/pricing/notes paths outside dependencies and build output.
+- **Observation:** no actual evidence file or anonymized note is present. The only CP2 IDs remain explicitly labelled `TU-000`, `EX-000`, `SV-000`, and `CM-000` examples in the blank register.
+- **What remains uncertain:** every CP2 research question and all open instructor questions; no conclusion is supported.
+- **Decision / next action:** retain **Evidence collection pending**. Do not add an evidence row, run collected-mode validation, complete the product-direction decision, or authorize M11.
+- **Owner/team review status:** not reviewed; no owner/team decision or approval was supplied.
+
 ## Exact inputs required next
 
 1. Documented fictional-data results for every M7/M5 owner review item above.
@@ -31,6 +41,7 @@ This file is a live checklist. An unchecked item is not complete. Do not mark an
 3. Aggregate anonymous survey counts/results and sampling limitations, if a survey is used.
 4. Current public-source records with URL, access date, source/update date when available, region, currency, plan/tax/access context, and the exact supported fact for market, competitor, privacy, or pricing research.
 5. Owner/team review date, reviewer, limitations/bias discussion, hypothesis classifications, and explicit product-direction decision.
+6. Instructor answers, dated and attributed, for the open CP2 requirement questions in `CHECKPOINT_TRACKER.md` before interpreting ambiguous requirements as complete.
 
 ## Current boundary
 

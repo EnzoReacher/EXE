@@ -14,6 +14,15 @@ Use one entry per completed research activity. Replace the blank template only w
 - Decision / next action: keep CP2 and M11 selection pending; request the exact consent-safe inputs listed in `M10_CP2_EXECUTION_STATUS.md`.
 - Owner/team review status: not reviewed; no owner/team approval recorded.
 
+## M10.1 evidence intake review — 2026-10-02
+
+- Activity: repository intake check for actual owner-supplied evidence or anonymized notes; this was **not** a research activity.
+- Evidence IDs or source IDs: none received.
+- Observation: no tracked or untracked evidence/research/interview/survey/market/competitor/pricing/note file contained collected CP2 evidence. The register remains limited to its explicitly marked example rows.
+- Interpretation: none. Absence of supplied evidence does not support or contradict a hypothesis.
+- Decision / next action: retain the blank log and register; request the exact inputs in `M10_CP2_EXECUTION_STATUS.md`.
+- Owner/team review status: not reviewed; no decision or approval recorded.
+
 ## Target-user interview entry
 
 - Evidence ID: TU-___

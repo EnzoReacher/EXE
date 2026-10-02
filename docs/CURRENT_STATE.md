@@ -42,6 +42,7 @@
 - Added M9 CP2 evidence-gate tooling: a template/collected-register validator with deterministic fictional tests; package commands; evidence-review, decision-gate, next-feature-selection, and owner-status templates. No production workflow was changed, no feature was selected, and no evidence was collected automatically.
 - Added M10 CP2 execution workspace: `M10_CP2_EXECUTION_STATUS.md`, `M10_RESEARCH_SESSION_LOG.md`, and `M10_PRODUCT_DIRECTION_DECISION.md`. These are blank owner/team execution records; no participant/source evidence, product-direction decision, or M11 feature selection was added.
 - Performed an M10 repository evidence review. The CP2 register remains example-only; no owner-review result, anonymized interview/expert/survey evidence, current public market/competitor/pricing source, or product-direction review was supplied. Recorded the exact missing inputs without adding an evidence row, claim, or M11 feature selection.
+- Performed M10.1 CP2 evidence intake review. No actual evidence file or anonymized note was supplied in tracked or untracked repository paths; the only CP2 IDs remain example placeholders. No evidence row, claim, product-direction decision, or M11 selection was added.
 
 ## Checks run for M1
 
@@ -76,12 +77,13 @@
 - M8 preparation is not research evidence. Pricing, lower-price, better-value, competitor, market, target-segment, and validation claims remain blocked until CP2 evidence is collected and owner/team reviewed.
 - M9 validator success is not research validation. Claims that EXE is cheaper, better, better value, validated, in demand, more private, easier to use, market-ready, or competitively superior remain blocked until relevant evidence and owner/team review exist.
 - M10 has not satisfied the decision gate: no real evidence IDs, source IDs, owner/team review, target segment, pricing decision, or M11 approval exists. CP2 and M11 remain blocked.
+- M10.1 did not change that status. Collected-mode validation is not applicable until real anonymized evidence is entered.
 
 ## Resume from here
 
 1. Complete the M7 owner review using fictional data only.
 2. Complete the M5 CP1 demo rehearsal and record the required course evidence.
-3. Provide/collect the exact missing consent-safe inputs listed in `M10_CP2_EXECUTION_STATUS.md`; keep raw identities outside Git, enter anonymized summaries, and run the M9 validator.
+3. Provide/collect the exact missing consent-safe inputs and instructor answers listed in `M10_CP2_EXECUTION_STATUS.md`; keep raw identities outside Git, enter anonymized summaries, and run the M9 validator.
 4. Complete the M10 product-direction decision only after owner/team review. Do not select an M11 feature before this gate.
 5. Complete privacy, retention, backup, merge, and deployment review with explicit owner approval.
 
