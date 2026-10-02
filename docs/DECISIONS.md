@@ -51,6 +51,7 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | 2026-10-02 | Do not claim EXE has a lower price, better value, validated demand, or superior market position until CP2 evidence is collected and owner/team reviewed. | Project owner / implementation | M8 evidence discipline requirement. | Keep such wording as an open hypothesis; record dated, relevant evidence and limitations before approving any precise claim. |
 | 2026-10-02 | Prepare M9 as a no-code-feature evidence gate and product-decision workflow. | Project owner / implementation | Explicit M9 direction from verified M8 baseline `8755795`. | Add structural/safety validation and decision templates only. Do not treat a validator pass as market research, CP2 completion, product-market fit, or owner approval. |
 | 2026-10-02 | Block M10 feature selection until owner/team reviews anonymized CP2 evidence, limitations, and hypothesis classification through the M9 decision gate. | Project owner / implementation | M9 evidence-first product direction. | Record whether to retain, narrow, revise, remove, improve, test later, or collect more evidence before starting a next feature. |
+| 2026-10-02 | Initialize M10 as a documentation-only CP2 execution workspace. | Project owner / implementation | Owner approved proceeding after M9; CP2 evidence is still pending. | Collect only consent-safe anonymized evidence, keep identities outside Git, and do not select M11 or merge/deploy before review. |
 
 ## Instructor questions
 
