@@ -19,6 +19,7 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | D-011 | M1 private deletion removes the live Supabase Storage object first, then its row and extracted text. A storage failure leaves a `delete_failed` record for retry. | Implementation decision, 2026-10-01 | Avoids falsely reporting deletion while the original remains. |
 | D-012 | The selected parsers produce normalized raw text in M1; stable page/section locations are not persisted because the parser output does not reliably expose them across both supported formats. | Implementation limit, 2026-10-01 | Preserve source-location context in a later parser upgrade before evidence analysis begins. |
 | D-013 | M2 uses a deterministic local evidence adapter while the team has not selected an AI provider. It returns wording-based findings only and sends no CV/JD text to an external service. | Reversible M2 prototype decision, 2026-10-01 | Lets the team review the end-to-end report safely; does not approve an AI vendor or make a proficiency/hiring claim. |
+| D-014 | M3 uses a deterministic source composer for roadmap actions and its first CV draft. Generated draft claims are exact stored CV excerpts with provenance; edits require user review and acceptance. | Reversible M3 prototype decision, 2026-10-02 | Keeps the job-seeker workflow useful while no AI provider, retention policy, or consent flow has been approved. |
 
 ## Proposed technical/product choices — team confirmation needed
 
@@ -42,6 +43,7 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 | 2026-10-01 | Approve M1 secure CV and target-job intake: Supabase Auth/Postgres/private Storage; PDF and DOCX only; AI unselected and out of scope. | Project owner | Explicit M1 direction. | Implement ownership policies, server-side parsing, replace/delete, and target-job persistence only. |
 | 2026-10-01 | Set M1 CV upload maximum to 5 MiB and preserve only server-extracted document text in the owner-scoped CV record. | Implementation | Explicit, configurable resource boundary; no AI provider receives CV or job content. | Review Supabase project backup/retention settings before accepting real CVs. |
 | 2026-10-01 | Start M2 from the accepted M1 branch and use a server-side local wording matcher until an AI provider and its data handling are approved. | Project owner / implementation | Owner requested the next milestone; the M1 branch records passing local two-user policy acceptance. | Review M2 output and run the M2 local Supabase RLS/cascade acceptance script. Do not merge or deploy without owner approval. |
+| 2026-10-02 | Begin M3 implementation at the owner's request while the M2 local policy run remains blocked by missing Docker/Supabase tooling. | Project owner / implementation | User directed work to continue and requested immediate progress reporting. | Run the expanded M2/M3 local policy script when the required tooling is available; do not merge or deploy without owner approval. |
 
 ## Instructor questions
 

@@ -24,7 +24,7 @@ export default function AssessmentPage() {
         <div className="stepper" aria-label="Assessment steps">
           <div className="stepper-item current"><span>1</span><div><strong>Private intake</strong><small>CV and target job</small></div></div><div className="stepper-line" />
           <div className="stepper-item available"><span>2</span><div><strong>Evidence report</strong><small>Local text prototype</small></div></div><div className="stepper-line" />
-          <div className="stepper-item upcoming"><span>3</span><div><strong>Next steps</strong><small>Coming later</small></div></div>
+          <div className="stepper-item available"><span>3</span><div><strong>Next steps</strong><small>Roadmap and CV draft</small></div></div>
         </div>
         <AssessmentForm />
         <div className="assessment-privacy">

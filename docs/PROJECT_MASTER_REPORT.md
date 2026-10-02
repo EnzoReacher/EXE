@@ -1,0 +1,221 @@
+# EXE101 Web App — Master Plan and Progress Report
+
+**Project:** EXE — AI Career Readiness Platform
+**Report owner:** Project owner / team
+**Last updated:** 2026-10-02
+**Working branch:** `codex/exe-web-app-m2`
+**Live status:** Nothing is merged to `main`, deployed, or available to real users.
+
+This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
+
+## 1. Product map
+
+### Product purpose
+
+EXE helps a student or recent graduate compare their existing CV with one specific job description, understand what their CV actually supports, decide what to improve, and prepare a clearer role-specific CV without inventing qualifications.
+
+### Core user
+
+The first validated target segment is still open. The working hypothesis is students and recent graduates applying for internships or junior roles. CP2 research must choose one segment and job family before public launch or pricing decisions.
+
+### Core promise
+
+> From CV and job description to checkable evidence, clear gaps, practical next actions, and a truthful tailored CV draft.
+
+### What makes it useful
+
+| User problem | EXE response | Product rule |
+|---|---|---|
+| A job seeker does not know whether their CV demonstrates a job requirement. | Show a requirement-by-requirement finding with the relevant CV excerpt. | Evidence before claims. |
+| Generic CV tools rewrite text without explaining gaps. | Label each requirement as supported, partly supported, unclear, or missing. | No opaque hiring score. |
+| People need a practical next step. | Create a short roadmap tied to the gaps. | Actions must link to a specific finding. |
+| Tailoring a CV can introduce false claims. | Create an editable draft with source provenance for every proposed claim. | Never invent skills, experience, metrics, or credentials. |
+| CVs contain personal data. | Store documents privately with owner-scoped access and deletion controls. | Do not use real data before privacy review. |
+
+### End-to-end user journey
+
+```mermaid
+flowchart TD
+  A["Sign in"] --> B["Upload CV"]
+  B --> C["Add target job and JD"]
+  C --> D["Evidence report"]
+  D --> E["Prioritized roadmap"]
+  E --> F["Review tailored CV draft"]
+  F --> G["Save, edit, or delete work"]
+```
+
+### MVP boundaries
+
+| Included in the course MVP | Deliberately deferred |
+|---|---|
+| Sign-in, private PDF/DOCX CV intake, pasted job description, evidence report, roadmap, grounded editable CV draft, saved work, deletion controls, responsive loading/error states | Payments, subscriptions, recruiter marketplace, job scraping, automatic job alerts, social profiles, mobile app, skill exams, automated public-profile collection |
+
+## 2. Architecture map
+
+```mermaid
+flowchart TD
+  U["Student"] --> W["Next.js web app"]
+  W --> S["Server routes and workflow"]
+  S --> P["CV parser and validation"]
+  S --> M["Evidence matcher / approved AI adapter"]
+  S --> DB[("Supabase Postgres")]
+  S --> ST[("Private CV storage")]
+  M --> DB
+```
+
+| Area | Current implementation | Status |
+|---|---|---|
+| Web app | Next.js 16 + TypeScript + responsive assessment/report screens | Built |
+| Identity | Supabase authenticated session access | Built; local acceptance passed in M1 |
+| CV storage | Private owner-prefixed Supabase bucket; PDF/DOCX only; 5 MiB maximum | Built; local acceptance passed in M1 |
+| Parsing | Server-side PDF/DOCX validation and normalized text extraction | Built |
+| Target jobs | Owner-scoped role, company, and pasted job description | Built |
+| Analysis | Server-side deterministic wording matcher; schema validation and traceable excerpts | Built in M2 |
+| AI provider | No vendor selected and no CV/JD text sent externally | Open decision |
+| Roadmap | Gap-linked actions, priority, rationale, and user-controlled progress | Built in M3; local policy acceptance pending |
+| CV drafting | Source-grounded editable draft with per-claim provenance and explicit acceptance | Built in M3; local policy acceptance pending |
+| Saved history / polish | Saved core work, empty/loading/error states, security and responsive review | Planned for M4 |
+
+## 3. Engineering milestone plan
+
+| Milestone | Scope and acceptance target | Status | Evidence / remaining work |
+|---|---|---|---|
+| **M0 — Web app shell** | Responsive UI, fictional report preview, CV/JD entry, browser-only validation | Complete; owner review pending | Build, lint, and typecheck passed. Branch: `codex/exe-web-app-m0`. |
+| **M1 — Secure intake and identity** | Auth, private CV storage, PDF/DOCX parse, saved target jobs, replace/delete, ownership policies | Complete; accepted as M2 baseline | Two-user local Supabase RLS/private-Storage acceptance passed on 2026-10-01. Branch: `codex/exe-web-app-m1`, commit `7909dc8`. |
+| **M2 — Evidence-based analysis** | Requirements, supported/partly supported/unclear/missing findings, excerpts, caveats, saved runs | Implementation complete; acceptance pending | Unit, lint, typecheck, and production build passed. Run local Supabase M2 RLS/cascade acceptance before review completion. Branch: `codex/exe-web-app-m2`, GitHub commit `c0ab3d7`. |
+| **M3 — Roadmap and grounded CV draft** | Prioritized gap-linked actions; editable CV draft with claim provenance and review | Implementation and code checks complete; local Supabase acceptance and owner review pending | Started at the owner's request while M2 integration remains blocked by local tooling. Uses a local source composer; no AI provider is connected. |
+| **M4 — Saved work and integration polish** | Minimal history, full core flow, error/empty states, responsive and privacy review | Planned | Demonstrate only fictional or consented data. |
+| **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
+
+## 4. M2 status and acceptance record
+
+### Delivered
+
+- Requirement extraction from the job description, capped at 12 requirements.
+- Four user-facing findings: **supported**, **partly supported**, **unclear**, and **missing**.
+- Exact CV excerpts plus offsets for wording evidence.
+- Clear labels for self-reported CV claims and example context.
+- No numerical hiring score, proficiency verdict, or job-offer prediction.
+- No external AI calls. The current `local-evidence` adapter is deterministic wording matching only.
+- Saved, owner-scoped analysis runs and findings with retry-safe request IDs.
+- Owner-scoped database policies; source-CV deletion cascades to stored evidence.
+- Report screen, processing state, retry path, and accessible plain-language limits.
+
+### Automated checks already passed
+
+| Check | Result |
+|---|---|
+| `pnpm test` | Passed: 5 test files, 33 tests |
+| `pnpm lint` | Passed |
+| `pnpm typecheck` | Passed |
+| `pnpm build` | Passed |
+| `node --check scripts/m1-local-policy-check.mjs` | Passed |
+| `git diff --check` | Passed |
+
+### Pending M2 acceptance
+
+| Check | Why it matters | Current state | Completion command |
+|---|---|---|---|
+| Two-user local Supabase analysis RLS | Confirms users cannot read or write another user's analysis or findings | Pending: this workspace has no Docker or Supabase CLI | `pnpm test:supabase:local` after a local Supabase stack is running |
+| Cross-owner CV/job reference denial | Prevents an analysis run using another user's CV or JD | Pending with the local acceptance run | Included in the same script |
+| Retry request uniqueness | Prevents duplicate reports after a network retry | Pending with the local acceptance run | Included in the same script |
+| CV deletion cascade | Removes derived evidence with the source CV | Pending with the local acceptance run | Included in the same script |
+| Owner UX review | Confirms wording is clear and useful for job seekers | Pending | Review the M2 branch with fictional data |
+
+## 5. M3 implementation and acceptance record
+
+M3 converts the M2 report into actions a job seeker can use. It stays evidence-grounded and uses fictional test data until the privacy, data retention, and AI-provider decisions are complete.
+
+| Section | Build work | Acceptance criteria |
+|---|---|---|
+| Roadmap generation | Completed: derives up to five actions from missing, partial, and unclear findings | Every item saves the linked requirement, finding status, priority, action, rationale, and user-controlled progress state |
+| Roadmap review | Completed: private screen shows priority, rationale, and progress control | A completed action records user progress and is never treated as skill verification |
+| Grounded CV draft | Completed: composes only supported or partial evidence excerpts already found in the CV | Each generated claim stores its requirement, exact excerpt, and source offsets; no new facts or metrics are generated |
+| Draft editing | Completed: direct editing, save, and explicit acceptance are available | Any edit clears prior acceptance and is labelled as the user's responsibility to verify |
+| Safety checks | Completed: unit tests cover linked actions and source-only claim selection | The local composer excludes missing and unclear findings from the generated draft |
+| Persistence and privacy | Implemented: owner-scoped roadmap, draft, and claim tables with deletion cascades | Pending local two-user RLS/cascade acceptance with Docker Supabase |
+
+## 6. Course delivery map
+
+Engineering progress does not automatically complete a course checkpoint. Each checkpoint needs its own evidence and team review.
+
+| Checkpoint | Course requirement | Current status | Needed evidence |
+|---|---|---|---|
+| **CP1 — Idea lock** | Product/service description, target-user hypothesis, problem, value proposition, MVP boundary | Not started | One-page idea-lock summary and agreed demo scenario |
+| **CP2 — Market research** | Survey of more than 100 responses or two qualified industry experts; 5–10 customer interviews; competitor, market, value, and price research | Not started | Dated sources, anonymized notes, consent approach, competitor matrix, and revised segment/value proposition |
+| **CP1 — MVP demo** | End-to-end product demo plus product and technology description | Not started | Fictional-data demo of the full M0–M4 path |
+| **CP3 — BMC** | Business Model Canvas supported by research or clearly labelled assumptions | Not started | BMC and evidence links |
+| **CP4 — Pitch deck** | Team, product-market fit, business model, operations, fundraising plan | Not started | Slide deck, speaker plan, and research-supported claims |
+| **Constructivism presentation** | Separate 15% assessment; rubric still needs confirmation | Not started | Instructor-confirmed rubric and working evidence log |
+
+### CP2 research work that must happen before pricing claims
+
+1. Select the primary job-seeker segment and sampling plan.
+2. Conduct the required survey or expert interviews, then 5–10 target-user video interviews with consent-safe notes.
+3. Compare current alternatives, including their pricing, privacy terms, and evidence quality.
+4. Ask what users do today, where it fails, which feature matters most, use intent, and willingness to pay.
+5. Label every claim as research evidence, estimate, assumption, or open question.
+6. Use the findings to decide the initial segment, value proposition, and pricing. A lower price remains a hypothesis until this research exists.
+
+## 7. Product and technical decisions
+
+| Decision | Status | Reason / next action |
+|---|---|---|
+| Next.js + TypeScript web app | In use | Existing application foundation; record any stack change before making it. |
+| Supabase Auth, Postgres, and private Storage | In use for M1–M3 | M1 local two-user policy acceptance passed; review backup/retention before real CVs. |
+| PDF and DOCX only; 5 MiB maximum | Approved for M1 | Server validates extension, signatures, and DOCX archive structure. |
+| Deterministic local analysis adapter | Reversible M2 choice | Avoids external CV/JD sharing while AI-provider data handling is unresolved. |
+| External AI provider | Open | Choose only after cost, privacy, retention, consent, and output-evaluation review. |
+| Numeric match score | Excluded from MVP | Categories with evidence are easier to understand and less likely to be mistaken for a hiring prediction. |
+| Initial job segment and pricing | Open | Must be based on CP2 research. |
+| Merge, deployment, or real-user use | Owner approval required | Keep feature branches reviewable; never deploy or merge without explicit approval. |
+
+## 8. Privacy, security, and quality rules
+
+- Never commit API keys, service-role keys, real CVs, interview recordings, or personally identifying research data.
+- Keep CVs private and owner-scoped in both application logic and database/storage policies.
+- Treat CV and job-description text as untrusted data; never execute it as instructions.
+- Explain external AI data handling and obtain appropriate consent before any such use.
+- Validate provider output before saving or displaying it.
+- Preserve source evidence for findings and draft claims; mark uncertainty clearly.
+- Give users clear delete, retry, loading, and error states.
+- Use fictional or consented data in tests, screenshots, presentations, and demos.
+
+## 9. Current work queue
+
+| Order | Work item | Status | Owner / dependency |
+|---:|---|---|---|
+| 1 | Create this single master report | Complete 2026-10-02 | Completed in this branch |
+| 2 | Run the expanded M2/M3 two-user acceptance script | Blocked in this workspace | Requires Docker and Supabase CLI |
+| 3 | Record M2/M3 acceptance result and publish report update on the feature branch | Next | Depends on item 2 |
+| 4 | Build M3 roadmap and source-grounded CV draft | Complete 2026-10-02 | Code checks passed; local policy acceptance and owner review remain |
+| 5 | Run CP2 research and approve target segment/value/pricing | Parallel product work | Team evidence and instructor guidance |
+| 6 | Build M4, prepare fictional-data demo, and run owner review | Planned | Depends on M3 |
+| 7 | Decide whether to merge/deploy | Owner decision only | Requires explicit approval |
+
+## 10. Progress log
+
+| Date | Completed section | Result | Evidence |
+|---|---|---|---|
+| 2026-10-01 | M1 local policy acceptance | Passed with temporary fictional users on local Docker Supabase | `7909dc8`; `scripts/m1-local-policy-check.mjs` |
+| 2026-10-01 | M2 implementation | Built and published for source review | GitHub commit `c0ab3d7` on `codex/exe-web-app-m2` |
+| 2026-10-01 | M2 automated code checks | Passed: 33 unit tests, lint, typecheck, build, syntax/diff checks | `docs/CURRENT_STATE.md` |
+| 2026-10-02 | Master project report | Created as the single tracking document | This file |
+| 2026-10-02 | M3 roadmap and CV draft | Built private roadmap, source-grounded draft, editing/acceptance controls, owner-scoped storage, and deletion cascade migration | 35 unit tests; lint, typecheck, build, syntax, and diff checks passed |
+
+## 11. How to resume
+
+1. From the `codex/exe-web-app-m2` branch, make Docker and Supabase CLI available.
+2. Start local Supabase and run `pnpm test:supabase:local` using temporary fictional data. The script now covers M1, M2, and M3 ownership and deletion cascades.
+3. Add the result to Sections 4, 5, 9, and 10 of this report.
+4. Review M2 and M3 output with fictional CV/JD data.
+5. Start M4 saved-work and integration polish after the M2/M3 acceptance record is complete.
+
+## 12. Source documents
+
+- [Project scope and build plan](PROJECT_SCOPE_AND_PLAN.md)
+- [Engineering build tracker](APP_BUILD_TRACKER.md)
+- [Current state](CURRENT_STATE.md)
+- [Decision log](DECISIONS.md)
+- [Course checkpoint tracker](CHECKPOINT_TRACKER.md)
+- [Phase prompts](PHASE_PROMPTS.md)

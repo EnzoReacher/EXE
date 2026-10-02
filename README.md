@@ -4,6 +4,7 @@ A course project for helping students and recent graduates understand how their 
 
 ## Start here
 
+- [Master plan and progress report](docs/PROJECT_MASTER_REPORT.md)
 - [Project scope, architecture, phases, and acceptance criteria](docs/PROJECT_SCOPE_AND_PLAN.md)
 - [App build tracker](docs/APP_BUILD_TRACKER.md)
 - [Ready-to-use prompts for each phase](docs/PHASE_PROMPTS.md)

@@ -37,6 +37,26 @@ const analysisRun = (ownerId, cvId, jobId) => ({
   failure_code: null,
   completed_at: new Date().toISOString(),
 });
+const roadmapItem = (ownerId, analysisRunId) => ({
+  owner_id: ownerId,
+  analysis_run_id: analysisRunId,
+  ordinal: 0,
+  requirement_text: "Fictional SQL requirement",
+  finding_status: "missing",
+  priority: "high",
+  action_text: "Build one fictional SQL practice project and describe only genuine work.",
+  rationale: "The fictional M2 finding had no direct wording in the source fixture.",
+  progress_status: "not_started",
+});
+const draft = (ownerId, analysisRunId, cvId, jobId) => ({
+  owner_id: ownerId,
+  analysis_run_id: analysisRunId,
+  cv_document_id: cvId,
+  target_job_id: jobId,
+  version: 1,
+  content: "Fictional analyst CV draft. Review every statement before using it in a real application.",
+  accepted_at: null,
+});
 const client = () => createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
 async function signUp(label) {
@@ -107,6 +127,27 @@ async function run() {
   assert.equal(ownFindings.error, null, "A can read own analysis findings");
   assert.equal(ownFindings.data?.length, 1, "A sees own saved evidence excerpt");
 
+  const { data: aRoadmap, error: aRoadmapError } = await a.supabase.from("roadmap_items").insert(roadmapItem(a.user.id, aRun.id)).select().single();
+  assert.equal(aRoadmapError, null, "A creates own M3 roadmap item");
+  assert.equal(aRoadmap.progress_status, "not_started", "A sees own roadmap progress state");
+  const { data: bRoadmap, error: bRoadmapError } = await b.supabase.from("roadmap_items").insert(roadmapItem(b.user.id, bRun.id)).select().single();
+  assert.equal(bRoadmapError, null, "B creates own M3 roadmap item");
+  const { data: aDraft, error: aDraftError } = await a.supabase.from("cv_drafts").insert(draft(a.user.id, aRun.id, aCvRow.id, aJob.id)).select().single();
+  assert.equal(aDraftError, null, "A creates own source-grounded CV draft");
+  const { data: bDraft, error: bDraftError } = await b.supabase.from("cv_drafts").insert(draft(b.user.id, bRun.id, bCvRow.id, bJob.id)).select().single();
+  assert.equal(bDraftError, null, "B creates own source-grounded CV draft");
+  const aDraftClaim = await a.supabase.from("cv_draft_claims").insert({
+    cv_draft_id: aDraft.id,
+    owner_id: a.user.id,
+    ordinal: 0,
+    requirement_text: "SQL coursework",
+    claim_text: fictionalExcerpt,
+    source_excerpt: fictionalExcerpt,
+    source_start: fictionalStart,
+    source_end: fictionalStart + fictionalExcerpt.length,
+  }).select().single();
+  assert.equal(aDraftClaim.error, null, "A creates source provenance for own CV draft");
+
   const ownCvRead = await a.supabase.from("cv_documents").select().eq("storage_path", aCv.storage_path);
   assert.equal(ownCvRead.error, null, "A can read own CV collection");
   assert.equal(ownCvRead.data?.length, 1, "A can see own CV row");
@@ -116,9 +157,15 @@ async function run() {
   await expectDenied(() => a.supabase.from("target_jobs").select().eq("id", bJob.id), "A reading B target job");
   await expectDenied(() => a.supabase.from("analysis_runs").select().eq("id", bRun.id), "A reading B analysis run");
   await expectDenied(() => a.supabase.from("requirement_findings").select().eq("analysis_run_id", bRun.id), "A reading B analysis findings");
+  await expectDenied(() => a.supabase.from("roadmap_items").select().eq("id", bRoadmap.id), "A reading B roadmap item");
+  await expectDenied(() => a.supabase.from("cv_drafts").select().eq("id", bDraft.id), "A reading B CV draft");
+  await expectDenied(() => a.supabase.from("cv_draft_claims").select().eq("cv_draft_id", bDraft.id), "A reading B draft provenance");
   await expectDenied(() => unauthenticated.from("analysis_runs").select().eq("id", aRun.id), "unauthenticated analysis read");
+  await expectDenied(() => unauthenticated.from("cv_drafts").select().eq("id", aDraft.id), "unauthenticated CV draft read");
   await expectDenied(() => a.supabase.from("analysis_runs").insert(analysisRun(a.user.id, bCvRow.id, bJob.id)).select(), "A linking another user's CV and job");
   await expectDenied(() => a.supabase.from("requirement_findings").insert({ ...aFinding, analysis_run_id: bRun.id }).select(), "A writing a finding to B's analysis run");
+  await expectDenied(() => a.supabase.from("roadmap_items").insert(roadmapItem(a.user.id, bRun.id)).select(), "A writing a roadmap item to B's analysis run");
+  await expectDenied(() => a.supabase.from("cv_drafts").insert(draft(a.user.id, bRun.id, aCvRow.id, aJob.id)).select(), "A writing a CV draft to B's analysis run");
   await expectDenied(() => a.supabase.storage.from("cv-private").download(bCv.storage_path), "A reading B private object");
   const publicBObject = await fetch(`${url}/storage/v1/object/public/cv-private/${bCv.storage_path}`);
   assert.notEqual(publicBObject.status, 200, "private bucket unexpectedly served B's object publicly");
@@ -132,6 +179,8 @@ async function run() {
   assert.equal((await a.supabase.storage.from("cv-private").update(aCv.storage_path, new Blob(["%PDF-1.4 replacement"], { type: "application/pdf" }))).error, null, "A replaces own private object");
   await expectDenied(() => a.supabase.from("cv_documents").update({ extracted_text: "forbidden" }).eq("storage_path", bCv.storage_path).select(), "A updating B CV row");
   await expectDenied(() => a.supabase.from("target_jobs").update({ company_name: "forbidden" }).eq("id", bJob.id).select(), "A updating B target job");
+  await expectDenied(() => a.supabase.from("roadmap_items").update({ progress_status: "completed" }).eq("id", bRoadmap.id).select(), "A updating B roadmap item");
+  await expectDenied(() => a.supabase.from("cv_drafts").update({ accepted_at: new Date().toISOString() }).eq("id", bDraft.id).select(), "A updating B CV draft");
   await expectDenied(() => a.supabase.storage.from("cv-private").update(bCv.storage_path, fictionalPdf), "A replacing B private object");
 
   // Exercise the application's retryable failed-deletion state using fictional
@@ -160,6 +209,12 @@ async function run() {
   assert.equal(aDeletedAnalysis.data?.length, 0, "deleting a CV removes its analysis run");
   const aDeletedFindings = await a.supabase.from("requirement_findings").select("id").eq("analysis_run_id", aRun.id);
   assert.equal(aDeletedFindings.data?.length, 0, "deleting a CV removes its evidence excerpts");
+  const aDeletedRoadmap = await a.supabase.from("roadmap_items").select("id").eq("analysis_run_id", aRun.id);
+  assert.equal(aDeletedRoadmap.data?.length, 0, "deleting a CV removes its M3 roadmap items");
+  const aDeletedDraft = await a.supabase.from("cv_drafts").select("id").eq("id", aDraft.id);
+  assert.equal(aDeletedDraft.data?.length, 0, "deleting a CV removes its source-grounded draft");
+  const aDeletedDraftClaims = await a.supabase.from("cv_draft_claims").select("id").eq("cv_draft_id", aDraft.id);
+  assert.equal(aDeletedDraftClaims.data?.length, 0, "deleting a CV removes draft provenance");
   await expectDenied(() => a.supabase.from("cv_documents").delete().eq("storage_path", bCv.storage_path).select(), "A deleting B CV row");
   await expectDenied(() => a.supabase.storage.from("cv-private").remove([bCv.storage_path]), "A deleting B object");
   await expectDenied(() => a.supabase.from("target_jobs").delete().eq("id", bJob.id).select(), "A deleting B target job");
@@ -175,7 +230,7 @@ async function run() {
   assert.equal(deletedBJob.error, null, "B deletes own target job");
   assert.equal(deletedBJob.data?.length, 1, "B deletes exactly one own target job");
 
-  console.log("M1/M2 local Supabase RLS, private Storage, analysis ownership, and cascade checks passed for two fictional users.");
+  console.log("M1/M2/M3 local Supabase RLS, private Storage, analysis, roadmap, draft ownership, and cascade checks passed for two fictional users.");
 }
 
 await run();
