@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
 const url = process.env.SUPABASE_URL;
@@ -56,6 +56,16 @@ const draft = (ownerId, analysisRunId, cvId, jobId) => ({
   version: 1,
   content: "Fictional analyst CV draft. Review every statement before using it in a real application.",
   accepted_at: null,
+});
+const reviewToken = () => randomBytes(32).toString("base64url");
+const reviewShare = (ownerId, analysisRunId, draftId, token, patch = {}) => ({
+  owner_id: ownerId,
+  analysis_run_id: analysisRunId,
+  cv_draft_id: draftId,
+  token_hash: createHash("sha256").update(token).digest("hex"),
+  expiry_hours: 24,
+  expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+  ...patch,
 });
 const client = () => createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
@@ -148,6 +158,66 @@ async function run() {
   }).select().single();
   assert.equal(aDraftClaim.error, null, "A creates source provenance for own CV draft");
 
+  // M6a: review links use a hash only, are scoped to a completed owned report,
+  // and include a draft only after explicit acceptance.
+  const draftBeforeAcceptanceToken = reviewToken();
+  await expectDenied(() => b.supabase.from("review_shares").insert(reviewShare(b.user.id, bRun.id, bDraft.id, draftBeforeAcceptanceToken)).select(), "B sharing an unaccepted draft");
+  const acceptedDraft = await a.supabase.from("cv_drafts").update({ accepted_at: new Date().toISOString() }).eq("id", aDraft.id).select().single();
+  assert.equal(acceptedDraft.error, null, "A explicitly accepts own draft before sharing it");
+  const activeToken = reviewToken();
+  const { data: activeShare, error: activeShareError } = await a.supabase.from("review_shares").insert(reviewShare(a.user.id, aRun.id, aDraft.id, activeToken)).select().single();
+  assert.equal(activeShareError, null, "A creates a private review share for own completed report and accepted draft");
+  assert.match(activeShare.token_hash, /^[a-f0-9]{64}$/, "only a SHA-256 token hash is stored");
+  assert.notEqual(activeShare.token_hash, activeToken, "raw review token is never stored");
+  const ownShares = await a.supabase.from("review_shares").select("id,token_hash").eq("id", activeShare.id);
+  assert.equal(ownShares.data?.length, 1, "A can list own review share metadata");
+  await expectDenied(() => unauthenticated.from("review_shares").select().eq("id", activeShare.id), "anonymous direct review share read");
+  await expectDenied(() => unauthenticated.from("expert_reviews").select().eq("review_share_id", activeShare.id), "anonymous direct feedback read");
+  await expectDenied(() => b.supabase.from("review_shares").select().eq("id", activeShare.id), "B reading A review share");
+  await expectDenied(() => b.supabase.from("review_shares").update({ revoked_at: new Date().toISOString() }).eq("id", activeShare.id).select(), "B revoking A review share");
+
+  const validReview = await unauthenticated.rpc("get_private_review", { p_token: activeToken });
+  assert.equal(validReview.error, null, "valid anonymous token calls narrow review RPC");
+  assert.equal(validReview.data.roleTitle, "Fictional junior analyst", "valid token returns selected role only");
+  assert.equal(validReview.data.companyName, "Example Campus Co.", "valid token returns selected company only");
+  assert.equal(validReview.data.findings.length, 1, "valid token returns only selected report findings");
+  assert.equal(validReview.data.draftContent, aDraft.content, "valid token returns selected accepted draft only");
+  assert.equal("ownerId" in validReview.data, false, "review RPC excludes owner IDs");
+  assert.equal("jobDescription" in validReview.data, false, "review RPC excludes raw job description");
+  assert.equal("cvFilename" in validReview.data, false, "review RPC excludes CV library metadata");
+  const invalidReview = await unauthenticated.rpc("get_private_review", { p_token: reviewToken() });
+  assert.equal(invalidReview.data, null, "invalid token returns no review content");
+
+  const feedbackSubmission = randomUUID();
+  const submittedFeedback = await unauthenticated.rpc("submit_private_review", { p_token: activeToken, p_reviewer_name: "Fictional reviewer", p_reviewer_role: "Fictional mentor", p_feedback: "This fictional feedback is long enough for the local acceptance test.", p_submission_id: feedbackSubmission });
+  assert.equal(submittedFeedback.data, true, "valid token submits fictional feedback");
+  const duplicateFeedback = await unauthenticated.rpc("submit_private_review", { p_token: activeToken, p_reviewer_name: "Fictional reviewer", p_reviewer_role: "Fictional mentor", p_feedback: "This fictional feedback is long enough for the local acceptance test.", p_submission_id: feedbackSubmission });
+  assert.equal(duplicateFeedback.data, true, "duplicate submission ID is safely idempotent");
+  const ownFeedback = await a.supabase.from("expert_reviews").select("feedback").eq("review_share_id", activeShare.id);
+  assert.equal(ownFeedback.data?.length, 1, "A reads feedback only on own share");
+  await expectDenied(() => b.supabase.from("expert_reviews").select().eq("review_share_id", activeShare.id), "B reading feedback on A share");
+
+  const expiredToken = reviewToken();
+  const expiredShare = await a.supabase.from("review_shares").insert(reviewShare(a.user.id, aRun.id, null, expiredToken, { created_at: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(), expires_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() })).select().single();
+  assert.equal(expiredShare.error, null, "A creates an expired fictional review fixture");
+  assert.equal((await unauthenticated.rpc("get_private_review", { p_token: expiredToken })).data, null, "expired token returns no review content");
+  assert.equal((await unauthenticated.rpc("submit_private_review", { p_token: expiredToken, p_reviewer_name: null, p_reviewer_role: null, p_feedback: "This fictional feedback must be rejected after the link expires.", p_submission_id: randomUUID() })).data, false, "expired token cannot submit feedback");
+
+  const revokedToken = reviewToken();
+  const revokedShare = await a.supabase.from("review_shares").insert(reviewShare(a.user.id, aRun.id, null, revokedToken)).select().single();
+  assert.equal(revokedShare.error, null, "A creates revocable fictional review fixture");
+  const revocation = await a.supabase.from("review_shares").update({ revoked_at: new Date().toISOString() }).eq("id", revokedShare.data.id).select().single();
+  assert.equal(revocation.error, null, "A revokes own review link immediately");
+  assert.equal((await unauthenticated.rpc("get_private_review", { p_token: revokedToken })).data, null, "revoked token returns no review content");
+  assert.equal((await unauthenticated.rpc("submit_private_review", { p_token: revokedToken, p_reviewer_name: null, p_reviewer_role: null, p_feedback: "This fictional feedback must be rejected after the link is revoked.", p_submission_id: randomUUID() })).data, false, "revoked token cannot submit feedback");
+
+  const editedDraftToken = reviewToken();
+  const editedDraftShare = await a.supabase.from("review_shares").insert(reviewShare(a.user.id, aRun.id, aDraft.id, editedDraftToken)).select().single();
+  assert.equal(editedDraftShare.error, null, "A creates a share for an accepted fictional draft before editing it");
+  const editedDraft = await a.supabase.from("cv_drafts").update({ content: `${aDraft.content}\nFictional owner edit.`, accepted_at: null }).eq("id", aDraft.id).select().single();
+  assert.equal(editedDraft.error, null, "editing a draft clears its acceptance");
+  assert.equal((await unauthenticated.rpc("get_private_review", { p_token: editedDraftToken })).data, null, "editing an included draft revokes its review link");
+
   const ownCvRead = await a.supabase.from("cv_documents").select().eq("storage_path", aCv.storage_path);
   assert.equal(ownCvRead.error, null, "A can read own CV collection");
   assert.equal(ownCvRead.data?.length, 1, "A can see own CV row");
@@ -215,6 +285,11 @@ async function run() {
   assert.equal(aDeletedDraft.data?.length, 0, "deleting a CV removes its source-grounded draft");
   const aDeletedDraftClaims = await a.supabase.from("cv_draft_claims").select("id").eq("cv_draft_id", aDraft.id);
   assert.equal(aDeletedDraftClaims.data?.length, 0, "deleting a CV removes draft provenance");
+  const aDeletedReviewShares = await a.supabase.from("review_shares").select("id").eq("id", activeShare.id);
+  assert.equal(aDeletedReviewShares.data?.length, 0, "deleting a CV removes related review shares");
+  const aDeletedFeedback = await a.supabase.from("expert_reviews").select("id").eq("review_share_id", activeShare.id);
+  assert.equal(aDeletedFeedback.data?.length, 0, "deleting a CV removes related reviewer feedback");
+  assert.equal((await unauthenticated.rpc("get_private_review", { p_token: activeToken })).data, null, "source deletion makes active review token unavailable");
   await expectDenied(() => a.supabase.from("cv_documents").delete().eq("storage_path", bCv.storage_path).select(), "A deleting B CV row");
   await expectDenied(() => a.supabase.storage.from("cv-private").remove([bCv.storage_path]), "A deleting B object");
   await expectDenied(() => a.supabase.from("target_jobs").delete().eq("id", bJob.id).select(), "A deleting B target job");
@@ -230,7 +305,7 @@ async function run() {
   assert.equal(deletedBJob.error, null, "B deletes own target job");
   assert.equal(deletedBJob.data?.length, 1, "B deletes exactly one own target job");
 
-  console.log("M1/M2/M3 local Supabase RLS, private Storage, analysis, roadmap, draft ownership, and cascade checks passed for two fictional users.");
+  console.log("M1–M6a local Supabase RLS, private Storage, analysis, roadmap, draft, private review-link, feedback, and cascade checks passed for two fictional users.");
 }
 
 await run();

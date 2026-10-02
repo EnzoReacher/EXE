@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getOwnedAnalysisDetails } from "@/lib/analysis/repository";
 import { IntakeError } from "@/lib/intake/types";
 import { AnalysisStatus, RetryAnalysis } from "./analysis-status";
+import ReviewLinks from "./review-links";
 import type { FindingStatus } from "@/lib/analysis/types";
 
 export const metadata = {
@@ -65,6 +66,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
           </article>)}</div>
           <section className="analysis-next-step"><div><strong>Ready to decide what to do next?</strong><p>Create a private roadmap from the gaps in this report and review a source-grounded CV draft.</p></div><Link className="button button-primary" href={`/analysis/${id}/next-steps`}>Open next steps <span aria-hidden="true">→</span></Link></section>
         </> : <section className="analysis-empty"><h2>No requirements were extracted</h2><p>This local prototype looks for bullet points and clearly labeled requirements in the job description. Edit the saved job to make the required skills or experience easier to identify.</p><Link className="text-link" href="/assessment">Update your intake <span aria-hidden="true">→</span></Link></section>}
+        <ReviewLinks analysisId={id} />
       </>}
 
       <footer className="analysis-footer"><span>Report version {run.schemaVersion} · {run.providerName} {run.providerVersion}</span><span>Private to your account · Advisory only</span></footer>

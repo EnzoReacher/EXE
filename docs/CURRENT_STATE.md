@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M1–M5 are implemented on `codex/exe-web-app-m2`. M2/M3 and the repeated M4/M5 local Supabase acceptance pass; the M5 CP1 Slot 8 fictional-data demo package is ready for owner/course review.
+**Status:** M1–M6a are implemented on `codex/exe-web-app-m6`. M6a private review links and feedback pass automated and local fictional two-user Supabase acceptance; M5 CP1 demo and M6a remain pending owner/course review.
 
 ## Completed in this build part
 
@@ -30,6 +30,9 @@
 - Corrected a real local-stack blocker: M1/M2 and M2/M3 had duplicate date-only Supabase migration versions. The M2 migration is now `20261002_m2_evidence_analysis.sql`; M3 is `20261003_m3_roadmap_cv_draft.sql`.
 - Added M4 private saved work: an owner-scoped server DTO/API and return-to-work screen with role, optional company, CV filename, date, report state, derived finding summary, and draft-review state only.
 - Added plain-language empty, loading, session/private-data error, report-processing, failed-report retry, no-plan, and saved-draft-review states, plus Saved work navigation and narrow-mobile layout improvements.
+- Added M6a private review links for one completed report, optionally including only its explicitly accepted CV draft. Owners select 24-hour, 7-day, or 30-day expiry, receive the raw URL only at creation, can revoke links, and can read feedback scoped to their own shares.
+- Added `20261004_m6_private_review_links.sql`: owner RLS, SHA-256 token hashes, direct-anonymous table denial, limited public token RPC functions, feedback idempotency, accepted-draft validation, source-deletion cascades, and automatic link revocation when an included draft is edited/unaccepted.
+- Added unlisted `/review/[token]`, marked `noindex,nofollow` and private no-store through route metadata and response headers. It projects only selected report findings/excerpts and optional accepted draft, has a neutral unavailable state, and provides an accessible bounded plain-text advisory feedback form without reviewer accounts.
 
 ## Checks run for M1
 
@@ -45,12 +48,13 @@
 - M4 checks — passed on 2026-10-02: `pnpm test` (7 test files, 40 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, and `git diff --check`. The available local stack also reran and passed `pnpm test:supabase:local` with fictional data only.
 - M5 demo package — completed on 2026-10-02: `docs/demo/` contains the fictional Aria Vale CV/JD material, parser-verified 1,489-byte DOCX fixture, local environment checklist, CP1 Slot 8 runbook, product/service description, technology/tools description, and owner review checklist. All names, company, qualifications, and achievements are fictional.
 - M5 final checks — passed on 2026-10-02: `pnpm test` (7 files, 40 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and repeated `pnpm test:supabase:local` with temporary fictional local accounts/content only.
+- M6a checks — passed on 2026-10-02: `pnpm test` (9 files, 44 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and `pnpm test:supabase:local` after local `supabase db reset`. The two-user fictional acceptance checks share isolation, direct-table denial, selected-only content, expired/revoked/invalid denial, bounded feedback/idempotency, accepted-draft and draft-edit guards, and deletion cascades.
 
 ## Current limits and open decisions
 
 - A reviewed Supabase project/environment is still required for any real user data. Use only placeholder values in `.env`; never commit credentials or real CVs.
 - Supabase Storage deletion removes the live object, but project-level backup and retention behavior must be reviewed and documented before real CVs are accepted.
-- No AI provider has been selected. The M2 matcher and M3 composer are local deterministic tools, do not independently validate skills, and do not produce a hiring score. Sharing, job links, payments, and mobile work remain out of scope.
+- No AI provider has been selected. The M2 matcher and M3 composer are local deterministic tools, do not independently validate skills, and do not produce a hiring score. M6a private sharing is implemented, but M6b curated opportunity links, payments, marketplace/reviewer verification, and messaging remain out of scope.
 - Saved work is a minimal private index, not a data-export or source-text browsing feature. It deliberately excludes sensitive source content and internal records from list responses.
 - Supabase backup/retention settings still need review before using real CVs. The local M2/M3 migration and two-user RLS/cascade checks now pass; this does not replace an owner security/privacy review.
 - M1 branch `codex/exe-web-app-m1` was approved as M2's base. `main` remains unchanged; no merge or deployment was initiated.
@@ -61,3 +65,4 @@
 1. Have the owner rehearse and review the M5 CP1 Slot 8 fictional-data package, including the required desktop and narrow-mobile visual check. Do not mark CP1 complete without team/course evidence.
 2. Begin CP2 evidence collection: validate the segment, value, alternatives, competitor positioning, and willingness to pay before any pricing or lower-price claim.
 3. Complete owner privacy/security and Supabase backup/retention review before real CVs. Do not merge to `main` or deploy without explicit owner approval.
+4. If the owner chooses more product work after review, consider M6b curated opportunity links only after CP2 research; do not make target-segment, pricing, competitor, market, or lower-price claims first.
