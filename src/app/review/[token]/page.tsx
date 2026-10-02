@@ -4,6 +4,7 @@ import { getPublicReview } from "@/lib/review-links/repository";
 import ReviewFeedbackForm from "./review-feedback-form";
 
 export const metadata: Metadata = { title: "Private EXE review", robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
 
 function Unavailable() { return <main className="reviewer-page"><div className="reviewer-wrap reviewer-unavailable"><p className="eyebrow">PRIVATE EXE REVIEW</p><h1>This private review link is not available.</h1><p>It may have expired, been revoked, or no longer be available. Ask the owner for a new link if needed.</p></div></main>; }
 

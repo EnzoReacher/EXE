@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M1–M6b are implemented on `codex/exe-web-app-m6b`. M6a review links and M6b private opportunity tracking pass automated and local fictional two-user Supabase acceptance; M5 CP1 demo and M6a/M6b remain pending owner/course review.
+**Status:** M7 is ready for owner review on `codex/exe-web-app-m7`, based on M6b commit `4527301`. M0–M6b remain implemented; M7 security hardening, fictional acceptance evidence, and non-deploying CI passed. No merge, deployment, public production environment, or real-data authorization exists.
 
 ## Completed in this build part
 
@@ -36,6 +36,8 @@
 - Added M6b private `/opportunities`: a user can select their own saved target job, store an HTTPS reference they found, add an optional company/note, and track only their own `saved`, `preparing`, `applied`, `closed`, or `dismissed` process state. It clearly states that EXE does not check the page, vacancy, or CV fit.
 - Added `20261005_m6b_private_opportunity_links.sql`: owner RLS, same-owner target-job composite foreign key, status constraint, and target-job deletion cascade. The M6b server APIs validate HTTPS-only links, reject embedded credentials and malformed/overlong inputs, and do not fetch, scrape, preview, parse, or otherwise inspect external URLs.
 - Added an intentionally empty typed future curated-source contract and `docs/OPPORTUNITY_CURATION_STANDARD.md`. No real source or listing is present; CP2 evidence plus documented team approval remains required before one can appear.
+- Added M7 release-candidate response hardening: `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `X-Frame-Options: DENY`, restrictive `Permissions-Policy`, and no-store headers for API/review routes. CSP remains deliberately deferred pending approved deployed-origin policy review.
+- Added `docs/RELEASE_CANDIDATE_ACCEPTANCE.md`, `docs/OWNER_REVIEW_M7.md`, and `.github/workflows/quality.yml`. CI does not deploy and contains no secrets or hosted Supabase checks.
 
 ## Checks run for M1
 
@@ -53,6 +55,7 @@
 - M5 final checks — passed on 2026-10-02: `pnpm test` (7 files, 40 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and repeated `pnpm test:supabase:local` with temporary fictional local accounts/content only.
 - M6a checks — passed on 2026-10-02: `pnpm test` (9 files, 44 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and `pnpm test:supabase:local` after local `supabase db reset`. The two-user fictional acceptance checks share isolation, direct-table denial, selected-only content, expired/revoked/invalid denial, bounded feedback/idempotency, accepted-draft and draft-edit guards, and deletion cascades.
 - M6b checks — passed on 2026-10-02: `pnpm test` (10 files, 51 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and `pnpm test:supabase:local` after `pnpm dlx supabase db reset --local`. The fictional two-user acceptance checks opportunity owner CRUD, anonymous and cross-user denial, cross-user target-job reference denial, and target-job cascade.
+- M7 checks — passed on 2026-10-02: `pnpm test` (**11 files, 54 tests**), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and `pnpm test:supabase:local` with temporary fictional local accounts. See `docs/RELEASE_CANDIDATE_ACCEPTANCE.md` for the complete 20-item acceptance record.
 
 ## Current limits and open decisions
 
@@ -63,10 +66,11 @@
 - Supabase backup/retention settings still need review before using real CVs. The local M2/M3 migration and two-user RLS/cascade checks now pass; this does not replace an owner security/privacy review.
 - M1 branch `codex/exe-web-app-m1` was approved as M2's base. `main` remains unchanged; no merge or deployment was initiated.
 - The M5 package supports a fictional-data local demo, not a completed CP1 course checkpoint. A connected-browser pixel review was unavailable during the final implementation session; the owner must complete the desktop and narrow-mobile visual review in the M5 checklist before presenting.
+- Connected-browser interactive review was also unavailable for M7. Static responsive/focus inspection passed, but the owner must complete desktop/narrow-mobile visual and keyboard review before approving a release.
 
 ## Resume from here
 
-1. Have the owner rehearse and review the M5 CP1 Slot 8 fictional-data package, including the required desktop and narrow-mobile visual check. Do not mark CP1 complete without team/course evidence.
-2. Begin CP2 evidence collection: validate the segment, value, alternatives, competitor positioning, and willingness to pay before any pricing or lower-price claim.
-3. Complete owner privacy/security and Supabase backup/retention review before real CVs. Do not merge to `main` or deploy without explicit owner approval.
-4. Complete final owner review of M6b, including desktop/narrow-mobile opportunity flows, external-link disclosure, long text, focus behavior, empty/error states, and deletion confirmation. Do not make target-segment, pricing, competitor, market, or lower-price claims before CP2 research.
+1. Complete the M7 owner review in `docs/OWNER_REVIEW_M7.md`, including connected-browser desktop/narrow-mobile visual and keyboard checks using fictional data only. This is the next action, not an automatic release.
+2. Have the owner rehearse and review the M5 CP1 Slot 8 fictional-data package. Do not mark CP1 complete without team/course evidence.
+3. Begin CP2 evidence collection: validate the segment, value, alternatives, competitor positioning, and willingness to pay before any pricing or lower-price claim.
+4. Complete owner privacy/security and Supabase backup/retention review before real CVs, merge, or deployment. Do not make target-segment, pricing, competitor, market, or lower-price claims before CP2 research.

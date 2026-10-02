@@ -3,7 +3,7 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-02
-**Working branch:** `codex/exe-web-app-m6b`
+**Working branch:** `codex/exe-web-app-m7`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -88,6 +88,7 @@ flowchart TD
 | **M5 — CP1 Slot 8 demo readiness** | Fictional local demo package, 3–5 minute runbook, setup checklist, product/service and technology descriptions | Demo package complete; owner/course review pending | `45188c5`; fictional fixture and local acceptance passed; no course checkpoint marked complete. |
 | **M6a — Private review links and feedback** | Private, revocable, expiry-limited sharing of one completed report and optional accepted draft | Implemented; final verification and owner review pending | Branch `codex/exe-web-app-m6` from `45188c5`; owner controls, narrow public reviewer route, hashed tokens, RLS/RPC boundary, and fictional local acceptance are implemented. |
 | **M6b — Private opportunity links and curated-source framework** | Owner-saved external HTTPS reference links with private process status; future curation contract only | Implemented; final owner review pending | Branch `codex/exe-web-app-m6b` from `4ccb54d`; RLS, same-owner target-job guard, HTTPS validation, local acceptance, and empty curation framework are complete. No external fetching, scraping, or unverified listings. |
+| **M7 — Internal release candidate** | Cross-route privacy/security audit, fictional acceptance evidence, CI, and owner-release package | Ready for owner review | Branch `codex/exe-web-app-m7` from clean M6b `4527301`; 54 tests, local M1–M6b fictional Supabase acceptance, security hardening, release checklist, CI, and owner handoff are complete. No deployment occurred. Owner must complete connected-browser desktop/narrow-mobile visual and keyboard review and make every release decision explicitly. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 
 ## 4. M2 status and acceptance record
@@ -226,8 +227,9 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 7 | Prepare M5 CP1 Slot 8 demo readiness | Complete — owner/course review pending | Fictional demo data and DOCX fixture, local setup checklist, 3–5 minute runbook, product/service and technology descriptions, failure plan, owner checklist, and final automated checks are complete; owner must still rehearse/review before CP1 is marked complete |
 | 8 | Build M6a private review links and feedback | Complete — owner review pending | Selected-report sharing with optional accepted draft, expiry, revocation, review feedback, narrow reviewer route, and fictional-data test evidence implemented |
 | 9 | Build M6b private opportunity links and curated-source framework | Complete — owner review pending | Private user-saved HTTPS references, owner RLS/same-owner target-job enforcement/cascade, and an empty curation contract implemented; real curation remains blocked by CP2/team approval |
-| 10 | Run CP2 evidence collection | Parallel product work | Validate segment, value, alternatives, competitor positioning, and willingness to pay; no pricing/lower-price claim before this research |
-| 11 | Final owner review, then decide whether to merge/deploy | Owner decision only | Requires explicit privacy/security and backup/retention review plus explicit approval; no deployment or merge in M6b |
+| 10 | Prepare M7 internal release candidate | Ready for owner review | Security/route audit, full fictional acceptance record, non-deploying CI, and owner review package completed from M6b `4527301`; next action is owner review, not release |
+| 11 | Run CP2 evidence collection | Parallel product work | Validate segment, value, alternatives, competitor positioning, and willingness to pay; no pricing/lower-price claim before this research |
+| 12 | Final owner review, then decide whether to merge/deploy | Owner decision only | Requires explicit privacy/security and backup/retention review plus explicit approval; no deployment or merge in M7 |
 
 ## 11. Progress log
 
@@ -255,13 +257,18 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 2026-10-02 | M6b Section 4 — job-seeker workspace | Added private `/opportunities` add/edit/status/delete interface and contextual private-link entry points | Shows no IDs, CV/JD text, evidence, review links, or technical database errors; external navigation is disclosed and delete needs confirmation |
 | 2026-10-02 | M6b Section 5 — future curation framework | Added empty typed source catalog contract and team curation standard | No unverified real listings/sources; CP2 research and documented team approval are required before any real curated source is shown |
 | 2026-10-02 | M6b Section 6 — verification and documentation | Passed all quality gates and reset local Supabase acceptance; documentation updated | 51 unit tests in 10 files, lint, typecheck, build, script syntax/diff checks, and M1–M6b fictional two-user acceptance passed. Static responsive review passed; connected-browser desktop/narrow-mobile review remains an owner task before any real-data, merge, or deployment decision. |
+| 2026-10-02 | M7 Section 1 — baseline and branch setup | Passed clean M6b baseline checks; created and pushed M7 internal release-candidate branch | Base `4527301`; 51 tests in 10 files, lint, typecheck, build, script syntax/diff checks, and M1–M6b fictional local Supabase acceptance passed; `codex/exe-web-app-m7` pushed without touching `main` |
+| 2026-10-02 | M7 Section 2 — privacy, security, and route audit | Passed; hardening added | Audited all App Router pages/API handlers, Supabase repositories/migrations/RPCs, private Storage, owner/cascade boundaries, review tokens, and response shapes. Added global `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `X-Frame-Options: DENY`, restrictive `Permissions-Policy`, and no-store headers for API/review routes. CSP is deliberately deferred until an owner-approved deployment/Supabase-origin policy can be verified. 53 tests in 11 files, lint, typecheck, production build, and diff check passed. |
+| 2026-10-02 | M7 Section 3 — fictional-data acceptance | Passed with explicit owner visual-review follow-up | Added `docs/RELEASE_CANDIDATE_ACCEPTANCE.md`, covering all 20 required checks with fictional fixture/local two-user acceptance evidence. Private core data flows and cascades passed. Connected-browser desktop/narrow-mobile and interactive keyboard review could not run in this workspace and remains a required owner task; no real data is authorized. |
+| 2026-10-02 | M7 Section 4 — automated quality and CI | Passed | Added non-deploying `.github/workflows/quality.yml` for branch pushes and pull requests: frozen-lockfile install, tests, lint, typecheck, build, policy-script syntax, and whitespace checks. Final local run: 54 unit tests in 11 files, lint, typecheck, production build, script syntax, and diff check passed. Docker local Supabase M1–M6b fictional two-user acceptance passed. CI deliberately has no secrets, hosted database, or deployment steps. |
+| 2026-10-02 | M7 Section 5 — owner review package and handoff | Ready for owner review | Added `docs/OWNER_REVIEW_M7.md`; updated build tracker, current state, decisions, and acceptance record. M7 is not a release: no merge or deployment occurred, CP2 research remains open, privacy/backup/retention and manual connected-browser review remain owner gates, and the next action is owner review. |
 
 ## 12. How to resume
 
-1. Have the owner rehearse and review the **M5 CP1 Slot 8 fictional-data demo package**, including a desktop and narrow-mobile visual pass. Do not mark CP1 complete without team/course evidence.
-2. Begin **CP2 evidence collection** before claims about segment, pricing, lower price, competitors, or market demand.
-3. Complete final owner privacy/security and Supabase backup/retention review before any merge, deployment, or real CV use.
-4. Review M6b opportunity add/edit/delete and empty/error states at desktop and narrow-mobile widths; keep real curated sources disabled until CP2 evidence and team approval exist.
+1. Complete the **M7 owner review** in `OWNER_REVIEW_M7.md` using fictional data, including desktop/narrow-mobile visual and keyboard checks. This is the next action; it does not trigger an automatic release.
+2. Have the owner rehearse and review the **M5 CP1 Slot 8 fictional-data demo package**. Do not mark CP1 complete without team/course evidence.
+3. Begin **CP2 evidence collection** before claims about segment, pricing, lower price, competitors, market demand, or real curated-source relevance.
+4. Complete final owner privacy/security and Supabase backup/retention review before any merge, deployment, or real CV use; keep real curated sources disabled until CP2 evidence and team approval exist.
 
 ## 13. Source documents
 
