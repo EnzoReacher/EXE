@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 import { PRIVATE_NO_STORE_HEADERS, SECURITY_HEADERS } from "./src/lib/http/security-headers";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // The TypeScript API avoids depending on captured child-process output during builds.
+    useTypeScriptCli: false,
+  },
   async headers() {
     return [
       { source: "/:path*", headers: [...SECURITY_HEADERS] },
