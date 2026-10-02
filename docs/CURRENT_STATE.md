@@ -5,6 +5,8 @@
 
 ## Completed in this build part
 
+- M10.5 local owner-review preflight added on `codex/exe-web-app-m10-5-qa-preflight` from M10.3 `9d9e3c2`: `pnpm review:preflight` reads only a local `.env.local`, requires local public Supabase browser settings, rejects private credential settings or hosted URLs without echoing values, and confirms the fictional DOCX demo/checklist are available. The full test suite passed (179 tests in 24 files), along with lint, typecheck, production build, direct synthetic CP2 checks, and diff check. An initial sandbox-only child-process capture issue was resolved by a full outside-sandbox rerun and is documented only as diagnostic context. It has no network call, no write, no app workflow change, and does not replace browser testing or create CP2 evidence. See `M10_5_QA_PREFLIGHT.md` and `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`.
+
 - M10.3 local CP2 research operations toolkit prepared on `codex/exe-web-app-m10-3-research-ops` from M10.2 `bd34743`: ignored private drafts, aggregate survey validation/neutral summaries, source-log completeness checks, schemas, synthetic fixtures and owner handoff. No app workflow changes or collected evidence. Checks passed: final 175 tests in 23 files, lint/typecheck/build, all required script syntax/template/synthetic CLI/diff checks and fictional local Supabase acceptance. See `M10_3_RESEARCH_OPS_ACCEPTANCE.md`.
 
 - Cloned the clean `main` baseline and created `codex/exe-web-app-m0` locally and on GitHub for source review.
