@@ -5,7 +5,7 @@ Use this file as the team's working checklist. Mark an item complete only when i
 | Checkpoint | Slot | Weight | Status | Owner | Evidence / exit condition |
 |---|---:|---:|---|---|---|
 | CP1 — idea lock | 3 | Part of 10% | Not started | TBD | Product/service description, target-user hypothesis, problem, value proposition, MVP boundary |
-| CP2 — market research | 5 | 20% | Evidence package and M9 gate prepared — evidence collection pending | TBD | M8 plan/guides/templates and M9 validator/decision workflow are ready; still requires actual reviewed survey/interview and market/competitor/value evidence before CP2 can be marked complete |
+| CP2 — market research | 5 | 20% | M10 execution workspace ready — evidence collection pending | TBD | M8/M9 research package and M10 execution records are ready; still requires actual reviewed survey/interview and market/competitor/value evidence before CP2 can be marked complete |
 | CP1 — MVP demo | 8 | Part of 10% | Demo package ready — team/course review pending | TBD | Fictional local end-to-end runbook and product/technology descriptions in `docs/demo/`; complete rehearsal, owner review, and course evidence before marking CP1 complete |
 | CP3 — BMC | 8 | 15% | Not started | TBD | Business Model Canvas supported by research or assumptions clearly labeled |
 | CP4 — pitch deck | 10 | 40% | Not started | TBD | Option 1 working rubric: Team profile 10%; Product-market fit 40%; Business model 20%; Operations 20%; Fundraising plan 10% |
@@ -15,6 +15,7 @@ Use this file as the team's working checklist. Mark an item complete only when i
 
 - [x] Prepare consent-safe M8 research plan, interview guides, anonymous survey template, blank evidence register, current-source comparison template, and owner checklist.
 - [x] Prepare M9 evidence-register validator, evidence-review template, product decision gate, next-feature matrix, and unchecked owner status.
+- [x] Initialize M10 CP2 execution workspace with blank status, session-log, and product-direction records.
 - [ ] Decide primary segment and sampling method.
 - [ ] Survey target: more than 100 responses, or document interviews with at least two qualified industry experts.
 - [ ] Separately plan 5–10 target-customer video interviews.
