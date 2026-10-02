@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M9 evidence-gate tooling and product-decision templates are prepared on `codex/exe-web-app-m9`, based on verified M8 commit `8755795`. M7 remains ready for owner review. CP2 is incomplete, the target segment remains open, and no merge, deployment, public production environment, or real-data authorization exists.
+**Status:** M10 CP2 execution workspace is prepared on `codex/exe-web-app-m10`, based on verified M9 commit `b374f0c`. M7 remains ready for owner review. CP2 is incomplete, the target segment remains open, and no merge, deployment, public production environment, or real-data authorization exists.
 
 ## Completed in this build part
 
@@ -40,6 +40,7 @@
 - Added `docs/RELEASE_CANDIDATE_ACCEPTANCE.md`, `docs/OWNER_REVIEW_M7.md`, and `.github/workflows/quality.yml`. CI does not deploy and contains no secrets or hosted Supabase checks.
 - Added M8 documentation-only CP2 and owner-review package: research plan, consent-safe target-user/expert interview guides, anonymous survey template, blank example-only evidence register, cited-source competitor/pricing template, owner execution checklist, and index. No participants, CVs, contact information, results, competitor facts, prices, or market claims were added.
 - Added M9 CP2 evidence-gate tooling: a template/collected-register validator with deterministic fictional tests; package commands; evidence-review, decision-gate, next-feature-selection, and owner-status templates. No production workflow was changed, no feature was selected, and no evidence was collected automatically.
+- Added M10 CP2 execution workspace: `M10_CP2_EXECUTION_STATUS.md`, `M10_RESEARCH_SESSION_LOG.md`, and `M10_PRODUCT_DIRECTION_DECISION.md`. These are blank owner/team execution records; no participant/source evidence, product-direction decision, or M11 feature selection was added.
 
 ## Checks run for M1
 
@@ -76,7 +77,10 @@
 
 ## Resume from here
 
-1. Complete the M7 owner review in `docs/OWNER_REVIEW_M7.md`, including connected-browser desktop/narrow-mobile visual and keyboard checks using fictional data only.
-2. Execute `docs/M8_README.md`: collect only consent-safe, anonymized CP2 evidence; use `pnpm cp2:validate:collected`; then review observations, limitations, and decisions in `docs/M9_EVIDENCE_REVIEW_TEMPLATE.md` before choosing the next feature.
-3. Have the owner rehearse and review the M5 CP1 Slot 8 fictional-data package. Do not mark CP1 complete without team/course evidence.
-4. Complete `docs/M9_DECISION_GATE.md` and use `docs/M9_NEXT_FEATURE_SELECTION.md` before M10 work. Complete owner privacy/security and Supabase backup/retention review before real CVs, merge, or deployment. Do not make target-segment, pricing, competitor, market, lower-price, better-value, privacy, ease-of-use, or validation claims before reviewed CP2 research.
+1. Complete the M7 owner review using fictional data only.
+2. Complete the M5 CP1 demo rehearsal and record the required course evidence.
+3. Execute M10: collect consent-safe CP2 evidence, keep raw identities outside Git, enter anonymized summaries, and run the M9 validator.
+4. Complete the M10 product-direction decision only after owner/team review. Do not select an M11 feature before this gate.
+5. Complete privacy, retention, backup, merge, and deployment review with explicit owner approval.
+
+M10 documentation-only initialization checks were not run in this remote update; no application behavior changed. No merge or deployment occurred.
