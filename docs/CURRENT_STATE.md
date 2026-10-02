@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M7 is ready for owner review on `codex/exe-web-app-m7`, based on M6b commit `4527301`. M0–M6b remain implemented; M7 security hardening, fictional acceptance evidence, and non-deploying CI passed. No merge, deployment, public production environment, or real-data authorization exists.
+**Status:** M8 research and owner-review templates are prepared on `codex/exe-web-app-m8`, based on verified M7 commit `13eab1b`. M7 remains ready for owner review. No CP2 evidence has been collected, and no merge, deployment, public production environment, or real-data authorization exists.
 
 ## Completed in this build part
 
@@ -38,6 +38,7 @@
 - Added an intentionally empty typed future curated-source contract and `docs/OPPORTUNITY_CURATION_STANDARD.md`. No real source or listing is present; CP2 evidence plus documented team approval remains required before one can appear.
 - Added M7 release-candidate response hardening: `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `X-Frame-Options: DENY`, restrictive `Permissions-Policy`, and no-store headers for API/review routes. CSP remains deliberately deferred pending approved deployed-origin policy review.
 - Added `docs/RELEASE_CANDIDATE_ACCEPTANCE.md`, `docs/OWNER_REVIEW_M7.md`, and `.github/workflows/quality.yml`. CI does not deploy and contains no secrets or hosted Supabase checks.
+- Added M8 documentation-only CP2 and owner-review package: research plan, consent-safe target-user/expert interview guides, anonymous survey template, blank example-only evidence register, cited-source competitor/pricing template, owner execution checklist, and index. No participants, CVs, contact information, results, competitor facts, prices, or market claims were added.
 
 ## Checks run for M1
 
@@ -56,6 +57,7 @@
 - M6a checks — passed on 2026-10-02: `pnpm test` (9 files, 44 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and `pnpm test:supabase:local` after local `supabase db reset`. The two-user fictional acceptance checks share isolation, direct-table denial, selected-only content, expired/revoked/invalid denial, bounded feedback/idempotency, accepted-draft and draft-edit guards, and deletion cascades.
 - M6b checks — passed on 2026-10-02: `pnpm test` (10 files, 51 tests), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and `pnpm test:supabase:local` after `pnpm dlx supabase db reset --local`. The fictional two-user acceptance checks opportunity owner CRUD, anonymous and cross-user denial, cross-user target-job reference denial, and target-job cascade.
 - M7 checks — passed on 2026-10-02: `pnpm test` (**11 files, 54 tests**), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, `git diff --check`, and `pnpm test:supabase:local` with temporary fictional local accounts. See `docs/RELEASE_CANDIDATE_ACCEPTANCE.md` for the complete 20-item acceptance record.
+- M8 checks — passed on 2026-10-02: documentation-only changes ran `pnpm test` (**11 files, 54 tests**), `pnpm lint`, `pnpm typecheck`, and `pnpm build`. No application behavior was intentionally changed.
 
 ## Current limits and open decisions
 
@@ -67,10 +69,11 @@
 - M1 branch `codex/exe-web-app-m1` was approved as M2's base. `main` remains unchanged; no merge or deployment was initiated.
 - The M5 package supports a fictional-data local demo, not a completed CP1 course checkpoint. A connected-browser pixel review was unavailable during the final implementation session; the owner must complete the desktop and narrow-mobile visual review in the M5 checklist before presenting.
 - Connected-browser interactive review was also unavailable for M7. Static responsive/focus inspection passed, but the owner must complete desktop/narrow-mobile visual and keyboard review before approving a release.
+- M8 preparation is not research evidence. Pricing, lower-price, better-value, competitor, market, target-segment, and validation claims remain blocked until CP2 evidence is collected and owner/team reviewed.
 
 ## Resume from here
 
-1. Complete the M7 owner review in `docs/OWNER_REVIEW_M7.md`, including connected-browser desktop/narrow-mobile visual and keyboard checks using fictional data only. This is the next action, not an automatic release.
-2. Have the owner rehearse and review the M5 CP1 Slot 8 fictional-data package. Do not mark CP1 complete without team/course evidence.
-3. Begin CP2 evidence collection: validate the segment, value, alternatives, competitor positioning, and willingness to pay before any pricing or lower-price claim.
-4. Complete owner privacy/security and Supabase backup/retention review before real CVs, merge, or deployment. Do not make target-segment, pricing, competitor, market, or lower-price claims before CP2 research.
+1. Complete the M7 owner review in `docs/OWNER_REVIEW_M7.md`, including connected-browser desktop/narrow-mobile visual and keyboard checks using fictional data only.
+2. Execute `docs/M8_README.md`: collect only consent-safe, anonymized CP2 evidence, log it in `docs/CP2_EVIDENCE_REGISTER.md`, and have the owner/team review it before choosing the next feature.
+3. Have the owner rehearse and review the M5 CP1 Slot 8 fictional-data package. Do not mark CP1 complete without team/course evidence.
+4. Complete owner privacy/security and Supabase backup/retention review before real CVs, merge, or deployment. Do not make target-segment, pricing, competitor, market, lower-price, better-value, or validation claims before reviewed CP2 research.
