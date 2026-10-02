@@ -11,6 +11,7 @@ M8 prepares an evidence-collection and owner-review package without changing M0â
 - [Blank evidence register](CP2_EVIDENCE_REGISTER.md)
 - [Competitor and pricing research template](COMPETITOR_AND_PRICING_RESEARCH_TEMPLATE.md)
 - [Owner execution checklist](M8_OWNER_EXECUTION_CHECKLIST.md)
+- [M9 evidence gate and product-decision workflow](M9_DECISION_GATE.md)
 
 ## What the owner must do manually
 

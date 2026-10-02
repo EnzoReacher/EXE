@@ -10,12 +10,12 @@
 4. Link the relevant hypothesis and classify the signal as supporting, neutral, or contradicting. This classification is a review aid, not proof.
 5. Record limitations, confidence, and owner review status before a claim is used publicly.
 
-| Evidence ID | Evidence type | Date collected | Participant/source category | Anonymized summary | Related hypothesis | Signal | Confidence notes / limitations | Action or decision triggered | Owner review status |
-|---|---|---|---|---|---|---|---|---|---|
-| Example only — not collected evidence (`TU-000`) | Example target-user interview placeholder | Not collected | Example category only | Example placeholder. Replace only with an actual anonymized summary after consent-safe collection. | Example primary hypothesis | Not classified | No evidence; template example only. | None. | Not reviewed |
-| Example only — not collected evidence (`EX-000`) | Example expert interview placeholder | Not collected | Example category only | Example placeholder. Do not interpret as an expert view. | Example trust/privacy hypothesis | Not classified | No evidence; template example only. | None. | Not reviewed |
-| Example only — not collected evidence (`SV-000`) | Example survey-summary placeholder | Not collected | Example category only | Example placeholder. Do not add a response count until a real anonymous summary exists. | Example value hypothesis | Not classified | No evidence; template example only. | None. | Not reviewed |
-| Example only — not collected evidence (`CM-000`) | Example cited-source placeholder | Not collected | Example public source category only | Example placeholder. Add current URL, access/source date, and exact supported fact only after research. | Example alternative/pricing question | Not classified | No evidence; template example only. | None. | Not reviewed |
+| Evidence ID | Evidence type | Date collected | Participant/source category | Anonymized summary | Related hypothesis | Signal | Confidence notes / limitations | Action or decision triggered | Owner review status | Source URL | Source date |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Example only — not collected evidence (`TU-000`) | Example target-user interview placeholder | Not collected | Example category only | Example placeholder. Replace only with an actual anonymized summary after consent-safe collection. | Example primary hypothesis | Not classified | No evidence; template example only. | None. | Not reviewed |  |  |
+| Example only — not collected evidence (`EX-000`) | Example expert interview placeholder | Not collected | Example category only | Example placeholder. Do not interpret as an expert view. | Example trust/privacy hypothesis | Not classified | No evidence; template example only. | None. | Not reviewed |  |  |
+| Example only — not collected evidence (`SV-000`) | Example survey-summary placeholder | Not collected | Example category only | Example placeholder. Do not add a response count until a real anonymous summary exists. | Example value hypothesis | Not classified | No evidence; template example only. | None. | Not reviewed |  |  |
+| Example only — not collected evidence (`CM-000`) | Example cited-source placeholder | Not collected | Example public source category only | Example placeholder. Add current URL, access/source date, and exact supported fact only after research. | Example alternative/pricing question | Not classified | No evidence; template example only. | None. | Not reviewed |  |  |
 
 ## Owner review decision log
 
