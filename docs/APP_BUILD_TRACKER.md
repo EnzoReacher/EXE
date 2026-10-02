@@ -25,6 +25,10 @@ Engineering hardening checks passed on `codex/exe-web-app-m10-2-hardening` from 
 
 Prepared on `codex/exe-web-app-m10-3-research-ops` from M10.2 `bd34743`: local-only aggregate/source validation and neutral summaries, ignored private directories, synthetic regression fixtures and owner schemas/handoff. Final 175 tests in 23 files and required quality/local fictional checks passed. No application workflow change or automated collection. CP2 remains pending, target segment/job family open, price/competitor claims blocked and M11 blocked. M7/M10.2 owner browser review remains pending; no merge or deployment. See `M10_3_RESEARCH_OPS_ACCEPTANCE.md`.
 
+## M10.5 local owner-review preflight
+
+Prepared on `codex/exe-web-app-m10-5-qa-preflight` from M10.3 `9d9e3c2`: a local-only `pnpm review:preflight` check for a bounded `.env.local`, public loopback Supabase settings, absence of private credential settings, and the fictional demo DOCX/owner checklist. The full suite passed (179 tests in 24 files), along with lint, typecheck, production build, direct synthetic CP2 checks, and diff check. An initial sandbox-only child-process capture issue was resolved by a full outside-sandbox rerun; it is retained in the acceptance record as diagnostic context, not a remaining test failure. The preflight emits no configuration values, sends no network requests, writes no data, and does not substitute for a browser review. CP2 evidence, M11 selection, merge, deployment, and real-data authorization remain blocked. See `M10_5_QA_PREFLIGHT.md` and `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`.
+
 ## M0 review notes
 
 - Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.
