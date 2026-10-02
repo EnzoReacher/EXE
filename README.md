@@ -29,6 +29,17 @@ pnpm dev
 
 Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and private, owner-scoped CV/job intake when placeholder values are configured for a reviewed Supabase project. It accepts PDF/DOCX CVs up to 5 MiB. Select a saved CV and job to create an evidence report. M2 uses local text matching only and does not call an AI provider. Use fictional/sample information until the team reviews Supabase backup, retention, deletion, and the M2 database policies.
 
+### Fictional-data owner-review preflight
+
+For a local owner review, configure only the local Supabase public URL and publishable key in `.env.local`; never put a service-role key, database URL, private credential, real CV, or hosted environment value there. Then run:
+
+```bash
+pnpm review:preflight
+pnpm dev
+```
+
+The preflight does not print configured values. It checks for a local-only browser configuration and the repository's fictional DOCX/checklist. It does not test the browser, approve a release, collect CP2 evidence, merge, or deploy.
+
 ## Course checkpoints
 
 | Checkpoint | Slot | Weight | Main deliverable |
