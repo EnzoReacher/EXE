@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M10 CP2 execution workspace is prepared on `codex/exe-web-app-m10`, based on verified M9 commit `b374f0c`. M7 remains ready for owner review. CP2 is incomplete, the target segment remains open, and no merge, deployment, public production environment, or real-data authorization exists.
+**Status:** M10 CP2 execution review confirms evidence collection is pending on `codex/exe-web-app-m10`, based on verified M9 commit `b374f0c`. M7 remains ready for owner review. CP2 is incomplete, the target segment remains open, M11 is blocked, and no merge, deployment, public production environment, or real-data authorization exists.
 
 ## Completed in this build part
 
@@ -41,6 +41,7 @@
 - Added M8 documentation-only CP2 and owner-review package: research plan, consent-safe target-user/expert interview guides, anonymous survey template, blank example-only evidence register, cited-source competitor/pricing template, owner execution checklist, and index. No participants, CVs, contact information, results, competitor facts, prices, or market claims were added.
 - Added M9 CP2 evidence-gate tooling: a template/collected-register validator with deterministic fictional tests; package commands; evidence-review, decision-gate, next-feature-selection, and owner-status templates. No production workflow was changed, no feature was selected, and no evidence was collected automatically.
 - Added M10 CP2 execution workspace: `M10_CP2_EXECUTION_STATUS.md`, `M10_RESEARCH_SESSION_LOG.md`, and `M10_PRODUCT_DIRECTION_DECISION.md`. These are blank owner/team execution records; no participant/source evidence, product-direction decision, or M11 feature selection was added.
+- Performed an M10 repository evidence review. The CP2 register remains example-only; no owner-review result, anonymized interview/expert/survey evidence, current public market/competitor/pricing source, or product-direction review was supplied. Recorded the exact missing inputs without adding an evidence row, claim, or M11 feature selection.
 
 ## Checks run for M1
 
@@ -74,13 +75,14 @@
 - Connected-browser interactive review was also unavailable for M7. Static responsive/focus inspection passed, but the owner must complete desktop/narrow-mobile visual and keyboard review before approving a release.
 - M8 preparation is not research evidence. Pricing, lower-price, better-value, competitor, market, target-segment, and validation claims remain blocked until CP2 evidence is collected and owner/team reviewed.
 - M9 validator success is not research validation. Claims that EXE is cheaper, better, better value, validated, in demand, more private, easier to use, market-ready, or competitively superior remain blocked until relevant evidence and owner/team review exist.
+- M10 has not satisfied the decision gate: no real evidence IDs, source IDs, owner/team review, target segment, pricing decision, or M11 approval exists. CP2 and M11 remain blocked.
 
 ## Resume from here
 
 1. Complete the M7 owner review using fictional data only.
 2. Complete the M5 CP1 demo rehearsal and record the required course evidence.
-3. Execute M10: collect consent-safe CP2 evidence, keep raw identities outside Git, enter anonymized summaries, and run the M9 validator.
+3. Provide/collect the exact missing consent-safe inputs listed in `M10_CP2_EXECUTION_STATUS.md`; keep raw identities outside Git, enter anonymized summaries, and run the M9 validator.
 4. Complete the M10 product-direction decision only after owner/team review. Do not select an M11 feature before this gate.
 5. Complete privacy, retention, backup, merge, and deployment review with explicit owner approval.
 
-M10 documentation-only initialization checks were not run in this remote update; no application behavior changed. No merge or deployment occurred.
+- M10 evidence-pending documentation review checks passed on 2026-10-02: `pnpm test` (**12 files, 65 tests**), `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/validate-cp2-evidence.mjs`, `pnpm cp2:validate` (template mode, reporting evidence pending), and `git diff --check`. No application behavior changed. No merge or deployment occurred.

@@ -1,10 +1,36 @@
 # M10 CP2 Research Execution Status
 
-**Status:** Ready for owner/team execution — no CP2 evidence has been collected in this repository.  
+**Status:** Evidence collection pending — M10 review confirmed no CP2 evidence or owner-review result is recorded in this repository.
 **Branch:** codex/exe-web-app-m10  
 **Purpose:** execute the M8 research plan and use the M9 decision gate before selecting the next product feature.
 
 This file is a live checklist. An unchecked item is not complete. Do not mark an item complete from an assumption, a template, a fictional demo, or a validator pass.
+
+## M10 execution review — 2026-10-02
+
+**Evidence IDs or source IDs used:** none. The CP2 register contains only explicitly labelled example rows; no anonymized participant, expert, survey, competitor, pricing, or market evidence was supplied for this review.
+
+| Check | Result | What remains uncertain / required action |
+|---|---|---|
+| M7 desktop review | No documented owner result | Owner must complete it with fictional demo data and record the result. |
+| M7 narrow-mobile review | No documented owner result | Owner must complete it with fictional demo data and record the result. |
+| M7 keyboard-only review | No documented owner result | Owner must complete it with fictional demo data and record the result. |
+| Private review-link behavior | No documented owner result | Owner must test selected-only visibility, feedback, revocation, and unavailable state using fictional data. |
+| Opportunity-tracker behavior | No documented owner result | Owner must test fictional link state, edit/delete, empty/error, and external-link disclosure. |
+| M5 CP1 demo rehearsal | No documented team/course result | Owner/team must rehearse and retain the required course evidence. |
+| Privacy and retention review | No owner decision recorded | Owner must decide/document data handling, deletion, backup, retention, and access before real CV use. |
+| CP2 target-user, expert, and survey evidence | No collected evidence | Owner/team must provide consent-safe anonymized summaries/aggregate results. |
+| Current public market, competitor, and pricing research | No supplied or authorized source evidence | Owner/team must provide current cited source records before any comparison or price claim. |
+
+**Status change:** none. CP2 remains pending; no M11 feature is authorized. This review does not replace owner/team review or collect evidence.
+
+## Exact inputs required next
+
+1. Documented fictional-data results for every M7/M5 owner review item above.
+2. Actual collection dates, anonymized category, consent-safe summary, related hypothesis, signal, limitations, and owner-review status for each target-user or expert activity.
+3. Aggregate anonymous survey counts/results and sampling limitations, if a survey is used.
+4. Current public-source records with URL, access date, source/update date when available, region, currency, plan/tax/access context, and the exact supported fact for market, competitor, privacy, or pricing research.
+5. Owner/team review date, reviewer, limitations/bias discussion, hypothesis classifications, and explicit product-direction decision.
 
 ## Current boundary
 

@@ -3,6 +3,12 @@
 **Status:** Blank decision record — no M10 product decision has been made.  
 **Rule:** complete this only after CP2 evidence is collected, anonymized, validated, and reviewed with the owner/team.
 
+## M10 readiness check — 2026-10-02
+
+No product-direction decision is permitted at this time. No real evidence IDs, source IDs, owner/team reviewer, review date, target-segment decision, or hypothesis classification exists in the repository. `pnpm cp2:validate:collected` must not be used as a substitute for these missing inputs; a structural validator cannot prove research quality or approval.
+
+**M11 status:** blocked. Do not select a feature until the evidence basis, observation/interpretation separation, limitations, classifications, and explicit owner/team decision below are completed with actual reviewed evidence.
+
 ## Evidence basis
 
 - Review date:

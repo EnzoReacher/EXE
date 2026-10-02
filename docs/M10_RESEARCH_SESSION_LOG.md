@@ -5,6 +5,15 @@
 
 Use one entry per completed research activity. Replace the blank template only with a real, consent-safe, anonymized record.
 
+## M10 repository review — 2026-10-02
+
+- Activity: documentation and evidence-register review; this was **not** a participant interview, expert interview, survey, or public-source research activity.
+- Evidence IDs or source IDs: none.
+- Observation: `CP2_EVIDENCE_REGISTER.md` contains only rows explicitly labelled “Example only — not collected evidence.” No real research files or owner-review results were supplied in the repository.
+- Interpretation: none; an empty/example-only register does not support a product, market, pricing, usability, privacy, or competitor conclusion.
+- Decision / next action: keep CP2 and M11 selection pending; request the exact consent-safe inputs listed in `M10_CP2_EXECUTION_STATUS.md`.
+- Owner/team review status: not reviewed; no owner/team approval recorded.
+
 ## Target-user interview entry
 
 - Evidence ID: TU-___
