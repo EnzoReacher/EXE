@@ -43,7 +43,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
   ];
 
   return <main className="analysis-page">
-    <header className="analysis-topbar"><Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link><Link href="/assessment" className="back-link"><span aria-hidden="true">←</span>Back to your workspace</Link></header>
+    <header className="analysis-topbar"><Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link><div className="topbar-links"><Link href="/saved-work" className="back-link">Saved work</Link><Link href="/assessment" className="back-link"><span aria-hidden="true">←</span>Assessment workspace</Link></div></header>
     <div className="analysis-wrap">
       <p className="eyebrow">MILESTONE 2 · EVIDENCE REPORT</p>
       <h1>{details.roleTitle}</h1>

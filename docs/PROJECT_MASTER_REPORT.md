@@ -84,7 +84,7 @@ flowchart TD
 | **M1 — Secure intake and identity** | Auth, private CV storage, PDF/DOCX parse, saved target jobs, replace/delete, ownership policies | Complete; accepted as M2 baseline | Two-user local Supabase RLS/private-Storage acceptance passed on 2026-10-01. Branch: `codex/exe-web-app-m1`, commit `7909dc8`. |
 | **M2 — Evidence-based analysis** | Requirements, supported/partly supported/unclear/missing findings, excerpts, caveats, saved runs | Local Supabase acceptance passed; owner review pending | Two-user M1/M2/M3 RLS, private Storage, retry uniqueness, and deletion-cascade acceptance passed locally on 2026-10-02. Branch: `codex/exe-web-app-m2`. |
 | **M3 — Roadmap and grounded CV draft** | Prioritized gap-linked actions; editable CV draft with claim provenance and review | Local Supabase acceptance passed; owner review pending | The local source composer remains provider-free. Two-user roadmap, draft, provenance, and deletion-cascade checks passed locally on 2026-10-02. |
-| **M4 — Saved work and integration polish** | Minimal history, full core flow, error/empty states, responsive and privacy review | Planned | Demonstrate only fictional or consented data. |
+| **M4 — Saved work and integration polish** | Minimal history, full core flow, error/empty states, responsive and privacy review | Complete; owner review pending | Private saved-work API/DTO, mobile-safe history UI, navigation, and calm state handling are implemented. All quality checks and local Supabase acceptance passed on 2026-10-02. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 
 ## 4. M2 status and acceptance record
@@ -135,7 +135,36 @@ M3 converts the M2 report into actions a job seeker can use. It stays evidence-g
 | Safety checks | Completed: unit tests cover linked actions and source-only claim selection | The local composer excludes missing and unclear findings from the generated draft |
 | Persistence and privacy | Implemented: owner-scoped roadmap, draft, and claim tables with deletion cascades | Passed local two-user RLS/cascade acceptance with Docker Supabase on 2026-10-02 |
 
-## 6. Course delivery map
+## 6. M4 saved work and integration polish
+
+### Delivered
+
+- Added the private `/saved-work` workspace and owner-scoped `/api/saved-work` endpoint.
+- The list returns only target role, optional company, CV filename, report dates/status, four derived finding counts, draft existence, and draft acceptance state. It never returns CV/JD text, excerpts, owner IDs, storage paths, or provider configuration.
+- Added calm empty, loading, private-session/error, processing, failed-report retry, no-next-steps, and draft-review states.
+- Added clear Saved work navigation from the overview, assessment, report, and next-step screens.
+- Reviewed and adjusted responsive behavior for desktop and narrow mobile: wrapping long titles and filenames, reachability of actions, visible keyboard focus, status text that does not rely on colour, and labelled controls.
+- Kept the deterministic local analysis/composer path. No external provider receives CV or job-description text.
+
+### M4 verification
+
+| Check | Result |
+|---|---|
+| `pnpm test` | Passed: 7 test files, 40 tests, including authenticated owner query scoping, unauthenticated rejection, cross-run metadata exclusion, derived summary counts, and empty data handling. |
+| `pnpm lint` | Passed |
+| `pnpm typecheck` | Passed |
+| `pnpm build` | Passed; includes `/saved-work` and `/api/saved-work` |
+| `node --check scripts/m1-local-policy-check.mjs` | Passed |
+| `git diff --check` | Passed |
+| `pnpm test:supabase:local` | Passed again against the isolated local Docker Supabase stack using temporary fictional users and content only. |
+
+### Remaining limitations
+
+- The saved-work list is intentionally a concise return-to-work index, not a source-data browser; users reopen a private report or draft for detail.
+- A reviewed Supabase environment, backup/retention review, and owner privacy/security review are still required before accepting real CVs.
+- M4 does not add payments, pricing claims, deployment, sharing, job links, or an external AI provider.
+
+## 7. Course delivery map
 
 Engineering progress does not automatically complete a course checkpoint. Each checkpoint needs its own evidence and team review.
 
@@ -157,7 +186,7 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 5. Label every claim as research evidence, estimate, assumption, or open question.
 6. Use the findings to decide the initial segment, value proposition, and pricing. A lower price remains a hypothesis until this research exists.
 
-## 7. Product and technical decisions
+## 8. Product and technical decisions
 
 | Decision | Status | Reason / next action |
 |---|---|---|
@@ -170,7 +199,7 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | Initial job segment and pricing | Open | Must be based on CP2 research. |
 | Merge, deployment, or real-user use | Owner approval required | Keep feature branches reviewable; never deploy or merge without explicit approval. |
 
-## 8. Privacy, security, and quality rules
+## 9. Privacy, security, and quality rules
 
 - Never commit API keys, service-role keys, real CVs, interview recordings, or personally identifying research data.
 - Keep CVs private and owner-scoped in both application logic and database/storage policies.
@@ -181,19 +210,20 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 - Give users clear delete, retry, loading, and error states.
 - Use fictional or consented data in tests, screenshots, presentations, and demos.
 
-## 9. Current work queue
+## 10. Current work queue
 
 | Order | Work item | Status | Owner / dependency |
 |---:|---|---|---|
 | 1 | Create this single master report | Complete 2026-10-02 | Completed in this branch |
 | 2 | Run the expanded M2/M3 two-user acceptance script | Complete 2026-10-02 | Docker plus `pnpm dlx supabase` 2.119.0; fictional local accounts only |
-| 3 | Record M2/M3 acceptance result and publish report update on the feature branch | In progress | This Section 1 documentation and commit precede M4 |
+| 3 | Record M2/M3 acceptance result and publish report update on the feature branch | Complete 2026-10-02 | Published in commit `45cc24f` |
 | 4 | Build M3 roadmap and source-grounded CV draft | Complete 2026-10-02 | Code checks passed; local policy acceptance and owner review remain |
 | 5 | Run CP2 research and approve target segment/value/pricing | Parallel product work | Team evidence and instructor guidance |
-| 6 | Build M4, prepare fictional-data demo, and run owner review | Planned | Depends on M3 |
-| 7 | Decide whether to merge/deploy | Owner decision only | Requires explicit approval |
+| 6 | Build M4 saved work and integration polish | Complete 2026-10-02 | Full quality gate and local acceptance passed; owner review remains |
+| 7 | Prepare M5 CP1 Slot 8 demo readiness | Next milestone | Use fictional data; include known limits and product/technology description |
+| 8 | Decide whether to merge/deploy | Owner decision only | Requires explicit approval |
 
-## 10. Progress log
+## 11. Progress log
 
 | Date | Completed section | Result | Evidence |
 |---|---|---|---|
@@ -203,14 +233,15 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 2026-10-02 | Master project report | Created as the single tracking document | This file |
 | 2026-10-02 | M3 roadmap and CV draft | Built private roadmap, source-grounded draft, editing/acceptance controls, owner-scoped storage, and deletion cascade migration | 35 unit tests; lint, typecheck, build, syntax, and diff checks passed |
 | 2026-10-02 | M2/M3 local Supabase acceptance | Passed using temporary fictional accounts, CVs, and JDs only | Fixed duplicate Supabase migration versions by renaming M2 to `20261002` and M3 to `20261003`; ran `pnpm dlx supabase start` and `SUPABASE_URL="$API_URL" SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY" pnpm test:supabase:local` |
+| 2026-10-02 | M4 saved work and integration polish | Completed private saved-work history, return links, responsive/accessibility refinements, and plain-language loading/empty/error states | 40 unit tests, lint, typecheck, build, syntax/diff checks, and a repeated local Supabase acceptance passed; no merge or deployment |
 
-## 11. How to resume
+## 12. How to resume
 
-1. Review M2 and M3 output with fictional CV/JD data.
-2. Build M4 saved work and integration polish.
-3. Prepare M5 CP1 Slot 8 demo evidence after M4 is accepted.
+1. Begin **M5 CP1 Slot 8 demo readiness**: prepare a 3–5 minute fictional-data demo, sample CV/JD, known-limit notes, and product/technology description.
+2. Obtain owner review of the M2–M4 feature branch. Do not merge or deploy without explicit owner approval.
+3. Complete CP2 research before making pricing or lower-price claims.
 
-## 12. Source documents
+## 13. Source documents
 
 - [Project scope and build plan](PROJECT_SCOPE_AND_PLAN.md)
 - [Engineering build tracker](APP_BUILD_TRACKER.md)

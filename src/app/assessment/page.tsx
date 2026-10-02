@@ -12,7 +12,7 @@ export default function AssessmentPage() {
     <main className="assessment-page">
       <header className="assessment-topbar">
         <Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link>
-        <Link href="/" className="back-link"><span aria-hidden="true">←</span>Back to overview</Link>
+        <div className="topbar-links"><Link href="/saved-work" className="back-link">Saved work</Link><Link href="/" className="back-link"><span aria-hidden="true">←</span>Back to overview</Link></div>
       </header>
       <div className="assessment-wrap">
         <div className="assessment-intro">

@@ -25,6 +25,7 @@ export default function Home() {
           <a className="nav-item active" href="#overview" aria-current="page"><span className="nav-icon nav-icon-home" aria-hidden="true" />Overview</a>
           <a className="nav-item" href="#how-it-works"><span className="nav-icon nav-icon-flow" aria-hidden="true" />How it works</a>
           <a className="nav-item" href="#example-report"><span className="nav-icon nav-icon-report" aria-hidden="true" />Example report</a>
+          <Link className="nav-item" href="/saved-work"><span className="nav-icon nav-icon-report" aria-hidden="true" />Saved work</Link>
         </nav>
         <div className="sidebar-bottom">
           <div className="privacy-mini-icon" aria-hidden="true">✓</div>
@@ -37,7 +38,7 @@ export default function Home() {
       <main className="main-column" id="overview">
         <header className="topbar">
           <div className="breadcrumb"><span>Workspace</span><span className="breadcrumb-separator">/</span><strong>Overview</strong></div>
-          <div className="topbar-right"><span className="build-badge"><span />Build in progress</span><span className="avatar-placeholder" role="img" aria-label="Demo workspace">D</span></div>
+          <div className="topbar-right"><Link className="saved-work-link" href="/saved-work">Saved work</Link><span className="build-badge"><span />Build in progress</span><span className="avatar-placeholder" role="img" aria-label="Demo workspace">D</span></div>
         </header>
         <div className="page-content">
           <section className="welcome-row">
