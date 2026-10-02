@@ -82,8 +82,8 @@ flowchart TD
 |---|---|---|---|
 | **M0 — Web app shell** | Responsive UI, fictional report preview, CV/JD entry, browser-only validation | Complete; owner review pending | Build, lint, and typecheck passed. Branch: `codex/exe-web-app-m0`. |
 | **M1 — Secure intake and identity** | Auth, private CV storage, PDF/DOCX parse, saved target jobs, replace/delete, ownership policies | Complete; accepted as M2 baseline | Two-user local Supabase RLS/private-Storage acceptance passed on 2026-10-01. Branch: `codex/exe-web-app-m1`, commit `7909dc8`. |
-| **M2 — Evidence-based analysis** | Requirements, supported/partly supported/unclear/missing findings, excerpts, caveats, saved runs | Implementation complete; acceptance pending | Unit, lint, typecheck, and production build passed. Run local Supabase M2 RLS/cascade acceptance before review completion. Branch: `codex/exe-web-app-m2`, GitHub commit `c0ab3d7`. |
-| **M3 — Roadmap and grounded CV draft** | Prioritized gap-linked actions; editable CV draft with claim provenance and review | Implementation and code checks complete; local Supabase acceptance and owner review pending | Started at the owner's request while M2 integration remains blocked by local tooling. Uses a local source composer; no AI provider is connected. |
+| **M2 — Evidence-based analysis** | Requirements, supported/partly supported/unclear/missing findings, excerpts, caveats, saved runs | Local Supabase acceptance passed; owner review pending | Two-user M1/M2/M3 RLS, private Storage, retry uniqueness, and deletion-cascade acceptance passed locally on 2026-10-02. Branch: `codex/exe-web-app-m2`. |
+| **M3 — Roadmap and grounded CV draft** | Prioritized gap-linked actions; editable CV draft with claim provenance and review | Local Supabase acceptance passed; owner review pending | The local source composer remains provider-free. Two-user roadmap, draft, provenance, and deletion-cascade checks passed locally on 2026-10-02. |
 | **M4 — Saved work and integration polish** | Minimal history, full core flow, error/empty states, responsive and privacy review | Planned | Demonstrate only fictional or consented data. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 
@@ -112,14 +112,14 @@ flowchart TD
 | `node --check scripts/m1-local-policy-check.mjs` | Passed |
 | `git diff --check` | Passed |
 
-### Pending M2 acceptance
+### M2 local acceptance
 
 | Check | Why it matters | Current state | Completion command |
 |---|---|---|---|
-| Two-user local Supabase analysis RLS | Confirms users cannot read or write another user's analysis or findings | Pending: this workspace has no Docker or Supabase CLI | `pnpm test:supabase:local` after a local Supabase stack is running |
-| Cross-owner CV/job reference denial | Prevents an analysis run using another user's CV or JD | Pending with the local acceptance run | Included in the same script |
-| Retry request uniqueness | Prevents duplicate reports after a network retry | Pending with the local acceptance run | Included in the same script |
-| CV deletion cascade | Removes derived evidence with the source CV | Pending with the local acceptance run | Included in the same script |
+| Two-user local Supabase analysis RLS | Confirms users cannot read or write another user's analysis or findings | Passed 2026-10-02 | `pnpm dlx supabase start`; environment from `pnpm dlx supabase status -o env`; `pnpm test:supabase:local` |
+| Cross-owner CV/job reference denial | Prevents an analysis run using another user's CV or JD | Passed 2026-10-02 | Included in the fictional-data acceptance script |
+| Retry request uniqueness | Prevents duplicate reports after a network retry | Passed 2026-10-02 | Included in the fictional-data acceptance script |
+| CV deletion cascade | Removes derived evidence with the source CV | Passed 2026-10-02 | Included in the fictional-data acceptance script |
 | Owner UX review | Confirms wording is clear and useful for job seekers | Pending | Review the M2 branch with fictional data |
 
 ## 5. M3 implementation and acceptance record
@@ -133,7 +133,7 @@ M3 converts the M2 report into actions a job seeker can use. It stays evidence-g
 | Grounded CV draft | Completed: composes only supported or partial evidence excerpts already found in the CV | Each generated claim stores its requirement, exact excerpt, and source offsets; no new facts or metrics are generated |
 | Draft editing | Completed: direct editing, save, and explicit acceptance are available | Any edit clears prior acceptance and is labelled as the user's responsibility to verify |
 | Safety checks | Completed: unit tests cover linked actions and source-only claim selection | The local composer excludes missing and unclear findings from the generated draft |
-| Persistence and privacy | Implemented: owner-scoped roadmap, draft, and claim tables with deletion cascades | Pending local two-user RLS/cascade acceptance with Docker Supabase |
+| Persistence and privacy | Implemented: owner-scoped roadmap, draft, and claim tables with deletion cascades | Passed local two-user RLS/cascade acceptance with Docker Supabase on 2026-10-02 |
 
 ## 6. Course delivery map
 
@@ -186,8 +186,8 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | Order | Work item | Status | Owner / dependency |
 |---:|---|---|---|
 | 1 | Create this single master report | Complete 2026-10-02 | Completed in this branch |
-| 2 | Run the expanded M2/M3 two-user acceptance script | Blocked in this workspace | Requires Docker and Supabase CLI |
-| 3 | Record M2/M3 acceptance result and publish report update on the feature branch | Next | Depends on item 2 |
+| 2 | Run the expanded M2/M3 two-user acceptance script | Complete 2026-10-02 | Docker plus `pnpm dlx supabase` 2.119.0; fictional local accounts only |
+| 3 | Record M2/M3 acceptance result and publish report update on the feature branch | In progress | This Section 1 documentation and commit precede M4 |
 | 4 | Build M3 roadmap and source-grounded CV draft | Complete 2026-10-02 | Code checks passed; local policy acceptance and owner review remain |
 | 5 | Run CP2 research and approve target segment/value/pricing | Parallel product work | Team evidence and instructor guidance |
 | 6 | Build M4, prepare fictional-data demo, and run owner review | Planned | Depends on M3 |
@@ -202,14 +202,13 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 2026-10-01 | M2 automated code checks | Passed: 33 unit tests, lint, typecheck, build, syntax/diff checks | `docs/CURRENT_STATE.md` |
 | 2026-10-02 | Master project report | Created as the single tracking document | This file |
 | 2026-10-02 | M3 roadmap and CV draft | Built private roadmap, source-grounded draft, editing/acceptance controls, owner-scoped storage, and deletion cascade migration | 35 unit tests; lint, typecheck, build, syntax, and diff checks passed |
+| 2026-10-02 | M2/M3 local Supabase acceptance | Passed using temporary fictional accounts, CVs, and JDs only | Fixed duplicate Supabase migration versions by renaming M2 to `20261002` and M3 to `20261003`; ran `pnpm dlx supabase start` and `SUPABASE_URL="$API_URL" SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY" pnpm test:supabase:local` |
 
 ## 11. How to resume
 
-1. From the `codex/exe-web-app-m2` branch, make Docker and Supabase CLI available.
-2. Start local Supabase and run `pnpm test:supabase:local` using temporary fictional data. The script now covers M1, M2, and M3 ownership and deletion cascades.
-3. Add the result to Sections 4, 5, 9, and 10 of this report.
-4. Review M2 and M3 output with fictional CV/JD data.
-5. Start M4 saved-work and integration polish after the M2/M3 acceptance record is complete.
+1. Review M2 and M3 output with fictional CV/JD data.
+2. Build M4 saved work and integration polish.
+3. Prepare M5 CP1 Slot 8 demo evidence after M4 is accepted.
 
 ## 12. Source documents
 

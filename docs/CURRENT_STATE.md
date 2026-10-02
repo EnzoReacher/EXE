@@ -1,7 +1,7 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-02
-**Status:** M1 is accepted as the baseline. M2 evidence analysis and M3 roadmap/source-grounded CV draft are implemented on `codex/exe-web-app-m2`; automated code checks pass, while the expanded M2/M3 local Supabase integration and owner review remain pending.
+**Status:** M1 is accepted as the baseline. M2 evidence analysis and M3 roadmap/source-grounded CV draft have passed expanded local Supabase acceptance on `codex/exe-web-app-m2`; owner review remains pending.
 
 ## Completed in this build part
 
@@ -26,6 +26,8 @@
 - Added a source-grounded CV draft screen. Initial generated claims are exact previously stored CV excerpts with requirement and offset provenance; editing and explicit acceptance are available to the user.
 - Added `20261002_m3_roadmap_cv_draft.sql` with owner-scoped roadmap, draft, and provenance records. Source-CV deletion cascades to all M2/M3 derived records.
 - Added the single living project report: `docs/PROJECT_MASTER_REPORT.md`.
+- Ran the expanded M1/M2/M3 local Supabase acceptance with Docker and `pnpm dlx supabase` 2.119.0, using only two temporary fictional accounts and fictional CV/JD content. It passed private Storage, ownership, read/write/update/delete denial, request-ID uniqueness, and all source-CV deletion cascades.
+- Corrected a real local-stack blocker: M1/M2 and M2/M3 had duplicate date-only Supabase migration versions. The M2 migration is now `20261002_m2_evidence_analysis.sql`; M3 is `20261003_m3_roadmap_cv_draft.sql`.
 
 ## Checks run for M1
 
@@ -36,19 +38,19 @@
 - `git diff --check` — passed.
 - Secrets/personal-data diff scan — passed; only configuration placeholders and fictional test strings are present.
 - `pnpm test:supabase:local` — passed against a local Docker Supabase stack after `pnpm dlx supabase start`. The test confirms own-user CRUD/replacement/deletion, cross-user and unauthenticated denial, owner-scoped private paths, private-bucket access, extracted-text removal, and retryable deletion-failure state. No hosted Supabase project, production data, or deployment was used.
-- M2/M3 local code checks — `pnpm test` passed (6 files, 35 tests); `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, and `git diff --check` passed. The current environment has no Docker or Supabase CLI executable, so the expanded M2/M3 Supabase integration script has not been run here.
+- M2/M3 local code checks — `pnpm test` passed (6 files, 35 tests); `pnpm lint`, `pnpm typecheck`, `pnpm build`, `node --check scripts/m1-local-policy-check.mjs`, and `git diff --check` passed.
+- M2/M3 local Supabase acceptance — passed on 2026-10-02: `pnpm dlx supabase start`, then `set -a; eval "$(pnpm dlx supabase status -o env | grep -E '^(API_URL|PUBLISHABLE_KEY)=')"; set +a; SUPABASE_URL="$API_URL" SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY" pnpm test:supabase:local`. The check used only temporary fictional accounts and fictional source content.
 
 ## Current limits and open decisions
 
 - A reviewed Supabase project/environment is still required for any real user data. Use only placeholder values in `.env`; never commit credentials or real CVs.
 - Supabase Storage deletion removes the live object, but project-level backup and retention behavior must be reviewed and documented before real CVs are accepted.
 - No AI provider has been selected. The M2 matcher and M3 composer are local deterministic tools, do not independently validate skills, and do not produce a hiring score. Sharing, job links, payments, and mobile work remain out of scope.
-- Supabase backup/retention settings still need review before using real CVs. M2/M3 migrations and two-user RLS/cascade checks have not yet been run in the current environment.
+- Supabase backup/retention settings still need review before using real CVs. The local M2/M3 migration and two-user RLS/cascade checks now pass; this does not replace an owner security/privacy review.
 - M1 branch `codex/exe-web-app-m1` was approved as M2's base. `main` remains unchanged; no merge or deployment was initiated.
 
 ## Resume from here
 
-1. Run `pnpm test:supabase:local` against local Docker Supabase to verify M2/M3 RLS, retry-safe request IDs, roadmap/draft isolation, and deletion cascades.
-2. Review the M2 evidence report and M3 roadmap/draft with fictional data; confirm that the wording is clear for students and recent graduates.
-3. Choose and review an AI provider only after the team evaluates cost, privacy, retention, and consent; until then, keep local mode clearly labeled.
-4. Review Supabase backup/retention settings before using real CVs. Do not merge to `main` or deploy without explicit owner approval.
+1. Build M4 saved work and integration polish, and review M2/M3 output with fictional data for student/recent-graduate clarity.
+2. Choose and review an AI provider only after the team evaluates cost, privacy, retention, and consent; until then, keep local mode clearly labeled.
+3. Review Supabase backup/retention settings before using real CVs. Do not merge to `main` or deploy without explicit owner approval.
