@@ -29,6 +29,14 @@ Prepared on `codex/exe-web-app-m10-3-research-ops` from M10.2 `bd34743`: local-o
 
 Prepared on `codex/exe-web-app-m10-5-qa-preflight` from M10.3 `9d9e3c2`: a local-only `pnpm review:preflight` check for a bounded `.env.local`, public loopback Supabase settings, absence of private credential settings, and the fictional demo DOCX/owner checklist. The full suite passed (179 tests in 24 files), along with lint, typecheck, production build, direct synthetic CP2 checks, and diff check. An initial sandbox-only child-process capture issue was resolved by a full outside-sandbox rerun; it is retained in the acceptance record as diagnostic context, not a remaining test failure. The preflight emits no configuration values, sends no network requests, writes no data, and does not substitute for a browser review. CP2 evidence, M11 selection, merge, deployment, and real-data authorization remain blocked. See `M10_5_QA_PREFLIGHT.md` and `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`.
 
+## M10.6 local verification runner and handoff
+
+Authorized continuation on 2026-10-03 preserved the existing M10.6 changes in place. Earlier attempts found absent local configuration; the final controlled sequence passed all five runner steps after configuration became available. No configuration values were printed or staged.
+
+Implemented on `codex/exe-web-app-m10-6-review-verify` from exact remote M10.5 `aaee9f93d366f61ab2f284cdab363fa6cb582300`: `pnpm review:verify` runs preflight → lint → typecheck → test → build sequentially with inherited output, timing and first-failure status. Final engineering gate passed: 189 tests in 25 files (including ten runner tests), lint/typecheck/build, preflight and CP2 template/diff checks. See `M10_6_REVIEW_VERIFY_ACCEPTANCE.md`.
+
+Not performed — no database/API/RLS/Storage change: `pnpm test:supabase:local`. Manual browser/mobile/keyboard/screen-reader/accessibility and privacy review are not performed. Pending owner action: configure existing local public settings, run `pnpm review:verify` then (only on success) `pnpm dev`, and complete `M10_2_OWNER_REVIEW.md` with only the fictional DOCX in `docs/demo/fixtures/` and actual date/viewport/keyboard/issues/retests. Reuse an existing local stack; port `54322` occupancy does not justify a duplicate. CP2 collection/review and M11 decision gate remain blocked/pending. No merge to main, no deployment; owner approval required. See `M10_6_REVIEW_VERIFY.md`.
+
 ## M0 review notes
 
 - Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.

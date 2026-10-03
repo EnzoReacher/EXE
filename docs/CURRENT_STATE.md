@@ -1,9 +1,13 @@
 # EXE Project Current State
 
-**Last updated:** 2026-10-02
-**Status:** M10.2 existing-experience engineering hardening passed automated/local fictional checks on `codex/exe-web-app-m10-2-hardening` from exact M10 baseline `4af832c`. M7/M10.2 owner manual review remains pending. CP2 evidence collection is pending, the target segment remains open, M11 is blocked, and no merge, deployment, public production environment, or real-data authorization exists. See `M10_2_HARDENING_ACCEPTANCE.md` for actual checks and owner follow-up.
+**Last updated:** 2026-10-03
+**Status:** M10.6 engineering verification passed on `codex/exe-web-app-m10-6-review-verify` from exact M10.5 baseline `aaee9f93d366f61ab2f284cdab363fa6cb582300`. The final runner passed all five steps, including 189 tests in 25 files; CP2 template validation passed. Manual owner review is not performed; CP2 collection/review and broader M11 product validation remain pending. Owner approval required before merge/deployment. See `M10_6_REVIEW_VERIFY_ACCEPTANCE.md`.
 
 ## Completed in this build part
+
+- M10.6 controlled final sequence on 2026-10-03 preserved existing stage changes and passed `pnpm run review:verify` after local configuration became available. All five checks, including 189 tests, passed; CP2 template/diff checks passed. Prior preflight failures remain historical limitations, not current blockers. No manual review or CP2 evidence collection occurred.
+
+- M10.6 adds `pnpm review:verify`: sequential `review:preflight`, `lint`, `typecheck`, `test`, `build`, inherited output, step timing, fail-fast non-zero status, and all-pass-only engineering summary. No new dependency, data handling, network client, or automatic Docker/Supabase operation. Not performed — no database/API/RLS/Storage change: `pnpm test:supabase:local`. Owner browser/mobile/keyboard/screen-reader/accessibility and privacy approval remain unperformed; CP2/product-validation/release gates remain. See `M10_6_REVIEW_VERIFY.md`.
 
 - M10.5 local owner-review preflight added on `codex/exe-web-app-m10-5-qa-preflight` from M10.3 `9d9e3c2`: `pnpm review:preflight` reads only a local `.env.local`, requires local public Supabase browser settings, rejects private credential settings or hosted URLs without echoing values, and confirms the fictional DOCX demo/checklist are available. The full test suite passed (179 tests in 24 files), along with lint, typecheck, production build, direct synthetic CP2 checks, and diff check. An initial sandbox-only child-process capture issue was resolved by a full outside-sandbox rerun and is documented only as diagnostic context. It has no network call, no write, no app workflow change, and does not replace browser testing or create CP2 evidence. See `M10_5_QA_PREFLIGHT.md` and `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`.
 
@@ -86,6 +90,8 @@
 - M10 has not satisfied the decision gate: no real evidence IDs, source IDs, owner/team review, target segment, pricing decision, or M11 approval exists. CP2 and M11 remain blocked.
 
 ## Resume from here
+
+For tomorrow: configure only the existing local stack's public browser settings, then run `pnpm review:verify` followed, only on success, by `pnpm dev`. Use only the fictional DOCX in `docs/demo/fixtures/`; complete `M10_2_OWNER_REVIEW.md` recording actual date, viewport size, keyboard actions, issues, and retests. Reuse already-running local Supabase; do not start a duplicate because port `54322` is occupied. This is not manual-review or CP2 evidence. No merge to main or deployment; owner approval required.
 
 1. Complete the M7 owner review using fictional data only.
 2. Complete the M5 CP1 demo rehearsal and record the required course evidence.

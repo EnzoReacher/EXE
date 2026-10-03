@@ -2,8 +2,8 @@
 
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
-**Last updated:** 2026-10-02
-**Working branch:** `codex/exe-web-app-m10-3-research-ops`
+**Last updated:** 2026-10-03
+**Working branch:** `codex/exe-web-app-m10-6-review-verify`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -107,6 +107,16 @@ No evidence was collected automatically or entered in the register. Target segme
 Prepared from verified M10.3 `9d9e3c2`: `pnpm review:preflight` checks only a local `.env.local` before the fictional owner review. It requires the two public browser settings, allows only an HTTP loopback Supabase URL, rejects private credential settings without echoing values, and confirms the fictional Aria Vale DOCX/checklist. It makes no network request or write and does not inspect a CV, job description, research record, or browser session.
 
 Targeted preflight tests, lint, typecheck, production build, direct synthetic CP2 CLI checks, and diff check passed. The full test suite also passed outside the sandbox: 179 tests in 24 files. An initial sandbox-only child-process capture issue (including `git check-ignore`) was resolved by this full rerun and is retained only as diagnostic context. Manual browser review, real CP2 evidence, M11 selection, merge, and deployment remain pending. See `M10_5_QA_PREFLIGHT.md` and `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`.
+
+## M10.6 local verification status — rerun 2026-10-03
+
+Completed engineering work: runner, package command, 10 deterministic injected regressions and owner handoff on the exact remote M10.5 baseline `aaee9f93d366f61ab2f284cdab363fa6cb582300`. `pnpm review:verify` runs `pnpm review:preflight`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` in that exact order with inherited output, step timing, first-failure status, and all-pass-only engineering summary. No new dependencies, network client, real data handling, or automatic Supabase/Docker operations.
+
+Actual final checks: `pnpm run review:verify` passed preflight, lint, typecheck, full 189 tests in 25 files and local build (telemetry disabled) in the required order. CP2 template validation and diff checks passed. Earlier missing-configuration failures were resolved when local configuration became available; no configuration values were printed or staged. See `M10_6_REVIEW_VERIFY_ACCEPTANCE.md`.
+
+Not performed: `pnpm test:supabase:local` — no database/API/RLS/Storage change; manual browser/mobile/keyboard/screen-reader/accessibility review, privacy approval, real CP2 collection/review, M11 selection, merge, deployment, or owner approval. Pending owner action: configure only the existing local stack's public settings, run `pnpm review:verify` then (only after success) `pnpm dev`, use only the fictional DOCX in `docs/demo/fixtures/`, and complete `M10_2_OWNER_REVIEW.md` with actual date/viewport/keyboard actions/issues/retests. Reuse an already-running local Supabase stack; do not start a duplicate merely because port `54322` is occupied.
+
+Blocked decisions: M11 remains blocked by the documented CP2 gate; evidence-based claims remain blocked. Automation is not manual owner-review evidence or CP2 completion. No merge to main or deployment; explicit owner approval required. See `M10_6_REVIEW_VERIFY.md`.
 
 ## 4. M2 status and acceptance record
 
@@ -294,7 +304,7 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 
 ## 12. How to resume
 
-M10.5 adds `pnpm review:preflight` before the owner session. Run it only against the local fictional-data configuration; it should pass before `pnpm dev` and the M10.2 checklist. It does not approve testing results, CP2 evidence, a feature, a merge, or deployment. See `M10_5_QA_PREFLIGHT.md` and `M10_5_QA_PREFLIGHT_ACCEPTANCE.md` for all results and limitations.
+M10.6 adds `pnpm review:verify` before the owner session, followed only on success by `pnpm dev`. Complete the actual M10.2 checklist using the fictional DOCX and record actual results. Reuse the existing local stack. Verification does not approve manual results, privacy, CP2 evidence, M11 selection, merge, or deployment. See `M10_6_REVIEW_VERIFY.md` and `M10_6_REVIEW_VERIFY_ACCEPTANCE.md` for results and limitations.
 
 1. Complete the M7 owner review in `OWNER_REVIEW_M7.md` using fictional data, including desktop/narrow-mobile visual and keyboard checks.
 2. Complete the M5 CP1 fictional demo rehearsal and record the required team/course evidence.

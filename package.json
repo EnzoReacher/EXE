@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:supabase:local": "node scripts/m1-local-policy-check.mjs",
     "review:preflight": "node scripts/review-preflight.mjs",
+    "review:verify": "node scripts/review-verify.mjs",
     "cp2:validate": "node scripts/validate-cp2-evidence.mjs --file docs/CP2_EVIDENCE_REGISTER.md --mode template",
     "cp2:validate:template": "node scripts/validate-cp2-evidence.mjs --file docs/CP2_EVIDENCE_REGISTER.md --mode template",
     "cp2:validate:collected": "node scripts/validate-cp2-evidence.mjs --file docs/CP2_EVIDENCE_REGISTER.md --mode collected",

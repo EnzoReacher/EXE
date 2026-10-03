@@ -29,16 +29,18 @@ pnpm dev
 
 Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and private, owner-scoped CV/job intake when placeholder values are configured for a reviewed Supabase project. It accepts PDF/DOCX CVs up to 5 MiB. Select a saved CV and job to create an evidence report. M2 uses local text matching only and does not call an AI provider. Use fictional/sample information until the team reviews Supabase backup, retention, deletion, and the M2 database policies.
 
-### Fictional-data owner-review preflight
+### Fictional-data owner-review verification
 
 For a local owner review, configure only the local Supabase public URL and publishable key in `.env.local`; never put a service-role key, database URL, private credential, real CV, or hosted environment value there. Then run:
 
 ```bash
-pnpm review:preflight
+pnpm review:verify
 pnpm dev
 ```
 
-The preflight does not print configured values. It checks for a local-only browser configuration and the repository's fictional DOCX/checklist. It does not test the browser, approve a release, collect CP2 evidence, merge, or deploy.
+`pnpm review:verify` runs `pnpm review:preflight`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` in that exact order, stopping at the first failure. Start `pnpm dev` only after all five pass. The runner does not print configuration values; it disables Next telemetry and makes no network request or automatic Supabase/Docker operation. It does not check browser rendering, mobile, keyboard, screen-reader/accessibility behavior, database policies, research quality, or privacy/owner approval.
+
+Use only the fictional DOCX in `docs/demo/fixtures/` and complete the actual [M10.2 owner checklist](docs/M10_2_OWNER_REVIEW.md). Record actual dates, viewport sizes, keyboard actions, issues, and retests only. Use an existing local Supabase stack if running; do not start a duplicate because port `54322` is occupied. See the [M10.6 handoff](docs/M10_6_REVIEW_VERIFY.md) and [actual acceptance results](docs/M10_6_REVIEW_VERIFY_ACCEPTANCE.md). M10.6 engineering verification passed on 2026-10-03 after local configuration became available. Manual owner review is not performed, CP2 evidence/review is pending, and broader M11 product validation remains blocked. No merge to main or deployment; owner approval required.
 
 ## Course checkpoints
 
