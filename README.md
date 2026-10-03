@@ -54,6 +54,12 @@ Use only the fictional DOCX in `docs/demo/fixtures/` and complete the actual [M1
 
 ## Current project state
 
+### M11A owner-directed technical prototype
+
+Credential-gated CV versions passed the engineering gate on `codex/exe-web-app-m11a-credentialed-cv-versions` from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`: 224 full-suite tests and existing-stack fictional database/private Storage acceptance. Open `/credential-versions` as a signed-in owner and `/expert/credential-reviews` as an authenticated, active team-approved expert. CV + optional portfolio → bounded proposed skill/wording + private certificate/degree → assigned expert decision → immutable candidate → before/after review and explicit owner acceptance. No upload alone adds a skill; original CVs, M3 drafts and old version text remain unchanged. Private evidence withdrawal is reflected in all dependent histories.
+
+Approval means **“Approved by a team-approved expert after reviewing submitted proof.”** It is not institutional authentication. Expert authorization is administered by the team outside the UI; there is no self-service role assignment or public-token expert authority. No OCR, external AI, issuer lookup, scraping, public evidence URLs, payments or document export. Fictional data only. Engineering checks and actual limitations are in the [M11A acceptance record](docs/M11A_CREDENTIAL_GATED_CV_VERSIONING_ACCEPTANCE.md); see the [workflow/security guide](docs/M11A_CREDENTIAL_GATED_CV_VERSIONING.md). This owner-directed prototype is not CP2 validation; research, broader M11 product-market decisions, manual review, privacy/role-policy approval, merge and deployment remain pending.
+
 ### Local CP2 research operations
 
 M10.3 tooling is on `codex/exe-web-app-m10-3-research-ops` from M10.2 commit `bd34743`. Place private drafts in ignored `research/private/` or `docs/evidence/private/`; keep identity/contact/raw research material separate and never force-add it. See the [owner handoff](docs/M10_3_OWNER_HANDOFF.md), [data boundary](docs/M10_3_RESEARCH_DATA_BOUNDARY.md) and [acceptance record](docs/M10_3_RESEARCH_OPS_ACCEPTANCE.md).

@@ -1,9 +1,11 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-03
-**Status:** M10.6 engineering verification passed on `codex/exe-web-app-m10-6-review-verify` from exact M10.5 baseline `aaee9f93d366f61ab2f284cdab363fa6cb582300`. The final runner passed all five steps, including 189 tests in 25 files; CP2 template validation passed. Manual owner review is not performed; CP2 collection/review and broader M11 product validation remain pending. Owner approval required before merge/deployment. See `M10_6_REVIEW_VERIFY_ACCEPTANCE.md`.
+**Status:** M11A engineering verification passed on `codex/exe-web-app-m11a-credentialed-cv-versions` from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`. Final runner passed all five steps, including 224 tests in 29 files; CP2 template validation and existing-stack fictional RLS/private Storage acceptance passed. Manual owner review is not performed; CP2 collection/review, role/privacy policy and broader M11 product validation remain pending. Owner approval required before merge/deployment. See `M11A_CREDENTIAL_GATED_CV_VERSIONING_ACCEPTANCE.md`.
 
 ## Completed in this build part
+
+- M11A owner-directed technical prototype engineering gate passed on `codex/exe-web-app-m11a-credentialed-cv-versions` from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`: 35 targeted tests; full preflight/lint/typecheck/224-test/build verification; CP2 template validation; existing-stack fictional RLS/private Storage acceptance. Private proof/optional portfolio, assigned authenticated team-approved expert, exact-wording immutable candidates, before/after owner acceptance/history, individual claim and cumulative evidence withdrawal. Manual owner/accessibility review, role policy, privacy/retention review and CP2 remain pending. No real expert identity/approval, OCR/AI, issuer validation, public URLs, M3 draft overwrite, merge or deployment. See the M11A guide and acceptance record.
 
 - M10.6 controlled final sequence on 2026-10-03 preserved existing stage changes and passed `pnpm run review:verify` after local configuration became available. All five checks, including 189 tests, passed; CP2 template/diff checks passed. Prior preflight failures remain historical limitations, not current blockers. No manual review or CP2 evidence collection occurred.
 

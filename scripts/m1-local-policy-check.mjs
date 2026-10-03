@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
+import { runM11aPolicyChecks } from "./m11a-local-policy-check.mjs";
 
 const url = process.env.SUPABASE_URL;
 const key = process.env.SUPABASE_PUBLISHABLE_KEY;
 if (!url || !key) throw new Error("SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY are required.");
+const localUrl = new URL(url);
+assert.ok(localUrl.protocol === "http:" && ["localhost", "127.0.0.1", "[::1]"].includes(localUrl.hostname), "Local policy acceptance requires an HTTP loopback URL.");
 
 const runId = `m1-policy-${Date.now()}`;
 const cv = (ownerId, suffix = "source") => ({
@@ -341,3 +344,4 @@ async function run() {
 }
 
 await run();
+await runM11aPolicyChecks(url, key);

@@ -3,7 +3,7 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-03
-**Working branch:** `codex/exe-web-app-m10-6-review-verify`
+**Working branch:** `codex/exe-web-app-m11a-credentialed-cv-versions`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -117,6 +117,14 @@ Actual final checks: `pnpm run review:verify` passed preflight, lint, typecheck,
 Not performed: `pnpm test:supabase:local` — no database/API/RLS/Storage change; manual browser/mobile/keyboard/screen-reader/accessibility review, privacy approval, real CP2 collection/review, M11 selection, merge, deployment, or owner approval. Pending owner action: configure only the existing local stack's public settings, run `pnpm review:verify` then (only after success) `pnpm dev`, use only the fictional DOCX in `docs/demo/fixtures/`, and complete `M10_2_OWNER_REVIEW.md` with actual date/viewport/keyboard actions/issues/retests. Reuse an already-running local Supabase stack; do not start a duplicate merely because port `54322` is occupied.
 
 Blocked decisions: M11 remains blocked by the documented CP2 gate; evidence-based claims remain blocked. Automation is not manual owner-review evidence or CP2 completion. No merge to main or deployment; explicit owner approval required. See `M10_6_REVIEW_VERIFY.md`.
+
+## M11A owner-directed technical prototype — 2026-10-03
+
+The owner explicitly approved this technical prototype after the controlled M10.6 completion/publication. Exact base: `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`; feature branch `codex/exe-web-app-m11a-credentialed-cv-versions`. This approval authorizes implementation, not CP2 validation, pricing/market/competitor claims, real data, real expert enrollment, merge, deployment or release.
+
+Prepared engineering work: private portfolio/certificate/degree intake; bounded frozen skill claims; team-authorized authenticated expert assignments/decisions; approved-only immutable candidates; explicit owner acceptance; cumulative provenance and truthful withdrawal. Seven new RLS-protected record types and two private buckets; checked server/database transitions and safe list/download boundaries. Original CVs, M3 drafts and token-based advisory review links are preserved. No OCR, inference, issuer API, external AI, scraping, payments or exports. See `M11A_CREDENTIAL_GATED_CV_VERSIONING.md`.
+
+Engineering gate passed: 35 targeted tests; `pnpm review:verify` passed preflight, lint, typecheck, 224 tests in 29 files and build; CP2 template validation passed; existing local-stack M1–M6b/M11A fictional RLS/private Storage acceptance passed after both migrations. Initial interaction and new test-hook failures were diagnosed and resolved, as recorded in `M11A_CREDENTIAL_GATED_CV_VERSIONING_ACCEPTANCE.md`. Final review added before/after comparison, individual claim withdrawal, sandboxed private proof previews, first-invalid focus, explicit expert approval metadata and lifecycle timestamps. Not performed: manual browser/mobile/screen-reader/accessibility review, real expert approvals, CP2 evidence collection or public release. Expert-role administration policy and privacy/backup/retention review remain pending. Broader M11 evidence-based product decisions remain gated by CP2; explicit owner approval required before merge/deployment.
 
 ## 4. M2 status and acceptance record
 

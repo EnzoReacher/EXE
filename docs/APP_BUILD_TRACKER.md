@@ -37,6 +37,10 @@ Implemented on `codex/exe-web-app-m10-6-review-verify` from exact remote M10.5 `
 
 Not performed — no database/API/RLS/Storage change: `pnpm test:supabase:local`. Manual browser/mobile/keyboard/screen-reader/accessibility and privacy review are not performed. Pending owner action: configure existing local public settings, run `pnpm review:verify` then (only on success) `pnpm dev`, and complete `M10_2_OWNER_REVIEW.md` with only the fictional DOCX in `docs/demo/fixtures/` and actual date/viewport/keyboard/issues/retests. Reuse an existing local stack; port `54322` occupancy does not justify a duplicate. CP2 collection/review and M11 decision gate remain blocked/pending. No merge to main, no deployment; owner approval required. See `M10_6_REVIEW_VERIFY.md`.
 
+## M11A — Owner-directed credential-gated CV version prototype
+
+Engineering gate passed from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e` on `codex/exe-web-app-m11a-credentialed-cv-versions`. Seven private record types, two private buckets, frozen claims, active team-approved authenticated expert review, exact-wording immutable candidates, before/after owner acceptance/history, individual claim and cumulative evidence withdrawal. Passed 35 targeted tests, five-step verification (224 full-suite tests), CP2 template validation and existing-stack fictional RLS/Storage acceptance. Existing drafts/token reviews preserved. No CP2 validation or real expert approval. Manual browser/accessibility review, role administration policy, privacy/retention approval, CP2 and broader product-market decisions remain pending. No merge/deployment/PR/release approval. See `M11A_CREDENTIAL_GATED_CV_VERSIONING_ACCEPTANCE.md`.
+
 ## M0 review notes
 
 - Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.

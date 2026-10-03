@@ -36,6 +36,12 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 
 ## Decision log
 
+### M11A owner-directed prototype authorization — 2026-10-03
+
+The project owner explicitly approved building credential-gated CV versions after completing and pushing M10.6. This authorizes a technical prototype on `codex/exe-web-app-m11a-credentialed-cv-versions` from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`. It does not imply CP2 validation or bypass evidence-based product-market, pricing/competitor/market, privacy, real-data, merge or deployment gates.
+
+A private certificate/degree, active team-authorized authenticated expert approval of exact submitted wording/proof, and separate CV-owner acceptance are required. Portfolio optional; source CV mandatory for versioning. Team authorization is not institutional authentication. Original CVs, M3 drafts and historical version content remain unchanged; evidence withdrawal removes current approval while preserving historical truth. No public token counts as expert authority; no self-service role assignment, self-approval, OCR, issuer lookup, inference, external AI, scraping, payments or export. Expert-role administration/enrollment policy remains an owner/team follow-up; only temporary fictional experts may be provisioned for local tests. See `M11A_CREDENTIAL_GATED_CV_VERSIONING.md`.
+
 | Date | Decision | Owner(s) | Evidence / reason | Follow-up |
 |---|---|---|---|---|
 | 2026-10-01 | Begin the local web-app foundation using the repository's Next.js + TypeScript proposal for the UI shell only. | Project owner | User directed the project to focus on building the web app. | Confirm the full stack with the team before adding persistent storage, authentication, or AI services. |
