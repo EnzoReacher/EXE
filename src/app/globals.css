@@ -507,6 +507,9 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
 .external-url-readonly { min-width: 0; margin: 5px 0; color: #647982; font-size: 10px; line-height: 1.55; }
 .external-url-readonly span { overflow-wrap: anywhere; }
 .opportunity-list { display: grid; gap: 11px; margin-top: 22px; }
+/* M11B.1 browser regression: intrinsic grid/fieldset widths overflowed at 320px. */
+.credential-workspace .opportunity-form, .credential-workspace .opportunity-list { grid-template-columns: minmax(0, 1fr); }
+.credential-workspace fieldset { min-inline-size: 0; max-inline-size: 100%; }
 .opportunity-card { padding: 16px; }
 .opportunity-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .opportunity-role { margin: 0; color: #82919a; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }

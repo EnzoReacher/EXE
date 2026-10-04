@@ -3,7 +3,7 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-04
-**Working branch:** `codex/exe-web-app-m11b-cv-export`
+**Working branch:** `codex/exe-web-app-m11b1-browser-acceptance`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -131,6 +131,10 @@ Engineering gate passed: 35 targeted tests; `pnpm review:verify` passed prefligh
 Owner requested export from exact published M11A `bc24377d57d503a21059ee0a467ede23252f289a` on `codex/exe-web-app-m11b-cv-export`. Implemented in-memory editable DOCX, byte-exact UTF-8 TXT fallback, private browser Print / Save as PDF, owner/state/acceptance/cumulative-provenance checks, escaped print text, sanitized private headers, and accessible history actions. Saved snapshots are the only CV text source; no claims are rewritten or generated, and no proof metadata/expert identity is included. No database/RLS/Storage or approval/acceptance/withdrawal authority change. New `docx` dependency is documented in `M11B_ACCEPTED_CV_EXPORT.md`.
 
 Engineering gate/source review passed: 48 targeted tests in 5 files; standalone preflight; `pnpm review:verify` passed preflight, lint, typecheck, 266 tests in 33 files and build; CP2 template validation and diff checks passed. Actual results and scope scan are recorded in `M11B_ACCEPTED_CV_EXPORT_ACCEPTANCE.md`. Local policy suite not performed because database/RLS/Storage behavior is unchanged. Print uses the browser, not a generated PDF download. M11A manual owner/accessibility review, CP2 research, broader product validation and privacy/role policies remain pending. No PR, merge, deployment, public/live release, or release approval occurred.
+
+## M11B.1 local browser acceptance — 2026-10-04
+
+From exact published M11B `64b0dc9e0c138ae31ed0eda102a783f0db9137b5`: separate `pnpm test:e2e:local` with pinned Playwright 1.61.1/cached Chromium, real local authentication, temporary synthetic owner/assigned expert/ordinary/unassigned-expert accounts, run-scoped cleanup, isolated owned Next.js server, restricted loopback networking and content-free reporting. Automated synthetic approval/owner acceptance, editable DOCX/TXT/print-view, denial/withdrawal/stale-action and five-width keyboard/overflow assertions passed. One observed 320px intrinsic grid/fieldset overflow fixed narrowly; native proof-preview compatibility remains a manual follow-up, with authenticated proof downloads tested. Engineering gate passed: browser suite/verified cleanup, 21 targeted tests, preflight, five-step verification (281 tests in 35 files), CP2 template and whitespace checks; final source/staged review precedes publication. See `M11B_1_LOCAL_BROWSER_ACCEPTANCE_ACCEPTANCE.md`. Not performed — browser harness only; no database/RLS/Storage changes: `pnpm test:supabase:local`. M11A manual owner review, M11B printing/pagination/editor review, CP2, policies, merge/deployment/release approval remain pending; manual/evidence records untouched.
 
 ## 4. M2 status and acceptance record
 

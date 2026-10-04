@@ -45,6 +45,10 @@ Engineering gate passed from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc
 
 Engineering gate passed from exact published M11A `bc24377d57d503a21059ee0a467ede23252f289a` on `codex/exe-web-app-m11b-cv-export`. In-memory editable DOCX, exact UTF-8 TXT, private browser Print / Save as PDF, fresh owner/historical-acceptance/complete-provenance checks, safe filenames/headers, and accessible export controls. Candidates/rejected/evidence-withdrawn versions blocked. No saved text rewriting or proof metadata export; no database/RLS/Storage/authority change. Passed 48 targeted tests in 5 files, standalone preflight, full five-step verification (266 tests, 33 files), CP2 template/diff checks and source scan. Local policy suite not performed because policies/schema/Storage are unchanged. M11A manual review, CP2, broader validation and privacy/role gates remain pending; no PR/merge/deployment/release approval. See `M11B_ACCEPTED_CV_EXPORT_ACCEPTANCE.md`.
 
+## M11B.1 — Local browser acceptance harness
+
+Engineering gate passed on `codex/exe-web-app-m11b1-browser-acceptance` from exact M11B `64b0dc9e0c138ae31ed0eda102a783f0db9137b5`. Separate cached-Chromium command exercises real local synthetic owner/expert acceptance/export/denial/withdrawal flows, keyboard and five widths; fixtures/temporary server are run-scoped and cleaned up. Passed browser journeys, 21 targeted tests, preflight, five-step verification (281 tests in 35 files), CP2 template and whitespace checks. Final source/staged review precedes publication. Narrow 320px credential grid/fieldset regression fixed. No new product feature, database/RLS/Storage changes, hosted integration or container management. Not performed — browser harness only; no database/RLS/Storage changes: `pnpm test:supabase:local`. M11A manual review, native proof preview, M11B actual printing/editor review, CP2 and owner release decisions remain pending. See `M11B_1_LOCAL_BROWSER_ACCEPTANCE_ACCEPTANCE.md`.
+
 ## M0 review notes
 
 - Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.

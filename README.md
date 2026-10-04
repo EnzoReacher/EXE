@@ -20,6 +20,10 @@ Upload a CV, provide a target job description, receive an evidence-based fit and
 
 The repository uses a single modular web app with Next.js, TypeScript, and Supabase Auth/Postgres/private Storage. An AI provider is still unselected. M2 therefore uses a server-side, deterministic wording prototype: no CV or job text is sent to an external AI service, and its categories are not a measure of proficiency or hiring likelihood.
 
+### Local synthetic browser acceptance (M11B.1)
+
+Run `pnpm test:e2e:local` for the separate real-browser credential/CV-export journey. Requires the **already-running local Supabase stack**, public-only loopback settings, existing migrations, and cached compatible Chromium; it never downloads browsers or manages Supabase/Docker. It owns a temporary Next.js server and cleans up only current-run fictional accounts/objects. See [setup and boundaries](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE.md) and [actual results](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE_ACCEPTANCE.md). Automated checks do not complete M11A manual owner review, M11B print-pagination/editor review, CP2, or merge/deployment approval.
+
 ## Run the local prototype
 
 ```bash

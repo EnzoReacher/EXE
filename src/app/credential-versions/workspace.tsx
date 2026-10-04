@@ -95,7 +95,7 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
   }
   function cancel() { setConfirmation(null); actionTrigger.current?.focus(); }
 
-  return <div aria-busy={busy}>
+  return <div className="credential-workspace" aria-busy={busy}>
     <p className="privacy-notice">Fictional data only. Authenticated team authorization is required for experts; this is not institutional authentication. No OCR or automatic skill inference.</p>
     <div ref={notice} role={error ? "alert" : "status"} aria-live="polite">{error || message || (loading ? "Loading private workspace…" : busy ? "Saving private action…" : "")}</div>
     {!loading && error && <button type="button" className="button button-secondary" disabled={busy} onClick={() => void perform(load, "Private workspace refreshed.", false)}>Retry loading</button>}
