@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e:local": "node scripts/e2e-local.mjs",
+    "test:proof-preview": "node scripts/proof-preview-browser.mjs",
+    "test:workspace-ui": "node scripts/workspace-ui-browser.mjs",
     "test:supabase:local": "node scripts/m1-local-policy-check.mjs",
     "review:preflight": "node scripts/review-preflight.mjs",
     "review:verify": "node scripts/review-verify.mjs",

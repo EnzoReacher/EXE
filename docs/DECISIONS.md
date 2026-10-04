@@ -36,6 +36,10 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 
 ## Decision log
 
+### M11C direct development authorization — 2026-10-04
+
+The owner requested direct work in ChatGPT after publishing M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. M11C improves proof-display compatibility, expert form safety and owner usability on a separate feature branch. Source review publication is within the existing GitHub-update authorization. Missing local-stack configuration in this execution environment is recorded as an integration limitation; no synthetic setting is substituted to claim a preflight or genuine-authentication pass. New isolated browser tests explicitly use rendering fixtures and do not establish approval or evidence. Original database/RLS/Storage, expert authorization and immutable acceptance/export/withdrawal contracts remain unchanged. CP2, expert enrollment/privacy/retention and manual owner review remain pending; this authorization does not permit a main merge, deployment, real data or release.
+
 ### M11A owner-directed prototype authorization — 2026-10-03
 
 The project owner explicitly approved building credential-gated CV versions after completing and pushing M10.6. This authorizes a technical prototype on `codex/exe-web-app-m11a-credentialed-cv-versions` from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`. It does not imply CP2 validation or bypass evidence-based product-market, pricing/competitor/market, privacy, real-data, merge or deployment gates.

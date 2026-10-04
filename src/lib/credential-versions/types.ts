@@ -1,8 +1,8 @@
 export const APPROVAL_NOTICE = "Approved by a team-approved expert after reviewing submitted proof.";
 export type DocumentKind = "credential" | "portfolio";
 export type Decision = "approved" | "needs_information" | "rejected";
-export type Claim = { id: string; skill: string; wording: string; state: string; createdAt: string; credentialId: string; portfolioId: string | null; note: string | null; canWithdraw: boolean };
-export type Version = { id: string; number: number; state: string; createdAt: string; acceptedAt: string | null; changes: string[] };
+export type Claim = { id: string; sourceCvId: string; sourceName: string; skill: string; wording: string; state: string; createdAt: string; credentialId: string; portfolioId: string | null; note: string | null; canWithdraw: boolean };
+export type Version = { id: string; sourceCvId: string; sourceName: string; number: number; state: string; createdAt: string; acceptedAt: string | null; changes: string[] };
 export type DocumentItem = { id: string; filename: string; withdrawn: boolean };
 export type Expert = { id: string; name: string; specialty: string | null };
 export type Workspace = { cvs: { id: string; filename: string }[]; portfolios: DocumentItem[]; credentials: DocumentItem[]; experts: Expert[]; claims: Claim[]; versions: Version[] };

@@ -510,6 +510,18 @@ h1, h2, h3, h4, p { overflow-wrap: break-word; }
 /* M11B.1 browser regression: intrinsic grid/fieldset widths overflowed at 320px. */
 .credential-workspace .opportunity-form, .credential-workspace .opportunity-list { grid-template-columns: minmax(0, 1fr); }
 .credential-workspace fieldset { min-inline-size: 0; max-inline-size: 100%; }
+.credential-summary, .credential-filters { margin-block: 20px; }
+.credential-steps { padding-inline-start: 24px; }
+.credential-steps li { margin-block: 8px; }
+.credential-counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px; margin-block: 20px; }
+.credential-counts div { min-width: 0; padding: 12px; border: 1px solid #cfdbe3; border-radius: 8px; background: white; }
+.credential-counts dt { font-size: 14px; }
+.credential-counts dd { font-size: 24px; font-weight: 700; margin: 6px 0 0; }
+.credential-actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.credential-filters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.credential-filters select { width: 100%; min-width: 0; padding: 12px; font: inherit; border: 1px solid #9eafb9; border-radius: 8px; background: white; color: #172c3c; }
+.credential-workspace pre, .credential-workspace p, .credential-workspace h3, .credential-workspace li, .credential-workspace .button { overflow-wrap: anywhere; }
+.credential-workspace > [role="alert"] { margin-block: 16px; padding: 16px; border: 1px solid #a33939; border-radius: 8px; background: #fff4f4; }
 .opportunity-card { padding: 16px; }
 .opportunity-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .opportunity-role { margin: 0; color: #82919a; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }

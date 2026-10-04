@@ -3,10 +3,26 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-04
-**Working branch:** `codex/exe-web-app-m11b1-browser-acceptance`
+**Working branch:** `codex/exe-web-app-m11c-proof-review`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
+
+## Current status — M11C
+
+M11C is implemented from exact published M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. Code and isolated browser rendering checks pass; this branch still needs the genuine local Supabase journey and manual owner review. Historical entries below retain what was known on their dates. Owner-directed M11A–M11C prototypes are authorized; broader evidence-selected product expansion and market claims remain gated by CP2.
+
+| Track | Current status | Evidence / next action |
+|---|---|---|
+| Core CV → JD → report → roadmap → grounded draft → saved work | Implemented; prior fictional local policy acceptance passed | Manual owner review still pending |
+| Private proof → expert review → immutable CV version → owner acceptance → export | Implemented in M11A/B; M11B.1 genuine synthetic browser journey passed on its baseline | Rerun genuine browser acceptance on M11C |
+| M11C proof/workflow improvements | Code/rendering checks passed; integration pending | 300 tests/37 files, lint/typecheck/build; protected PNG/JPG and fixture-backed production UI at five widths |
+| Local owner-review verification in this ChatGPT environment | Blocked at configuration | No local Supabase configuration/stack available; do not substitute fake settings or count isolated fixtures as integration |
+| CP2 / target segment / pricing / competitiveness | Evidence pending | Templates/validator are prepared; no actual evidence or reviewed decision supplied |
+| Real experts, privacy/backup/retention and real data | Approval pending | Team must review qualification, role/revocation/conflict and data-handling policies |
+| Main / deployment / release | Owner decision pending | Feature-branch source review only; no PR, main merge or deployment |
+
+M11C adds controlled private image proof pages with PDF-download guidance, fresh expert decision/checkbox state for every assignment, source-CV history labels/filters, a next-step summary, new-claim preparation from rejected/incomplete wording, safe deletion/refresh recovery, and stale-panel closure. No database/RLS/Storage or authority change. See [actual results](M11C_ACCEPTANCE.md) and [implementation/resume guide](M11C_PROOF_REVIEW_AND_WORKFLOW.md).
 
 ## 1. Product map
 
@@ -31,6 +47,7 @@ The first validated target segment is still open. The working hypothesis is stud
 | People need a practical next step. | Create a short roadmap tied to the gaps. | Actions must link to a specific finding. |
 | Tailoring a CV can introduce false claims. | Create an editable draft with source provenance for every proposed claim. | Never invent skills, experience, metrics, or credentials. |
 | CVs contain personal data. | Store documents privately with owner-scoped access and deletion controls. | Do not use real data before privacy review. |
+| A learner wants new qualifications added truthfully. | Require certificate/degree evidence, assigned team-approved expert review of exact wording, then separate owner acceptance of an immutable candidate. | Upload, approval and owner acceptance are separate; no issuer-authentication claim. |
 
 ### End-to-end user journey
 
@@ -42,6 +59,23 @@ flowchart TD
   D --> E["Prioritized roadmap"]
   E --> F["Review tailored CV draft"]
   F --> G["Save, edit, or delete work"]
+```
+
+### Credential-version journey
+
+```mermaid
+flowchart TD
+  D["Private CV and proof"] --> C["Frozen skill claim"]
+  C --> E["Assigned expert review"]
+  E -->|"Needs information or rejects"| R["Prepare a new claim"]
+  R --> C
+  E -->|"Approves; owner creates"| V["Immutable candidate"]
+  V -->|"Owner accepts"| A["Accepted version"]
+  V -->|"Owner rejects"| H["Rejected history"]
+  A --> X["DOCX, TXT, private print"]
+  D -->|"Withdraw supporting evidence"| W["Withdrawn; future export denied"]
+  V --> W
+  A --> W
 ```
 
 ### MVP boundaries
@@ -72,9 +106,29 @@ flowchart TD
 | Target jobs | Owner-scoped role, company, and pasted job description | Built |
 | Analysis | Server-side deterministic wording matcher; schema validation and traceable excerpts | Built in M2 |
 | AI provider | No vendor selected and no CV/JD text sent externally | Open decision |
-| Roadmap | Gap-linked actions, priority, rationale, and user-controlled progress | Built in M3; local policy acceptance pending |
-| CV drafting | Source-grounded editable draft with per-claim provenance and explicit acceptance | Built in M3; local policy acceptance pending |
-| Saved history / polish | Saved core work, empty/loading/error states, security and responsive review | Planned for M4 |
+| Roadmap | Gap-linked actions, priority, rationale, and user-controlled progress | Built; prior local policy acceptance passed |
+| CV drafting | Source-grounded editable draft with per-claim provenance and explicit acceptance | Built; prior local policy acceptance passed |
+| Saved history / polish | Saved core work, empty/loading/error states, security and responsive review | Built in M4/M10.2; owner review pending |
+| Credential versions | Private proof/optional portfolio, frozen claim, assigned expert decision, immutable history and explicit acceptance | Built in M11A; prior local policy acceptance passed |
+| Accepted exports | Saved-text DOCX/TXT and private browser print with fresh owner/provenance checks | Built in M11B; M11B.1 synthetic authenticated journey passed |
+| Credential usability / proof display | Source-aware filters, workflow summary, safe refresh/errors and controlled raster proof view | Built in M11C; isolated checks passed, local integration pending |
+
+### Route map
+
+| Route | Purpose | Access / boundary |
+|---|---|---|
+| `/` | Overview and fictional example | Public shell; no real job/price/market claim |
+| `/assessment` | Sign in, private CV intake and target JD | Authenticated persistence; PDF/DOCX CV up to 5 MiB |
+| `/analysis/[id]` | Four-state evidence report and private sharing controls | Owner report; deterministic local wording analysis |
+| `/analysis/[id]/next-steps` | Gap roadmap and editable grounded M3 draft | Owner only; editing clears draft acceptance |
+| `/saved-work` | Return to saved reports/drafts | Owner-scoped minimal metadata |
+| `/opportunities` | Save a user-found HTTPS reference and process state | Owner only; no external fetch/scrape/vacancy verification |
+| `/review/[token]` | Selected report/accepted draft and advisory feedback | Narrow unlisted token, expiry/revocation; does not confer expert authority |
+| `/credential-versions` | Private evidence, claims, CV history and owner acceptance | Authenticated owner data; source/next-step filters |
+| `/expert/credential-reviews` | Assigned submitted claims and immutable expert decision | Authenticated active team-approved expert, exact assignment, no self-review |
+| `/api/credential-versions/evidence/[id]` | Authorized private proof/portfolio delivery and proof view | Existing owner/assignment RPC + private Storage; no public URLs |
+| `/api/credential-versions/[id]/export` | DOCX/TXT of saved accepted text | Owner, historical acceptance and complete active provenance required |
+| `/credential-versions/[id]/print` | Private browser Print / Save as PDF | Same accepted-export boundary; no generated PDF download |
 
 ## 3. Engineering milestone plan
 
@@ -95,6 +149,12 @@ flowchart TD
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 | **M10.2 — Existing-experience hardening** | Existing route clarity, keyboard/form access, responsive safeguards, safe errors and regression coverage | Engineering checks passed — owner manual review pending | From exact M10 baseline `4af832c`; 115 tests in 22 files, lint/typecheck/build, script syntax, CP2 template/diff and local fictional Supabase acceptance passed. Seven routes hardened; browser disconnected, so viewport/zoom/keyboard/assistive-technology review remains owner follow-up. See `M10_2_HARDENING_ACCEPTANCE.md`. CP2 remains pending, M11 remains blocked, and no price, market, competitor, validation, privacy-superiority or ease-of-use claim is unlocked. No merge or deployment occurred. |
 | **M10.5 — Local owner-review preflight** | Local fictional-data configuration guard and preflight command | Engineering checks passed — owner browser review pending | From M10.3 `9d9e3c2`; `pnpm review:preflight` permits only local public Supabase browser settings, rejects private credentials/hosted URLs without printing values, and checks the fictional DOCX/checklist. Full tests passed: 179 tests in 24 files; lint, typecheck, build, direct synthetic checks, and diff check also passed. A sandbox-only child-process diagnostic was resolved by a full outside-sandbox rerun and is recorded in `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`. No app feature, CP2 evidence, M11 selection, merge, or deployment occurred. |
+| **M10.3 — Research operations** | Aggregate survey/source-log validation and private local tooling | Prepared — evidence pending | 175 historical tests; templates/synthetic fixtures are not research results. |
+| **M10.6 — Verification runner** | Preflight → lint → typecheck → tests → build | Published; original local gate passed | `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`; no manual/CP2 approval implied. |
+| **M11A — Credential-gated CV versions** | Private proof, assigned expert, immutable candidates and explicit owner acceptance | Published; original local policy/code gate passed | `bc24377d57d503a21059ee0a467ede23252f289a`; role/privacy/manual review pending. |
+| **M11B — Accepted CV exports** | DOCX/TXT and private browser print; cumulative provenance | Published; code gate passed | `64b0dc9e0c138ae31ed0eda102a783f0db9137b5`; external-editor and print-pagination review pending. |
+| **M11B.1 — Genuine local browser acceptance** | Real local synthetic authentication, upload/review/accept/export/withdrawal and denials | Published; baseline journey and cleanup passed | `e15d9584fa67230024ed21cc6258f29a1353726b`; 281 historical tests; no human approval or CP2 evidence. |
+| **M11C — Proof review and workflow usability** | Controlled raster proof view, fresh expert form, source-aware history, guidance and recovery | Implemented; isolated checks passed, integration pending | 300 tests/37 files; Chromium rendering/fixture UI at five widths. Review preflight/full local journey blocked here by unavailable local configuration. See `M11C_ACCEPTANCE.md`. |
 
 ## M10.3 research operations status — 2026-10-02
 
@@ -219,9 +279,9 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 
 | Checkpoint | Course requirement | Current status | Needed evidence |
 |---|---|---|---|
-| **CP1 — Idea lock** | Product/service description, target-user hypothesis, problem, value proposition, MVP boundary | Not started | One-page idea-lock summary and agreed demo scenario |
-| **CP2 — Market research** | Survey of more than 100 responses or two qualified industry experts; 5–10 customer interviews; competitor, market, value, and price research | Not started | Dated sources, anonymized notes, consent approach, competitor matrix, and revised segment/value proposition |
-| **CP1 — MVP demo** | End-to-end product demo plus product and technology description | Not started | Fictional-data demo of the full M0–M4 path |
+| **CP1 — Idea lock** | Product/service description, target-user hypothesis, problem, value proposition, MVP boundary | Course acceptance unknown | Existing scope/description; owner/instructor idea-lock result not supplied |
+| **CP2 — Market research** | Survey of more than 100 responses or two qualified industry experts; 5–10 customer interviews; competitor, market, value, and price research | Tools prepared; evidence/review pending | Dated sources, anonymized notes, consent approach, competitor matrix, and revised segment/value proposition |
+| **CP1 — MVP demo** | End-to-end product demo plus product and technology description | Package prepared; rehearsal/course review pending | Fictional M5 fixture and runbook; actual demonstration results not supplied |
 | **CP3 — BMC** | Business Model Canvas supported by research or clearly labelled assumptions | Not started | BMC and evidence links |
 | **CP4 — Pitch deck** | Team, product-market fit, business model, operations, fundraising plan | Not started | Slide deck, speaker plan, and research-supported claims |
 | **Constructivism presentation** | Separate 15% assessment; rubric still needs confirmation | Not started | Instructor-confirmed rubric and working evidence log |
@@ -240,14 +300,14 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | Decision | Status | Reason / next action |
 |---|---|---|
 | Next.js + TypeScript web app | In use | Existing application foundation; record any stack change before making it. |
-| Supabase Auth, Postgres, and private Storage | In use for M1–M3 | M1 local two-user policy acceptance passed; review backup/retention before real CVs. |
+| Supabase Auth, Postgres, and private Storage | In use across private workflows | Prior local ownership/policy acceptance passed; review backup/retention before real CVs. |
 | PDF and DOCX only; 5 MiB maximum | Approved for M1 | Server validates extension, signatures, and DOCX archive structure. |
 | Deterministic local analysis adapter | Reversible M2 choice | Avoids external CV/JD sharing while AI-provider data handling is unresolved. |
 | External AI provider | Open | Choose only after cost, privacy, retention, consent, and output-evaluation review. |
 | Numeric match score | Excluded from MVP | Categories with evidence are easier to understand and less likely to be mistaken for a hiring prediction. |
 | Initial job segment and pricing | Open | Must be based on CP2 research. |
 | Product-value, affordability, competitive, and validation claims | Blocked pending CP2 evidence | M8 supplies research templates only; make a claim only from dated, reviewed, relevant evidence. |
-| M10 next product feature | Blocked pending M9 decision gate | Use reviewed evidence, limitations, and `M9_NEXT_FEATURE_SELECTION.md`; a technically attractive idea is not a validated requirement. |
+| Evidence-selected next product expansion | Blocked pending M9/CP2 decision gate | Owner-directed M11A–M11C engineering is authorized separately; it does not validate demand or market positioning. |
 | Merge, deployment, or real-user use | Owner approval required | Keep feature branches reviewable; never deploy or merge without explicit approval. |
 
 ## 9. Privacy, security, and quality rules
@@ -262,6 +322,17 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 - Use fictional or consented data in tests, screenshots, presentations, and demos.
 
 ## 10. Current work queue
+
+Current priorities take precedence over the historical queue below.
+
+| Priority | Next work | Status / dependency |
+|---:|---|---|
+| 1 | M11C.1 genuine local integration | Rerun `pnpm review:verify` and `pnpm test:e2e:local` on the existing owner stack, then the new proof/UI rendering commands. Actual M11C local-stack result remains pending. |
+| 2 | Manual owner experience review | M7/M10.2/M11A checklists; two CV histories, fresh expert acknowledgements, withdrawal/recovery, desktop/mobile/keyboard and screen-reader review. Record only performed activities. |
+| 3 | Export fidelity review | Actual browser Print / Save as PDF pagination and opening DOCX in an external editor. |
+| 4 | Expert and data-handling policy | Approve qualification/enrollment/revocation/conflict rules, privacy, backup and retention before real users/documents. |
+| 5 | CP2 research and evidence-selected decision | Complete consent-safe research/register and team review before selecting segment, prices or comparative claims. |
+| 6 | Owner release decision | Explicit merge/deployment approval after relevant checks/reviews; no automatic release. |
 
 | Order | Work item | Status | Owner / dependency |
 |---:|---|---|---|
@@ -278,7 +349,7 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 11 | Prepare M8 research and owner-review package | Complete — evidence collection pending | M8 templates cover consent-safe interviews, anonymous survey, blank register, current-source comparison, and owner execution; no results collected or claims unlocked |
 | 12 | Prepare M9 evidence gate and product-decision workflow | Complete — evidence collection pending | Added validator, deterministic validator tests, review template, decision gate, next-feature matrix, and owner-status checklist. It does not collect evidence, complete CP2, or select a feature. |
 | 13 | Run CP2 evidence collection and owner/team review | Pending | Collect and review real consent-safe evidence for segment, value, alternatives, competitor positioning, and willingness to pay; use the collected-evidence validator and record limitations before a product decision. |
-| 14 | Select M11 next feature from reviewed evidence | Blocked by M10 decision gate | Requires completed fictional M7 owner review, CP1 review evidence, anonymized CP2 register, validator pass, owner/team limitation review, and recorded product decision. |
+| 14 | Select future product expansion from reviewed evidence | Blocked by M10 decision gate | Requires owner-review/research evidence and a recorded decision. M11A–M11C prototypes have separate owner authorization and do not complete that validation. |
 | 15 | Final owner review, then decide whether to merge/deploy | Owner decision only | Requires explicit privacy/security and backup/retention review plus explicit approval; no deployment or merge in M9 |
 
 ## 11. Progress log
@@ -321,6 +392,8 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 | 2026-10-02 | M10.5 local owner-review preflight | Engineering checks passed; owner browser review pending | Added a local-only configuration preflight that rejects hosted Supabase URLs and private settings without printing values, and confirms the fictional DOCX/checklist. Full tests passed: 179 tests in 24 files; lint, typecheck, build, direct synthetic checks, and diff check also passed. An initial sandbox-only child-process diagnostic was resolved by an outside-sandbox full rerun. No workflow/feature, CP2 evidence, M11 selection, merge, or deployment was added. |
 
 ## 12. How to resume
+
+For the newest code, resume `codex/exe-web-app-m11c-proof-review` from a clean checkout. Follow [M11C local integration instructions](M11C_PROOF_REVIEW_AND_WORKFLOW.md). The new isolated browser commands passed here but do not replace `pnpm test:e2e:local`, manual review or the release decision. M11C.1 is the next acceptance stage; additional engineering fixes should follow actual results.
 
 M10.6 adds `pnpm review:verify` before the owner session, followed only on success by `pnpm dev`. Complete the actual M10.2 checklist using the fictional DOCX and record actual results. Reuse the existing local stack. Verification does not approve manual results, privacy, CP2 evidence, M11 selection, merge, or deployment. See `M10_6_REVIEW_VERIFY.md` and `M10_6_REVIEW_VERIFY_ACCEPTANCE.md` for results and limitations.
 

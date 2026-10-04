@@ -13,9 +13,9 @@ export async function loadWorkspace(): Promise<Workspace> {
     supabase.from("portfolio_documents").select("id,filename,withdrawn_at").eq("owner_id", user.id),
     supabase.from("credential_documents").select("id,filename,withdrawn_at").eq("owner_id", user.id),
     supabase.rpc("m11a_experts"),
-    supabase.from("credential_skill_claims").select("id,skill_label,proposed_wording,state,created_at,credential_id,portfolio_id").eq("owner_id", user.id).order("created_at", { ascending: false }),
+    supabase.from("credential_skill_claims").select("id,source_cv_id,skill_label,proposed_wording,state,created_at,credential_id,portfolio_id").eq("owner_id", user.id).order("created_at", { ascending: false }),
     supabase.from("credential_expert_decisions").select("claim_id,explanation,approved_wording"),
-    supabase.from("cv_versions").select("id,version_number,state,created_at,accepted_at").eq("owner_id", user.id).order("version_number", { ascending: false }),
+    supabase.from("cv_versions").select("id,source_cv_id,version_number,state,created_at,accepted_at").eq("owner_id", user.id).order("version_number", { ascending: false }),
     supabase.from("cv_version_skill_claims").select("version_id,claim_id"),
   ]);
   if ([cvs, portfolios, credentials, experts, claims, decisions, versions, links].some((result) => result.error)) throw unavailable();
@@ -23,8 +23,8 @@ export async function loadWorkspace(): Promise<Workspace> {
   return {
     cvs: (cvs.data ?? []).map((r) => ({ id: r.id, filename: r.original_filename })),
     portfolios: documents(portfolios.data), credentials: documents(credentials.data), experts: experts.data as Expert[],
-    claims: (claims.data ?? []).map((r): Claim => ({ id: r.id, skill: r.skill_label, wording: r.proposed_wording, state: r.state, createdAt: r.created_at, credentialId: r.credential_id, portfolioId: r.portfolio_id, note: decisions.data?.find((d) => d.claim_id === r.id)?.explanation ?? null, canWithdraw: r.state !== "withdrawn" && !(links.data ?? []).some((link) => link.claim_id === r.id && versions.data?.some((v) => v.id === link.version_id && v.accepted_at)) })),
-    versions: (versions.data ?? []).map((r): Version => ({ id: r.id, number: r.version_number, state: r.state, createdAt: r.created_at, acceptedAt: r.accepted_at, changes: (links.data ?? []).filter((l) => l.version_id === r.id).map((l) => decisions.data?.find((d) => d.claim_id === l.claim_id)?.approved_wording).filter((w): w is string => typeof w === "string") })),
+    claims: (claims.data ?? []).map((r): Claim => ({ id: r.id, sourceCvId: r.source_cv_id, sourceName: cvs.data?.find((cv) => cv.id === r.source_cv_id)?.original_filename ?? "Source CV unavailable", skill: r.skill_label, wording: r.proposed_wording, state: r.state, createdAt: r.created_at, credentialId: r.credential_id, portfolioId: r.portfolio_id, note: decisions.data?.find((d) => d.claim_id === r.id)?.explanation ?? null, canWithdraw: r.state !== "withdrawn" && !(links.data ?? []).some((link) => link.claim_id === r.id && versions.data?.some((v) => v.id === link.version_id && v.accepted_at)) })),
+    versions: (versions.data ?? []).map((r): Version => ({ id: r.id, sourceCvId: r.source_cv_id, sourceName: cvs.data?.find((cv) => cv.id === r.source_cv_id)?.original_filename ?? "Source CV unavailable", number: r.version_number, state: r.state, createdAt: r.created_at, acceptedAt: r.accepted_at, changes: (links.data ?? []).filter((l) => l.version_id === r.id).map((l) => decisions.data?.find((d) => d.claim_id === l.claim_id)?.approved_wording).filter((w): w is string => typeof w === "string") })),
   };
 }
 

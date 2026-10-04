@@ -166,6 +166,7 @@ test("synthetic local credential approval, acceptance, exports and denial bounda
       for (const page of [ordinaryPage, outsider]) {
         check((await page.context().request.get(`/api/expert/credential-reviews?claim=${claimId}`, { maxRedirects: 0 })).status() === 403, "UNASSIGNED_CLAIM_DENIED");
         check((await page.context().request.get(`/api/credential-versions/evidence/${claimId}?kind=credential`, { maxRedirects: 0 })).status() === 403, "UNASSIGNED_PROOF_DENIED");
+        check((await page.context().request.get(`/api/credential-versions/evidence/${claimId}?kind=credential&preview=1`, { maxRedirects: 0 })).status() === 403, "UNASSIGNED_PROOF_VIEW_DENIED");
         check((await page.context().request.post("/api/expert/credential-reviews", { data: { id: claimId, decision: "approved", note: "Synthetic forbidden decision", proofReviewed: true }, maxRedirects: 0 })).status() === 403, "NONASSIGNED_DECISION_DENIED");
       }
       const anonymous = await pageFor();
@@ -180,6 +181,20 @@ test("synthetic local credential approval, acceptance, exports and denial bounda
       await keyClick(page.getByRole("button", { name: `Review ${skill}` }));
       await page.getByRole("button", { name: "Save expert decision" }).waitFor();
       await noOverflow(page);
+      const proofLink = page.getByRole("link", { name: "View assigned private proof (opens a new tab)" });
+      check(await proofLink.getAttribute("target") === "_blank", "PRIVATE_PROOF_NEW_TAB_LINK_REQUIRED");
+      // Script-free proof document in a script-disabled context. App contexts
+      // still block service workers; their injected blocking shim is not
+      // compatible with opaque sandbox origins. Reuse genuine fixture cookies.
+      const proofContext = await browser.newContext({ javaScriptEnabled: false, serviceWorkers: "allow" }); contexts.push(proofContext);
+      await proofContext.addCookies(await page.context().cookies());
+      await proofContext.route("**/*", (route) => { if (new URL(route.request().url()).origin === app) return route.continue(); forbiddenNetwork++; return route.abort(); });
+      const proofView = await proofContext.newPage(); proofView.on("pageerror", () => { pageErrors++; });
+      const proofResponse = await proofView.goto(new URL((await proofLink.getAttribute("href"))!, app).href);
+      check(proofResponse?.headers()["content-security-policy"]?.startsWith("sandbox;"), "PRIVATE_PROOF_SANDBOX_REQUIRED");
+      await proofView.getByRole("heading", { name: "Private proof view", exact: true }).waitFor();
+      await proofView.waitForFunction(() => { const image = document.querySelector("img"); return image?.complete && image.naturalWidth > 0; });
+      await noOverflow(proofView); await proofView.close();
       const proofBytes = await downloaded(page, page.getByRole("link", { name: "Download assigned private proof", exact: true }));
       check(proofBytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), "SYNTHETIC_PROOF_BYTES_REQUIRED");
       const evidence = await page.context().request.get(`/api/credential-versions/evidence/${claimId}?kind=credential`, { maxRedirects: 0 });
@@ -243,6 +258,7 @@ test("synthetic local credential approval, acceptance, exports and denial bounda
       await keyClick(ownerPage.getByRole("button", { name: `Withdraw and delete ${proofName}` }));
       await keyClick(ownerPage.getByRole("button", { name: "Confirm action" }));
       await ownerPage.getByText("Export is unavailable because supporting evidence was withdrawn.").waitFor();
+      check((await ownerPage.context().request.get(`/api/credential-versions/evidence/${claimId}?kind=credential&preview=1`, { maxRedirects: 0 })).status() === 403, "WITHDRAWN_PROOF_VIEW_DENIED");
       for (const path of [`/api/credential-versions/${versionId}/export`, `/credential-versions/${versionId}/print`]) check((await ownerPage.context().request.get(path, { maxRedirects: 0 })).status() === 404, "WITHDRAWN_EXPORT_DENIED");
       await keyClick(stale.getByRole("button", { name: "Download editable DOCX — version 1" }));
       await stale.getByRole("alert").filter({ hasText: "This accepted CV export is unavailable." }).waitFor();

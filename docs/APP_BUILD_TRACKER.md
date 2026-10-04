@@ -2,6 +2,10 @@
 
 This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. The GitHub feature branch is for source review; do not merge to `main` or deploy without the project owner's approval.
 
+## Latest — M11C
+
+Implemented on `codex/exe-web-app-m11c-proof-review` from exact published M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. Controlled private raster proof view/PDF-download guidance; fresh per-assignment expert form/acknowledgement; source-aware owner filters/history, next-step summary, new-claim preparation, stale-panel closure and safe deletion/refresh recovery. 300 tests/37 files, lint/typecheck/build and isolated Chromium proof/fixture-backed production UI at five widths passed. Full local preflight/credential journey is pending here due unavailable local configuration/stack. No database/RLS/Storage/authority change; this is not full acceptance or release. [Actual results](M11C_ACCEPTANCE.md); [master report](PROJECT_MASTER_REPORT.md). M11C.1 genuine local integration/manual owner review is next. CP2, policies, print/editor/accessibility and owner release decisions remain pending.
+
 | Part | Status | Scope | Exit criteria |
 |---|---|---|---|
 | M0 — Web app shell | Complete, awaiting owner review | Next.js + TypeScript shell, responsive overview, fictional report example, CV/JD intake UI, browser-only validation | App builds; lint and type checks pass; no file or job data leaves the browser; no deployment |

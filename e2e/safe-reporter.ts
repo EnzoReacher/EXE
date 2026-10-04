@@ -17,9 +17,9 @@ export default class SafeReporter implements Reporter {
         : result.error?.message?.includes("apiRequestContext.get") ? "API_REQUEST_FAILURE"
         : result.error?.message?.includes("locator.waitFor") ? "ELEMENT_WAIT_FAILURE"
         : result.error?.message?.includes("page.goto") ? "NAVIGATION_FAILURE" : "ASSERTION_OR_TIMEOUT");
-    const locations = [...(result.error?.stack ?? "").matchAll(/credential-flow\.spec\.ts:(\d+):(\d+)/g)];
+    const locations = [...(result.error?.stack ?? "").matchAll(/(?:credential-flow|proof-preview|workspace-ui)\.spec\.ts:(\d+):(\d+)/g)];
     const line = locations.at(-1)?.[1];
-    console.log(result.status === "passed" ? "Synthetic credential/export journeys: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${line ? ` (spec line ${line})` : ""}.`);
+    console.log(result.status === "passed" ? "Synthetic browser checks: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${line ? ` (spec line ${line})` : ""}.`);
   }
   onError() { console.log("Browser runner/configuration error; no private details emitted."); }
   onEnd(result: FullResult) { console.log(`Browser suite result: ${result.status}. Screenshots/traces/videos disabled.`); }

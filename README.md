@@ -58,6 +58,12 @@ Use only the fictional DOCX in `docs/demo/fixtures/` and complete the actual [M1
 
 ## Current project state
 
+### M11C private proof and credential workflow
+
+Current review branch: `codex/exe-web-app-m11c-proof-review`, from exact M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. Protected JPG/PNG proof pages, PDF-download guidance, per-claim expert form reset, source-CV filters/history labels, next-step guidance, new-claim preparation and safe stale/deletion/refresh recovery are implemented. No database/RLS/Storage or authority redesign. Code checks passed: 300 tests/37 files, lint/typecheck/build; isolated Chromium proof rendering and fixture-backed production UI checks passed. Genuine local Supabase acceptance is pending because this build environment lacks local configuration/stack. See the [M11C guide](docs/M11C_PROOF_REVIEW_AND_WORKFLOW.md), [actual results](docs/M11C_ACCEPTANCE.md) and [single master report](docs/PROJECT_MASTER_REPORT.md).
+
+Additional optional browser checks use installed Chromium and no Supabase: `pnpm test:proof-preview`; after a fresh `pnpm build`, `pnpm test:workspace-ui`. They are separate from ordinary verification/CI and do not replace genuine-authentication acceptance or owner review. Reuse the existing local stack for `pnpm review:verify` and `pnpm test:e2e:local`; do not create duplicate containers. Manual printing/editor/accessibility, role/privacy/retention and CP2 gates remain pending. No merge or deployment.
+
 ### M11B accepted CV export prototype
 
 Owner-directed M11B on `codex/exe-web-app-m11b-cv-export` starts from verified M11A `bc24377d57d503a21059ee0a467ede23252f289a`. Eligible accepted/superseded versions offer an editable DOCX, exact-text TXT fallback, and private browser Print / Save as PDF view. Every request rechecks owner acceptance and cumulative evidence provenance; candidates, rejected versions and evidence-withdrawn versions cannot export. Export uses immutable saved text and does not rewrite claims or include proof metadata. DOCX is built in memory using the new `docx` library; no generated documents are stored in the repository. The print view is browser printing, not an EXE-generated PDF download. See the [M11B guide](docs/M11B_ACCEPTED_CV_EXPORT.md) and [actual acceptance record](docs/M11B_ACCEPTED_CV_EXPORT_ACCEPTANCE.md). M11A manual review, CP2, broader validation, and release/privacy gates remain pending; no merge or deployment occurred.

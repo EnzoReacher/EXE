@@ -3,7 +3,7 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ExportControls from "./export-controls";
-const version = { id: "11111111-1111-4111-8111-111111111111", number: 1, state: "accepted", acceptedAt: "2026-10-04", createdAt: "2026-10-04", changes: ["Fictional SQL"] };
+const version = { id: "11111111-1111-4111-8111-111111111111", sourceCvId: "fictional-source", sourceName: "fictional-cv.pdf", number: 1, state: "accepted", acceptedAt: "2026-10-04", createdAt: "2026-10-04", changes: ["Fictional SQL"] };
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 describe("keyboard-accessible accepted CV exports", () => {
   it.each(["candidate", "rejected", "evidence_withdrawn"])("explains blocked %s state without download or print actions", (state) => {
