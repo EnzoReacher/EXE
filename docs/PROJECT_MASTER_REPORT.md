@@ -2,8 +2,8 @@
 
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
-**Last updated:** 2026-10-03
-**Working branch:** `codex/exe-web-app-m11a-credentialed-cv-versions`
+**Last updated:** 2026-10-04
+**Working branch:** `codex/exe-web-app-m11b-cv-export`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
@@ -125,6 +125,12 @@ The owner explicitly approved this technical prototype after the controlled M10.
 Prepared engineering work: private portfolio/certificate/degree intake; bounded frozen skill claims; team-authorized authenticated expert assignments/decisions; approved-only immutable candidates; explicit owner acceptance; cumulative provenance and truthful withdrawal. Seven new RLS-protected record types and two private buckets; checked server/database transitions and safe list/download boundaries. Original CVs, M3 drafts and token-based advisory review links are preserved. No OCR, inference, issuer API, external AI, scraping, payments or exports. See `M11A_CREDENTIAL_GATED_CV_VERSIONING.md`.
 
 Engineering gate passed: 35 targeted tests; `pnpm review:verify` passed preflight, lint, typecheck, 224 tests in 29 files and build; CP2 template validation passed; existing local-stack M1–M6b/M11A fictional RLS/private Storage acceptance passed after both migrations. Initial interaction and new test-hook failures were diagnosed and resolved, as recorded in `M11A_CREDENTIAL_GATED_CV_VERSIONING_ACCEPTANCE.md`. Final review added before/after comparison, individual claim withdrawal, sandboxed private proof previews, first-invalid focus, explicit expert approval metadata and lifecycle timestamps. Not performed: manual browser/mobile/screen-reader/accessibility review, real expert approvals, CP2 evidence collection or public release. Expert-role administration policy and privacy/backup/retention review remain pending. Broader M11 evidence-based product decisions remain gated by CP2; explicit owner approval required before merge/deployment.
+
+## M11B owner-directed accepted CV export prototype — 2026-10-04
+
+Owner requested export from exact published M11A `bc24377d57d503a21059ee0a467ede23252f289a` on `codex/exe-web-app-m11b-cv-export`. Implemented in-memory editable DOCX, byte-exact UTF-8 TXT fallback, private browser Print / Save as PDF, owner/state/acceptance/cumulative-provenance checks, escaped print text, sanitized private headers, and accessible history actions. Saved snapshots are the only CV text source; no claims are rewritten or generated, and no proof metadata/expert identity is included. No database/RLS/Storage or approval/acceptance/withdrawal authority change. New `docx` dependency is documented in `M11B_ACCEPTED_CV_EXPORT.md`.
+
+Engineering gate/source review passed: 48 targeted tests in 5 files; standalone preflight; `pnpm review:verify` passed preflight, lint, typecheck, 266 tests in 33 files and build; CP2 template validation and diff checks passed. Actual results and scope scan are recorded in `M11B_ACCEPTED_CV_EXPORT_ACCEPTANCE.md`. Local policy suite not performed because database/RLS/Storage behavior is unchanged. Print uses the browser, not a generated PDF download. M11A manual owner/accessibility review, CP2 research, broader product validation and privacy/role policies remain pending. No PR, merge, deployment, public/live release, or release approval occurred.
 
 ## 4. M2 status and acceptance record
 

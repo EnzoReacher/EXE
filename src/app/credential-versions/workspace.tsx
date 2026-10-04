@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import type { Workspace, ExpertDetail } from "@/lib/credential-versions/types";
 import { APPROVAL_NOTICE } from "@/lib/credential-versions/types";
+import ExportControls from "./export-controls";
 
 const ownerApi = "/api/credential-versions";
 const expertApi = "/api/expert/credential-reviews";
@@ -134,6 +135,7 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
       </article>)}</section>
       <section className="opportunity-list"><h2 ref={historyHeading} tabIndex={-1}>Immutable version history</h2><p>Original uploads and M3 drafts are not edited. Only the approved wording is appended; accepted versions are historical snapshots after supersession. Withdrawal removes active approval without rewriting history.</p>{workspace.versions.map((v) => <article key={v.id} className="opportunity-card"><h3>Version {v.number}</h3><p>{labels[v.state] ?? v.state}</p><p>Created {new Date(v.createdAt).toLocaleString()}{v.acceptedAt ? `; accepted ${new Date(v.acceptedAt).toLocaleString()}` : ""}</p><ul>{v.changes.map((w, i) => <li key={i}>{w}</li>)}</ul>
         <button className="button button-secondary" disabled={busy} onClick={() => void perform(async () => { setVersion(await json(await fetch(`${ownerApi}?version=${v.id}`, { cache: "no-store" }))); }, "Version snapshot loaded.", false)}>Review version {v.number}</button>
+        <ExportControls version={v} disabled={busy} />
       </article>)}</section>
     </>}
     {!loading && expert && <section className="opportunity-list"><h2 ref={historyHeading} tabIndex={-1}>Assigned review queue</h2>{!queue.length && !error && <p>No submitted claims assigned to you.</p>}{queue.map((c) => <article className="opportunity-card" key={c.id}><h3>{c.skill}</h3><p>{c.wording}</p><button className="button button-primary" disabled={busy} onClick={() => void perform(async () => { setDetail(await json(await fetch(`${expertApi}?claim=${c.id}`, { cache: "no-store" }))); setFieldError(""); }, "Assigned claim loaded.", false)}>Review {c.skill}</button></article>)}</section>}

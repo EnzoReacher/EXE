@@ -54,6 +54,10 @@ Use only the fictional DOCX in `docs/demo/fixtures/` and complete the actual [M1
 
 ## Current project state
 
+### M11B accepted CV export prototype
+
+Owner-directed M11B on `codex/exe-web-app-m11b-cv-export` starts from verified M11A `bc24377d57d503a21059ee0a467ede23252f289a`. Eligible accepted/superseded versions offer an editable DOCX, exact-text TXT fallback, and private browser Print / Save as PDF view. Every request rechecks owner acceptance and cumulative evidence provenance; candidates, rejected versions and evidence-withdrawn versions cannot export. Export uses immutable saved text and does not rewrite claims or include proof metadata. DOCX is built in memory using the new `docx` library; no generated documents are stored in the repository. The print view is browser printing, not an EXE-generated PDF download. See the [M11B guide](docs/M11B_ACCEPTED_CV_EXPORT.md) and [actual acceptance record](docs/M11B_ACCEPTED_CV_EXPORT_ACCEPTANCE.md). M11A manual review, CP2, broader validation, and release/privacy gates remain pending; no merge or deployment occurred.
+
 ### M11A owner-directed technical prototype
 
 Credential-gated CV versions passed the engineering gate on `codex/exe-web-app-m11a-credentialed-cv-versions` from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e`: 224 full-suite tests and existing-stack fictional database/private Storage acceptance. Open `/credential-versions` as a signed-in owner and `/expert/credential-reviews` as an authenticated, active team-approved expert. CV + optional portfolio → bounded proposed skill/wording + private certificate/degree → assigned expert decision → immutable candidate → before/after review and explicit owner acceptance. No upload alone adds a skill; original CVs, M3 drafts and old version text remain unchanged. Private evidence withdrawal is reflected in all dependent histories.

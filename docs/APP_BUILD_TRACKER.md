@@ -41,6 +41,10 @@ Not performed — no database/API/RLS/Storage change: `pnpm test:supabase:local`
 
 Engineering gate passed from published M10.6 `5dd5fbebf688aeafe20ecc91cb55838bdc5d851e` on `codex/exe-web-app-m11a-credentialed-cv-versions`. Seven private record types, two private buckets, frozen claims, active team-approved authenticated expert review, exact-wording immutable candidates, before/after owner acceptance/history, individual claim and cumulative evidence withdrawal. Passed 35 targeted tests, five-step verification (224 full-suite tests), CP2 template validation and existing-stack fictional RLS/Storage acceptance. Existing drafts/token reviews preserved. No CP2 validation or real expert approval. Manual browser/accessibility review, role administration policy, privacy/retention approval, CP2 and broader product-market decisions remain pending. No merge/deployment/PR/release approval. See `M11A_CREDENTIAL_GATED_CV_VERSIONING_ACCEPTANCE.md`.
 
+## M11B — Owner-directed accepted CV export prototype
+
+Engineering gate passed from exact published M11A `bc24377d57d503a21059ee0a467ede23252f289a` on `codex/exe-web-app-m11b-cv-export`. In-memory editable DOCX, exact UTF-8 TXT, private browser Print / Save as PDF, fresh owner/historical-acceptance/complete-provenance checks, safe filenames/headers, and accessible export controls. Candidates/rejected/evidence-withdrawn versions blocked. No saved text rewriting or proof metadata export; no database/RLS/Storage/authority change. Passed 48 targeted tests in 5 files, standalone preflight, full five-step verification (266 tests, 33 files), CP2 template/diff checks and source scan. Local policy suite not performed because policies/schema/Storage are unchanged. M11A manual review, CP2, broader validation and privacy/role gates remain pending; no PR/merge/deployment/release approval. See `M11B_ACCEPTED_CV_EXPORT_ACCEPTANCE.md`.
+
 ## M0 review notes
 
 - Working branch: [`codex/exe-web-app-m0`](https://github.com/EnzoReacher/EXE/tree/codex/exe-web-app-m0), pushed for source review at commit `a19d72e`.
