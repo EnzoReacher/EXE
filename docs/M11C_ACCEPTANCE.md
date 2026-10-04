@@ -3,6 +3,7 @@
 **Run date:** 2026-10-04
 **Exact baseline:** e15d9584fa67230024ed21cc6258f29a1353726b
 **Review branch:** codex/exe-web-app-m11c-proof-review
+**Published implementation commit:** 7738159434cb732ca94095d6a5db4b4e388a9eac
 **Overall status:** Implementation and isolated code/rendering verification complete; full local-stack acceptance pending.
 
 ## Section progress
@@ -12,7 +13,7 @@
 | 1 — Baseline | Complete | GitHub ref matched the supplied M11B.1 SHA. A clean separate worktree was created from it. Existing worktrees were preserved. |
 | 2 — Implementation | Complete | Protected proof rendering, fresh expert acknowledgements, source-aware history, guidance, new-claim preparation, safe errors and stale-panel handling. |
 | 3 — Verification/audit | Isolated checks passed; integration pending | Tests and code review preserve the existing owner/assignment/RLS/immutable/export/withdrawal authority. No database migration was changed. |
-| 4 — Reporting/publication | Prepared for feature-branch source review | Master report, tracker/current state, guide and this actual-results record updated. Publication does not constitute acceptance or release. |
+| 4 — Reporting/publication | Complete — implementation published for source review | All 30 intended file blobs and the complete Git tree matched the staged/tested source. New GitHub review ref matched 7738159434cb732ca94095d6a5db4b4e388a9eac; main remained at d956118e3b89eb1fdcfd10fb48a45ba150fec20a. This documentation follow-up changes no tested application code. Publication does not constitute integration acceptance or release. |
 
 ## Commands and actual outcomes
 

@@ -10,6 +10,8 @@ This is the single working report for the web app. It combines the product map, 
 
 ## Current status — M11C
 
+**Published implementation:** `7738159434cb732ca94095d6a5db4b4e388a9eac` on the review branch. Exact file-blob/tree equality and remote branch SHA were verified; `main` stayed at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`. This report follow-up changes no tested application code.
+
 M11C is implemented from exact published M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. Code and isolated browser rendering checks pass; this branch still needs the genuine local Supabase journey and manual owner review. Historical entries below retain what was known on their dates. Owner-directed M11A–M11C prototypes are authorized; broader evidence-selected product expansion and market claims remain gated by CP2.
 
 | Track | Current status | Evidence / next action |
