@@ -3,12 +3,16 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-05
-**Working branch:** `codex/exe-web-app-m11c-proof-review`
+**Working branch:** `codex/exe-web-app-m12-landing-auth`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
 
-## Current status — M11C.1
+## Current status — M12 landing and Supabase account access
+
+The owner-approved landing/auth stage is implemented on `codex/exe-web-app-m12-landing-auth`. Public landing, sign-up, sign-in, PKCE confirmation callback, and Supabase SSR session refresh are in place. Engineering checks passed; actual local Supabase sign-up/sign-in in a browser and the owner's full accessibility review remain pending. CP2, merge, and deployment remain pending. See the dated M12 record at the end of this report.
+
+## Prior status — M11C.1
 
 **Original published M11C implementation:** `7738159434cb732ca94095d6a5db4b4e388a9eac`. Prior synthetic acceptance head: `b7807e5c8cd1711c84fff2354923ac6eb5921629`. `main` remains at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`; no merge or deployment occurred.
 
@@ -126,6 +130,9 @@ flowchart TD
 | Route | Purpose | Access / boundary |
 |---|---|---|
 | `/` | Overview and fictional example | Public shell; no real job/price/market claim |
+| `/sign-in` | Sign in with Supabase Auth | Public entry; successful sign-in returns to the owner's private workspace |
+| `/sign-up` | Create a Supabase Auth account | Public entry; password confirmation and neutral email-confirmation status |
+| `/auth/callback` | Exchange an email-confirmation PKCE code for a cookie session | Fixed same-origin redirect; no user-supplied next URL; no-store response |
 | `/assessment` | Sign in, private CV intake and target JD | Authenticated persistence; PDF/DOCX CV up to 5 MiB |
 | `/analysis/[id]` | Four-state evidence report and private sharing controls | Owner report; deterministic local wording analysis |
 | `/analysis/[id]/next-steps` | Gap roadmap and editable grounded M3 draft | Owner only; editing clears draft acceptance |
@@ -154,6 +161,7 @@ flowchart TD
 | **M8 — Research and owner-review package** | CP2 plan, interview/survey tools, blank evidence register, alternative/pricing template, and owner execution checklist | Prepared — evidence collection pending | Branch `codex/exe-web-app-m8` from M7 `13eab1b`; templates contain no collected participant, competitor, pricing, or market evidence. Pricing, competitive, value, and validation claims remain blocked pending reviewed CP2 evidence. |
 | **M9 — Evidence gate and product-decision workflow** | CP2 register validator, evidence-review template, decision gate, next-feature matrix, and owner status | Evidence gate prepared — CP2 evidence pending | Branch `codex/exe-web-app-m9` from M8 `8755795`; no code feature was selected or built. [Validator](../scripts/validate-cp2-evidence.mjs) checks template/collected-register structure and safety but cannot validate research quality; see the [decision gate](M9_DECISION_GATE.md). M11 feature selection depends on owner/team evidence review. No merge or deployment occurred. |
 | **M10 — CP2 research execution workspace** | CP2 execution status, research-session log, product-direction decision record, and owner gate | Evidence collection pending | The 2026-10-02 review found only example/template material. On 2026-10-05, seven vendor-page observations and two official national context sources (CM-001–CM-009) were added with limitations. A bilingual instructor clarification draft is prepared, not sent. Owner/team review, actual course clarification, primary research, and the product-direction decision remain pending. No feature was selected. No merge or deployment occurred. |
+| **M12 — Public landing and Supabase account access** | Public product landing, dedicated sign-in/sign-up, secure Supabase email/password session and confirmation callback | Engineering implementation complete; actual local Auth browser acceptance and owner review pending | Branch `codex/exe-web-app-m12-landing-auth` from exact M11C review head `65583406b3bc177cc4ed215df1df98900d83fa87`; no schema migration. See the M12 record below. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 | **M10.2 — Existing-experience hardening** | Existing route clarity, keyboard/form access, responsive safeguards, safe errors and regression coverage | Engineering checks passed — owner manual review pending | From exact M10 baseline `4af832c`; 115 tests in 22 files, lint/typecheck/build, script syntax, CP2 template/diff and local fictional Supabase acceptance passed. Seven routes hardened; browser disconnected, so viewport/zoom/keyboard/assistive-technology review remains owner follow-up. See `M10_2_HARDENING_ACCEPTANCE.md`. CP2 remains pending, M11 remains blocked, and no price, market, competitor, validation, privacy-superiority or ease-of-use claim is unlocked. No merge or deployment occurred. |
 | **M10.5 — Local owner-review preflight** | Local fictional-data configuration guard and preflight command | Engineering checks passed — owner browser review pending | From M10.3 `9d9e3c2`; `pnpm review:preflight` permits only local public Supabase browser settings, rejects private credentials/hosted URLs without printing values, and checks the fictional DOCX/checklist. Full tests passed: 179 tests in 24 files; lint, typecheck, build, direct synthetic checks, and diff check also passed. A sandbox-only child-process diagnostic was resolved by a full outside-sandbox rerun and is recorded in `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`. No app feature, CP2 evidence, M11 selection, merge, or deployment occurred. |
@@ -412,7 +420,7 @@ Documentation checks for this task: `pnpm exec vitest run scripts/validate-cp2-e
 
 CP2 continuation: review the [dated inventory and decision preparation](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md). No actual owner/team decision is recorded. The next requested manual fact is the owner's actual overview `/` review result (date, viewport/input, observations and retest); do not infer it from the prior automated pass. Primary-research occurrence, consent-safe results and any subsequent instructor reply remain Unknown until supplied. Keep all existing evidence review statuses pending.
 
-For the newest code, resume `codex/exe-web-app-m11c-proof-review` from a clean checkout. Follow [M11C local integration instructions](M11C_PROOF_REVIEW_AND_WORKFLOW.md). M11C.1 automated verification, both isolated browser suites and `pnpm test:e2e:local` passed in the current run. The next action is manual owner/accessibility and export-fidelity review; additional existing-flow fixes should follow actual findings. CP2 and the release decision remain open.
+For the newest code, resume `codex/exe-web-app-m12-landing-auth` from a clean checkout. Use the M12 section below for the exact implementation, tests, pending Supabase browser acceptance, and owner-review limits. Reuse the existing local Supabase stack; do not start duplicate containers. CP2 and the release decision remain open.
 
 M10.6 adds `pnpm review:verify` before the owner session, followed only on success by `pnpm dev`. Complete the actual M10.2 checklist using the fictional DOCX and record actual results. Reuse the existing local stack. Verification does not approve manual results, privacy, CP2 evidence, M11 selection, merge, or deployment. See `M10_6_REVIEW_VERIFY.md` and `M10_6_REVIEW_VERIFY_ACCEPTANCE.md` for results and limitations.
 
@@ -444,3 +452,16 @@ M10.6 adds `pnpm review:verify` before the owner session, followed only on succe
 **First owner activity to record — M7 desktop overview review:** Using fictional data only, open `/` in a desktop browser. Record the actual review date, browser/version, viewport width and height, route, pointer/keyboard actions actually tried, observed issues and outcomes, and any retest result. Do not mark a review complete from this instruction alone. After the owner supplies one activity’s actual results, update the report and proceed to the next review item.
 
 **Remaining gate:** M7/M10.2 and M11A–M11C manual usability/accessibility/export reviews, actual CP2 owner/team source review, primary research if performed, limitations/bias discussion, hypothesis classification, and product-direction decision remain pending or Unknown as specified in the evidence records. No feature is selected. The next feature requires a recorded evidence-based decision and separate explicit build approval.
+
+
+## M12 — Public landing and Supabase account access — 2026-10-05
+
+**Status:** Engineering implementation and production build complete on feature branch `codex/exe-web-app-m12-landing-auth`; manual real-local-Supabase auth acceptance is pending. **Exact base:** M11C review branch commit `65583406b3bc177cc4ed215df1df98900d83fa87`. **M12 implementation commit:** `0d9dc84b9695c7a71d5f917c14bf1424b0c48348`. The M12 branch preserves the remote M11C.1 changes and does not merge to `main`.
+
+**Owner feedback recorded (partial):** On 2026-10-05 the owner described the shown experience as “quite okay” but “too bare-bones,” and requested a landing page with working login/sign-up, backend priority, and visual polish later. The exact route, browser/version, viewport, keyboard actions, specific issues, and retest results were not supplied and remain Unknown. This is partial feedback; it does not complete the M7/M10.2/M11 manual owner, accessibility, or release checklist.
+
+**Delivered:** The public `/` page explains the current CV-to-target-role workflow, uses fictional example findings and bounded product claims, and links to `/sign-in` and `/sign-up`. Dedicated account forms use Supabase email/password Auth, accessible validation, password confirmation, generic failure messages, and non-enumerating confirmation messaging. The PKCE callback exchanges confirmation codes server-side, redirects only to fixed same-origin destinations, and sets no-store/no-referrer headers. Next.js 16 Proxy refreshes cookie sessions with `@supabase/ssr` and `getClaims`; it does not grant authorization, and existing server routes retain their user/owner checks. `.env.example` documents local public-only configuration and is explicitly unignored. Local Supabase redirects include localhost callback paths. No new tables, migrations, service-role key, custom password storage, pricing, or external AI were introduced.
+
+**Checks run and results:** `node scripts/review-preflight.mjs` passed using local-only placeholder settings; no configuration values were printed. ESLint passed. `tsc --noEmit` passed. The M12-focused Vitest run passed 25 tests across five files. The wider run passed 257 tests across 40 files, excluding the existing `scripts/cp2-research.test.mjs`; isolated attempts to run that unrelated file did not terminate in this sandbox and were stopped, so that file is not reported as passed. `NEXT_TELEMETRY_DISABLED=1 node node_modules/next/dist/bin/next build` passed after merging the latest M11C branch CSS with the M12 styles; routes `/`, `/sign-in`, `/sign-up`, and `/auth/callback` were included. `git diff --check` passed.
+
+**Not performed:** Actual Supabase account creation/sign-in, session persistence, or email confirmation in a browser; manual desktop/mobile/keyboard/screen-reader review; hosted email delivery or production redirect allow-list configuration; CP2 evidence collection/review; live deployment. The build sandbox had placeholder local Supabase settings and was not connected to the owner's running Supabase instance. Use the existing local stack and synthetic account only for the next browser acceptance. M12 is not release approval; no merge or deployment occurred.
