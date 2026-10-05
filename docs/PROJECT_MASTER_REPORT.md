@@ -431,3 +431,16 @@ M10.6 adds `pnpm review:verify` before the owner session, followed only on succe
 - [Decision log](DECISIONS.md)
 - [Course checkpoint tracker](CHECKPOINT_TRACKER.md)
 - [Phase prompts](PHASE_PROMPTS.md)
+
+
+## Owner-approved review and CP2 closeout — 2026-10-05
+
+**Status:** Stage approved by the project owner on 2026-10-05; review preparation started. This approval is for owner review and CP2 evidence closeout. It does not select or authorize a new app feature, classify evidence as approved, authorize a merge, or authorize deployment/release.
+
+**Starting references:** Review branch `codex/exe-web-app-m11c-proof-review` at `f082baf68adc5018832adccb979254dba76055de`; `main` at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`. The existing CP2 reconciliation records 9 collected source rows, 0 owner-reviewed, and 9 pending/not-reviewed. Its prior validator result is historical and was not rerun for this kickoff.
+
+**Kickoff work completed:** Rechecked the GitHub branch and main references and read the master report, M11C acceptance record, CP2 evidence register, and CP2 gate reconciliation. No actual manual owner-review results or primary-research results were supplied in those records. Their occurrence outside the records remains Unknown. No app/browser test, interview, survey, expert contact, instructor contact, or evidence review was performed for this kickoff.
+
+**First owner activity to record — M7 desktop overview review:** Using fictional data only, open `/` in a desktop browser. Record the actual review date, browser/version, viewport width and height, route, pointer/keyboard actions actually tried, observed issues and outcomes, and any retest result. Do not mark a review complete from this instruction alone. After the owner supplies one activity’s actual results, update the report and proceed to the next review item.
+
+**Remaining gate:** M7/M10.2 and M11A–M11C manual usability/accessibility/export reviews, actual CP2 owner/team source review, primary research if performed, limitations/bias discussion, hypothesis classification, and product-direction decision remain pending or Unknown as specified in the evidence records. No feature is selected. The next feature requires a recorded evidence-based decision and separate explicit build approval.
