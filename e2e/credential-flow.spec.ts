@@ -160,7 +160,8 @@ test("synthetic local credential approval, acceptance, exports and denial bounda
         check(response.ok(), `CLAIM_SUBMIT_HTTP_${response.status()}`);
       });
       await test.step("OWNER_CLAIM_SUBMITTED_STATE", async () => {
-        try { await ownerPage.getByText("Waiting for expert", { exact: true }).waitFor(); }
+        const claimCard = ownerPage.locator("article.opportunity-card").filter({ has: ownerPage.getByRole("heading", { name: skill, exact: true }) });
+        try { await claimCard.locator("p").filter({ hasText: /^Waiting for expert$/ }).waitFor(); }
         catch {
           const response = await ownerPage.context().request.get("/api/credential-versions", { maxRedirects: 0 });
           if (!response.ok()) throw new Error(`CLAIM_REFRESH_HTTP_${response.status()}`);
