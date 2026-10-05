@@ -30,6 +30,10 @@ The harness accepts only these local public settings in root .env.local:
 
 The site URL must be an HTTP loopback origin allowed by the local Supabase Auth redirect list. The repository's local config uses 127.0.0.1:3000 for the email callback while the isolated browser app defaults to 127.0.0.1:3111; local email confirmations are disabled so automated sign-up returns a test session. No private Supabase key is allowed. Values are never printed.
 
+## Engineering verification
+
+GitHub Quality passed for implementation commit 5efd0f7e9fef5f4905eccecf08d292d98bab62d7 in [run 37329809259](https://github.com/EnzoReacher/EXE/actions/runs/37329809259): 321 tests across 41 files, lint, typecheck (including the new Playwright TypeScript), production build, required script syntax checks, collected-mode CP2 validation, and git diff --check. CI does not run the local browser journey because it requires the owner's existing local Supabase stack. CP2 validation reports 9 collected source rows, 0 owner-reviewed and 9 pending; this does not approve evidence or claims.
+
 ## Journeys covered
 
 - The landing page renders its main message and fictional example; sign-in and sign-up links reach the correct pages.
