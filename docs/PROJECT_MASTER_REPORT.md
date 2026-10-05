@@ -2,7 +2,7 @@
 
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
-**Last updated:** 2026-10-04
+**Last updated:** 2026-10-05
 **Working branch:** `codex/exe-web-app-m11c-proof-review`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
@@ -14,12 +14,14 @@ This is the single working report for the web app. It combines the product map, 
 
 M11C is implemented from exact published M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. Code and isolated browser rendering checks pass; this branch still needs the genuine local Supabase journey and manual owner review. Historical entries below retain what was known on their dates. Owner-directed M11A–M11C prototypes are authorized; broader evidence-selected product expansion and market claims remain gated by CP2.
 
+Owner rerun on 2026-10-05: `pnpm review:verify` passed all five checks (including 300 tests and production build); `pnpm test:proof-preview` and `pnpm test:workspace-ui` passed. `pnpm dlx supabase migration list --local` showed local/remote versions matching for migrations `20261001`–`20261007`. `pnpm run test:e2e:local` passed sign-in, workspace, form validation, CV upload and proof upload, then failed later in the combined owner flow; synthetic accounts and private objects were cleaned up. The runner currently mislabels the failure as `OWNER_PROOF_UPLOAD` and points to the enclosing test-step line, so the exact post-upload action is unknown. A diagnostic-only test change now reports claim-draft creation, submission and responsive-layout steps separately. This is not a product fix or acceptance pass.
+
 | Track | Current status | Evidence / next action |
 |---|---|---|
 | Core CV → JD → report → roadmap → grounded draft → saved work | Implemented; prior fictional local policy acceptance passed | Manual owner review still pending |
-| Private proof → expert review → immutable CV version → owner acceptance → export | Implemented in M11A/B; M11B.1 genuine synthetic browser journey passed on its baseline | Rerun genuine browser acceptance on M11C |
-| M11C proof/workflow improvements | Code/rendering checks passed; integration pending | 300 tests/37 files, lint/typecheck/build; protected PNG/JPG and fixture-backed production UI at five widths |
-| Local owner-review verification in this ChatGPT environment | Blocked at configuration | No local Supabase configuration/stack available; do not substitute fake settings or count isolated fixtures as integration |
+| Private proof → expert review → immutable CV version → owner acceptance → export | Implemented in M11A/B; M11B.1 genuine synthetic browser journey passed on its baseline | M11C local run reached proof upload but failed later in the owner flow; rerun with the new diagnostic checkpoints |
+| M11C proof/workflow improvements | Code/rendering checks pass; local integration partially exercised and still failing | 300 tests/37 files; owner verification/build and two isolated browser suites passed; owner local end-to-end journey failed after uploads |
+| Local owner-review verification in this ChatGPT environment | Blocked at configuration | No local Supabase configuration/stack available; owner supplied a separate local run with a remaining browser failure |
 | CP2 / target segment / pricing / competitiveness | Evidence pending | Templates/validator are prepared; no actual evidence or reviewed decision supplied |
 | Real experts, privacy/backup/retention and real data | Approval pending | Team must review qualification, role/revocation/conflict and data-handling policies |
 | Main / deployment / release | Owner decision pending | Feature-branch source review only; no PR, main merge or deployment |
@@ -156,7 +158,7 @@ flowchart TD
 | **M11A — Credential-gated CV versions** | Private proof, assigned expert, immutable candidates and explicit owner acceptance | Published; original local policy/code gate passed | `bc24377d57d503a21059ee0a467ede23252f289a`; role/privacy/manual review pending. |
 | **M11B — Accepted CV exports** | DOCX/TXT and private browser print; cumulative provenance | Published; code gate passed | `64b0dc9e0c138ae31ed0eda102a783f0db9137b5`; external-editor and print-pagination review pending. |
 | **M11B.1 — Genuine local browser acceptance** | Real local synthetic authentication, upload/review/accept/export/withdrawal and denials | Published; baseline journey and cleanup passed | `e15d9584fa67230024ed21cc6258f29a1353726b`; 281 historical tests; no human approval or CP2 evidence. |
-| **M11C — Proof review and workflow usability** | Controlled raster proof view, fresh expert form, source-aware history, guidance and recovery | Implemented; isolated checks passed, integration pending | 300 tests/37 files; Chromium rendering/fixture UI at five widths. Review preflight/full local journey blocked here by unavailable local configuration. See `M11C_ACCEPTANCE.md`. |
+| **M11C — Proof review and workflow usability** | Controlled raster proof view, fresh expert form, source-aware history, guidance and recovery | Product implementation published; local owner acceptance failed after uploads; diagnostics split into smaller test steps | Owner reported verification/build and isolated proof/UI suites passed; local end-to-end run reached proof upload and later failed; cleanup passed. See `M11C_ACCEPTANCE.md`. |
 
 ## M10.3 research operations status — 2026-10-02
 

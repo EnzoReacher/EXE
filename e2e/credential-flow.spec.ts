@@ -142,21 +142,25 @@ test("synthetic local credential approval, acceptance, exports and denial bounda
         await keyClick(ownerPage.getByRole("button", { name: "Upload credential privately" }));
         await ownerPage.getByRole("button", { name: `Withdraw and delete ${proofName}` }).waitFor();
       });
-      const data = await json(ownerPage, "/api/credential-versions");
-      check(data.cvs.length === 1 && data.credentials.length === 1, "SYNTHETIC_UPLOADS_REQUIRED");
-      await select(ownerPage.getByLabel("Source CV (required)"), data.cvs[0].id);
-      await select(ownerPage.getByLabel("Certificate or degree (required)"), data.credentials[0].id);
-      await select(ownerPage.getByLabel("Team-approved expert (required)"), expert.profile!);
-      await type(ownerPage.getByLabel("Skill label (2–80 characters)"), skill);
-      await type(ownerPage.getByLabel("Exact proposed CV wording (2–300 characters)"), wording);
-      await keyClick(ownerPage.getByRole("button", { name: "Save draft claim" }));
-      await ownerPage.getByRole("button", { name: `Submit ${skill} for expert review` }).waitFor();
-      await keyClick(ownerPage.getByRole("button", { name: `Submit ${skill} for expert review` }));
-      await ownerPage.getByText("Waiting for expert", { exact: true }).waitFor();
-      const submitted = await json(ownerPage, "/api/credential-versions"); claimId = submitted.claims[0].id;
-      check(submitted.claims[0].state === "submitted" && submitted.versions.length === 0, "SUBMISSION_MUST_NOT_ADD_VERSION");
-      check(await ownerPage.getByRole("button", { name: /Download editable DOCX/ }).count() === 0, "PENDING_MUST_NOT_EXPORT");
-      await noOverflow(ownerPage);
+      await test.step("OWNER_CLAIM_DRAFT_CREATION", async () => {
+        const data = await json(ownerPage, "/api/credential-versions");
+        check(data.cvs.length === 1 && data.credentials.length === 1, "SYNTHETIC_UPLOADS_REQUIRED");
+        await select(ownerPage.getByLabel("Source CV (required)"), data.cvs[0].id);
+        await select(ownerPage.getByLabel("Certificate or degree (required)"), data.credentials[0].id);
+        await select(ownerPage.getByLabel("Team-approved expert (required)"), expert.profile!);
+        await type(ownerPage.getByLabel("Skill label (2–80 characters)"), skill);
+        await type(ownerPage.getByLabel("Exact proposed CV wording (2–300 characters)"), wording);
+        await keyClick(ownerPage.getByRole("button", { name: "Save draft claim" }));
+        await ownerPage.getByRole("button", { name: `Submit ${skill} for expert review` }).waitFor();
+      });
+      await test.step("OWNER_CLAIM_SUBMISSION", async () => {
+        await keyClick(ownerPage.getByRole("button", { name: `Submit ${skill} for expert review` }));
+        await ownerPage.getByText("Waiting for expert", { exact: true }).waitFor();
+        const submitted = await json(ownerPage, "/api/credential-versions"); claimId = submitted.claims[0].id;
+        check(submitted.claims[0].state === "submitted" && submitted.versions.length === 0, "SUBMISSION_MUST_NOT_ADD_VERSION");
+        check(await ownerPage.getByRole("button", { name: /Download editable DOCX/ }).count() === 0, "PENDING_MUST_NOT_EXPORT");
+      });
+      await test.step("OWNER_WORKSPACE_RESPONSIVE_LAYOUT", () => noOverflow(ownerPage));
     });
     await test.step("NONEXPERT_UNASSIGNED_AND_ANONYMOUS_DENIALS", async () => {
       const ordinaryPage = await pageFor(ordinary); await ordinaryPage.goto("/expert/credential-reviews");
