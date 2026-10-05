@@ -41,6 +41,12 @@ This file is a live checklist. An unchecked item is not complete. Do not mark an
 
 ## Exact inputs required next
 
+### Reconciliation — 2026-10-05
+
+The [evidence inventory and decision-preparation packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md) confirms 9 collected register rows and 0 owner-reviewed. Source-log CM-009 maps to register EDU-001; not an extra tenth item. Actual primary-research results and recent manual owner observations were not found; activity details outside this checkout remain Unknown. No historical result or source review status was replaced.
+
+Technical attempts to close existing gaps: Jobie timed out, Jobscan pricing had no readable response and desktop browsing was unavailable, and the MOET PDF URL returned a Page not found page. Current checkout/price and direct PDF verification remain unavailable. Both validators passed structural checks, not source accuracy or approval. User-friendliness and affordability remain hypotheses; decision and new-feature gates remain pending. No outreach, primary collection, owner/team decision or feature implementation occurred.
+
 M10.3 prepares local operations only: use `M10_3_OWNER_HANDOFF.md` and the survey/source schemas to manually anonymize, validate and summarize actual owner-supplied evidence before safe register entry. Private drafts go in ignored `research/private/` or `docs/evidence/private/`; identities/raw files stay separate. The 2026-10-02 review found no research had been collected or entered at that time; the subsequent 2026-10-05 public-source activity is recorded separately above. CP2 remains **Evidence collection pending**. Target segment/job family remain open, price/competitor claims blocked and M11 blocked. M7/M10.2 fictional owner browser reviews remain pending. No merge or deployment occurred.
 
 1. Documented fictional-data results for every M7/M5 owner review item above.

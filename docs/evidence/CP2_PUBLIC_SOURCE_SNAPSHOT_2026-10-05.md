@@ -45,3 +45,15 @@ For the CP2 concept test, show a consistent fictional-data walkthrough and ask p
 - Confirm the instructor's interpretation of “hub,” “5 target cus, 5 suppliers,” participant overlap, and the survey-versus-two-experts option before recruitment or CP2 completion.
 - No target segment, job family, price, feature selection, or public competitive claim is approved by this snapshot.
 - No interviews, survey, expert interviews, or product walkthroughs were conducted as part of this activity.
+
+## Technical retrieval follow-up — 2026-10-05
+
+This follow-up targeted existing gaps; it is not an owner/team source review. Historical observations and pending review statuses are preserved. No search snippets were used as current checkout evidence, accounts created, purchases made or contacts sent. Which sources the owner/team will adopt for comparison remains Unknown.
+
+| Source / exact URL | Retrieval outcome | What remains unverified |
+|---|---|---|
+| CM-002 — https://jobie.io.vn/ | Direct web retrieval timed out (30-second timeout). | Live credit prices, expiry, tax, promotions, eligibility and checkout remain Unknown. Earlier indexed prices are provisional. |
+| CM-007 — https://www.jobscan.co/pricing | Direct web retrieval returned no readable content. A desktop-browser attempt was blocked because no browser is connected to this session. | Plan, currency, cadence, region, tax, promotions and checkout remain Unknown. No current redirect or price inferred from the empty response. |
+| CM-009 / EDU-001 — https://moet.gov.vn/content/tintuc/Lists/News/Attachments/10555/so-lieu-chung-dh-23-24.pdf | Direct retrieval returned an HTML page displaying “404” / “Page not found” and a Vietnamese unavailable-content message rather than the statistics PDF. This is page content, not a verified HTTP status. | Original document/totals/exclusions and publication date remain directly unverified here. Historical indexed observations are not current PDF verification. |
+
+No new collected-register rows were created from failed retrievals. Owner-selected official pricing/checkout inspection and source adoption remain pending. See [inventory and decision preparation](CP2_GATE_RECONCILIATION_2026-10-05.md) for comparability and primary-research gaps.

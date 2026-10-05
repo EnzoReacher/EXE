@@ -11,6 +11,10 @@ No product-direction decision is permitted at this time. No real evidence IDs, s
 
 ## Evidence basis
 
+### Preparation update — 2026-10-05 (not an owner/team decision)
+
+The [reconciliation packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md) inventories 9 public-source register rows (CM-001–CM-008 plus EDU-001, mapped to source CM-009), with 0 owner-reviewed. Collected-register and source-log validators passed structural checks; primary-research and actual manual owner results are not recorded. User-friendliness for CV-based job seekers and affordability are owner-stated hypotheses only. Retrieval follow-ups did not verify Jobie pricing, Jobscan pricing or the original MOET PDF. Actual-review fields and direction choices below remain unfilled until supplied by the owner/team. No feature is authorized.
+
 - Review date:
 - Reviewer(s):
 - Evidence IDs reviewed:

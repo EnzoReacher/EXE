@@ -34,6 +34,16 @@ Use one entry per completed research activity. Replace the blank template only w
 - Decision / next action: retain CP2 as pending; review all nine source records, send the clarification only if the owner chooses, record the actual reply, then plan evidence collection after course requirements are confirmed.
 - Owner/team review status: pending. No instructor contact or participant research occurred.
 
+## Repository reconciliation and source retrieval follow-up — 2026-10-05
+
+- Activity: reconciled register/source IDs, manual-review records, course requirements and decision gates; attempted direct retrieval of existing missing Jobie/Jobscan/MOET sources. Not primary research, manual app review, an owner/team evidence-review meeting or instructor contact.
+- IDs: CM-001–CM-009; CM-009 maps to register EDU-001. No new evidence row or participant ID assigned.
+- Observation: validators reported 9 register rows and 0 owner-reviewed. No actual interview/expert/survey aggregates or recent manual outcomes recorded. Jobie timed out; Jobscan pricing yielded no readable content; MOET URL returned a Page not found page. Desktop browser unavailable.
+- Interpretation: no approved hypothesis conclusion. The packet identifies insufficient evidence for segment, understanding, trust, effort, return/payment, affordability and usability prioritization; preparatory gap assessments, not owner classifications.
+- Limitations: actual unrecorded owner/participant activities Unknown; source gaps remain; no checkout, account, product trial or price comparison performed.
+- Decision: Not performed. Owner/team reviewer/date/approval Unknown; source adoption and product direction pending. No recruitment/messages/feature implementation.
+- Packet: `docs/evidence/CP2_GATE_RECONCILIATION_2026-10-05.md`; retrieval outcomes appended to the historical source snapshot.
+
 ## Target-user interview entry
 
 - Evidence ID: TU-___
