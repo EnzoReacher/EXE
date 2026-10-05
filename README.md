@@ -22,7 +22,7 @@ The repository uses a single modular web app with Next.js, TypeScript, and Supab
 
 ### Local synthetic browser acceptance (M11B.1)
 
-Run `pnpm test:e2e:local` for the separate real-browser credential/CV-export journey. Requires the **already-running local Supabase stack**, public-only loopback settings, existing migrations, and cached compatible Chromium; it never downloads browsers or manages Supabase/Docker. It owns a temporary Next.js server and cleans up only current-run fictional accounts/objects. See [setup and boundaries](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE.md) and [actual results](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE_ACCEPTANCE.md). Automated checks do not complete M11A manual owner review, M11B print-pagination/editor review, CP2, or merge/deployment approval.
+Run pnpm test:e2e:local for the separate real-browser credential/CV-export and M13 landing/account journeys. Requires the already-running local Supabase stack, public-only loopback settings, existing migrations, and cached compatible Chromium; it never downloads browsers or manages Supabase/Docker. It owns a temporary Next.js server and cleans up only current-run synthetic accounts/objects. See [setup and boundaries](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE.md), [actual M11B.1 results](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE_ACCEPTANCE.md), and [M13 auth acceptance](docs/M13_AUTH_ACCEPTANCE.md). Automated checks do not complete manual owner/accessibility review, CP2, or merge/deployment approval.
 
 ## Run the local prototype
 
@@ -41,7 +41,7 @@ Before any hosted use, set `NEXT_PUBLIC_SITE_URL` to the canonical HTTPS site or
 
 ### Fictional-data owner-review verification
 
-For a local owner review, configure only the local Supabase public URL and publishable key in `.env.local`; never put a service-role key, database URL, private credential, real CV, or hosted environment value there. Then run:
+For a local owner review and browser acceptance, configure the local Supabase public URL and publishable key, plus the optional loopback NEXT_PUBLIC_SITE_URL, in .env.local; never put a service-role key, database URL, private credential, real CV, or hosted environment value there. Then run:
 
 ```bash
 pnpm review:verify
@@ -64,11 +64,11 @@ Use only the fictional DOCX in `docs/demo/fixtures/` and complete the actual [M1
 
 ## Current project state
 
-### M11C private proof and credential workflow
+### Current engineering stage: M13 landing and account acceptance
 
-Current review branch: `codex/exe-web-app-m11c-proof-review`, from exact M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. Protected JPG/PNG proof pages, PDF-download guidance, per-claim expert form reset, source-CV filters/history labels, next-step guidance, new-claim preparation and safe stale/deletion/refresh recovery are implemented. No database/RLS/Storage or authority redesign. Code checks passed: 300 tests/37 files, lint/typecheck/build; isolated Chromium proof rendering and fixture-backed production UI checks passed. Genuine local Supabase acceptance is pending because this build environment lacks local configuration/stack. See the [M11C guide](docs/M11C_PROOF_REVIEW_AND_WORKFLOW.md), [actual results](docs/M11C_ACCEPTANCE.md) and [single master report](docs/PROJECT_MASTER_REPORT.md).
+M12 added the public landing page, Supabase sign-up/sign-in, PKCE confirmation callback and SSR session refresh. M13 extends the existing local browser harness to exercise real local sign-up/sign-in, session persistence, generic invalid-credential messages, responsive entry pages and anonymous API denial. The feature branch is `codex/exe-web-app-m13-auth-browser-acceptance`; GitHub quality verification and the owner's local Supabase run are pending. No database migration, merge or deployment is included. See the [M13 acceptance steps](docs/M13_AUTH_ACCEPTANCE.md) and [single master report](docs/PROJECT_MASTER_REPORT.md).
 
-Additional optional browser checks use installed Chromium and no Supabase: `pnpm test:proof-preview`; after a fresh `pnpm build`, `pnpm test:workspace-ui`. They are separate from ordinary verification/CI and do not replace genuine-authentication acceptance or owner review. Reuse the existing local stack for `pnpm review:verify` and `pnpm test:e2e:local`; do not create duplicate containers. Manual printing/editor/accessibility, role/privacy/retention and CP2 gates remain pending. No merge or deployment.
+The earlier M11C proof/review work and M11B.1 local acceptance remain documented in the [M11C guide](docs/M11C_PROOF_REVIEW_AND_WORKFLOW.md), [M11C results](docs/M11C_ACCEPTANCE.md), and [M11B.1 harness guide](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE.md). Optional isolated Chromium checks use `pnpm test:proof-preview` and, after a fresh `pnpm build`, `pnpm test:workspace-ui`. Reuse the existing local stack; do not create duplicate containers. Manual owner/accessibility/print review, CP2, privacy/retention and release approval remain pending. No merge or deployment.
 
 ### M11B accepted CV export prototype
 

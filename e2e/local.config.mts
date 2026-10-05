@@ -5,7 +5,7 @@ if (!process.env.E2E_TEMP || !/^\/tmp\/opencode\/exe-browser-[A-Za-z0-9]+$/.test
 const baseURL = loopbackOrigin(process.env.E2E_APP_URL);
 loopbackOrigin(process.env.E2E_SUPABASE_URL);
 export default defineConfig({
-  testDir: ".", testMatch: "credential-flow.spec.ts", workers: 1, retries: 0, timeout: 180000,
+  testDir: ".", testMatch: ["credential-flow.spec.ts", "auth-flow.spec.ts"], workers: 1, retries: 0, timeout: 180000,
   outputDir: `${process.env.E2E_TEMP}/results`, preserveOutput: "never",
   reporter: [["./safe-reporter.ts"]],
   use: { baseURL, browserName: "chromium", headless: true, screenshot: "off", trace: "off", video: "off",

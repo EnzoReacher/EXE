@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { chromium } from "@playwright/test";
 import { parseEnv, verifyReviewPreflight } from "./review-preflight.mjs";
-import { loopbackOrigin, publicKeyOnly, localFetch, provisionFixtures } from "./e2e-local-support.mjs";
+import { loopbackOrigin, publicLocalSettings, localFetch, provisionFixtures } from "./e2e-local-support.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 let phase = "configuration";
@@ -28,9 +28,7 @@ async function main() {
     const config = path.join(root, ".env.local");
     if (verifyReviewPreflight(config, root).code) throw new Error("LOCAL_PREFLIGHT_BLOCKED");
     const settings = parseEnv(readFileSync(config, "utf8"));
-    if (Object.keys(settings).some((key) => !["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"].includes(key))) throw new Error("ONLY_PUBLIC_LOCAL_SETTINGS_ALLOWED");
-    const supabase = loopbackOrigin(settings.NEXT_PUBLIC_SUPABASE_URL);
-    const key = publicKeyOnly(settings.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+    const { supabase, key, siteUrl } = publicLocalSettings(settings);
     if (app === supabase) throw new Error("SEPARATE_APPLICATION_PORT_REQUIRED");
     for (const name of [".env", ".env.development", ".env.development.local"]) {
       if (existsSync(path.join(root, name))) throw new Error("ADDITIONAL_NEXT_ENV_FILE_BLOCKED");
@@ -61,7 +59,7 @@ async function main() {
     const provisioned = await provisionFixtures(supabase, key); cleanFixtures = provisioned.cleanup;
     if (interrupted) throw new Error("INTERRUPTED");
     const childEnv = { PATH: process.env.PATH, HOME: process.env.HOME, TMPDIR: temporary, NODE_ENV: "development", NEXT_TELEMETRY_DISABLED: "1",
-      NEXT_PUBLIC_SUPABASE_URL: supabase, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: key };
+      NEXT_PUBLIC_SUPABASE_URL: supabase, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: key, NEXT_PUBLIC_SITE_URL: siteUrl };
     phase = "owned Next.js server";
     server = spawn(process.execPath, [path.join(serverRoot, "node_modules/next/dist/bin/next"), "dev", "--hostname", host, "--port", String(port)], { cwd: serverRoot, env: childEnv, detached: true, stdio: "ignore" });
     let serverSpawnFailed = false;

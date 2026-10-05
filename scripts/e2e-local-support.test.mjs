@@ -1,6 +1,35 @@
 import { describe, expect, it, vi } from "vitest";
-import { loopbackOrigin, publicKeyOnly, localFetch } from "./e2e-local-support.mjs";
+import { loopbackOrigin, publicKeyOnly, localFetch, publicLocalSettings } from "./e2e-local-support.mjs";
 describe("local browser harness network and credential guards", () => {
+  it("accepts public local Supabase settings and a loopback auth origin", () => {
+    expect(publicLocalSettings({
+      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_synthetic-placeholder",
+      NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:3000",
+    })).toEqual({
+      supabase: "http://127.0.0.1:54321",
+      key: "sb_publishable_synthetic-placeholder",
+      siteUrl: "http://127.0.0.1:3000",
+    });
+  });
+  it("defaults the callback origin to the repository local site URL", () => {
+    expect(publicLocalSettings({
+      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_synthetic-placeholder",
+    }).siteUrl).toBe("http://127.0.0.1:3000");
+  });
+  it("rejects a hosted callback URL and extra settings without echoing values", () => {
+    expect(() => publicLocalSettings({
+      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_synthetic-placeholder",
+      NEXT_PUBLIC_SITE_URL: "https://hosted.example",
+    })).toThrow("LOOPBACK_URL_REQUIRED");
+    expect(() => publicLocalSettings({
+      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_synthetic-placeholder",
+      SUPABASE_SERVICE_ROLE_KEY: "must-never-be-printed",
+    })).toThrow("ONLY_PUBLIC_LOCAL_SETTINGS_ALLOWED");
+  });
   it.each(["http://127.0.0.1:3111", "http://localhost:3111", "http://[::1]:3111"])("permits explicit loopback origin %s", (url) => {
     expect(loopbackOrigin(url)).toBe(url);
   });

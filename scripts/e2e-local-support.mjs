@@ -17,6 +17,14 @@ export function publicKeyOnly(key) {
   } catch { /* No values or decoder errors escape. */ }
   throw new Error("PUBLIC_KEY_REQUIRED");
 }
+export function publicLocalSettings(settings) {
+  const allowed = new Set(["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "NEXT_PUBLIC_SITE_URL"]);
+  if (Object.keys(settings).some((key) => !allowed.has(key))) throw new Error("ONLY_PUBLIC_LOCAL_SETTINGS_ALLOWED");
+  const supabase = loopbackOrigin(settings.NEXT_PUBLIC_SUPABASE_URL ?? "");
+  const key = publicKeyOnly(settings.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+  const siteUrl = loopbackOrigin(settings.NEXT_PUBLIC_SITE_URL || "http://127.0.0.1:3000");
+  return { supabase, key, siteUrl };
+}
 export function localFetch(origins) {
   return (input, init) => {
     const url = new URL(typeof input === "string" || input instanceof URL ? input : input.url);
@@ -35,7 +43,8 @@ function admin(sql) {
 export async function provisionFixtures(url, key) {
   loopbackOrigin(url); publicKeyOnly(key);
   admin("select 1;");
-  const run = `m11b1-${randomUUID()}`;
+  const run = "m13-auth-" + randomUUID();
+  const authCandidate = { email: run + "-signup@example.invalid", password: "Synthetic-only-" + randomUUID() };
   const actors = [];
   const cleanup = async () => {
     let failed = false;
@@ -70,9 +79,14 @@ export async function provisionFixtures(url, key) {
       }
       catch { failed = true; }
     }
+    try {
+      admin("delete from auth.users where email='" + authCandidate.email + "' and email like 'm13-auth-%@example.invalid';");
+      if (admin("select count(*) from auth.users where email='" + authCandidate.email + "' and email like 'm13-auth-%@example.invalid';") !== "0") failed = true;
+    } catch { failed = true; }
     if (failed) throw new Error("FIXTURE_CLEANUP_FAILED");
   };
   try {
+    if (admin("select count(*) from auth.users where email='" + authCandidate.email + "' and email like 'm13-auth-%@example.invalid';") !== "0") throw new Error("AUTH_CANDIDATE_ADDRESS_COLLISION");
     for (const label of ["owner", "expert", "ordinary", "unassigned"]) {
       const email = `${run}-${label}@example.invalid`;
       const password = `Synthetic-only-${randomUUID()}`;
@@ -90,6 +104,6 @@ export async function provisionFixtures(url, key) {
       actor.name = `Synthetic browser ${actor.label} ${run.slice(-8)}`;
       admin(`insert into public.team_expert_profiles(id,reviewer_id,display_name,active,approval_status,approved_at) values ('${actor.profile}','${actor.id}','${actor.name}',true,'approved',now());`);
     }
-    return { fixtures: { run, actors: actors.map((actor) => ({ id: actor.id, email: actor.email, password: actor.password, label: actor.label, profile: actor.profile, name: actor.name })) }, cleanup };
+    return { fixtures: { run, actors: actors.map((actor) => ({ id: actor.id, email: actor.email, password: actor.password, label: actor.label, profile: actor.profile, name: actor.name })), authCandidate }, cleanup };
   } catch (error) { await cleanup(); throw error; }
 }
