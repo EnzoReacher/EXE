@@ -8,9 +8,11 @@
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
 
-## Current status — M11C
+## Current status — M11C.1
 
-**Published implementation:** `7738159434cb732ca94095d6a5db4b4e388a9eac`. Latest reviewed branch head: `b7807e5c8cd1711c84fff2354923ac6eb5921629`. `main` remains at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`; no merge or deployment occurred.
+**Original published M11C implementation:** `7738159434cb732ca94095d6a5db4b4e388a9eac`. Prior synthetic acceptance head: `b7807e5c8cd1711c84fff2354923ac6eb5921629`. `main` remains at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`; no merge or deployment occurred.
+
+**M11C.1 verification — 2026-10-05:** Clean checkout fetched and fast-forwarded on `codex/exe-web-app-m11c-proof-review` to exact starting SHA `4117575126f3c2163582d5bf6a2fb20bc1f641c9`. This stage hardens existing behavior: invalidate cached history/candidate controls after confirmed withdrawal with pending file deletion; accurately mark invalid required proposal fields; associate expert proof acknowledgement with its validation error. Required install, five-step verification (301 tests/37 files/build), proof-preview, workspace UI, genuine synthetic local Supabase journey and cleanup, both CP2 validators, and whitespace checks passed. See the dated [M11C.1 acceptance record](M11C_ACCEPTANCE.md#m11c1--existing-flow-reliability-and-accessibility-hardening--2026-10-05) for exact commands, audit findings and limits. The tested code is the M11C.1 change set on this starting SHA; its publication commit is reported after commit/push. Manual owner review remains pending.
 
 M11C is implemented from exact published M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. On 2026-10-05 the owner reran the complete synthetic local Supabase browser journey at `b7807e5`; every browser step passed and run-scoped synthetic account/object cleanup passed. Manual owner/accessibility review and CP2 remain pending. Historical failures below are retained as run history. Owner-directed M11A–M11C prototypes are authorized; broader evidence-selected product expansion and market claims remain gated by CP2.
 
@@ -21,7 +23,7 @@ Owner reruns on 2026-10-05: `pnpm review:verify` passed all five checks (includi
 | Core CV → JD → report → roadmap → grounded draft → saved work | Implemented; prior fictional local policy acceptance passed | Manual owner review still pending |
 | Private proof → expert review → immutable CV version → owner acceptance → export | Implemented; owner synthetic local browser journey passed on `b7807e5` | All journey steps and fixture cleanup passed; manual usability/accessibility review remains pending |
 | M11C proof/workflow improvements | Implementation and local synthetic integration acceptance passed | 300 tests/37 files and owner verification/build passed; proof-preview, workspace UI, and full local Supabase journey passed |
-| Local owner-run verification | Passed on owner's existing local Supabase stack | Owner supplied successful migration check and full synthetic browser result; current execution environment itself has no local Supabase configuration |
+| Local automated verification | M11C.1 rerun passed on the existing local Supabase stack | Current run passed preflight, full verification, both isolated browser suites and genuine synthetic journey with cleanup; manual owner review remains pending |
 | CP2 / target segment / pricing / competitiveness | Evidence collection pending | Seven public vendor records plus two official national context sources (CM-001–CM-009) were recorded on 2026-10-05 in `docs/evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md`; owner/team review, course clarification, and primary research remain pending. A bilingual instructor clarification draft is prepared but not sent. No segment, price, differentiation, or product-direction decision is approved. |
 | Real experts, privacy/backup/retention and real data | Approval pending | Team must review qualification, role/revocation/conflict and data-handling policies |
 | Main / deployment / release | Owner decision pending | Feature-branch source review only; no PR, main merge or deployment |
@@ -331,7 +333,7 @@ Current priorities take precedence over the historical queue below.
 
 | Priority | Next work | Status / dependency |
 |---:|---|---|
-| 1 | M11C.1 genuine local integration | Rerun `pnpm review:verify` and `pnpm test:e2e:local` on the existing owner stack, then the new proof/UI rendering commands. Actual M11C local-stack result remains pending. |
+| 1 | M11C.1 existing-flow hardening and genuine local integration | Complete automated verification on 2026-10-05: 301 tests, build, both isolated browser suites and full synthetic local-stack journey/cleanup passed. Manual review remains pending; see `M11C_ACCEPTANCE.md`. |
 | 2 | Manual owner experience review | M7/M10.2/M11A checklists; two CV histories, fresh expert acknowledgements, withdrawal/recovery, desktop/mobile/keyboard and screen-reader review. Record only performed activities. |
 | 3 | Export fidelity review | Actual browser Print / Save as PDF pagination and opening DOCX in an external editor. |
 | 4 | Expert and data-handling policy | Approve qualification/enrollment/revocation/conflict rules, privacy, backup and retention before real users/documents. |
@@ -396,9 +398,11 @@ Current priorities take precedence over the historical queue below.
 | 2026-10-02 | M10.2 existing-experience hardening | Engineering checks passed; owner manual review pending | Seven current routes, shared keyboard/responsive/readability safeguards, truthful async behavior, safe fallback and narrow API fixes. 115 tests in 22 files and required quality checks passed; fictional local Supabase acceptance passed. Browser disconnected; owner checklist remains required. CP2 pending, M11 blocked, no claims or release authorization. |
 | 2026-10-02 | M10.5 local owner-review preflight | Engineering checks passed; owner browser review pending | Added a local-only configuration preflight that rejects hosted Supabase URLs and private settings without printing values, and confirms the fictional DOCX/checklist. Full tests passed: 179 tests in 24 files; lint, typecheck, build, direct synthetic checks, and diff check also passed. An initial sandbox-only child-process diagnostic was resolved by an outside-sandbox full rerun. No workflow/feature, CP2 evidence, M11 selection, merge, or deployment was added. |
 
+| 2026-10-05 | M11C.1 existing-flow reliability and accessibility hardening | Automated verification passed; manual owner review pending | From `4117575126f3c2163582d5bf6a2fb20bc1f641c9`: partial-deletion cache invalidation and accurate proposal/expert validation semantics; 301 tests/37 files, build, both isolated browser suites, genuine local-stack synthetic journey/cleanup and CP2 structural validators passed. CP2 remains open with 9 rows and 0 owner-reviewed. See `M11C_ACCEPTANCE.md`. |
+
 ## 12. How to resume
 
-For the newest code, resume `codex/exe-web-app-m11c-proof-review` from a clean checkout. Follow [M11C local integration instructions](M11C_PROOF_REVIEW_AND_WORKFLOW.md). The new isolated browser commands passed here but do not replace `pnpm test:e2e:local`, manual review or the release decision. M11C.1 is the next acceptance stage; additional engineering fixes should follow actual results.
+For the newest code, resume `codex/exe-web-app-m11c-proof-review` from a clean checkout. Follow [M11C local integration instructions](M11C_PROOF_REVIEW_AND_WORKFLOW.md). M11C.1 automated verification, both isolated browser suites and `pnpm test:e2e:local` passed in the current run. The next action is manual owner/accessibility and export-fidelity review; additional existing-flow fixes should follow actual findings. CP2 and the release decision remain open.
 
 M10.6 adds `pnpm review:verify` before the owner session, followed only on success by `pnpm dev`. Complete the actual M10.2 checklist using the fictional DOCX and record actual results. Reuse the existing local stack. Verification does not approve manual results, privacy, CP2 evidence, M11 selection, merge, or deployment. See `M10_6_REVIEW_VERIFY.md` and `M10_6_REVIEW_VERIFY_ACCEPTANCE.md` for results and limitations.
 

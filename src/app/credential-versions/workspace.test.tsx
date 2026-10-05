@@ -48,6 +48,31 @@ describe("owner credential forms", () => {
     await screen.findByText(/Private action confirmed/);
     expect(JSON.parse(fetchMock.mock.calls[2][1].body).action).toBe("accept");
   });
+  it("marks only invalid required proposal fields and clears their invalid state as they are corrected", async () => {
+    const user = userEvent.setup(); const fetchMock = vi.fn().mockResolvedValue(response(blank)); vi.stubGlobal("fetch", fetchMock);
+    render(<CredentialWorkspace />);
+    await user.click(await screen.findByRole("button", { name: "Save draft claim" }));
+    const source = screen.getByLabelText(/Source CV/);
+    const portfolio = screen.getByLabelText(/Portfolio \(optional\)/);
+    const wording = screen.getByLabelText(/Exact proposed CV wording/);
+    expect(portfolio.getAttribute("aria-invalid")).toBeNull();
+    expect(portfolio.hasAttribute("required")).toBe(false);
+    expect(wording.getAttribute("aria-invalid")).toBe("true");
+    expect(wording.getAttribute("aria-describedby")).toBe("claim-error");
+    await user.selectOptions(source, id);
+    await user.selectOptions(screen.getByLabelText(/Certificate or degree/), id);
+    await user.selectOptions(screen.getByLabelText(/Team-approved expert/), id);
+    await user.type(screen.getByLabelText(/Skill label/), "SQL");
+    await user.click(screen.getByRole("button", { name: "Save draft claim" }));
+    expect(document.activeElement).toBe(wording);
+    for (const field of [source, screen.getByLabelText(/Certificate or degree/), screen.getByLabelText(/Team-approved expert/), screen.getByLabelText(/Skill label/)]) {
+      expect(field.getAttribute("aria-invalid")).toBeNull();
+      expect(field.hasAttribute("required")).toBe(true);
+    }
+    await user.type(wording, "Fictional SQL coursework");
+    expect(wording.getAttribute("aria-invalid")).toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
   it("does not display an empty authorized workspace after denied access; supports keyboard retry", async () => {
     const user = userEvent.setup(); vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(response({}, false)).mockResolvedValue(response(blank)));
     render(<CredentialWorkspace />); await screen.findByRole("alert");
@@ -93,15 +118,25 @@ describe("owner credential forms", () => {
     expect(screen.queryByRole("button", { name: "Accept candidate after review" })).toBeNull();
     expect(screen.queryByRole("heading", { name: "Immutable CV snapshot" })).toBeNull();
   });
-  it("reports partial evidence deletion with safe recovery wording instead of a raw response", async () => {
-    const user = userEvent.setup(); const fetchMock = vi.fn().mockResolvedValueOnce(response(blank)).mockResolvedValueOnce(response({ code: "delete_pending", error: "private-path-sentinel" }, false));
+  it("invalidates cached candidate controls after partial deletion and retries loading without repeating withdrawal", async () => {
+    const user = userEvent.setup(); const fetchMock = vi.fn().mockResolvedValueOnce(response({ ...blank, versions: [version("candidate")] })).mockResolvedValueOnce(response({ id, before: "Fictional source", content: "Fictional addition", state: "candidate" })).mockResolvedValueOnce(response({ code: "delete_pending", error: "private-path-sentinel" }, false)).mockResolvedValueOnce(response({ ...blank, credentials: [{ ...blank.credentials[0], withdrawn: true }], versions: [version("evidence_withdrawn")] }));
     vi.stubGlobal("fetch", fetchMock); render(<CredentialWorkspace />);
+    await user.click(await screen.findByRole("button", { name: "Review version 1" }));
+    await screen.findByRole("button", { name: "Accept candidate after review" });
     await user.click(await screen.findByRole("button", { name: "Withdraw and delete fictional-proof.pdf" }));
     await user.click(screen.getByRole("button", { name: "Confirm action" }));
     const alert = await screen.findByRole("alert");
     expect(alert.textContent).toContain("private file deletion is still pending");
     expect(alert.textContent).not.toContain("private-path-sentinel");
+    expect(document.activeElement).toBe(alert);
+    expect(screen.queryByRole("button", { name: "Accept candidate after review" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Confirm action" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Immutable version history" })).toBeNull();
     expect(screen.getByRole("button", { name: "Retry loading" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Retry loading" }));
+    await screen.findByRole("button", { name: "Retry deletion fictional-proof.pdf" });
+    expect(screen.getByText("Export is unavailable because supporting evidence was withdrawn.")).toBeTruthy();
+    expect(fetchMock.mock.calls.filter((call) => call[1]?.method === "POST")).toHaveLength(1);
   });
   it("distinguishes a saved action from a failed refresh and does not resubmit it on retry", async () => {
     const user = userEvent.setup(); const fetchMock = vi.fn().mockResolvedValueOnce(response({ ...blank, claims: [claim("draft")] })).mockResolvedValueOnce(response({ ok: true })).mockRejectedValueOnce(new Error("private-network-sentinel")).mockResolvedValueOnce(response({ ...blank, claims: [claim("submitted")] }));
@@ -139,8 +174,15 @@ describe("expert accessible decision form", () => {
     await screen.findByRole("alert"); expect(document.activeElement).toBe(screen.getByLabelText(/Explanation/));
     await user.type(screen.getByLabelText(/Explanation/), "Reviewed only fictional proof.");
     await user.click(save); await screen.findByText(/Confirm that you reviewed/);
+    const proof = screen.getByRole("checkbox");
+    expect(document.activeElement).toBe(proof);
+    expect(proof.getAttribute("aria-invalid")).toBe("true");
+    expect(proof.getAttribute("aria-describedby")).toBe("decision-error");
+    expect(screen.getByLabelText(/Explanation/).getAttribute("aria-invalid")).toBeNull();
     expect(fetchMock).toHaveBeenCalledTimes(2);
-    await user.click(screen.getByRole("checkbox")); await user.selectOptions(screen.getByLabelText("Expert decision"), "approved"); await user.click(save);
+    await user.keyboard(" ");
+    expect(proof.getAttribute("aria-invalid")).toBeNull();
+    await user.selectOptions(screen.getByLabelText("Expert decision"), "approved"); await user.click(save);
     await screen.findByText(/Expert decision saved/);
     expect(JSON.parse(fetchMock.mock.calls[2][1].body)).toEqual({ id, decision: "approved", note: "Reviewed only fictional proof.", proofReviewed: true });
     expect(screen.queryByText(/Private documents/)).toBeNull();

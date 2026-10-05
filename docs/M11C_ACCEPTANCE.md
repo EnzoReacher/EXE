@@ -75,3 +75,54 @@ Initial proof-rendering diagnostics failed on Playwright's service-worker sandbo
 | PR, merge, deployment, live publication or release approval | Not performed |
 
 The working main baseline is d956118e3b89eb1fdcfd10fb48a45ba150fec20a; no main write is part of this stage. Use the review branch's published head for source inspection and the [master report](PROJECT_MASTER_REPORT.md) for current project tracking.
+
+## M11C.1 — Existing-flow reliability and accessibility hardening — 2026-10-05
+
+**Branch:** `codex/exe-web-app-m11c-proof-review`
+
+**Exact starting / verification base SHA:** `4117575126f3c2163582d5bf6a2fb20bc1f641c9`
+
+**Status:** Narrow existing-flow fixes and automated verification complete. The tested change set is on this base; final publication SHA is reported after commit/push. Manual owner/accessibility review and release approval remain pending.
+
+### Section results
+
+1. **Safe synchronization:** `git status --short --branch` confirmed a clean checkout. Fetched `origin/codex/exe-web-app-m11c-proof-review`, switched to the same branch and merged fast-forward only from `b7807e5` to the exact starting SHA above. Frozen-lockfile installation passed without dependency/lockfile changes.
+2. **Audit:** Reviewed current project/CP2 documents, M11A workflow/owner instructions, M11B export acceptance, M10.2 manual checklist, and the installed Next.js client-component guide. Traced workspace, expert form, API handlers/repository, evidence delivery/renderer, export controls/repository, print route/HTML, database transitions and existing coverage.
+3. **Implementation:** Fixed the verified stale-cache and field-semantics defects below. One new proposal interaction regression; strengthened existing partial-deletion and expert-form regressions. Targeted workspace tests passed: 15 tests.
+4. **Verification:** All required commands passed on the actual local environment. Browser reports were content-free; screenshots/traces/videos remained disabled. The existing Supabase stack was reused; no duplicate stack or database reset occurred. Synthetic account/private-object cleanup passed.
+5. **Reporting/publication:** This acceptance record and the master report record the actual results. Full working/staged diff and whitespace review precede a normal fast-forward push to the review branch. No PR, merge or deployment.
+
+### Findings, fixes and audit boundaries
+
+| Area | Actual finding / result |
+|---|---|
+| Partial evidence deletion / stale state | Server `delete_pending` means withdrawal persisted before Storage removal failed. Previously the client retained cached history, the snapshot panel and confirmation, including candidate acceptance controls. The client now hides cached lists and closes actionable panels on that response. Safe focused error and Retry loading remain; loading the withdrawn tombstone exposes Retry deletion. Regression checks one withdrawal POST, no stale acceptance/confirmation, no private error leakage, and refreshed withdrawn/export-blocked state. |
+| Candidate proposal accessibility | Previously any proposal error marked every select (including optional portfolio) and the skill invalid, while wording lacked `aria-invalid`. Invalid state now follows each required field's actual value and clears as corrected; optional portfolio stays valid. Required fields expose native required semantics; existing custom validation/focus remains. Regression covers valid selections/skill, missing wording focus and description, correction, optional semantics, and no invalid submission. |
+| Expert decision accessibility | Previously missing acknowledgement marked the valid explanation invalid and the focused checkbox had no error association. Explanation and checkbox now expose their own invalid states; the checkbox describes `decision-error`. Regression checks focused checkbox/error association, valid explanation, keyboard Space acknowledgement and exact assigned decision payload. |
+| Keyboard / responsive / retry | Existing candidate confirmation/Escape/close-review focus and fresh expert state remain covered. Isolated UI browser checks passed keyboard validation, source filters, narrow layout and stale refresh; genuine journey passed five-width responsive checks. Saved-action/failed-refresh coverage remains; partial-deletion recovery does not repeat withdrawal when retrying loading. |
+| Proof preview / download | Authorized RPC and private Storage delivery still precede rendering/download. Raster signature/bounds checks, script-free opaque sandbox, PDF private-download guidance, neutral errors and fixed attachment filenames remain. Isolated raster/PDF suite and assigned-expert genuine journey passed. |
+| Ownership / acceptance / export / print | Reviewed owner-scoped queries, assigned active expert RPC access, separate owner confirmation, accepted-state/cumulative-provenance export boundary and escaped private print view. Genuine journey passed anonymous/nonexpert/unassigned denials, candidate export denial, acceptance, DOCX/TXT/print private-metadata exclusion, withdrawal and stale-export denial. Authorization/Storage/RLS/immutable snapshots are preserved. |
+
+### Exact commands and outcomes for this stage
+
+| Command | Actual result |
+|---|---|
+| `pnpm install --frozen-lockfile` | Passed; no lockfile/dependency changes |
+| `pnpm run review:preflight` | Passed; local public settings/fictional fixtures checked without printing values |
+| `pnpm exec vitest run src/app/credential-versions/workspace.test.tsx` | Passed — 15 tests, 1 file |
+| `pnpm run review:verify` | Passed all five sequential steps: preflight, lint, typecheck, 301 tests in 37 files, production build |
+| `pnpm run test:proof-preview` | Passed — decoded raster, large PNG/JPEG at five widths, protected view and PDF guidance |
+| `pnpm run test:workspace-ui` | Passed — production UI with synthetic intercepted responses; keyboard/source-filter and narrow-layout/stale-candidate checks |
+| `pnpm run test:e2e:local` | Passed after local preflight; real local synthetic sign-in/uploads/submission, assigned expert review, denials, candidate acceptance/export, private metadata exclusion, withdrawal/stale export. Run-scoped synthetic accounts and private objects cleaned up. |
+| `pnpm cp2:validate:collected` | Passed structure/safety checks — 9 rows, 0 owner-reviewed, 9 pending/not-reviewed |
+| `pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md` | Passed source-log structure/completeness; no URL fetched or fact verified |
+| `git diff --check` | Passed after correcting two Markdown trailing-space line breaks found in the initial documentation check; repeated with final documentation and staged diff before commit |
+
+### Limitations and owner actions
+
+- The partial-deletion failure and accessibility semantics are exercised by synthetic component interaction tests. The genuine browser journey verifies normal withdrawal/denial and the existing lifecycle; it does not inject a real Storage deletion failure.
+- Manual owner desktop/mobile/200% zoom/keyboard and screen-reader review remains unperformed. Use `M10_2_OWNER_REVIEW.md` and the M11A/M11C instructions, including two CV histories, fresh expert acknowledgement, PDF download, revised claims, withdrawal/recovery and acceptance. Record actual route, viewport, input method, issues and retests.
+- Actual browser Print / Save as PDF pagination and external DOCX-editor review remain unperformed. Automated print-view/document checks are not those manual reviews.
+- `pnpm test:supabase:local` was not performed in this stage; no database/RLS/Storage implementation changed. The required genuine local browser suite used the existing stack and passed.
+- CP2 remains open: nine rows, zero owner-reviewed; instructor clarification draft remains unsent. Public-source data and validators are not user research, instructor approval, demand validation or a product-direction decision. No M11D policy work or new feature selection occurred.
+- Expert qualification/authorization/revocation/conflict and privacy/backup/retention/real-data approvals remain pending. No real documents/accounts/research or generated user documents were committed. No release approval, PR, main merge or deployment occurred.

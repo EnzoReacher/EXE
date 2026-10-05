@@ -9,9 +9,10 @@ import { claimNextStep, filterHistory, STATE_LABELS as labels, type HistoryFilte
 
 const ownerApi = "/api/credential-versions";
 const expertApi = "/api/expert/credential-reviews";
+const DELETE_PENDING_MESSAGE = "Evidence was withdrawn, but private file deletion is still pending. Refresh, then use Retry deletion for that file.";
 const SAFE_ERRORS = [
   "Sign in from the assessment workspace, then retry.",
-  "Evidence was withdrawn, but private file deletion is still pending. Refresh, then use Retry deletion for that file.",
+  DELETE_PENDING_MESSAGE,
   "This private action is unavailable. Check the required fields and current status, then retry.",
   "The private review queue could not be loaded. Retry.",
   "The private workspace could not be loaded. Retry.",
@@ -26,7 +27,7 @@ async function json(response: Response) {
   if (!response.ok) {
     let code = "";
     try { code = (await response.json()).code; } catch { /* Never display a raw server response. */ }
-    throw new Error(response.status === 401 ? "Sign in from the assessment workspace, then retry." : code === "delete_pending" ? "Evidence was withdrawn, but private file deletion is still pending. Refresh, then use Retry deletion for that file." : "This private action is unavailable. Check the required fields and current status, then retry.");
+    throw new Error(response.status === 401 ? "Sign in from the assessment workspace, then retry." : code === "delete_pending" ? DELETE_PENDING_MESSAGE : "This private action is unavailable. Check the required fields and current status, then retry.");
   }
   return response.json();
 }
@@ -89,7 +90,15 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
     working.current = true; setBusy(true); setError(""); setMessage("");
     let completed = false;
     try { await operation(); completed = true; if (refresh) await load(); setMessage(success); return true; }
-    catch (e) { setError(completed && refresh ? "The action was saved, but the refreshed workspace could not be loaded. Retry loading to check its status before repeating an action." : safeError(e)); return false; }
+    catch (e) {
+      const failure = safeError(e);
+      // A delete_pending response confirms withdrawal already persisted. The
+      // cached history and candidate panel can no longer be treated as current.
+      if (failure === DELETE_PENDING_MESSAGE) {
+        setWorkspace(null); setQueue([]); setVersion(null); setDetail(null); setConfirmation(null);
+      }
+      setError(completed && refresh ? "The action was saved, but the refreshed workspace could not be loaded. Retry loading to check its status before repeating an action." : failure); return false;
+    }
     finally { working.current = false; setBusy(false); }
   }
   async function action(input: Record<string, unknown>) {
@@ -172,12 +181,12 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
         {!workspace.experts.length && <p role="status">No active team-approved experts available. Role administration is outside this UI.</p>}
         <form className="opportunity-form" noValidate onSubmit={createClaim}>
           <fieldset disabled={busy}>
-            {(["cvId", "portfolioId", "credentialId", "expertId"] as const).map((key) => <div key={key}><label htmlFor={key}>{({ cvId: "Source CV (required)", portfolioId: "Portfolio (optional)", credentialId: "Certificate or degree (required)", expertId: "Team-approved expert (required)" })[key]}</label><select id={key} value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} aria-describedby={fieldError ? "claim-error" : undefined} aria-invalid={fieldError ? true : undefined}>
+            {(["cvId", "portfolioId", "credentialId", "expertId"] as const).map((key) => <div key={key}><label htmlFor={key}>{({ cvId: "Source CV (required)", portfolioId: "Portfolio (optional)", credentialId: "Certificate or degree (required)", expertId: "Team-approved expert (required)" })[key]}</label><select id={key} value={form[key]} required={key !== "portfolioId"} onChange={(e) => setForm({ ...form, [key]: e.target.value })} aria-describedby={fieldError && key !== "portfolioId" && !form[key] ? "claim-error" : undefined} aria-invalid={fieldError && key !== "portfolioId" && !form[key] ? true : undefined}>
               <option value="">{key === "portfolioId" ? "No portfolio" : "Select"}</option>
               {(key === "cvId" ? workspace.cvs.map((r) => ({ id: r.id, text: r.filename })) : key === "expertId" ? workspace.experts.map((r) => ({ id: r.id, text: `${r.name}${r.specialty ? ` — ${r.specialty}` : ""}` })) : (key === "portfolioId" ? workspace.portfolios : workspace.credentials).filter((r) => !r.withdrawn).map((r) => ({ id: r.id, text: r.filename }))).map((r) => <option key={r.id} value={r.id}>{r.text}</option>)}
             </select></div>)}
-            <label htmlFor="skill">Skill label (2–80 characters)</label><input ref={skillInput} id="skill" value={form.skill} maxLength={80} onChange={(e) => setForm({ ...form, skill: e.target.value })} aria-invalid={fieldError ? true : undefined} aria-describedby="claim-error" />
-            <label htmlFor="wording">Exact proposed CV wording (2–300 characters)</label><textarea id="wording" value={form.wording} maxLength={300} onChange={(e) => setForm({ ...form, wording: e.target.value })} aria-describedby="claim-error" />
+            <label htmlFor="skill">Skill label (2–80 characters)</label><input ref={skillInput} id="skill" required value={form.skill} maxLength={80} onChange={(e) => setForm({ ...form, skill: e.target.value })} aria-invalid={fieldError && form.skill.trim().length < 2 ? true : undefined} aria-describedby="claim-error" />
+            <label htmlFor="wording">Exact proposed CV wording (2–300 characters)</label><textarea id="wording" required value={form.wording} maxLength={300} onChange={(e) => setForm({ ...form, wording: e.target.value })} aria-invalid={fieldError && form.wording.trim().length < 2 ? true : undefined} aria-describedby="claim-error" />
             <p id="claim-error" role={fieldError ? "alert" : undefined}>{fieldError}</p>
             <button className="button button-primary" type="submit">Save draft claim</button>
           </fieldset>
@@ -203,8 +212,8 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
       <p>Read the submitted proof before deciding. Approval is about this exact wording and proof, not institutional authentication. No owner workspace or unrelated documents are available here.</p>
       <button type="button" className="button button-secondary" disabled={busy} onClick={closeReview}>Close assigned review</button>
       <form key={detail.id} className="opportunity-form" noValidate onSubmit={sendDecision}><fieldset disabled={busy}><label htmlFor="decision">Expert decision</label><select id="decision" value={decision} onChange={(e) => setDecision(e.target.value)}><option value="needs_information">Request more information</option><option value="rejected">Reject</option><option value="approved">Approve exact proposed wording</option></select>
-        <label htmlFor="explanation">Explanation (2–1,000 characters)</label><textarea ref={noteInput} id="explanation" maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} aria-invalid={fieldError ? true : undefined} aria-describedby="decision-error" /><p id="decision-error" role={fieldError ? "alert" : undefined}>{fieldError}</p>
-        <label htmlFor="proof-reviewed"><input id="proof-reviewed" name="proofReviewed" type="checkbox" checked={proofReviewed} onChange={(e) => setProofReviewed(e.target.checked)} required /> I reviewed the assigned proof and exact proposed wording.</label>
+        <label htmlFor="explanation">Explanation (2–1,000 characters)</label><textarea ref={noteInput} id="explanation" required maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} aria-invalid={fieldError && note.trim().length < 2 ? true : undefined} aria-describedby="decision-error" /><p id="decision-error" role={fieldError ? "alert" : undefined}>{fieldError}</p>
+        <label htmlFor="proof-reviewed"><input id="proof-reviewed" name="proofReviewed" type="checkbox" checked={proofReviewed} onChange={(e) => setProofReviewed(e.target.checked)} aria-invalid={fieldError && !proofReviewed ? true : undefined} aria-describedby="decision-error" required /> I reviewed the assigned proof and exact proposed wording.</label>
         <button className="button button-primary" type="submit">Save expert decision</button>
       </fieldset></form>
     </section>}
