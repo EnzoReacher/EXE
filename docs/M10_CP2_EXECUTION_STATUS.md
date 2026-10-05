@@ -39,6 +39,10 @@ This file is a live checklist. An unchecked item is not complete. Do not mark an
 - Instructor follow-up: `docs/M10_CP2_INSTRUCTOR_CLARIFICATION_DRAFT.md` contains English and Vietnamese draft wording for the ambiguous “hub,” participant-count, overlap, supplier, expert-qualification, and evidence-format requirements. It is **not sent**; no instructor reply or outreach is recorded.
 - Review/decision: CM-001–CM-009 and EDU-001 remain pending owner/team review. No recruitment, fieldwork, product selection, price/competitive claim, CP2 completion, or M11 authorization occurred.
 
+## Supplementary public-page retrieval — 2026-10-05
+
+A separate web retrieval directly opened the official FitCV pricing, TopCV sign-up/CV-template, Rezi pricing, and Jobscan tools pages. It recorded the on-page access, plan, credit, promotion, and price context in the [source snapshot](evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md). Jobscan pricing redirected without readable price details. Direct Jobie, NSO, and MOET retrieval timed out in that session. This is assistant-performed public-source retrieval, not owner/team review: all nine source/register rows remain pending with zero owner-reviewed. No account, checkout, purchase, primary research, manual owner review, or product decision occurred. The source log and evidence register were unchanged. Project validators and app tests were not run in that separate environment; previously recorded results remain historical.
+
 ## Exact inputs required next
 
 ### Reconciliation — 2026-10-05

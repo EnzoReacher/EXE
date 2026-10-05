@@ -57,3 +57,18 @@ This follow-up targeted existing gaps; it is not an owner/team source review. Hi
 | CM-009 / EDU-001 — https://moet.gov.vn/content/tintuc/Lists/News/Attachments/10555/so-lieu-chung-dh-23-24.pdf | Direct retrieval returned an HTML page displaying “404” / “Page not found” and a Vietnamese unavailable-content message rather than the statistics PDF. This is page content, not a verified HTTP status. | Original document/totals/exclusions and publication date remain directly unverified here. Historical indexed observations are not current PDF verification. |
 
 No new collected-register rows were created from failed retrievals. Owner-selected official pricing/checkout inspection and source adoption remain pending. See [inventory and decision preparation](CP2_GATE_RECONCILIATION_2026-10-05.md) for comparability and primary-research gaps.
+
+## Additional direct-page retrieval — 2026-10-05
+
+A later independent web retrieval in ChatGPT accessed several first-party pages directly. It was separate from the repository-side retrieval attempts above and is not owner/team review. The detailed outcome remains limited to what each public page displayed; no account, checkout, or purchase was made.
+
+| Source | Direct-page observations in this retrieval | Limits |
+|---|---|---|
+| CM-001 — FitCV pricing | The page displayed three lifetime Free generations and three reviews, Personal Pro with launch-free copy beside 490,000 VND/year, and one-off credit packs from 10,000 VND. It also displayed bundles, non-expiring credits, a seven-day refund condition, a 30% student discount requiring an edu.vn email and student-card photo, and annual VAT-invoice availability. | The “free” promotion and annual price remain ambiguous; tax inclusion, checkout total, promotion/discount eligibility, and product access were not tested. The student-card-photo requirement is a vendor statement; no student data was submitted. |
+| CM-002 — Jobie | The official homepage timed out. An official-domain search-index excerpt still displayed credit bundle and per-feature credit text. | Indexed text is not live-page or checkout verification. Price terms remain provisional. |
+| CM-003/CM-004 — TopCV | The official sign-up and CV-template pages described free account/job-search access and free CV templates with online editing/export. | These pages do not establish that every service or template is free, candidate usage, or satisfaction. No account was created. |
+| CM-006 — Rezi | The official pricing page listed Free at USD 0 with one resume and up to three PDF downloads, Pro at USD 29/month, and Lifetime at USD 149 one time. It stated that Pro includes a monthly human resume review and Lifetime does not include that monthly review. | Vietnam-specific availability, currency conversion, tax, promotions, and checkout total remain unknown. The plans are not directly comparable to VND credits or annual plans. |
+| CM-007 — Jobscan | The official tools page described a resume builder, job board, resume/job-description scanner, one-click optimization, and application tracking. The pricing route redirected to an app plan page with no readable price content. | Feature copy is a vendor description, not independent quality or outcome evidence. Price and cadence remain unknown. |
+| CM-008 / CM-009 — NSO / MOET | Direct requests to the official NSO page and MOET PDF timed out in this retrieval session. | This pass adds no new facts for these records. MOET's PDF still needs direct inspection. |
+
+No structured source-log or evidence-register field was changed. Existing source rows remain pending owner/team review. This activity does not establish actual checkout pricing, product quality, user need, affordability, or ease of use.

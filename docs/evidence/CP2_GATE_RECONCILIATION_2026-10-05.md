@@ -91,3 +91,9 @@ No feature work is permitted by this task. No release, main merge, deployment, r
 - App/build/browser verification suites: Not performed in this documentation-only task; prior passes remain historical. No new install or local-stack operations performed.
 
 Structural validation is not source accuracy, anonymity proof, research quality, instructor acceptance, product validation or owner approval.
+
+## 6. Subsequent direct-page retrieval — 2026-10-05
+
+A separate retrieval directly opened official FitCV pricing, TopCV sign-up/CV templates, Rezi pricing, and Jobscan tools pages. The source snapshot records the displayed terms and remaining limitations. Jobscan's pricing route redirected without readable content. Direct Jobie, NSO, and MOET requests timed out in this retrieval session. No account, checkout, purchase, or direct PDF inspection occurred.
+
+This is assistant-performed public-source retrieval, not an owner/team review. It does not change source adoption or review status: the register remains at nine rows, zero owner-reviewed. No participant research, manual app review, expert-policy review, product decision, or feature selection occurred. The structured source log and register were unchanged; project validators and app tests were not run in this separate environment. Prior validator/test results remain historical.
