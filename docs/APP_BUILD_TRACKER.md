@@ -2,9 +2,10 @@
 
 This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. The GitHub feature branch is for source review; do not merge to `main` or deploy without the project owner's approval.
 
-## Latest — M11C
+## Latest — M14 visual foundation
 
-Implemented on `codex/exe-web-app-m11c-proof-review` from exact published M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. Controlled private raster proof view/PDF-download guidance; fresh per-assignment expert form/acknowledgement; source-aware owner filters/history, next-step summary, new-claim preparation, stale-panel closure and safe deletion/refresh recovery. 300 tests/37 files, lint/typecheck/build and isolated Chromium proof/fixture-backed production UI at five widths passed. Full local preflight/credential journey is pending here due unavailable local configuration/stack. No database/RLS/Storage/authority change; this is not full acceptance or release. [Actual results](M11C_ACCEPTANCE.md); [master report](PROJECT_MASTER_REPORT.md). M11C.1 genuine local integration/manual owner review is next. CP2, policies, print/editor/accessibility and owner release decisions remain pending.
+Prepared on `codex/exe-web-app-m14-visual-foundation` from M13 head `b8e5cbb6c00222215d5382f17274480698b0f018`. Refined shared visual tokens and scoped the public landing/sign-in/sign-up styling, reflow, focus, and reduced-motion behavior. Added a design-system guide and owner acceptance checklist. M13 engineering/Quality passed, but its real local-Supabase browser journey remains pending. M14 automated Quality and owner visual/accessibility review are pending until verified. No account/backend/schema changes, PR, merge, deployment or release approval. See `M14_VISUAL_DESIGN_SYSTEM.md`, `M14_VISUAL_ACCEPTANCE.md`, and [the master report](PROJECT_MASTER_REPORT.md).
+
 
 | Part | Status | Scope | Exit criteria |
 |---|---|---|---|
@@ -20,6 +21,9 @@ Implemented on `codex/exe-web-app-m11c-proof-review` from exact published M11B.1
 | M8 — Research and owner-review package | Prepared — evidence collection pending | CP2 plan, consent-safe target-user/expert guides, anonymous survey, blank register, current-source alternative/pricing template, and owner checklist | No real participant, market, competitor, pricing, or acceptance results are present. Owner must collect/review evidence before product-value, affordability, competitive, or validation claims and before choosing the next feature. |
 | M9 — Evidence gate and product-decision workflow | Evidence gate prepared — CP2 evidence pending | Template/collected register validator, deterministic tests, review template, decision gate, qualitative next-feature matrix, and owner status | Validator checks structural/safety requirements only; it does not prove research quality. No product feature selected or app workflow changed. M11 selection is blocked until reviewed evidence and the documented decision gate are complete. |
 | M10 — CP2 research execution workspace | Evidence collection pending | CP2 execution status, research-session log, product-direction decision, and owner gate | M10 evidence review found only template/example material. No owner-review result, collected research, public source record, product direction, or M11 feature decision is recorded; M11 remains blocked until reviewed CP2 evidence. |
+| M12 — Public landing and account access | Implemented — local auth acceptance pending | Public landing, Supabase email/password sign-in/sign-up, confirmation callback, and session refresh | M12 implementation passed recorded build checks; M13 local browser journey remains an owner action. See master report and `M13_AUTH_ACCEPTANCE.md`. |
+| M13 — Local landing and account acceptance | Engineering checks passed — owner local run pending | Synthetic local account journey, session persistence, generic failures, anonymous denial, and collected-mode CP2 CI repair | GitHub Quality passed; owner must still run the journey against the existing local Supabase stack. |
+| M14 — Public visual foundation | Implementation on feature branch — automated checks and owner review pending | Shared visual tokens, landing/auth styling, responsive and reduced-motion rules, review documentation | Check current GitHub Quality, then record actual visual, keyboard, responsive, and accessibility review. No backend or auth behavior changes. |
 
 ## M10.2 existing-experience hardening
 

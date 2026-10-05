@@ -3,14 +3,16 @@
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
 **Last updated:** 2026-10-05
-**Working branch:** `codex/exe-web-app-m13-auth-browser-acceptance`
+**Working branch:** `codex/exe-web-app-m14-visual-foundation`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
 
-## Current status — M13 local account acceptance
+## Current status — M14 visual foundation
 
-M12 delivered the public landing page and Supabase sign-in/sign-up implementation. M13 adds a synthetic local browser journey for account creation, session persistence, sign-in, generic authentication failures, and anonymous API denial; it also corrects CI to validate the nine already-recorded CP2 source rows in collected mode while retaining their pending owner-review status. GitHub Quality passed on implementation commit 5efd0f7 (run 37329809259): 321 tests/41 files, lint, typecheck, production build, syntax, CP2 validation, and diff check. The owner still needs to run the local Supabase browser acceptance and complete manual usability/accessibility review. CP2 decisions, merge, and deployment remain pending.
+M14 refreshes the shared color system and gives the public landing page and sign-in/sign-up routes a clearer visual hierarchy, calmer report preview, more legible process cards, and improved narrow-screen layouts. The accompanying [visual design system](M14_VISUAL_DESIGN_SYSTEM.md) and [owner acceptance checklist](M14_VISUAL_ACCEPTANCE.md) record the intended rules and pending real review. M14 is on a separate branch from M13; no authentication, data, or backend behavior changes are in scope.
+
+M13 engineering and GitHub Quality are complete: implementation commit 5efd0f7 and report commit b8e5cbb passed the recorded Quality runs, including 321 tests/41 files, lint, typecheck, production build, syntax, collected-mode CP2 validation, and diff check. The owner-run local Supabase browser acceptance and manual usability/accessibility review are still pending. CP2 decisions, merge, and deployment remain pending.
 
 ## Prior status — M11C.1
 
@@ -164,6 +166,7 @@ flowchart TD
 | **M10 — CP2 research execution workspace** | CP2 execution status, research-session log, product-direction decision record, and owner gate | Evidence collection pending | The 2026-10-02 review found only example/template material. On 2026-10-05, seven vendor-page observations and two official national context sources (CM-001–CM-009) were added with limitations. A bilingual instructor clarification draft is prepared, not sent. Owner/team review, actual course clarification, primary research, and the product-direction decision remain pending. No feature was selected. No merge or deployment occurred. |
 | **M12 — Public landing and Supabase account access** | Public product landing, dedicated sign-in/sign-up, secure Supabase email/password session and confirmation callback | Implementation complete; automated local Auth acceptance pending | Branch `codex/exe-web-app-m12-landing-auth` from exact M11C review head `65583406b3bc177cc4ed215df1df98900d83fa87`; no schema migration. See the M12 record below. |
 | **M13 — Local landing and account acceptance** | Exercise real local Supabase sign-up/sign-in, session persistence, generic failures, responsive entry routes, and anonymous denial; align CI with the collected CP2 register | Implementation and GitHub Quality passed; owner local browser run pending | Implementation commit `5efd0f7`; run `37329809259` passed 321 tests/41 files, lint, typecheck, build, CP2 structural validation, and diff check. See `M13_AUTH_ACCEPTANCE.md`. |
+| **M14 — Public visual foundation** | Refine shared visual tokens, public landing, account-entry hierarchy, responsive styling, reduced motion, and visual-review documentation | Implementation on feature branch; CI and owner visual review pending | CSS-only product-surface styling plus design-system and acceptance Markdown. No workflow, authentication, schema, or data changes. See `M14_VISUAL_DESIGN_SYSTEM.md` and `M14_VISUAL_ACCEPTANCE.md`. |
 | **Release review** | Final owner review, security/privacy review, course demo preparation | Planned | Requires explicit owner approval before a merge or any deployment. |
 | **M10.2 — Existing-experience hardening** | Existing route clarity, keyboard/form access, responsive safeguards, safe errors and regression coverage | Engineering checks passed — owner manual review pending | From exact M10 baseline `4af832c`; 115 tests in 22 files, lint/typecheck/build, script syntax, CP2 template/diff and local fictional Supabase acceptance passed. Seven routes hardened; browser disconnected, so viewport/zoom/keyboard/assistive-technology review remains owner follow-up. See `M10_2_HARDENING_ACCEPTANCE.md`. CP2 remains pending, M11 remains blocked, and no price, market, competitor, validation, privacy-superiority or ease-of-use claim is unlocked. No merge or deployment occurred. |
 | **M10.5 — Local owner-review preflight** | Local fictional-data configuration guard and preflight command | Engineering checks passed — owner browser review pending | From M10.3 `9d9e3c2`; `pnpm review:preflight` permits only local public Supabase browser settings, rejects private credentials/hosted URLs without printing values, and checks the fictional DOCX/checklist. Full tests passed: 179 tests in 24 files; lint, typecheck, build, direct synthetic checks, and diff check also passed. A sandbox-only child-process diagnostic was resolved by a full outside-sandbox rerun and is recorded in `M10_5_QA_PREFLIGHT_ACCEPTANCE.md`. No app feature, CP2 evidence, M11 selection, merge, or deployment occurred. |
@@ -343,7 +346,7 @@ Engineering progress does not automatically complete a course checkpoint. Each c
 
 Current priorities take precedence over the historical queue below.
 
-The active engineering task is M13: pull the M13 feature branch and run the existing-stack local auth journey in M13_AUTH_ACCEPTANCE.md. Record actual output only after the owner runs it. No migration, reset, merge or deployment is part of this step. CP2 remains separate and incomplete; continue it using the [reconciliation packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md), recording only actual owner activities and genuine anonymized primary results. All nine collected public-source rows remain pending owner/team review, and no product or pricing claim is approved.
+M14 visual styling is prepared on `codex/exe-web-app-m14-visual-foundation`; check the current GitHub Quality result, then follow `M14_VISUAL_ACCEPTANCE.md` for actual owner browser review using fictional content. M13's existing-stack local Auth journey remains a separate pending owner action in `M13_AUTH_ACCEPTANCE.md`. No migration, reset, merge, or deployment is part of M14. CP2 remains separate and incomplete; continue it using the [reconciliation packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md), recording only actual owner activities and genuine anonymized primary results. All nine collected public-source rows remain pending owner/team review, and no product or pricing claim is approved.
 
 Documentation checks for this task: `pnpm exec vitest run scripts/validate-cp2-evidence.test.mjs scripts/cp2-research.test.mjs` passed 71 tests in 2 files; `pnpm lint` and `git diff --check` passed. Both CP2 validators passed as recorded above. Synthetic tests and structural passes are not research, source accuracy or approval. Six intended Markdown files comprise the reconciliation change set; final staged whitespace and privacy/scope scan precede commit/push.
 
@@ -419,12 +422,13 @@ Documentation checks for this task: `pnpm exec vitest run scripts/validate-cp2-e
 | 2026-10-05 | CP2 supplementary public-page retrieval | Current first-party page observations recorded; owner/team review pending | Directly opened FitCV, TopCV, Rezi and Jobscan tools pages; Jobscan pricing returned no readable terms and Jobie/NSO/MOET direct requests timed out. Source log/register unchanged; 9 rows remain pending, 0 owner-reviewed. No checkout, primary research, manual review, product decision or feature work. |
 | 2026-10-05 | M12 landing and Supabase account access | Engineering implementation complete; local Supabase Auth browser acceptance remains pending. | Feature branch `codex/exe-web-app-m12-landing-auth`; partial owner feedback recorded; no merge or deployment. |
 | 2026-10-05 | M13 local landing and account acceptance | Implementation commit `5efd0f7`; GitHub Quality passed (run `37329809259`, 321 tests/41 files, lint, typecheck, production build, syntax, CP2 validation and diff check). Owner local-stack browser run pending. | Feature branch `codex/exe-web-app-m13-auth-browser-acceptance`; CP2 remains 0 owner-reviewed/9 pending; no schema change, merge, or deployment. |
+| 2026-10-05 | M14 visual foundation — implementation started | Added a shared visual-token and public/auth styling pass plus the design-system and owner acceptance Markdown. Automated checks and manual browser/accessibility review are pending. | `codex/exe-web-app-m14-visual-foundation`, based on `b8e5cbb6c00222215d5382f17274480698b0f018`; no backend/auth behavior, schema, merge, or deployment change. |
 
 ## 12. How to resume
 
 CP2 continuation: review the [dated inventory and decision preparation](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md). No actual owner/team decision is recorded. The next requested manual fact is the owner's actual overview `/` review result (date, viewport/input, observations and retest); do not infer it from the prior automated pass. Primary-research occurrence, consent-safe results and any subsequent instructor reply remain Unknown until supplied. Keep all existing evidence review statuses pending.
 
-For the newest code, resume `codex/exe-web-app-m13-auth-browser-acceptance`. Follow [M13 local acceptance](M13_AUTH_ACCEPTANCE.md) against the existing local Supabase stack; do not start duplicate containers or run a migration/reset. The actual local Auth browser journey remains pending. CP2 review and the release decision remain open.
+For visual work, use `codex/exe-web-app-m14-visual-foundation` and follow [M14 visual acceptance](M14_VISUAL_ACCEPTANCE.md). M13 local authentication acceptance is still pending; when doing it, follow [M13 local acceptance](M13_AUTH_ACCEPTANCE.md) against the existing local Supabase stack without starting duplicate containers or running a migration/reset. CP2 review and the release decision remain open.
 
 M10.6 adds `pnpm review:verify` before the owner session, followed only on success by `pnpm dev`. Complete the actual M10.2 checklist using the fictional DOCX and record actual results. Reuse the existing local stack. Verification does not approve manual results, privacy, CP2 evidence, M11 selection, merge, or deployment. See `M10_6_REVIEW_VERIFY.md` and `M10_6_REVIEW_VERIFY_ACCEPTANCE.md` for results and limitations.
 
@@ -443,6 +447,8 @@ M10.6 adds `pnpm review:verify` before the owner session, followed only on succe
 - [Decision log](DECISIONS.md)
 - [Course checkpoint tracker](CHECKPOINT_TRACKER.md)
 - [Phase prompts](PHASE_PROMPTS.md)
+- [M14 visual design system](M14_VISUAL_DESIGN_SYSTEM.md)
+- [M14 owner visual acceptance checklist](M14_VISUAL_ACCEPTANCE.md)
 
 
 ## Owner-approved review and CP2 closeout — 2026-10-05
@@ -483,3 +489,12 @@ M10.6 adds `pnpm review:verify` before the owner session, followed only on succe
 **Checks passed remotely:** The GitHub Quality workflow passed 321 tests in 41 files, lint, typecheck (including the new Playwright spec), production build, required script syntax checks, collected-mode CP2 validation, and git diff --check. No repository checkout was available in this work session, so no local test command was run. The actual local Supabase browser journey has not been run in this work session or by the owner. Manual owner/browser/accessibility review, CP2 source review/primary research/product decision, privacy and retention approval, PR, merge, deployment, and release remain pending.
 
 See [M13 local acceptance steps](M13_AUTH_ACCEPTANCE.md). Do not treat the automated synthetic journey as owner review, real-user evidence, CP2 evidence, or release approval.
+
+
+## M14 — Public landing and account-entry visual foundation — 2026-10-05
+
+**Status:** Styling and documentation are implemented on `codex/exe-web-app-m14-visual-foundation`, based on exact M13 head `b8e5cbb6c00222215d5382f17274480698b0f018`. GitHub Quality result: pending at the time this report entry was drafted; update only after reading the actual workflow result. Owner browser visual review: pending. `main` remains at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`.
+
+**Delivered:** Updated shared color tokens and scoped CSS for the landing, fictional report example, three-step explanation, sign-in, and sign-up. Improved type hierarchy, spacing, card/surface contrast, keyboard focus visibility, narrow-screen reflow, and reduced-motion handling. Added `M14_VISUAL_DESIGN_SYSTEM.md` and `M14_VISUAL_ACCEPTANCE.md`. No new images, remote fonts, dependencies, account flows, backend behavior, migrations, pricing/competitive claims, or real-user data.
+
+**Not yet performed:** Owner browser/visual/accessibility review, screen-reader review, and actual M13 local Supabase account-journey acceptance. No merge, deployment, or release approval. CP2 remains 0 owner-reviewed and 9 pending.
