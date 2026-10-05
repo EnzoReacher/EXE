@@ -153,9 +153,16 @@ test("synthetic local credential approval, acceptance, exports and denial bounda
         await keyClick(ownerPage.getByRole("button", { name: "Save draft claim" }));
         await ownerPage.getByRole("button", { name: `Submit ${skill} for expert review` }).waitFor();
       });
-      await test.step("OWNER_CLAIM_SUBMISSION", async () => {
+      await test.step("OWNER_CLAIM_SUBMIT_REQUEST", async () => {
+        const submittedResponse = ownerPage.waitForResponse((response) => response.url() === `${app}/api/credential-versions` && response.request().method() === "POST");
         await keyClick(ownerPage.getByRole("button", { name: `Submit ${skill} for expert review` }));
+        const response = await submittedResponse;
+        check(response.ok(), `CLAIM_SUBMIT_HTTP_${response.status()}`);
+      });
+      await test.step("OWNER_CLAIM_SUBMITTED_STATE", async () => {
         await ownerPage.getByText("Waiting for expert", { exact: true }).waitFor();
+      });
+      await test.step("OWNER_CLAIM_SERVER_STATE", async () => {
         const submitted = await json(ownerPage, "/api/credential-versions"); claimId = submitted.claims[0].id;
         check(submitted.claims[0].state === "submitted" && submitted.versions.length === 0, "SUBMISSION_MUST_NOT_ADD_VERSION");
         check(await ownerPage.getByRole("button", { name: /Download editable DOCX/ }).count() === 0, "PENDING_MUST_NOT_EXPORT");
