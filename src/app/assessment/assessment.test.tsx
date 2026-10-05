@@ -6,10 +6,10 @@ import userEvent from "@testing-library/user-event";
 import AssessmentForm from "./assessment-form";
 import AuthControls from "./auth-controls";
 
-const { signIn } = vi.hoisted(() => ({ signIn: vi.fn() }));
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
-vi.mock("@/lib/supabase/client", () => ({ createSupabaseBrowserClient: () => ({ auth: { signInWithPassword: signIn, signUp: vi.fn() } }) }));
-afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+const { signIn, signUp, replace, refresh } = vi.hoisted(() => ({ signIn: vi.fn(), signUp: vi.fn(), replace: vi.fn(), refresh: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), replace, refresh }) }));
+vi.mock("@/lib/supabase/client", () => ({ createSupabaseBrowserClient: () => ({ auth: { signInWithPassword: signIn, signUp } }) }));
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.unstubAllEnvs(); signIn.mockReset(); signUp.mockReset(); replace.mockReset(); refresh.mockReset(); });
 const json = (body: object, status = 200) => new Response(JSON.stringify(body), { status });
 function workspaceFetch() {
   return vi.fn().mockResolvedValueOnce(json({ cvs: [] })).mockResolvedValueOnce(json({ jobs: [] }));
@@ -143,6 +143,60 @@ describe("Assessment interactions", () => {
     expect(email.value).toBe("sample@example.invalid");
     expect((screen.getByLabelText("Password (required)") as HTMLInputElement).value).toBe("sample-password");
   });
+
+  it("submits sign-up with a same-origin PKCE callback and gives a neutral confirmation message", async () => {
+    signUp.mockResolvedValue({ data: { user: { id: "synthetic-user" }, session: null }, error: null });
+    render(<AuthControls appearance="standalone" initialMode="signUp" />);
+    await userEvent.type(screen.getByLabelText("Email (required)"), "sample@example.invalid");
+    await userEvent.type(screen.getByLabelText("Password (required)"), "sample-password");
+    await userEvent.type(screen.getByLabelText("Confirm password (required)"), "sample-password");
+    await userEvent.click(screen.getByRole("button", { name: "Create account" }));
+
+    await screen.findByText(/If this address can receive a confirmation/);
+    expect(signUp).toHaveBeenCalledWith({
+      email: "sample@example.invalid",
+      password: "sample-password",
+      options: { emailRedirectTo: "http://localhost:3000/auth/callback" },
+    });
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it("opens the workspace when local Supabase returns an active sign-up session", async () => {
+    signUp.mockResolvedValue({ data: { user: { id: "synthetic-user" }, session: { access_token: "synthetic-token" } }, error: null });
+    render(<AuthControls appearance="standalone" initialMode="signUp" />);
+    await userEvent.type(screen.getByLabelText("Email (required)"), "sample@example.invalid");
+    await userEvent.type(screen.getByLabelText("Password (required)"), "sample-password");
+    await userEvent.type(screen.getByLabelText("Confirm password (required)"), "sample-password");
+    await userEvent.click(screen.getByRole("button", { name: "Create account" }));
+
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/assessment"));
+    expect(refresh).toHaveBeenCalledOnce();
+  });
+
+  it("requires matching passwords before sending a sign-up request", async () => {
+    render(<AuthControls appearance="standalone" initialMode="signUp" />);
+    await userEvent.type(screen.getByLabelText("Email (required)"), "sample@example.invalid");
+    await userEvent.type(screen.getByLabelText("Password (required)"), "sample-password");
+    const confirmation = screen.getByLabelText("Confirm password (required)");
+    await userEvent.type(confirmation, "different-password");
+    await userEvent.click(screen.getByRole("button", { name: "Create account" }));
+
+    await screen.findByText("Enter the same password in both fields.");
+    expect(document.activeElement).toBe(confirmation);
+    expect(signUp).not.toHaveBeenCalled();
+  });
+
+  it("navigates to the private workspace after successful sign-in", async () => {
+    signIn.mockResolvedValue({ data: { user: { id: "synthetic-user" }, session: {} }, error: null });
+    render(<AuthControls appearance="standalone" />);
+    await userEvent.type(screen.getByLabelText("Email (required)"), "sample@example.invalid");
+    await userEvent.type(screen.getByLabelText("Password (required)"), "sample-password");
+    await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
+
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/assessment"));
+    expect(refresh).toHaveBeenCalledOnce();
+  });
+
   it("does not announce success when CV retry saves a failed parse state", async () => {
     const cv = { id: "cv-sample", originalFilename: "sample.pdf", processingStatus: "failed" };
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(json({ cvs: [cv] })).mockResolvedValueOnce(json({ jobs: [] })).mockResolvedValueOnce(json({ cv })));

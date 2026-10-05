@@ -1,108 +1,101 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Overview | EXE" };
+export const metadata: Metadata = {
+  title: "EXE | Understand your CV for a target role",
+  description: "Compare CV wording with a target job and review evidence-based next steps.",
+};
 
 const findings = [
-  { title: "SQL querying", status: "Partly supported", tone: "partial", evidence: "Coursework is listed, but no project example is shown." },
-  { title: "Data visualization", status: "Supported", tone: "supported", evidence: "A dashboard project is described in the CV." },
-  { title: "Experiment design", status: "Missing", tone: "missing", evidence: "The example CV does not mention an experiment or test. This does not mean the person lacks that skill." },
-  { title: "Stakeholder communication", status: "Unclear", tone: "unclear", evidence: "The example CV mentions teamwork without enough detail to explain this requirement." },
+  { title: "Data visualization", status: "Supported", tone: "supported", detail: "A dashboard project is described in the example CV." },
+  { title: "SQL querying", status: "Partly supported", tone: "partial", detail: "Coursework is listed, but no project example is shown." },
+  { title: "Experiment design", status: "Not found in this CV", tone: "missing", detail: "This describes the submitted wording; it does not mean the person lacks the skill." },
 ];
 
 const steps = [
-  { number: "01", title: "Sign in and add a fictional CV", detail: "Use the local demo account and a PDF or DOCX file, up to 5 MiB." },
-  { number: "02", title: "Choose a role", detail: "Paste a job description to set the target." },
-  { number: "03", title: "See the evidence", detail: "Understand what is supported and what to build next." },
-  { number: "04", title: "Review roadmap and draft", detail: "Choose actions, check the source text, and review every edit before accepting it." },
-  { number: "05", title: "Return to saved work", detail: "Your saved reports and drafts can be reopened later in your signed-in workspace." },
+  { number: "01", title: "Add a CV and target role", detail: "Choose one CV and paste one job description." },
+  { number: "02", title: "Review the evidence", detail: "See which requirements the wording supports, partly supports, or does not mention." },
+  { number: "03", title: "Choose a next step", detail: "Use the roadmap and edit any CV draft yourself before using it." },
 ];
 
 export default function Home() {
   return (
-    <div className="workspace-shell">
-      <aside className="sidebar" aria-label="Workspace navigation">
-        <Link className="brand" href="/" aria-label="EXE career readiness home">
+    <main className="landing-page" id="main-content" tabIndex={-1}>
+      <header className="landing-header">
+        <Link className="brand landing-brand" href="/" aria-label="EXE career readiness home">
           <span className="brand-mark" aria-hidden="true">E</span>
           <span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span>
         </Link>
-        <div className="sidebar-label">WORKSPACE</div>
-        <nav className="side-nav" aria-label="Workspace">
-          <a className="nav-item active" href="#main-content" aria-current="page"><span className="nav-icon nav-icon-home" aria-hidden="true" />Overview</a>
-          <a className="nav-item" href="#how-it-works"><span className="nav-icon nav-icon-flow" aria-hidden="true" />How it works</a>
-          <a className="nav-item" href="#example-report"><span className="nav-icon nav-icon-report" aria-hidden="true" />Example report</a>
-          <Link className="nav-item" href="/saved-work"><span className="nav-icon nav-icon-report" aria-hidden="true" />Saved work</Link>
+        <nav className="landing-nav" aria-label="Main navigation">
+          <Link href="#how-it-works">How it works</Link>
+          <Link href="#example-report">Example report</Link>
+          <Link href="/sign-in">Sign in</Link>
+          <Link className="button button-primary" href="/sign-up">Create account</Link>
         </nav>
-        <div className="sidebar-bottom">
-          <div className="privacy-mini-icon" aria-hidden="true">✓</div>
-          <p className="privacy-mini-title">Your experience stays yours</p>
-          <p className="privacy-mini-copy">CV sharing will always be an action you control.</p>
-          <span className="prototype-label"><span />Local prototype</span>
+      </header>
+
+      <section className="landing-hero" aria-labelledby="landing-title">
+        <div className="landing-hero-copy">
+          <p className="eyebrow">A clearer way to review one application</p>
+          <h1 id="landing-title">See how your CV connects to a target role.</h1>
+          <p className="landing-intro">
+            Compare the wording in your CV with one job description. Review what is supported, what is unclear, and what you might work on next.
+          </p>
+          <div className="landing-actions">
+            <Link className="button button-primary" href="/sign-up">Create account</Link>
+            <Link className="button button-secondary" href="#example-report">View fictional example</Link>
+          </div>
+          <p className="landing-caveat">EXE provides advisory guidance. It does not score your hiring chances, verify qualifications, or guarantee a job.</p>
         </div>
-      </aside>
 
-      <main className="main-column" id="main-content" tabIndex={-1}>
-        <header className="topbar">
-          <div className="breadcrumb"><span>Workspace</span><span className="breadcrumb-separator">/</span><strong>Overview</strong></div>
-          <div className="topbar-right"><Link className="saved-work-link" href="/saved-work">Saved work</Link><span className="build-badge"><span />Build in progress</span><span className="avatar-placeholder" role="img" aria-label="Demo workspace">D</span></div>
-        </header>
-        <div className="page-content">
-          <section className="welcome-row">
-            <div>
-              <p className="eyebrow">YOUR CAREER WORKSPACE</p>
-              <h1>Make your next application a clearer one.</h1>
-               <p className="welcome-copy">Compare CV wording with one job description, check the evidence, and choose what to work on next. This internal prototype uses fictional data only; do not upload your real CV.</p>
-            </div>
-            <Link href="/assessment" className="button button-primary">Start an assessment <span aria-hidden="true">↗</span></Link>
-          </section>
+        <aside className="landing-preview" aria-labelledby="preview-title">
+          <div className="landing-preview-heading">
+            <div><p className="report-label">FICTIONAL EXAMPLE</p><h2 id="preview-title">Data Analyst Intern</h2></div>
+            <span className="report-status">Example only</span>
+          </div>
+          <p className="landing-preview-caption">A finding describes wording in a sample CV, not a verified skill.</p>
+          <ul className="landing-finding-list">
+            {findings.map((finding) => (
+              <li className="landing-finding" key={finding.title}>
+                <span className={`finding-indicator ${finding.tone}`} aria-hidden="true" />
+                <div><strong>{finding.title}</strong><p>{finding.detail}</p></div>
+                <span className={`finding-status ${finding.tone}`}>{finding.status}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="landing-preview-footnote">This example contains fictional CV and job information.</p>
+        </aside>
+      </section>
 
-          <section className="hero-panel" aria-labelledby="hero-title">
-            <div className="hero-copy">
-              <div className="hero-kicker"><span className="sparkle" aria-hidden="true">✳</span>FROM CV TO NEXT STEP</div>
-              <h2 id="hero-title">Know what to strengthen before you apply.</h2>
-               <p>Supported, Partly supported, Unclear, and Missing describe wording found in the submitted CV. They do not verify skills, predict hiring, or guarantee employment.</p>
-               <Link className="hero-link" href="/assessment">Add a fictional CV and job description <span aria-hidden="true">→</span></Link>
-               <div className="hero-note"><span className="check-ring" aria-hidden="true">✓</span>Check each proposed draft statement against its source before using it.</div>
-            </div>
-            <div className="hero-visual" aria-hidden="true">
-              <div className="visual-orbit orbit-one" /><div className="visual-orbit orbit-two" />
-              <div className="visual-center"><span className="visual-doc-icon">CV</span><span>Your experience</span></div>
-              <div className="visual-node node-one"><span className="node-dot teal" />Evidence</div>
-              <div className="visual-node node-two"><span className="node-dot amber" />Skill gap</div>
-              <div className="visual-node node-three"><span className="node-dot blue" />Next step</div>
-              <span className="visual-spark spark-one">✦</span><span className="visual-spark spark-two">·</span>
-            </div>
-          </section>
-
-          <section className="content-grid" id="how-it-works">
-            <div className="section-card process-card">
-               <div className="section-heading"><div><p className="eyebrow">YOUR EXISTING WORKFLOW</p><h2>How your assessment works</h2></div><span className="small-step-count">5 steps</span></div>
-               <ol className="process-list">
-                 {steps.map((step) => <li className="process-step" key={step.number}><span className="step-number" aria-hidden="true">{step.number}</span><div><h3>{step.title}</h3><p>{step.detail}</p></div></li>)}
-               </ol>
-              <Link href="/assessment" className="text-link">Start with your CV <span aria-hidden="true">→</span></Link>
-            </div>
-            <div className="section-card promise-card">
-              <div className="promise-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5 19 6v5.1c0 4.5-3 7.8-7 9.4-4-1.6-7-4.9-7-9.4V6l7-2.5Z" stroke="currentColor" strokeWidth="1.6"/><path d="m9 12 2 2 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
-              <p className="eyebrow">BUILT AROUND YOUR EVIDENCE</p><h2>Advice you can check.</h2>
-              <p className="promise-copy">Each finding should point back to something in your CV—or say clearly when the evidence is missing.</p>
-              <div className="promise-rule" /><div className="promise-foot"><span className="status-dot" />You review every CV change before using it.</div>
-            </div>
-          </section>
-
-          <section className="example-section" id="example-report">
-            <div className="example-heading"><div><p className="eyebrow">A LOOK AT THE RESULT</p><h2>Clear findings, with the evidence beside them.</h2></div><span className="fictional-tag"><span className="tag-star">✦</span>Fictional example</span></div>
-            <div className="report-preview">
-              <div className="report-summary"><div className="report-role-icon" aria-hidden="true">DA</div><div><p className="report-label">TARGET ROLE</p><h3>Data Analyst Intern</h3><p className="report-muted">Example CV · Example job description</p></div><span className="report-status">Example analysis</span></div>
-              <div className="finding-list">
-                {findings.map((finding) => <article className="finding-row" key={finding.title}><div className="finding-main"><span className={`finding-indicator ${finding.tone}`} aria-hidden="true" /><div><h4>{finding.title}</h4><p>{finding.evidence}</p></div></div><span className={`finding-status ${finding.tone}`}>{finding.status}</span></article>)}
-              </div>
-              <div className="report-footnote"><span aria-hidden="true">ⓘ</span>This fictional example demonstrates evidence labels; it is not based on your CV.</div>
-            </div>
-          </section>
-          <footer className="page-footer"><span>EXE · Career readiness platform</span><span>Fictional preview · M2 reports use local wording checks; no AI provider is connected</span></footer>
+      <section className="landing-process" id="how-it-works" aria-labelledby="process-title">
+        <div className="landing-section-heading">
+          <p className="eyebrow">THREE STEPS</p>
+          <h2 id="process-title">Start with one job application.</h2>
         </div>
-      </main>
-    </div>
+        <ol className="landing-steps">
+          {steps.map((step) => (
+            <li className="landing-step" key={step.number}>
+              <span className="landing-step-number" aria-hidden="true">{step.number}</span>
+              <h3>{step.title}</h3>
+              <p>{step.detail}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="landing-example" id="example-report" aria-labelledby="example-title">
+        <div>
+          <p className="eyebrow">KEEP CONTROL OF YOUR CV</p>
+          <h2 id="example-title">Check every suggestion before you use it.</h2>
+          <p>EXE keeps each finding connected to the wording it came from. It will not add a skill or qualification just because a job description asks for it.</p>
+        </div>
+        <Link className="button button-primary" href="/sign-up">Create your account</Link>
+      </section>
+
+      <footer className="landing-footer">
+        <span>EXE · Career readiness</span>
+        <span>Prototype status: use fictional data until privacy and retention review is complete.</span>
+      </footer>
+    </main>
   );
 }

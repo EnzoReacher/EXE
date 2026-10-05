@@ -31,7 +31,13 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000`. The `/assessment` workspace uses Supabase Auth and private, owner-scoped CV/job intake when placeholder values are configured for a reviewed Supabase project. It accepts PDF/DOCX CVs up to 5 MiB. Select a saved CV and job to create an evidence report. M2 uses local text matching only and does not call an AI provider. Use fictional/sample information until the team reviews Supabase backup, retention, deletion, and the M2 database policies.
+For the default local Supabase redirect settings, open `http://127.0.0.1:3000` (the configuration also allows `http://localhost:3000`). The public home page links to `/sign-up` and `/sign-in`; successful authentication opens `/assessment`. The workspace uses Supabase Auth and private, owner-scoped CV/job intake when local public settings are configured. It accepts PDF/DOCX CVs up to 5 MiB. Select a saved CV and job to create an evidence report. M2 uses local text matching only and does not call an AI provider. Use fictional/sample information until the team reviews Supabase backup, retention, deletion, and the M2 database policies.
+
+### M12 landing page and account access
+
+Copy `.env.example` to `.env.local` and use the public URL and publishable key from the already-running local Supabase stack. `NEXT_PUBLIC_SITE_URL` should be the app's canonical origin. The local Auth config supports confirmation links to `/auth/callback`; local email confirmation is disabled, so a successful local sign-up should create an active session immediately. When email confirmation is enabled for another Supabase environment, the callback exchanges the PKCE code into the cookie session and returns to `/assessment`.
+
+Before any hosted use, set `NEXT_PUBLIC_SITE_URL` to the canonical HTTPS site origin and add the exact `${NEXT_PUBLIC_SITE_URL}/auth/callback` URL to that Supabase project's Auth redirect allow-list. Do not add a service-role key to browser configuration. Supabase Auth manages passwords; the app uses the publishable key and cookie-based `@supabase/ssr` clients. The Next.js Proxy refreshes sessions; existing server routes continue to verify the user and owner-scoped policies remain the authorization boundary. No production redirect, email delivery, merge, or deployment has been tested or approved.
 
 ### Fictional-data owner-review verification
 
