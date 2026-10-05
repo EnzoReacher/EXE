@@ -4,7 +4,7 @@ This tracks engineering work separately from course grading checkpoints. Mark a 
 
 ## Latest — M14 visual foundation
 
-Prepared on `codex/exe-web-app-m14-visual-foundation` from M13 head `b8e5cbb6c00222215d5382f17274480698b0f018`. Refined shared visual tokens and scoped the public landing/sign-in/sign-up styling, reflow, focus, and reduced-motion behavior. Added a design-system guide and owner acceptance checklist. M13 engineering/Quality passed, but its real local-Supabase browser journey remains pending. M14 automated Quality and owner visual/accessibility review are pending until verified. No account/backend/schema changes, PR, merge, deployment or release approval. See `M14_VISUAL_DESIGN_SYSTEM.md`, `M14_VISUAL_ACCEPTANCE.md`, and [the master report](PROJECT_MASTER_REPORT.md).
+Prepared on `codex/exe-web-app-m14-visual-foundation` from M13 head `b8e5cbb6c00222215d5382f17274480698b0f018`. Refined shared visual tokens and scoped the public landing/sign-in/sign-up styling, reflow, focus, and reduced-motion behavior. Added a design-system guide and owner acceptance checklist. M13 engineering/Quality passed, but its real local-Supabase browser journey remains pending. M14 GitHub Quality passed run `37332982645` (321 tests/41 files, lint/typecheck/build, scripts, CP2 structural validation, and diff check); owner visual/accessibility review remains pending. No account/backend/schema changes, PR, merge, deployment or release approval. See `M14_VISUAL_DESIGN_SYSTEM.md`, `M14_VISUAL_ACCEPTANCE.md`, and [the master report](PROJECT_MASTER_REPORT.md).
 
 
 | Part | Status | Scope | Exit criteria |
@@ -23,7 +23,7 @@ Prepared on `codex/exe-web-app-m14-visual-foundation` from M13 head `b8e5cbb6c00
 | M10 — CP2 research execution workspace | Evidence collection pending | CP2 execution status, research-session log, product-direction decision, and owner gate | M10 evidence review found only template/example material. No owner-review result, collected research, public source record, product direction, or M11 feature decision is recorded; M11 remains blocked until reviewed CP2 evidence. |
 | M12 — Public landing and account access | Implemented — local auth acceptance pending | Public landing, Supabase email/password sign-in/sign-up, confirmation callback, and session refresh | M12 implementation passed recorded build checks; M13 local browser journey remains an owner action. See master report and `M13_AUTH_ACCEPTANCE.md`. |
 | M13 — Local landing and account acceptance | Engineering checks passed — owner local run pending | Synthetic local account journey, session persistence, generic failures, anonymous denial, and collected-mode CP2 CI repair | GitHub Quality passed; owner must still run the journey against the existing local Supabase stack. |
-| M14 — Public visual foundation | Implementation on feature branch — automated checks and owner review pending | Shared visual tokens, landing/auth styling, responsive and reduced-motion rules, review documentation | Check current GitHub Quality, then record actual visual, keyboard, responsive, and accessibility review. No backend or auth behavior changes. |
+| M14 — Public visual foundation | Engineering checks passed — owner review pending | Shared visual tokens, landing/auth styling, responsive and reduced-motion rules, review documentation | GitHub Quality run `37332982645` passed 321 tests/41 files and all workflow steps. Owner must record actual visual, keyboard, responsive, and accessibility review. No backend or auth behavior changes. |
 
 ## M10.2 existing-experience hardening
 

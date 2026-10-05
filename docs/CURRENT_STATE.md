@@ -1,11 +1,11 @@
 # EXE Project Current State
 
 **Last updated:** 2026-10-05
-**Status:** M14 public visual-foundation styling and design/acceptance Markdown are implemented on `codex/exe-web-app-m14-visual-foundation`, based on M13 head `b8e5cbb6c00222215d5382f17274480698b0f018`. Automated Quality and owner browser review are pending. M13 engineering/CI passed; its local Supabase browser journey remains an owner action. No authentication behavior, database, RLS, Storage, or API change in M14. No PR, merge, deployment or release approval. See `M14_VISUAL_DESIGN_SYSTEM.md`, `M14_VISUAL_ACCEPTANCE.md`, and the single `PROJECT_MASTER_REPORT.md`.
+**Status:** M14 public visual-foundation styling and design/acceptance Markdown are implemented on `codex/exe-web-app-m14-visual-foundation`, based on M13 head `b8e5cbb6c00222215d5382f17274480698b0f018`. GitHub Quality run `37332982645` passed 321 tests/41 files, lint, typecheck, production build, script syntax, CP2 structural validation, and diff check. Owner browser review remains pending. M13 engineering/CI passed; its local Supabase browser journey remains an owner action. No authentication behavior, database, RLS, Storage, or API change in M14. No PR, merge, deployment or release approval. See `M14_VISUAL_DESIGN_SYSTEM.md`, `M14_VISUAL_ACCEPTANCE.md`, and the single `PROJECT_MASTER_REPORT.md`.
 
 ## M14 current work
 
-- M14 applies the shared palette refresh and visual hierarchy to the public landing and sign-in/sign-up surfaces. The design-system and owner-review Markdown document intent and actual results separately. Automated Quality and owner review remain pending until results are observed.
+- M14 applies the shared palette refresh and visual hierarchy to the public landing and sign-in/sign-up surfaces. The design-system and owner-review Markdown document intent and actual results separately. GitHub Quality passed run `37332982645`; owner review remains pending until actual results are supplied.
 - M13 engineering checks passed, but the genuine browser sign-up/sign-in journey against the owner's local Supabase stack has not been recorded here. Keep this local account acceptance pending.
 
 ## Completed in this build part
