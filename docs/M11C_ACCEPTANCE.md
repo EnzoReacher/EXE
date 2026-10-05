@@ -4,7 +4,7 @@
 **Exact baseline:** e15d9584fa67230024ed21cc6258f29a1353726b
 **Review branch:** codex/exe-web-app-m11c-proof-review
 **Published implementation commit:** 7738159434cb732ca94095d6a5db4b4e388a9eac
-**Overall status:** Implementation and isolated code/rendering verification complete. Owner local-stack journey was run on 2026-10-05; latest run passed claim draft creation and failed during claim submission. The specific submit request/state assertion is still unknown.
+**Overall status:** Implementation and isolated code/rendering verification complete. Owner local-stack journey was run on 2026-10-05; the run on `ebc98f9` passed the submit request and failed waiting for the visible submitted-state label. Whether the saved state refreshed correctly remains unknown.
 
 ## Section progress
 
@@ -12,7 +12,7 @@
 |---|---|---|
 | 1 — Baseline | Complete | GitHub ref matched the supplied M11B.1 SHA. A clean separate worktree was created from it. Existing worktrees were preserved. |
 | 2 — Implementation | Complete | Protected proof rendering, fresh expert acknowledgements, source-aware history, guidance, new-claim preparation, safe errors and stale-panel handling. |
-| 3 — Verification/audit | Isolated checks passed; owner integration run failed during submission | Owner reported review verification passed all five checks, including 300 tests and production build; proof-preview and workspace UI suites passed. Local migration list matched for versions 20261001–20261007. Updated end-to-end run passed sign-in, workspace, validation, CV upload, proof upload and claim draft creation; claim submission then failed. Harness cleanup succeeded. |
+| 3 — Verification/audit | Isolated checks passed; owner integration run failed waiting for submitted state | Owner reported review verification passed all five checks, including 300 tests and production build; proof-preview and workspace UI suites passed. Local migration list matched for versions 20261001–20261007. Run on `ebc98f9` passed sign-in, workspace, validation, both uploads, claim draft creation and claim submit POST; it failed waiting for “Waiting for expert”. Harness cleanup succeeded. |
 | 4 — Reporting/publication | Complete — implementation published for source review | All 30 intended file blobs and the complete Git tree matched the staged/tested source. New GitHub review ref matched 7738159434cb732ca94095d6a5db4b4e388a9eac; main remained at d956118e3b89eb1fdcfd10fb48a45ba150fec20a. This documentation follow-up changes no tested application code. Publication does not constitute integration acceptance or release. |
 
 ## Commands and actual outcomes
@@ -36,11 +36,12 @@
 | Owner `pnpm dlx supabase migration list --local` | Passed — local and remote showed matching versions `20261001` through `20261007` |
 | Owner `pnpm run review:verify` | Passed all five steps — preflight, lint, typecheck, 300 tests/37 files, and production build |
 | Owner `pnpm run test:e2e:local` on `7bbaed5` | Passed nested steps `OWNER_REAL_SIGN_IN`, `OWNER_WORKSPACE_OPEN`, `OWNER_FORM_VALIDATION`, `OWNER_CV_UPLOAD`, `OWNER_PROOF_UPLOAD`, and `OWNER_CLAIM_DRAFT_CREATION`; `OWNER_CLAIM_SUBMISSION` failed with `ELEMENT_WAIT_FAILURE`. Synthetic fixture cleanup passed. |
+| Owner `pnpm run test:e2e:local` on `ebc98f9` | Passed `OWNER_CLAIM_SUBMIT_REQUEST` after all earlier owner steps; `OWNER_CLAIM_SUBMITTED_STATE` failed with `ELEMENT_WAIT_FAILURE`. Synthetic fixture cleanup passed. |
 | Owner `pnpm run test:proof-preview` / `pnpm run test:workspace-ui` | Passed both isolated browser suites |
 
 ## Follow-up diagnostic change (2026-10-05)
 
-The test first separated draft creation, submission and responsive layout. After the owner rerun localized the timeout to submission, the latest follow-up divides that stage into submit-request response, visible submitted-state, and refreshed server-state checks. This is diagnostic only; it does not change product behavior or claim acceptance. Lint, typecheck, and `git diff --check` passed for the previous diagnostic revision. The newest finer-grained revision still needs the owner’s local-stack rerun.
+The test separates submission request from visible submitted state. After the owner reported the submit POST passed but the label wait timed out, the newest revision fetches the safe synthetic claim state on that failure and emits only its HTTP status/state category. This should distinguish a failed workspace refresh from a UI-label issue without printing claim contents or credentials. It does not change product behavior or claim acceptance. Lint, typecheck, and `git diff --check` passed for the previous diagnostic revision; this revision needs the owner’s local-stack rerun.
 
 Browser commands above used PROOF_BROWSER_EXECUTABLE and LD_LIBRARY_PATH for a temporary, separately installed test executable. That browser package/binary is outside the app repository and is not an app dependency. Playwright's standard Chromium download failed because the returned archive was invalid in this environment; no success is claimed for that installation.
 
@@ -61,7 +62,7 @@ Initial proof-rendering diagnostics failed on Playwright's service-worker sandbo
 
 | Activity | Actual status |
 |---|---|
-| Genuine local Supabase browser acceptance of this new branch | Owner ran it on 2026-10-05 through draft creation; claim submission failed. Rerun the newest request/state/server checkpoints to isolate the exact failure. |
+| Genuine local Supabase browser acceptance of this new branch | Owner ran it through successful submit POST but no visible submitted-state label on 2026-10-05. Rerun the latest diagnostic to see whether refreshed API state is submitted, missing, or unavailable. |
 | M11A manual owner/browser/mobile/accessibility review | Not performed |
 | Screen-reader evaluation and full accessibility audit | Not performed |
 | Real browser printing/PDF pagination; external DOCX-editor inspection | Not performed |

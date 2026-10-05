@@ -160,7 +160,15 @@ test("synthetic local credential approval, acceptance, exports and denial bounda
         check(response.ok(), `CLAIM_SUBMIT_HTTP_${response.status()}`);
       });
       await test.step("OWNER_CLAIM_SUBMITTED_STATE", async () => {
-        await ownerPage.getByText("Waiting for expert", { exact: true }).waitFor();
+        try { await ownerPage.getByText("Waiting for expert", { exact: true }).waitFor(); }
+        catch {
+          const response = await ownerPage.context().request.get("/api/credential-versions", { maxRedirects: 0 });
+          if (!response.ok()) throw new Error(`CLAIM_REFRESH_HTTP_${response.status()}`);
+          const data = await response.json();
+          const claim = data.claims?.find((item: { skill?: string }) => item.skill === skill);
+          const state = typeof claim?.state === "string" && /^[a-z_]+$/.test(claim.state) ? claim.state.toUpperCase() : "MISSING";
+          throw new Error(`CLAIM_REFRESH_STATE_${state}_UI_LABEL_MISSING`);
+        }
       });
       await test.step("OWNER_CLAIM_SERVER_STATE", async () => {
         const submitted = await json(ownerPage, "/api/credential-versions"); claimId = submitted.claims[0].id;
