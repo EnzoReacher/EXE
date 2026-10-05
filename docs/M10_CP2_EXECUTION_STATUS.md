@@ -1,6 +1,6 @@
 # M10 CP2 Research Execution Status
 
-**Status:** Evidence collection pending — M10 review confirmed no CP2 evidence or owner-review result is recorded in this repository.
+**Status:** Evidence collection pending — nine public-source records CM-001–CM-009 are now recorded for 2026-10-05; owner/team review and primary research remain pending.
 **Branch:** codex/exe-web-app-m10  
 **Purpose:** execute the M8 research plan and use the M9 decision gate before selecting the next product feature.
 
@@ -20,19 +20,35 @@ This file is a live checklist. An unchecked item is not complete. Do not mark an
 | M5 CP1 demo rehearsal | No documented team/course result | Owner/team must rehearse and retain the required course evidence. |
 | Privacy and retention review | No owner decision recorded | Owner must decide/document data handling, deletion, backup, retention, and access before real CV use. |
 | CP2 target-user, expert, and survey evidence | No collected evidence | Owner/team must provide consent-safe anonymized summaries/aggregate results. |
-| Current public market, competitor, and pricing research | No supplied or authorized source evidence | Owner/team must provide current cited source records before any comparison or price claim. |
+| Current public market, competitor, and pricing research | At the 2026-10-02 review, no source evidence had been recorded | Owner/team must review the subsequent 2026-10-05 source records, verify current checkout/promotion/tax context, and add needed market/outlook sources. No price or competitive claim is approved. |
 
-**Status change:** none. CP2 remains pending; no M11 feature is authorized. This review does not replace owner/team review or collect evidence.
+**Status as of 2026-10-02:** no status change. CP2 remained pending; no evidence-selected M11 feature was authorized. No participant research or owner/team review was performed by that review.
+
+## Public-source update — 2026-10-05
+
+- Activity: manually reviewed official public pages for candidate product features and displayed access/pricing context; this was not an interview, survey, expert interview, product usability test, or market-size study.
+- Source IDs: CM-001–CM-008; detailed dated notes are in `docs/evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md`, and structured fields are in `docs/evidence/cp2-public-source-log-2026-10-05.md`.
+- Checks: `pnpm cp2:validate:collected` passed with 8 records and 0 owner-reviewed records. `pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md` passed documentation-completeness checks; it did not fetch URLs or verify facts.
+- Review/decision: owner/team review remains pending. No price, differentiation, market, target-segment, job-family, or product-direction decision was made. CP2 remains pending and no evidence-selected M11 feature is authorized.
+
+## Follow-on education-context source and instructor clarification draft — 2026-10-05
+
+- Activity: added CM-009 from an official Ministry of Education and Training higher-education statistics PDF. It reports 2,355,711 undergraduate students across 243 universities for academic year 2023–24, with an explicit exclusion for Public Security and National Defence institutions. This is education enrolment context only, not a count of job seekers or CV-support demand.
+- Evidence records: CM-009 is in the dated public-source log and snapshot; EDU-001 is the corresponding neutral context row in `docs/CP2_EVIDENCE_REGISTER.md`. Publication date is not stated in the PDF.
+- Validation: `pnpm cp2:validate:collected` passed with 9 evidence rows and 0 owner-reviewed; `pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md` passed source-log structure/completeness. The source validator did not fetch URLs or verify facts. Direct PDF retrieval timed out; CM-009 is based on indexed text and requires owner inspection.
+- Instructor follow-up: `docs/M10_CP2_INSTRUCTOR_CLARIFICATION_DRAFT.md` contains English and Vietnamese draft wording for the ambiguous “hub,” participant-count, overlap, supplier, expert-qualification, and evidence-format requirements. It is **not sent**; no instructor reply or outreach is recorded.
+- Review/decision: CM-001–CM-009 and EDU-001 remain pending owner/team review. No recruitment, fieldwork, product selection, price/competitive claim, CP2 completion, or M11 authorization occurred.
 
 ## Exact inputs required next
 
-M10.3 prepares local operations only: use `M10_3_OWNER_HANDOFF.md` and the survey/source schemas to manually anonymize, validate and summarize actual owner-supplied evidence before safe register entry. Private drafts go in ignored `research/private/` or `docs/evidence/private/`; identities/raw files stay separate. No research was collected automatically or entered; CP2 remains **Evidence collection pending**. Target segment/job family remain open, price/competitor claims blocked and M11 blocked. M7/M10.2 fictional owner browser reviews remain pending. No merge or deployment occurred.
+M10.3 prepares local operations only: use `M10_3_OWNER_HANDOFF.md` and the survey/source schemas to manually anonymize, validate and summarize actual owner-supplied evidence before safe register entry. Private drafts go in ignored `research/private/` or `docs/evidence/private/`; identities/raw files stay separate. The 2026-10-02 review found no research had been collected or entered at that time; the subsequent 2026-10-05 public-source activity is recorded separately above. CP2 remains **Evidence collection pending**. Target segment/job family remain open, price/competitor claims blocked and M11 blocked. M7/M10.2 fictional owner browser reviews remain pending. No merge or deployment occurred.
 
 1. Documented fictional-data results for every M7/M5 owner review item above.
 2. Actual collection dates, anonymized category, consent-safe summary, related hypothesis, signal, limitations, and owner-review status for each target-user or expert activity.
 3. Aggregate anonymous survey counts/results and sampling limitations, if a survey is used.
-4. Current public-source records with URL, access date, source/update date when available, region, currency, plan/tax/access context, and the exact supported fact for market, competitor, privacy, or pricing research.
-5. Owner/team review date, reviewer, limitations/bias discussion, hypothesis classifications, and explicit product-direction decision.
+4. Owner/team review of `docs/evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md` and CM-001–CM-009 / EDU-001; recheck live pricing/checkout terms and add required market/outlook sources with dates, region, currency, plan/tax/access context, and exact supported facts.
+5. Send the instructor clarification draft if the project owner chooses, then record the actual send date/reply. Do not treat the draft as course approval.
+6. Owner/team review date, reviewer, limitations/bias discussion, hypothesis classifications, and explicit product-direction decision.
 
 ## Current boundary
 

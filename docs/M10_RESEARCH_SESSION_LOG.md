@@ -1,6 +1,6 @@
 # M10 Research Session Log
 
-**Status:** Blank execution log — no participant or market evidence has been collected here.  
+**Status:** No participant primary research is recorded. An initial public-source desk research activity is documented below; owner/team review is pending.
 **Privacy rule:** keep identity/contact information, recordings, full CVs, credentials, and confidential applications outside the repository.
 
 Use one entry per completed research activity. Replace the blank template only with a real, consent-safe, anonymized record.
@@ -13,6 +13,26 @@ Use one entry per completed research activity. Replace the blank template only w
 - Interpretation: none; an empty/example-only register does not support a product, market, pricing, usability, privacy, or competitor conclusion.
 - Decision / next action: keep CP2 and M11 selection pending; request the exact consent-safe inputs listed in `M10_CP2_EXECUTION_STATUS.md`.
 - Owner/team review status: not reviewed; no owner/team approval recorded.
+
+## Public-source desk research — 2026-10-05
+
+- Activity: checked official public competitor/product pages for candidate-facing features and displayed access/pricing context. This was **not** a participant interview, expert interview, survey, user walkthrough, or market-size study.
+- Evidence IDs: CM-001 through CM-008; detailed observations and URLs are in `docs/evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md`.
+- Observation: seven vendor pages describe free CV tools and overlapping CV-to-job analysis, gap/roadmap, tailoring, or human-review offers. Displayed prices include VND credit/annual offers and USD subscription/lifetime plans. The National Statistics Office also reports Q2 2026 youth unemployment and NEET indicators. Some prices or current availability are unclear or inaccessible.
+- Interpretation: no validated differentiation, affordability, ease-of-use, market-size, share, uptake, outcome, or willingness-to-pay conclusion follows from vendor pages.
+- Limitations: vendor-controlled pages; no checkout, purchase, full product trial, independent price verification, or page update date for most sources. The Jobie page was available only as indexed official-page text in this review; the HUFLIT page is on a development subdomain with expired event dates; Jobscan's pricing route returned no readable price.
+- Decision / next action: request owner/team review of CM-001–CM-008; confirm ambiguous course counts and research route with the instructor; then conduct consent-safe target-user and expert/survey research as instructed.
+- Owner/team review status: pending. No outreach was sent.
+
+## Higher-education context source and clarification preparation — 2026-10-05
+
+- Activity: reviewed an official Ministry of Education and Training higher-education statistics PDF and prepared an instructor-clarification draft. This was public-source desk research and document preparation; it was not participant recruitment, an interview, survey, expert interview, usability test, or instructor contact.
+- Evidence/source IDs: CM-009 in the public-source log; EDU-001 in the CP2 register. English and Vietnamese draft: `docs/M10_CP2_INSTRUCTOR_CLARIFICATION_DRAFT.md`.
+- Observation: the PDF's indexed text reports 2,355,711 undergraduate students across 243 universities for academic year 2023–24 and its extracted table note says universities/academies under Public Security and National Defence are excluded. Direct retrieval of the PDF timed out, and the PDF does not state a publication date.
+- Interpretation: these enrolment totals describe higher-education context only. They do not identify active job seekers, CV-support demand, EXE's addressable market, or willingness to pay.
+- Limitation: the full document was not opened or visually checked in this session; indexed text and a completeness-validator pass are not independent factual verification. The source facts and register row have not received owner/team review. The instructor draft is not sent, and no reply is available.
+- Decision / next action: retain CP2 as pending; review all nine source records, send the clarification only if the owner chooses, record the actual reply, then plan evidence collection after course requirements are confirmed.
+- Owner/team review status: pending. No instructor contact or participant research occurred.
 
 ## Target-user interview entry
 
