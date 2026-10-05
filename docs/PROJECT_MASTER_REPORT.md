@@ -415,6 +415,7 @@ Documentation checks for this task: `pnpm exec vitest run scripts/validate-cp2-e
 | 2026-10-05 | M11C.1 existing-flow reliability and accessibility hardening | Automated verification passed; manual owner review pending | From `4117575126f3c2163582d5bf6a2fb20bc1f641c9`: partial-deletion cache invalidation and accurate proposal/expert validation semantics; 301 tests/37 files, build, both isolated browser suites, genuine local-stack synthetic journey/cleanup and CP2 structural validators passed. CP2 remains open with 9 rows and 0 owner-reviewed. See `M11C_ACCEPTANCE.md`. |
 
 | 2026-10-05 | CP2 supplementary public-page retrieval | Current first-party page observations recorded; owner/team review pending | Directly opened FitCV, TopCV, Rezi and Jobscan tools pages; Jobscan pricing returned no readable terms and Jobie/NSO/MOET direct requests timed out. Source log/register unchanged; 9 rows remain pending, 0 owner-reviewed. No checkout, primary research, manual review, product decision or feature work. |
+| 2026-10-05 | M12 landing and Supabase account access | Engineering checks passed on `0d9dc84`; 257 tests/40 files excluding the sandbox-nonterminating CP2 research test, 25 focused tests, lint, typecheck, preflight, build, and whitespace checks passed. Actual local Supabase Auth browser acceptance remains pending. | Feature branch `codex/exe-web-app-m12-landing-auth`; partial owner feedback recorded; CP2 unchanged; no merge or deployment. |
 
 ## 12. How to resume
 
