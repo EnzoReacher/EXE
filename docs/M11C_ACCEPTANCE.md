@@ -4,7 +4,7 @@
 **Exact baseline:** e15d9584fa67230024ed21cc6258f29a1353726b
 **Review branch:** codex/exe-web-app-m11c-proof-review
 **Published implementation commit:** 7738159434cb732ca94095d6a5db4b4e388a9eac
-**Overall status:** Implementation and isolated code/rendering verification complete. Owner local-stack journey on `ebc98f9` passed the submit request; the UI assertion timed out while a follow-up API read found the synthetic claim in `submitted` state. A selector ambiguity is suspected; the test is now scoped to the claim card's status paragraph and awaits owner rerun.
+**Overall status:** Implementation, isolated verification, and genuine owner local-stack synthetic browser acceptance passed on 2026-10-05 at `b7807e5`. All journeys and run-scoped fixture cleanup passed. Manual owner/accessibility review, CP2, expert-policy and release gates remain pending.
 
 ## Section progress
 
@@ -12,8 +12,8 @@
 |---|---|---|
 | 1 — Baseline | Complete | GitHub ref matched the supplied M11B.1 SHA. A clean separate worktree was created from it. Existing worktrees were preserved. |
 | 2 — Implementation | Complete | Protected proof rendering, fresh expert acknowledgements, source-aware history, guidance, new-claim preparation, safe errors and stale-panel handling. |
-| 3 — Verification/audit | Isolated checks passed; integration partially verified; UI assertion under correction | Owner reported review verification passed all five checks, including 300 tests and production build; proof-preview and workspace UI suites passed. Local migration list matched for versions 20261001–20261007. Run on `ebc98f9` passed sign-in, workspace, validation, both uploads, claim draft creation and claim submit POST. The text wait failed, but its diagnostic API read found the claim in `submitted` state. Harness cleanup succeeded. |
-| 4 — Reporting/publication | Complete — implementation published for source review | All 30 intended file blobs and the complete Git tree matched the staged/tested source. New GitHub review ref matched 7738159434cb732ca94095d6a5db4b4e388a9eac; main remained at d956118e3b89eb1fdcfd10fb48a45ba150fec20a. This documentation follow-up changes no tested application code. Publication does not constitute integration acceptance or release. |
+| 3 — Verification/audit | Complete for automated local acceptance; manual review remains open | Owner reports all five `review:verify` steps passed (300 tests/37 files/build), proof-preview and workspace UI suites passed, migration list matched for 20261001–20261007, and full local journey on `b7807e5` passed every step with cleanup. No real-user data or human expert decision was used. |
+| 4 — Reporting/publication | Complete — diagnostics and acceptance record published on feature branch | Implementation remains on the review branch; latest branch head at acceptance was `b7807e5`. `main` remains `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`. Nothing was merged or deployed. Passing automated acceptance is not release approval. |
 
 ## Commands and actual outcomes
 
@@ -38,11 +38,12 @@
 | Owner `pnpm run test:e2e:local` on `7bbaed5` | Passed nested steps `OWNER_REAL_SIGN_IN`, `OWNER_WORKSPACE_OPEN`, `OWNER_FORM_VALIDATION`, `OWNER_CV_UPLOAD`, `OWNER_PROOF_UPLOAD`, and `OWNER_CLAIM_DRAFT_CREATION`; `OWNER_CLAIM_SUBMISSION` failed with `ELEMENT_WAIT_FAILURE`. Synthetic fixture cleanup passed. |
 | Owner `pnpm run test:e2e:local` on `ebc98f9` | Passed `OWNER_CLAIM_SUBMIT_REQUEST` after all earlier owner steps; `OWNER_CLAIM_SUBMITTED_STATE` failed with `ELEMENT_WAIT_FAILURE`. Synthetic fixture cleanup passed. |
 | Owner API fallback on `ebc98f9` | Returned the synthetic claim with state `submitted`; no claim contents were printed. This verifies the stored transition but not successful UI display. |
+| Owner `pnpm run test:e2e:local` on `b7807e5` | Passed `OWNER_REAL_SIGN_IN`, `OWNER_WORKSPACE_OPEN`, `OWNER_FORM_VALIDATION`, `OWNER_CV_UPLOAD`, `OWNER_PROOF_UPLOAD`, `OWNER_CLAIM_DRAFT_CREATION`, `OWNER_CLAIM_SUBMIT_REQUEST`, `OWNER_CLAIM_SUBMITTED_STATE`, `OWNER_CLAIM_SERVER_STATE`, `OWNER_WORKSPACE_RESPONSIVE_LAYOUT`, `NONEXPERT_UNASSIGNED_AND_ANONYMOUS_DENIALS`, `ASSIGNED_SYNTHETIC_EXPERT_REVIEW`, `CANDIDATE_EXPORT_DENIAL_AND_OWNER_ACCEPTANCE`, `DOCX_TXT_PRINT_AND_PRIVATE_METADATA_EXCLUSION`, and `WITHDRAWAL_AND_STALE_EXPORT_DENIAL`. Synthetic browser checks passed; run-scoped synthetic accounts and private objects cleaned up. |
 | Owner `pnpm run test:proof-preview` / `pnpm run test:workspace-ui` | Passed both isolated browser suites |
 
 ## Follow-up diagnostic change (2026-10-05)
 
-The test separates the submit request and visible state. The `ebc98f9` run showed the submit POST succeeded and API state was `submitted` while the broad text locator timed out. Since the page also has a filter option with the same words, and component tests scope the status to a paragraph, the E2E check now targets the matching claim card's status paragraph. This is a test-selector correction, not a product change. It still needs owner rerun confirmation.
+The `ebc98f9` run showed the submit POST succeeded and the API state was `submitted` while the broad text locator timed out. The page also has a filter option with the same words, so the E2E check was scoped to the matching claim card's status paragraph. The owner's `b7807e5` rerun passed that check and the full journey. This was a test-selector correction; no product behavior changed.
 
 Browser commands above used PROOF_BROWSER_EXECUTABLE and LD_LIBRARY_PATH for a temporary, separately installed test executable. That browser package/binary is outside the app repository and is not an app dependency. Playwright's standard Chromium download failed because the returned archive was invalid in this environment; no success is claimed for that installation.
 
@@ -63,7 +64,7 @@ Initial proof-rendering diagnostics failed on Playwright's service-worker sandbo
 
 | Activity | Actual status |
 |---|---|
-| Genuine local Supabase browser acceptance of this new branch | Owner run verified submit POST and API state `submitted`, but the broad UI locator failed. Rerun the scoped status check before considering this journey accepted. |
+| Genuine local Supabase browser acceptance of this branch | Passed on `b7807e5` on 2026-10-05, including cleanup. Manual owner review and CP2 remain outstanding. |
 | M11A manual owner/browser/mobile/accessibility review | Not performed |
 | Screen-reader evaluation and full accessibility audit | Not performed |
 | Real browser printing/PDF pagination; external DOCX-editor inspection | Not performed |
