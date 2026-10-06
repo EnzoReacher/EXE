@@ -18,6 +18,10 @@ Compared the import schema and validator/summarizer implementation with document
 
 Linked survey readiness from CP2 execution status and clarified the import schema's aggregate-only anonymity and completed-response denominators. Survey wording/platform launch approval, primary research, manual reviews and M18 approval remain pending. No source/evidence facts or review statuses were altered.
 
+### Independent synchronized-checkout verification — 2026-10-06
+
+Fetched and checked out the cumulative `codex/exe-m17-survey-readiness` branch at `3789c0832ca5cfab95f32b19a1bfcec7b36e8eaa`. Direct Node runs passed for the collected evidence register (9 rows, 0 owner-reviewed), public-source log structure, synthetic CSV and JSON survey fixtures, and synthetic aggregate summary. `git diff --check` passed and the synchronized checkout was clean before this verification note. The `pnpm` wrappers could not start in this managed workspace because pnpm attempted to create `/root/.local`; the underlying Node scripts ran directly. This verifies documentation and synthetic handling only. No real survey, owner review, manual M7/CP1 review, or M18 product decision was supplied, so the human M17 gate remains open.
+
 | Command / check run in this follow-up | Actual result |
 |---|---|
 | `pnpm cp2:validate` | PASS: 9 collected rows, 0 owner-reviewed, 9 pending; structural only. |
@@ -48,6 +52,62 @@ pnpm cp2:survey:validate -- --file scripts/fixtures/cp2-research/survey-valid.js
 pnpm cp2:survey:summarize -- --file scripts/fixtures/cp2-research/survey-valid.csv
 git diff --check
 ```
+
+## Roadmap — current state through app completion
+
+**Roadmap date:** 2026-10-06. This section is the working report for the remaining project. M0–M16 application engineering and automated acceptance are recorded as implemented; M17 documentation/survey readiness is complete. The M17 human evidence and owner-review gate is still open, so no M18 direction or feature is authorized yet.
+
+| Stage | Status | Work to do | Exit criteria |
+|---|---|---|---|
+| 1. Close M17 research and owner review | Waiting for owner/team activity | Review the nine public-source records and limitations; confirm survey platform, consent and course sampling requirements; conduct only approved consent-safe research; complete M7/CP1 manual reviews and privacy/retention decisions. Keep raw identities, CVs, recordings and respondent-level exports outside Git. | Actual review dates/IDs and real anonymized research summaries or aggregates are recorded; manual outcomes and remaining limits are documented. No status is inferred from templates or synthetic fixtures. |
+| 2. Lock product scope in M18 | Blocked by stage 1 | Select the target segment/job family based on reviewed evidence; classify hypotheses and record contradictory evidence; choose one next feature or decide to gather more evidence; define observable acceptance criteria, privacy limits and explicit implementation approval. Resolve the scope decisions below. | `M10_PRODUCT_DIRECTION_DECISION.md` and `M9_NEXT_FEATURE_SELECTION.md` contain a reviewed, evidence-linked decision and owner/team approval. |
+| 3. Build the approved product slice in M19 | Not started — gated by M18 | Create a feature branch from the approved decision head. Implement the selected feature end to end in the existing Next.js/Supabase architecture, including UI, server/API, owner-scoped persistence/RLS when needed, error/loading/empty states, responsive/keyboard behavior and regression tests. | Feature meets the recorded criteria using synthetic data; ownership and denial cases pass; tracker and handoff report exact results. |
+| 4. Close the agreed MVP in M20 | Planned — scope depends on M18 | Crosswalk the current implementation against the MVP checklist in `PROJECT_SCOPE_AND_PLAN.md`; identify missing or broken required paths; fix only agreed blockers. Re-test sign-in/session refresh, CV intake/deletion, pasted-JD analysis, evidence report, roadmap, grounded CV draft, saved work, and any approved review/opportunity flows. | Every agreed MVP requirement maps to an implementation and passing test/manual check; no unresolved critical/high-severity defect; privacy and deletion behavior are documented. |
+| 5. Owner pilot and acceptance | Not started — requires connected owner review | Owner tests fresh-account and returning-user journeys with fictional data on desktop and narrow mobile; performs keyboard/accessibility, print/export, review-link, opportunity and credential flows as applicable; records issues, retests, privacy/retention choices and acceptance. | Actual owner results are recorded; accepted scope and known limitations are clear. |
+| 6. Public-release readiness, if wanted | Separate optional release track; no deployment authorization | Choose hosting and production Supabase; review migrations/RLS/Storage, canonical domain/auth redirects/email, secrets, rate limits, privacy/terms, backup/restore, logging/monitoring, incident and support ownership; test in staging with synthetic accounts and complete a data-deletion/restore check. | Production checklist passes and owner explicitly approves the release. No public launch happens by completing an engineering checklist alone. |
+
+### Product scope decisions to settle in M18
+
+- **Job discovery:** the original product idea mentions finding jobs from a CV, while the current MVP scope accepts a user-pasted job description and explicitly defers automated job-board integrations/scraping. Decide whether manual JD intake completes the first app or whether evidence supports a separately scoped job-discovery feature.
+- **AI provider:** current analysis is deterministic/local and no external AI provider has been selected. Decide whether that is acceptable for the course MVP. If an external provider is considered, assess CV/JD data handling, consent, retention, cost, output validation and deletion before implementation.
+- **Target and course evidence:** confirm the actual course interview/survey requirements and choose one target segment/job family only after the real evidence is reviewed.
+- **Meaning of “app complete”:** the default target in this plan is an owner-accepted course MVP running locally or in an approved staging environment. Public production deployment, payments, a reviewer marketplace, automated job feeds and mobile clients remain separate, unapproved scope.
+
+### Completion definition
+
+The course MVP is complete when the owner-approved product scope is implemented, the full CV-to-JD workflow passes its acceptance checks, owner-scoped data/security and deletion behavior are verified, responsive/accessibility and privacy reviews are recorded, the owner accepts the known limitations, and the project has a reproducible setup/test handoff. A public production launch is complete only after the separate release track is approved and tested.
+
+### MVP implementation-to-scope audit — 2026-10-06
+
+This audit maps the written MVP checklist in `PROJECT_SCOPE_AND_PLAN.md` to the implementation and recorded engineering evidence. “Implemented / automated evidence recorded” is not the same as owner acceptance. Historical M15/M16 CI results are cited as recorded results; they have not been rerun in this documentation-only follow-up.
+
+| MVP area | Current implementation | Engineering evidence recorded | Remaining closure work |
+|---|---|---|---|
+| Account, session and private workspace | Supabase sign-up/sign-in, cookie-backed SSR session, protected assessment, sign-out, owner-scoped server routes | M15/M16 genuine synthetic local-Supabase browser and API acceptance recorded as passing | Owner retests the fresh-account, returning-session, refresh, sign-out and anonymous-denial journey; record any local-only failures before pilot sign-off. |
+| CV intake, parse status and deletion | Private PDF/DOCX intake, parsing, replacement recovery, saved CV selection and delete route | Intake unit/integration and genuine browser acceptance recorded; M15 covers recovery and deletion | Owner checks understandable parse failures and deletion behavior; document the actual retention/backup limits. |
+| Specific job description and analysis | User enters a role and pasted JD; deterministic local matcher creates supported/partial/unclear/missing findings with source text | Analysis/matcher tests and core browser/database journey recorded as passing | M18 records whether deterministic analysis meets the course MVP. An external AI provider is unselected and is not an implementation assumption. |
+| Evidence report and safe claims | Findings link to CV excerpts or report no supporting text; report has caveats and user-facing status | Unit and core-flow acceptance results recorded | Owner reviews whether labels and caveats are understandable and do not imply verified proficiency or hiring likelihood. |
+| Prioritized roadmap and editable grounded draft | Gap-linked next steps, editable role-specific draft, provenance and explicit acceptance | M15 atomic persistence, rollback/retry, provenance and genuine browser acceptance recorded | Owner checks usefulness and source fidelity with fictional data; approve any changed scope through M18. |
+| Saved work and recoverable states | Private saved-work history and loading/empty/error/retry states across the core flow | Unit, route, responsive fixture and browser acceptance results recorded | Owner performs the end-to-end pilot and records friction or any remaining defects. |
+| Optional review, opportunity, credential and export flows | Private revocable review links, user-saved HTTPS references, expert-reviewed credential prototype, accepted-version export | M15/M16 synthetic two-user, browser, policy and export evidence is recorded in milestone handoffs | Decide which optional flows belong in the agreed course demo; include only selected flows in owner pilot acceptance. Opportunity references are not live job discovery. |
+| Responsive, keyboard and accessibility review | Shared visual system, responsive layouts, focus and reduced-motion handling | Automated checks and fixture UI coverage are recorded; they do not establish manual accessibility acceptance | Owner completes desktop/narrow-mobile keyboard, visual and accessibility review and records outcomes. |
+| Setup and release boundary | Local Next.js/Supabase setup, CI checks, synthetic fixtures and reproducible verification scripts | M15/M16 Quality and CI runs recorded as passing; this checkout lacks installed dependencies for a fresh full rerun | Re-run the agreed full suite at M20 after dependencies are available. Hosting, real data, production policy and release approval are separate. |
+
+#### Product choices versus implementation gaps
+
+- Automated job-board search is absent by documented scope: users paste a JD and may save their own opportunity link. Decide in M18 whether that is sufficient for the course MVP; do not count lack of scraping as a defect before that decision.
+- Analysis and drafting use deterministic/local behavior. No AI vendor, data transfer, consent wording, cost or retention policy has been selected. M18 must decide whether local behavior meets the MVP before any provider integration is proposed.
+- The engineering surface is broad, but a broad feature list does not establish customer value. CP2 evidence, course requirement clarification, manual M7/CP1 review and owner privacy/accessibility review remain open inputs.
+- Do not start M19 feature coding from this audit. First close the M17 human evidence/review gate and record the M18 direction, selected scope, testable acceptance criteria and implementation approval.
+
+### Progress checkpoint — 2026-10-06
+
+- [x] Synced the latest cumulative M17 branch and verified evidence/source structure plus synthetic survey CSV/JSON handling.
+- [x] Updated the M17 survey owner workflow and documented this end-to-end completion roadmap.
+- [x] Audited the documented MVP against current code surfaces and recorded evidence; separated completed engineering from owner acceptance and product decisions.
+- [ ] Owner/team completes the actual M17 review, research and manual acceptance work.
+- [ ] Owner/team records M18 product scope and approves a feature linked to reviewed evidence.
+- [ ] Implement and verify that approved feature, close agreed MVP gaps, complete the owner pilot, and decide separately whether to pursue public release.
 
 ## Prior — M18 authorization check: feature implementation blocked
 
