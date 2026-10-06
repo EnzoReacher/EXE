@@ -89,6 +89,7 @@ test("complete private CV job report roadmap review and opportunity journey", as
       check((await page.context().request.get(`/api/analysis/${runId}`)).status() === 404, "CORE_JOB_DELETE_CASCADES_REPORT");
       check((await json(page, "/api/intake/cv")).cvs.some((item: { id: string }) => item.id === cvId), "CORE_JOB_DELETE_RETAINS_CV");
       check(!(await json(page, "/api/opportunities")).items.some((item: { targetJobId: string }) => item.targetJobId === jobId), "CORE_JOB_DELETE_CASCADES_OPPORTUNITIES");
+      check((await page.context().request.delete(`/api/intake/cv/${cvId}`)).status() === 204, "CORE_FIXTURE_CV_CLEANUP");
       await page.getByRole("button", { name: "Sign out", exact: true }).press("Enter"); await page.waitForURL("**/sign-in");
       check((await page.context().request.get("/api/intake/cv")).status() === 401, "CORE_SIGNOUT_SESSION_DENIED");
       check(blocked === 0 && pageErrors === 0, "CORE_BROWSER_ERROR_OR_EXTERNAL_REQUEST");
