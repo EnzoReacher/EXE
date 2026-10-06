@@ -21,7 +21,13 @@ export default class SafeReporter implements Reporter {
     const line = locations.at(-1)?.[1];
     console.log(result.status === "passed" ? "Synthetic browser checks: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${line ? ` (spec line ${line})` : ""}.`);
   }
-  onError() { console.log("Browser runner/configuration error; no private details emitted."); }
+  onError(error: { message?: string; stack?: string }) {
+    const message = error.message ?? "";
+    const categories = ["Cannot find module", "Cannot find package", "No tests found", "SyntaxError", "ReferenceError", "TypeError", "Unexpected token", "is not defined", "is not a function", "Named export", "RUN_ONLY_THROUGH", "LOOPBACK", "JSON", "test()", "import", "require"].filter((word) => message.includes(word)).map((word) => word.replace(/[^A-Za-z0-9]/g, "_").toUpperCase());
+    const location = error.stack?.match(/(credential-flow|proof-preview|workspace-ui|auth-flow|core-flow)\.spec\.ts:(\d+):(\d+)/);
+    const packages = ["docx", "mammoth", "@playwright/test", "supabase", "server-only"].filter((name) => message.includes(name)).map((name) => name.replace(/[^A-Za-z0-9]/g, "_").toUpperCase());
+    console.log(`Browser runner/configuration error: ${categories.join("_") || "UNCLASSIFIED"}${packages.length ? "_PACKAGE_" + packages.join("_") : ""}${location ? "_" + location[1].replaceAll("-", "_").toUpperCase() + "_LINE_" + location[2] : ""}; no private details emitted.`);
+  }
   onEnd(result: FullResult) { console.log(`Browser suite result: ${result.status}. Screenshots/traces/videos disabled.`); }
   printsToStdio() { return true; }
 }
