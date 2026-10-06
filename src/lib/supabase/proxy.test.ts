@@ -43,11 +43,11 @@ describe("Supabase session refresh proxy", () => {
     expect(response.headers.get("Pragma")).toBe("no-cache");
   });
 
-  it("leaves anonymous APIs, confirmation callbacks and public reviews to their route authorization", async () => {
+  it("leaves APIs, private print, confirmation callbacks and public reviews to their route authorization", async () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "synthetic-publishable-key");
     createServerClientMock.mockReturnValue({ auth: { getClaims: async () => ({ data: null, error: null }) } });
-    for (const path of ["/api/intake/cv", "/auth/callback", "/review/synthetic-token", "/sign-in", "/sign-up"]) {
+    for (const path of ["/api/intake/cv", "/credential-versions/synthetic-version/print", "/auth/callback", "/review/synthetic-token", "/sign-in", "/sign-up"]) {
       const response = await updateSupabaseSession(new NextRequest("http://127.0.0.1:3000" + path));
       expect(response.status).toBe(200);
       expect(response.headers.get("Location")).toBeNull();

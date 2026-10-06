@@ -34,7 +34,10 @@ export async function updateSupabaseSession(request: NextRequest) {
   }
 
   const path = request.nextUrl.pathname;
-  if (!authenticated && privatePages.some((prefix) => path === prefix || path.startsWith(prefix + "/"))) {
+  // Print is an authenticated Route Handler with its own 401/404 response
+  // contract, rather than a workspace page. Do not replace it with a redirect.
+  const isPrintEndpoint = /^\/credential-versions\/[^/]+\/print\/?$/.test(path);
+  if (!authenticated && !isPrintEndpoint && privatePages.some((prefix) => path === prefix || path.startsWith(prefix + "/"))) {
     const target = new URL("/sign-in", request.url);
     // NextURL normalizes loopback hosts to localhost. Preserve the browser's
     // actual request host so redirects do not cross Auth cookie scopes.

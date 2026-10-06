@@ -31,11 +31,16 @@ async function select(locator: Locator, value: string) {
   await locator.press("Enter"); check(await locator.inputValue() === value, "KEYBOARD_SELECT_REQUIRED");
 }
 async function signedIn(page: Page, actor: Actor) {
-  await page.goto("/assessment");
+  await page.goto("/sign-in");
   await type(page.getByLabel("Email (required)"), actor.email);
   await type(page.getByLabel("Password (required)"), actor.password);
+  const authenticated = page.waitForResponse((response) => response.url().startsWith(supabase + "/auth/v1/token") && response.request().method() === "POST");
   await keyClick(page.getByRole("button", { name: "Sign in", exact: true }));
-  await page.getByText("Signed in. Opening your workspace…", { exact: true }).waitFor();
+  check((await authenticated).ok(), "CREDENTIAL_AUTH_REJECTED");
+  await page.waitForURL((url) => url.pathname === "/assessment");
+  await page.getByRole("heading", { name: "Save a CV and target job privately." }).waitFor();
+  check(await page.getByRole("form", { name: "Sign in", exact: true }).count() === 0, "CREDENTIAL_SIGNIN_UI_REMAINED");
+  check((await page.context().request.get("/api/intake/cv", { maxRedirects: 0 })).ok(), "CREDENTIAL_COOKIE_HANDOFF_FAILED");
 }
 async function json(page: Page, path: string) {
   const response = await page.context().request.get(path, { maxRedirects: 0 });
