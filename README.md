@@ -69,9 +69,9 @@ Use only the fictional DOCX in `docs/demo/fixtures/` and complete the actual [M1
 
 ## Current project state
 
-### Current engineering stage: M13 landing and account acceptance
+### Current engineering stage: M17 evidence and owner-review gate
 
-M12 added the public landing page, Supabase sign-up/sign-in, PKCE confirmation callback and SSR session refresh. M13 extends the existing local browser harness to exercise real local sign-up/sign-in, session persistence, generic invalid-credential messages, responsive entry pages and anonymous API denial. The feature branch is `codex/exe-web-app-m13-auth-browser-acceptance`; GitHub Quality passed (321 tests/41 files, lint, typecheck/build and CP2 structural validation). The owner's local Supabase run is pending. No database migration, merge or deployment is included. See the [M13 acceptance steps](docs/M13_AUTH_ACCEPTANCE.md) and [single master report](docs/PROJECT_MASTER_REPORT.md).
+The cumulative working branch is `codex/exe-m17-survey-readiness`. M0–M16 application work and automated engineering acceptance are documented as complete; M17 survey and evidence-review preparation is ready, but real research, owner/team review, manual M7/CP1 outcomes and M18 product approval remain pending. The next feature must be selected from reviewed evidence before implementation. Use the [current app completion tracker](docs/APP_BUILD_TRACKER.md) for the stage-by-stage roadmap, MVP implementation audit, owner actions and exit criteria. No merge to `main` or deployment is authorized by completing this work.
 
 The earlier M11C proof/review work and M11B.1 local acceptance remain documented in the [M11C guide](docs/M11C_PROOF_REVIEW_AND_WORKFLOW.md), [M11C results](docs/M11C_ACCEPTANCE.md), and [M11B.1 harness guide](docs/M11B_1_LOCAL_BROWSER_ACCEPTANCE.md). Optional isolated Chromium checks use `pnpm test:proof-preview` and, after a fresh `pnpm build`, `pnpm test:workspace-ui`. Reuse the existing local stack; do not create duplicate containers. Manual owner/accessibility/print review, CP2, privacy/retention and release approval remain pending. No merge or deployment.
 
