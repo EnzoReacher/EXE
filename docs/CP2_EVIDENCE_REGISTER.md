@@ -2,6 +2,10 @@
 
 **Status: public-source records added; owner/team review pending.** Primary participant research is not recorded. Do not add names, contact details, full CVs, recordings, confidential employer information, raw private applications, or fabricated results.
 
+**M17 reconciliation — 2026-10-06:** 9 collected public-source rows, **0 owner-reviewed, 9 pending**. CM-001–CM-008 plus EDU-001 are the register IDs; source-log CM-009 maps to EDU-001, not a tenth item. TU-000, EX-000, SV-000 and CM-000 below are examples, not evidence. No actual TU/EX/SV results or owner review decision is recorded in the tracked research documents.
+
+The existing [source snapshot](evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md) now contains dated 2026-10-06 retrieval outcomes; the [rolling source log](evidence/cp2-public-source-log-2026-10-05.md) reflects successful rechecks and failed-attempt limits. Register rows below retain their historical collection/source observations; do not present their 2026-10-05 amounts or availability as freshly verified without the supplement. **No row's owner review status changed.** Use the [M17 owner review packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md) to review each row and record actual decisions in the log below.
+
 ## Evidence handling rules
 
 1. Give each item a unique ID: `TU-###` for target-user interview, `EX-###` for expert interview, `SV-###` for survey summary, `CM-###` for competitor/market source, or another documented prefix.

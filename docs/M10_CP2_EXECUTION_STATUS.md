@@ -1,10 +1,16 @@
 # M10 CP2 Research Execution Status
 
-**Status:** Evidence collection pending — nine public-source records CM-001–CM-009 are now recorded for 2026-10-05; owner/team review and primary research remain pending.
-**Branch:** codex/exe-web-app-m10  
+**Status:** M17 decision preparation complete; CP2 human gate OPEN — 9 public-source rows, 0 owner-reviewed, 9 pending. No primary-research results, manual owner acceptance or product direction recorded. Public-source rechecks are dated 2026-10-06; historical collection began 2026-10-05.
+**Current branch:** `codex/exe-m17-cp2-evidence-review` (historical M10 branch: `codex/exe-web-app-m10`)
 **Purpose:** execute the M8 research plan and use the M9 decision gate before selecting the next product feature.
 
 This file is a live checklist. An unchecked item is not complete. Do not mark an item complete from an assumption, a template, a fictional demo, or a validator pass.
+
+## M17 current execution handoff — 2026-10-06
+
+The [existing owner review packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md#current-owner-review-packet--m17-2026-10-06) lists all nine pending register IDs (CM-001–CM-008, EDU-001 mapped to source CM-009), missing TU/EX/SV research, manual M7/CP1/M16 outcomes and exact M18 decision fields. The [source snapshot](evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md) records five usable official-source rechecks, Jobie timeout, TopCV HTTP 403 responses, unreadable Jobscan pricing and MOET Page not found HTML. This is assistant desk research, not owner/team evidence review. Preserve historical sections below as dated status records; their M11 gate is now applied to M18 feature selection and does not undo completed M15/M16 engineering.
+
+Next owner actions: confirm instructor requirements; provide actual anonymized participant/expert summaries and survey aggregates if applicable; review the nine source rows and limitations; record fictional manual walkthrough/rehearsal results; complete the existing reviewed direction/feature records and explicit approval. A validator pass does not authorize M18.
 
 ## M10 execution review — 2026-10-02
 

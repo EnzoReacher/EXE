@@ -2,11 +2,13 @@
 
 Complete this review before presenting or approving the M5 package. A checked item is not permission to merge or deploy.
 
+**Current M17 handoff — 2026-10-06:** perform this fictional walkthrough on verified M16 `codex/exe-m16-pilot-readiness` (`ca4046010d23f1a4da0d21567e8e07e66eec9c7d`) or its documentation-only M17 descendant. Record actual branch/SHA, reviewer role/date, browser/device/input, observations and team/course evidence in the [existing review packet workflow](../evidence/CP2_GATE_RECONCILIATION_2026-10-05.md). Historical M5 package lineage remains available; no manual CP1 result is supplied by M16 automation.
+
 ## Demo scope and data
 
 - [ ] The presentation uses only the Aria Vale fictional CV/JD pack or equally fictional, reviewed material.
 - [ ] No real CV, job description, name, email, credential, interview data, screenshot, token, API key, or browser history is visible.
-- [ ] The demo runs from `codex/exe-web-app-m2`, not `main`.
+- [ ] The demo runs from the verified current feature line above, and its branch/SHA is recorded.
 - [ ] The fictional local account works and is not a public authentication bypass.
 - [ ] Uploading `docs/demo/fixtures/aria-vale-fictional-cv.docx` succeeds and reaches **Processed**.
 - [ ] The fictional target job saves successfully.

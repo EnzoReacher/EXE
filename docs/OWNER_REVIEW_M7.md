@@ -2,7 +2,7 @@
 
 ## Current testing handoff — 2026-10-06
 
-Use the complete workspace on `codex/exe-web-app-m15-complete-workspace` and [M15 update, migration and test instructions](M15_COMPLETE_WORKSPACE.md) for the next owner test session. The M7 record below is historical; its manual checklist remains useful. Actual manual outcomes have not been recorded by automation.
+Use verified M16 `codex/exe-m16-pilot-readiness` at `ca4046010d23f1a4da0d21567e8e07e66eec9c7d` or its documentation-only M17 descendant, and the [current tracker handoff](APP_BUILD_TRACKER.md#m16-verification-and-owner-handoff) for the next owner test session. The [M15 instructions](M15_COMPLETE_WORKSPACE.md) retain migration history; M17 needs no new migration. The M7 record below is historical; its manual checklist remains useful. Actual manual outcomes have not been recorded by automation. Record them for the [M17 review packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md); owner review is still pending.
 
 **Historical M7 branch:** `codex/exe-web-app-m7`
 **Baseline:** M6b commit `4527301`  

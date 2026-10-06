@@ -3,6 +3,18 @@
 **Status:** No participant primary research is recorded. An initial public-source desk research activity is documented below; owner/team review is pending.
 **Privacy rule:** keep identity/contact information, recordings, full CVs, credentials, and confidential applications outside the repository.
 
+## M17 repository reconciliation and source recheck — 2026-10-06
+
+- Activity: inspected the clean verified M16 line, CP2 register/log/snapshot, earlier review packet, execution/decision/session records and owner handoff; directly rechecked the existing official source URLs. This was assistant desk research, not participant research, an owner manual walkthrough or owner/team review.
+- Baseline: `codex/exe-m16-pilot-readiness` / `ca4046010d23f1a4da0d21567e8e07e66eec9c7d`, matched fetched origin. Continued on `codex/exe-m17-cp2-evidence-review`; separately reported M17 commit `825544d22712ea12d2b3af83707cd7a364fedfa9` was unavailable locally after fetch.
+- Evidence IDs: CM-001–CM-008 and EDU-001 (source CM-009), existing items only. No TU/EX/SV result supplied or created; four example rows excluded.
+- Observation: five source IDs yielded usable official text. Jobie timed out; both TopCV routes returned HTTP 403; Jobscan pricing returned no readable text; MOET's PDF URL returned Page not found HTML. Exact page-supported observations, access date and limitations are in the [snapshot supplement](evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md#m17-public-source-recheck-2026-10-06). Successful source-log records were refreshed; failed rechecks preserve historical access dates with new caveats. No reviewed row was changed and all nine remain pending.
+- Engineering evidence: `gh run view 37412665615 --json status,conclusion,headSha,url` confirmed M16 Quality completed successfully at the exact baseline SHA. No M16 tests were rerun by M17.
+- Interpretation: public offers/features and national context do not establish EXE demand, willingness to pay, usability, superiority or a selected segment. No primary sample/owner hypothesis classification is recorded.
+- Decision / next action: prepared the [existing owner packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md) and M18 decision fields. Keep CP2 and M18 feature authorization open for the actual owner inputs listed there. No product direction selected.
+- Owner/team review status: not reviewed; 9 source rows pending, no approval recorded. No recruitment, interview, survey, instructor contact, account creation or checkout performed in this activity.
+- Verification: CP2 structural checks and documentation diff/link/count/scope review; exact commands/results are recorded in `APP_BUILD_TRACKER.md`. No actual survey data to validate. Application and backend/browser suites not rerun for documentation-only M17.
+
 Use one entry per completed research activity. Replace the blank template only with a real, consent-safe, anonymized record.
 
 ## M10 repository review — 2026-10-02

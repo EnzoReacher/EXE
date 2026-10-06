@@ -3,6 +3,51 @@
 **Status:** Repository reconciliation and technical source-retrieval follow-up; not an owner/team evidence review or product decision.
 **Branch / exact starting SHA:** `codex/exe-web-app-m11c-proof-review` / `69013a148a57b3b5a6d4aa62bd6c354e0a42eb81`.
 
+## Current owner review packet — M17, 2026-10-06
+
+**Preparation complete; CP2 human gate OPEN.** M17 began from clean, fetched M16 `codex/exe-m16-pilot-readiness` at `ca4046010d23f1a4da0d21567e8e07e66eec9c7d`, on `codex/exe-m17-cp2-evidence-review`. The separately reported commit `825544d22712ea12d2b3af83707cd7a364fedfa9` was unavailable locally after fetch; no M17 remote branch existed. This packet was reconstructed from tracked documentation and actual source retrieval. Sections 1–6 below preserve dated earlier work.
+
+### 1. Review these nine existing evidence rows
+
+Use the [2026-10-06 snapshot supplement](CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md#m17-public-source-recheck-2026-10-06) and [source log](cp2-public-source-log-2026-10-05.md). **All nine await owner/team review.** Record reviewer role(s), actual review date, IDs, accepted source facts, limits, disagreements and follow-up in the [register review log](../CP2_EVIDENCE_REGISTER.md) and [M9 review record](../M9_EVIDENCE_REVIEW_TEMPLATE.md). A reviewed row is not automatic approval of an EXE claim.
+
+| Register ID | Review focus / unresolved source gap |
+|---|---|
+| CM-001 | FitCV launch-free versus annual offer, lifetime free quotas, credit units and unverified tax/checkout. Readable recheck 2026-10-06. |
+| CM-002 | Jobie historical indexed credit amounts; live recheck timed out. Verify current original terms or exclude current-price claims. |
+| CM-003 | TopCV homepage historical offer; recheck HTTP 403. No fresh listing/free-access verification. |
+| CM-004 | TopCV template historical offer; recheck HTTP 403. Signed-in/free limits untested. |
+| CM-005 | HUFLIT institutional development-site copy, expired campaign and student form. Readable recheck; current production access and performance unknown. |
+| CM-006 | Rezi displayed monthly/lifetime offers and their different human-review entitlements. Readable recheck; local checkout and outcome claims unverified. |
+| CM-007 | Jobscan readable tool descriptions; pricing route yielded no readable text. No established current price or independent effectiveness evidence. |
+| CM-008 | NSO official Q2 youth indicators, distinct denominators and stated publication date. Readable recheck; national context is not CV demand. |
+| EDU-001 (source CM-009) | MOET historical indexed enrolment context; original URL returned Page not found HTML. Obtain a working official original or exclude from approved claims. |
+
+**Count reconciliation:** 9 collected rows, 0 owner-reviewed, 9 pending. Four example rows do not count. Source CM-009 and register EDU-001 are one item. Five source IDs yielded usable official text in M17; failed access is recorded, not treated as verification. Vendor copy is first-party marketing/offer information; none of its usage, superiority or hiring-outcome claims was independently verified here.
+
+### 2. Supply missing human evidence
+
+- **Course clarification:** obtain and record the actual instructor interpretation of “hub (5 target cus, 5 suppliers),” count overlap, expert qualifications, the more-than-100-survey-responses or two-qualified-experts option, the separately planned 5–10 target-customer video interviews, and required evidence/consent format. The [clarification draft](../M10_CP2_INSTRUCTOR_CLARIFICATION_DRAFT.md) remains unsent in the tracked record. The practical M8 pilot sample is not course completion.
+- **Target users:** dated, consent-safe anonymized TU summaries of actual workflow, difficulty/workaround and fictional EXE walkthrough actions/label understanding; record recruitment, count, limitations and contrary findings.
+- **Experts:** dated anonymized EX summaries, relevant qualification category, consent, trust/privacy/workflow observations and limitations. Fictional expert app flows are not interviews.
+- **Survey, if applicable:** manually anonymized aggregate SV results with collection period, questionnaire/choice types, recruitment, started/eligible/completed denominators, all category counts and unanswered counts. No actual aggregate is recorded. Use [the existing import workflow](../M10_3_OWNER_HANDOFF.md); synthetic validator fixtures do not supply research.
+
+Absence of a tracked result is not proof that no off-repository research happened. Add only actual safe summaries; keep identities, recordings, CVs and raw private responses outside Git.
+
+### 3. Record the manual M7/CP1 and M16 owner walkthrough
+
+Use the verified M16 line and the [tracker handoff](../APP_BUILD_TRACKER.md#m16-verification-and-owner-handoff), [M7 checklist](../OWNER_REVIEW_M7.md), and [CP1 checklist](../demo/CP1_SLOT8_OWNER_REVIEW_CHECKLIST.md) with the committed fictional pack. Record date, reviewer role, branch/SHA, browser/device/version, viewport/input method, route/action, observed outcome, friction and any retest for desktop, narrow-mobile, keyboard, review-link visibility/revocation/feedback, and opportunity edit/delete/error states. Record actual CP1 rehearsal/team/course evidence. Accessibility/assistive-technology, print/PDF, external DOCX and privacy/retention/expert-administration decisions remain owner inputs where required by the M16 handoff.
+
+M16 engineering acceptance is preserved. Its [Quality run 37412665615](https://github.com/EnzoReacher/EXE/actions/runs/37412665615) was independently checked in M17: **completed / success**, at exact M16 SHA `ca4046010d23f1a4da0d21567e8e07e66eec9c7d`. That is historical M16 CI, not an M17 app retest or manual acceptance.
+
+### 4. Complete the M18 decision fields after review
+
+In [the existing product-direction record](../M10_PRODUCT_DIRECTION_DECISION.md), supply actual reviewer role/date, reviewed IDs, research period/counts, course requirement confirmation, target segment/job family, observation versus interpretation, limitations/bias/contradictions, and hypothesis classifications. Then record one explicit direction, its supporting and challenging evidence, unknowns, claim limits and owner approval/date. If a feature is approved, complete [the existing feature matrix](../M9_NEXT_FEATURE_SELECTION.md) with observed problem, severity/current workaround, evidence IDs, expected value, trust/privacy risk, complexity/course relevance, open questions and observable acceptance criteria, and explicitly approve that scoped M18 implementation. No direction, feature or price is selected by M17; actual “collect more evidence” is also a possible owner decision.
+
+### M17 verification
+
+Run `pnpm cp2:validate`, `pnpm cp2:validate:collected`, `pnpm cp2:validate:template`, `pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md`, and `git diff --check`. Results are recorded in [the build tracker](../APP_BUILD_TRACKER.md). No actual survey exists to validate or summarize. Documentation-only M17 does not rerun application, browser, database or policy acceptance. Structural checks do not close this human gate.
+
 The owner wants to investigate user-friendliness for job seekers using their CVs and affordability as a possible differentiator. These are owner-stated hypotheses, not participant observations, a price, or approval to implement a feature. No messages, recruitment, expert contact or instructor contact occurred in this task.
 
 ## 1. Evidence inventory
