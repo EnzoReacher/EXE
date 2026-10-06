@@ -2,7 +2,41 @@
 
 This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. The GitHub feature branch is for source review; do not merge to `main` or deploy without the project owner's approval.
 
-## Latest — M17 CP2 evidence review and M18 decision readiness
+## Latest — M18 authorization check: feature implementation blocked
+
+2026-10-06: Inspected clean local branch `codex/exe-m17-cp2-evidence-review` at `3131c51de370c9c5c906d1ab9ffcb7b004fe6c96`; `git fetch origin` confirmed that exact published M17 HEAD and preserved M16 baseline `ca4046010d23f1a4da0d21567e8e07e66eec9c7d`. No M18 branch existed locally or on fetched origin. Read the actual decision, evidence register, execution status, M17 handoff/source records and feature matrix; searched tracked documentation for M18 selection/approval. M17 preparation is published, but actual owner/team evidence review and product decision are still unrecorded. Created documentation-only `codex/exe-m18-decision-gate` from that verified M17 HEAD.
+
+**M18 authorization: NOT SATISFIED.** No feature or evidence IDs have been selected for implementation. The request to implement an owner-approved feature does not fill the following missing decision fields:
+
+| Required gate item | Actual repository state | Exact owner input and destination |
+|---|---|---|
+| Selected target segment / applicable job family | Decision fields blank; general research target is a hypothesis, not a reviewed selection | Record chosen segment and job family (or why not applicable), basis and limits in [the direction record](M10_PRODUCT_DIRECTION_DECISION.md). |
+| Specific direction or observed user problem | No direction box selected; decision and observation/interpretation records unfilled | Record actual problem observations, interpretations, reviewed direction, supporting/contrary evidence and unknowns in the direction record and [M9 review](M9_EVIDENCE_REVIEW_TEMPLATE.md). |
+| One selected feature with supporting evidence IDs | [Feature matrix](M9_NEXT_FEATURE_SELECTION.md) contains candidate names only; supporting IDs and decision cells blank | Select one scoped feature in the matrix, cite actual reviewed IDs and explain the problem, severity and current workaround. |
+| Acceptance criteria and known limitations | No selected-feature criteria; source limitations alone are not feature criteria | Complete observable behavior/acceptance criteria, boundaries, trust/privacy risks and known limitations in the selected matrix row. |
+| Explicit owner/team implementation approval | Approval/date blank; M18 authorization checklist unchecked | Record actual approval, reviewer role(s), date and exact approved feature/scope in the direction record and matrix. |
+
+**Evidence/review prerequisites still open:** 9 public-source rows, 0 owner-reviewed, 9 pending (CM-001–CM-008 plus EDU-001, mapped to source CM-009). No actual TU/EX/SV results or completed manual M7/CP1/current owner walkthrough are recorded. Supply consent-safe research summaries/aggregates with collection/recruitment/count/limitation context, record source review role/date/IDs and hypothesis classifications, resolve course/instructor requirements, and record the fictional manual/rehearsal results using [the existing M17 owner packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.md#current-owner-review-packet--m17-2026-10-06). Any required privacy decisions remain owner inputs. Public vendor claims and structural validators do not establish demand or substitute for these records. Off-repository activity remains unknown until supplied safely.
+
+**Independent work completed:** documented this five-item gate audit and exact blockers; retained source/evidence facts and owner statuses. `pnpm cp2:validate` passed (9 collected rows, 0 reviewed, 9 pending); `pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md` passed structure/completeness. A read-only local link/anchor check passed for all 7 tracker links; `git diff --check` and full documentation diff/scope review passed. The sole changed file is this tracker; no credentials, tokens, personal research data or generated artifacts were added. No public sources were re-fetched in this authorization check. Unit, auth/browser, Supabase/RLS/Storage, lint, typecheck and production-build checks were not run for this documentation-only change; M15/M16 acceptance remains historical. M18 implementation and owner acceptance remain blocked, with no merge or deployment.
+
+### Pull and validate this documentation branch
+
+In an existing clean checkout (preserve local work before switching):
+
+```sh
+git fetch origin
+git switch codex/exe-m18-decision-gate
+git pull --ff-only origin codex/exe-m18-decision-gate
+pnpm install --frozen-lockfile
+pnpm cp2:validate
+pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md
+git diff --check
+```
+
+After the actual gate records are completed, reassess the latest approved M17 line, branch for the selected feature, and write its implementation/acceptance plan before coding. No proposed feature is authorized by this audit.
+
+## Prior — M17 CP2 evidence review and M18 decision readiness
 
 2026-10-06: Documentation/source-recheck preparation complete on `codex/exe-m17-cp2-evidence-review`; **CP2 human gate remains OPEN**. Verified clean M16 starting branch/commit `codex/exe-m16-pilot-readiness` / `ca4046010d23f1a4da0d21567e8e07e66eec9c7d`, matched fetched origin. The reported separate M17 commit `825544d22712ea12d2b3af83707cd7a364fedfa9` was unavailable locally after fetch; no M17 branch existed locally or on fetched origin. Reconstructed only supported documentation work. Current inventory: 9 collected public-source rows, 0 owner-reviewed, 9 pending; no recorded TU/EX/SV primary results, actual manual approval or selected product direction.
 
