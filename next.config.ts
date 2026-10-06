@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     return [
       { source: "/:path*", headers: [...SECURITY_HEADERS] },
       { source: "/api/:path*", headers: [...PRIVATE_NO_STORE_HEADERS] },
+      ...["/assessment", "/saved-work", "/analysis/:path*", "/credential-versions/:path*", "/expert/:path*", "/opportunities"].map((source) => ({
+        source, headers: [...PRIVATE_NO_STORE_HEADERS, { key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      })),
       {
         source: "/review/:path*",
         headers: [

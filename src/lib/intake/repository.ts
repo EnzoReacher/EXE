@@ -73,3 +73,17 @@ export async function listOwnedTargetJobs() {
   if (error) throw new IntakeError("load_failed", "We could not load your target jobs. Try again.", 500);
   return (data as JobRow[]).map(jobFromRow);
 }
+
+export async function getOwnedTargetJob(id: string) {
+  const { supabase, user } = await requireCurrentUser();
+  const { data, error } = await supabase.from("target_jobs").select().eq("id", id).eq("owner_id", user.id).single();
+  if (error || !data) throw new IntakeError("not_found", "That target job is unavailable or does not belong to you.", 404);
+  return jobFromRow(data as JobRow);
+}
+
+export async function removeOwnedTargetJob(id: string) {
+  const { supabase, user } = await requireCurrentUser();
+  const { data, error } = await supabase.from("target_jobs").delete().eq("id", id).eq("owner_id", user.id).select("id").maybeSingle();
+  if (error) throw new IntakeError("delete_failed", "We could not delete this target job. Try again.", 500);
+  if (!data) throw new IntakeError("not_found", "That target job is unavailable or does not belong to you.", 404);
+}

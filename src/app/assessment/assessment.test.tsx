@@ -63,12 +63,19 @@ describe("Assessment interactions", () => {
     await userEvent.type(role, "another unsaved edit");
     expect(role.value).toBe("  Sample analyst  ");
     resolveJob(json({ error: "Sample job save failed" }, 500));
-    await screen.findByText("Sample job save failed");
+    await screen.findByText(/Sample job save failed.*Your uploaded CV is kept/);
     for (const field of [file, role, company, description]) expect(field.disabled).toBe(false);
-    expect(file.files?.[0].name).toBe("sample.pdf");
+    expect(file.files?.length).toBe(0);
     expect(role.value).toBe("  Sample analyst  ");
     expect(company.value).toBe("  Sample company  ");
     expect(description.value).toBe(`  ${sampleDescription}  `);
+    expect(screen.getByRole("button", { name: "Save target job" })).toBeTruthy();
+    fetchMock.mockResolvedValueOnce(json({ job: { id: "sample-job", roleTitle: "Sample analyst", companyName: "Sample company" } }));
+    await userEvent.click(screen.getByRole("button", { name: "Save target job" }));
+    await screen.findByText("Your target job was saved. Choose a processed CV below to create a report.");
+    expect(fetchMock.mock.calls.filter(([url, options]) => url === "/api/intake/cv" && options?.method === "POST")).toHaveLength(1);
+    expect(fetchMock.mock.calls.filter(([url, options]) => url === "/api/intake/jobs" && options?.method === "POST")).toHaveLength(2);
+
   });
 
   it("reloads the dependent workspace after successful sign-in", async () => {

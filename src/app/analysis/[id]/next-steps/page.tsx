@@ -1,3 +1,4 @@
+import WorkspaceHeader from "@/components/workspace-header";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getOwnedAnalysisDetails } from "@/lib/analysis/repository";
@@ -26,7 +27,7 @@ export default async function NextStepsPage({ params }: { params: Promise<{ id: 
   if (reportStillProcessing) return <main id="main-content" tabIndex={-1} className="analysis-page"><div className="analysis-wrap"><p className="eyebrow">MILESTONE 3 · NEXT STEPS</p><section className="analysis-empty"><h1>Finish the evidence report first</h1><p>The roadmap and CV draft need a completed evidence report so every action has a visible reason. Return to the report to check its status or retry a failed report.</p><Link className="text-link" href={`/analysis/${id}`}>Return to your report <span aria-hidden="true">→</span></Link></section></div></main>;
   if (!analysis) notFound();
   return <main id="main-content" tabIndex={-1} className="analysis-page">
-    <header className="analysis-topbar"><Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link><div className="topbar-links"><Link href="/saved-work" className="back-link">Saved work</Link><Link href={`/analysis/${id}`} className="back-link"><span aria-hidden="true">←</span>Evidence report</Link></div></header>
+    <WorkspaceHeader active="/saved-work" />
     <div className="analysis-wrap">
       <p className="eyebrow">MILESTONE 3 · NEXT STEPS</p>
       <h1>{analysis.roleTitle}</h1>

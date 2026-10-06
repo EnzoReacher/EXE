@@ -1,4 +1,4 @@
-import Link from "next/link";
+import WorkspaceHeader from "@/components/workspace-header";
 import AssessmentForm from "./assessment-form";
 import AuthControls from "./auth-controls";
 
@@ -10,10 +10,7 @@ export const metadata = {
 export default function AssessmentPage() {
   return (
     <main id="main-content" tabIndex={-1} className="assessment-page">
-      <header className="assessment-topbar">
-        <Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link>
-        <div className="topbar-links"><Link href="/opportunities" className="back-link">Opportunities</Link><Link href="/saved-work" className="back-link">Saved work</Link><Link href="/" className="back-link"><span aria-hidden="true">←</span>Back to overview</Link></div>
-      </header>
+      <WorkspaceHeader active="/assessment" />
       <div className="assessment-wrap">
         <div className="assessment-intro">
           <p className="eyebrow">ASSESSMENT WORKSPACE</p>

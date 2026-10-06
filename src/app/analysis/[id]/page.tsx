@@ -1,3 +1,4 @@
+import WorkspaceHeader from "@/components/workspace-header";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getOwnedAnalysisDetails } from "@/lib/analysis/repository";
@@ -38,7 +39,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
   ];
 
   return <main id="main-content" tabIndex={-1} className="analysis-page">
-    <header className="analysis-topbar"><Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link><div className="topbar-links"><Link href="/opportunities" className="back-link">Opportunities</Link><Link href="/saved-work" className="back-link">Saved work</Link><Link href="/assessment" className="back-link"><span aria-hidden="true">←</span>Assessment workspace</Link></div></header>
+    <WorkspaceHeader active="/saved-work" />
     <div className="analysis-wrap">
       <p className="eyebrow">MILESTONE 2 · EVIDENCE REPORT</p>
       <h1>Evidence report: {details.roleTitle}</h1>

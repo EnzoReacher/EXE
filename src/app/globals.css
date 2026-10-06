@@ -1182,3 +1182,13 @@ select { font: inherit; }
     transform: none;
   }
 }
+
+/* Shared private workspace navigation. */
+.workspace-header { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 22px 0 0; }
+.workspace-header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.workspace-header-row .button { min-height: 44px; }
+.workspace-navigation { display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--border, #dce7e8); padding: 18px 0; }
+.workspace-navigation a { min-height: 44px; display: flex; align-items: center; padding: 8px 12px; border-radius: 9px; color: var(--text, #193c40); font-size: 14px; font-weight: 600; text-decoration: none; }
+.workspace-navigation a:hover, .workspace-navigation a[aria-current="page"] { background: #e4f1ef; color: #175e56; }
+.workspace-header [role="alert"] { color: #9b3030; }
+@media (max-width: 480px) { .workspace-header { width: calc(100% - 28px); } .workspace-navigation { gap: 4px; } .workspace-navigation a { padding: 8px; } }

@@ -79,59 +79,17 @@ export async function createOrGetNextSteps(analysisId: string): Promise<NextStep
   const existing = await getOwnedNextSteps(analysisId);
   if (existing) return existing;
 
-  const [details, { supabase, user }] = await Promise.all([completedAnalysis(analysisId), requireCurrentUser()]);
+  const [details, { supabase }] = await Promise.all([completedAnalysis(analysisId), requireCurrentUser()]);
   const generated = generateNextSteps(details.roleTitle, details.findings);
-  const now = new Date().toISOString();
-
-  if (generated.roadmapItems.length) {
-    const { error } = await supabase.from("roadmap_items").insert(generated.roadmapItems.map((item) => ({
-      analysis_run_id: analysisId,
-      owner_id: user.id,
-      ordinal: item.ordinal,
-      requirement_text: item.requirement,
-      finding_status: item.findingStatus,
-      priority: item.priority,
-      action_text: item.action,
-      rationale: item.rationale,
-      progress_status: "not_started",
-      created_at: now,
-      updated_at: now,
-    })));
-    if (error) throw new IntakeError("next_steps_save_failed", "We could not save your roadmap. Try again.", 500);
-  }
-
-  const { data: draftData, error: draftError } = await supabase.from("cv_drafts").insert({
-    owner_id: user.id,
-    analysis_run_id: analysisId,
-    cv_document_id: details.run.cvDocumentId,
-    target_job_id: details.run.targetJobId,
-    version: 1,
-    content: generated.draftContent,
-    accepted_at: null,
-    created_at: now,
-    updated_at: now,
-  }).select("id,version,content,accepted_at,created_at,updated_at").single();
-
-  if (draftError || !draftData) {
-    const concurrent = await getOwnedNextSteps(analysisId);
-    if (concurrent) return concurrent;
-    throw new IntakeError("next_steps_save_failed", "We could not save your CV draft. Try again.", 500);
-  }
-
-  if (generated.claims.length) {
-    const { error } = await supabase.from("cv_draft_claims").insert(generated.claims.map((claim) => ({
-      cv_draft_id: (draftData as DraftRow).id,
-      owner_id: user.id,
-      ordinal: claim.ordinal,
-      requirement_text: claim.requirement,
-      claim_text: claim.claimText,
-      source_excerpt: claim.sourceExcerpt,
-      source_start: claim.sourceStart,
-      source_end: claim.sourceEnd,
-      created_at: now,
-    })));
-    if (error) throw new IntakeError("next_steps_save_failed", "We could not save your draft evidence. Try again.", 500);
-  }
+  // One authenticated database transaction stores the roadmap, draft and exact
+  // provenance together. The run lock makes concurrent requests idempotent.
+  const { error } = await supabase.rpc("m15_create_next_steps", {
+    p_analysis: analysisId,
+    p_roadmap: generated.roadmapItems,
+    p_content: generated.draftContent,
+    p_claims: generated.claims,
+  });
+  if (error) throw new IntakeError("next_steps_save_failed", "We could not save your next steps. Try again.", 500);
 
   const saved = await getOwnedNextSteps(analysisId);
   if (!saved) throw new IntakeError("next_steps_save_failed", "We could not load your saved next steps. Try again.", 500);

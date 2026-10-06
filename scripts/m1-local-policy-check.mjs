@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
+import { runM15PolicyChecks } from "./m15-local-policy-check.mjs";
 import { runM11aPolicyChecks } from "./m11a-local-policy-check.mjs";
 
 const url = process.env.SUPABASE_URL;
@@ -135,6 +136,8 @@ async function run() {
   assert.equal(aCvReadError, null, "A can load own CV id for analysis");
   const { data: bCvRow, error: bCvReadError } = await b.supabase.from("cv_documents").select("id").eq("storage_path", bCv.storage_path).single();
   assert.equal(bCvReadError, null, "B can load own CV id for analysis");
+
+  await runM15PolicyChecks(a, b, unauthenticated, aCvRow, aJob);
 
   const aRunInput = analysisRun(a.user.id, aCvRow.id, aJob.id);
   const { data: aRun, error: aRunError } = await a.supabase.from("analysis_runs").insert(aRunInput).select().single();
