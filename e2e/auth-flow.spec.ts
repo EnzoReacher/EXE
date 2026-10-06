@@ -62,14 +62,22 @@ test("standalone owner sign-in hands cookies to the workspace despite slow route
       const page = await context.newPage();
       page.on("pageerror", () => { pageErrors += 1; });
       await test.step(warmWorkspace ? "OWNER_SIGNIN_WARM_ROUTER" : "OWNER_SIGNIN_COLD_ROUTER", async () => {
-        if (warmWorkspace) await page.goto("/assessment");
-        await page.goto("/sign-in");
+        if (warmWorkspace) {
+          await page.goto("/assessment");
+          await page.getByRole("link", { name: "EXE career readiness home", exact: true }).click();
+          await page.waitForURL((url) => url.pathname === "/");
+          await page.getByRole("link", { name: "Sign in", exact: true }).click();
+          await page.waitForURL((url) => url.pathname === "/sign-in");
+        } else {
+          await page.goto("/sign-in");
+        }
         await page.getByLabel("Email (required)").fill(owner.email);
         await page.getByLabel("Password (required)", { exact: true }).fill(owner.password);
         const token = page.waitForResponse((response) => response.url().startsWith(supabase + "/auth/v1/token") && response.request().method() === "POST");
         await page.getByRole("button", { name: "Sign in", exact: true }).click();
         check((await token).ok(), "OWNER_SIGNIN_AUTH_REJECTED");
-        await page.waitForURL((url) => url.pathname === "/assessment", { timeout: 30000 });
+        await page.waitForURL((url) => url.pathname === "/assessment", { timeout: 30000 })
+          .catch(() => { throw new Error("OWNER_SIGNIN_STUCK_ON_ENTRY_AFTER_VALID_AUTH"); });
         await page.getByRole("heading", { name: "Save a CV and target job privately." }).waitFor();
         check(await page.getByRole("form", { name: "Sign in", exact: true }).count() === 0, "SIGNED_IN_WORKSPACE_STILL_SHOWS_SIGNIN");
         const cookies = await context.cookies(app);

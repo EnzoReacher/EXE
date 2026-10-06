@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { openAuthenticatedWorkspace } from "@/lib/supabase/auth-navigation";
 import { getAuthCallbackUrl } from "@/lib/supabase/auth-redirect";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -20,7 +20,6 @@ export default function AuthControls({
   initialMode = "signIn",
   notice,
 }: AuthControlsProps) {
-  const router = useRouter();
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const [message, setMessage] = useState(notice ?? (initialMode === "signIn"
     ? "Sign in to access your private intake workspace."
@@ -34,8 +33,7 @@ export default function AuthControls({
       window.dispatchEvent(new Event("exe:workspace-signed-in"));
       return;
     }
-    router.replace("/assessment");
-    router.refresh();
+    openAuthenticatedWorkspace();
   }
 
   async function authenticate(form: HTMLFormElement) {
@@ -67,8 +65,8 @@ export default function AuthControls({
     try {
       const supabase = createSupabaseBrowserClient();
       if (intent === "signIn") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error || !data.session) throw error ?? new Error("Auth session was not created.");
         setMessage("Signed in. Opening your workspace…");
         completeAuthentication();
         return;

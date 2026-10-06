@@ -1,5 +1,7 @@
 # EXE101 — AI Career Readiness Platform
 
+Owner sign-in follow-up: [M15 auth handoff fix and local retest commands](docs/M15_AUTH_HANDOFF_FIX.md) on `codex/exe-m15-auth-handoff-fix`.
+
 
 Latest review build: **M15 complete private workspace** on `codex/exe-web-app-m15-complete-workspace`. See [changes, additive migration, verification and owner testing](docs/M15_COMPLETE_WORKSPACE.md). Apply the additive migration to the existing local database with `pnpm dlx supabase db push --local` before testing roadmap creation.
 

@@ -1,5 +1,7 @@
 # EXE Project Current State
 
+**M15 owner-auth follow-up:** `codex/exe-m15-auth-handoff-fix` starts from completed M15 head `4f8bb42`. It replaces the standalone auth document after cookie persistence, makes account/assessment pages session-aware, removes misleading authenticated sign-in UI, and preserves proxy cookies/cache headers through private-page redirects. The new real-Auth regression exposed the missing UI assertion on unchanged M15. See [findings, verification boundary and retest commands](M15_AUTH_HANDOFF_FIX.md); the existing M15 record below is retained.
+
 **Last updated:** 2026-10-06
 **Status:** M15 complete private workspace implemented and automated acceptance passed on `79a375da4c905c0a2c7790a55dff3fd90614bf00` (`codex/exe-web-app-m15-complete-workspace`). Quality run `37397936335` passed 331 tests/43 files, lint, typecheck and build. Combined run `37397936139` passed real database policies, all three backend/browser journeys, proof rendering, workspace UI, structural validation and synthetic cleanup. Manual owner/research and production decisions remain pending. No main merge or deployment occurred.
 

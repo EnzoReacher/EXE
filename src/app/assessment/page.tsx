@@ -1,13 +1,15 @@
 import WorkspaceHeader from "@/components/workspace-header";
 import AssessmentForm from "./assessment-form";
-import AuthControls from "./auth-controls";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Start an assessment | EXE",
   description: "Prepare your CV and target job for an EXE assessment.",
 };
 
-export default function AssessmentPage() {
+export default async function AssessmentPage() {
+  if (!await getCurrentUser()) redirect("/sign-in");
   return (
     <main id="main-content" tabIndex={-1} className="assessment-page">
       <WorkspaceHeader active="/assessment" />
@@ -17,7 +19,6 @@ export default function AssessmentPage() {
           <h1>Save a CV and target job privately.</h1>
           <p>Save a CV and target job privately, then review an evidence report based on wording in the CV.</p>
         </div>
-        <AuthControls />
         <div className="stepper" aria-label="Assessment steps">
           <div className="stepper-item current"><span>1</span><div><strong>Private intake</strong><small>CV and target job</small></div></div><div className="stepper-line" />
           <div className="stepper-item available"><span>2</span><div><strong>Evidence report</strong><small>Local text prototype</small></div></div><div className="stepper-line" />

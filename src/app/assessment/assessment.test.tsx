@@ -6,10 +6,11 @@ import userEvent from "@testing-library/user-event";
 import AssessmentForm from "./assessment-form";
 import AuthControls from "./auth-controls";
 
-const { signIn, signUp, replace, refresh } = vi.hoisted(() => ({ signIn: vi.fn(), signUp: vi.fn(), replace: vi.fn(), refresh: vi.fn() }));
+const { signIn, signUp, replace, refresh, openWorkspace } = vi.hoisted(() => ({ signIn: vi.fn(), signUp: vi.fn(), replace: vi.fn(), refresh: vi.fn(), openWorkspace: vi.fn() }));
+vi.mock("@/lib/supabase/auth-navigation", () => ({ openAuthenticatedWorkspace: openWorkspace }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), replace, refresh }) }));
 vi.mock("@/lib/supabase/client", () => ({ createSupabaseBrowserClient: () => ({ auth: { signInWithPassword: signIn, signUp } }) }));
-afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.unstubAllEnvs(); signIn.mockReset(); signUp.mockReset(); replace.mockReset(); refresh.mockReset(); });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.unstubAllEnvs(); signIn.mockReset(); signUp.mockReset(); replace.mockReset(); refresh.mockReset(); openWorkspace.mockReset(); });
 const json = (body: object, status = 200) => new Response(JSON.stringify(body), { status });
 function workspaceFetch() {
   return vi.fn().mockResolvedValueOnce(json({ cvs: [] })).mockResolvedValueOnce(json({ jobs: [] }));
@@ -79,7 +80,7 @@ describe("Assessment interactions", () => {
   });
 
   it("reloads the dependent workspace after successful sign-in", async () => {
-    signIn.mockResolvedValue({ error: null });
+    signIn.mockResolvedValue({ data: { session: { access_token: "synthetic-token" } }, error: null });
     const fetchMock = workspaceFetch().mockResolvedValueOnce(json({ cvs: [] })).mockResolvedValueOnce(json({ jobs: [] }));
     vi.stubGlobal("fetch", fetchMock);
     render(<><AuthControls /><AssessmentForm /></>);
@@ -176,8 +177,9 @@ describe("Assessment interactions", () => {
     await userEvent.type(screen.getByLabelText("Confirm password (required)"), "sample-password");
     await userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
-    await waitFor(() => expect(replace).toHaveBeenCalledWith("/assessment"));
-    expect(refresh).toHaveBeenCalledOnce();
+    await waitFor(() => expect(openWorkspace).toHaveBeenCalledOnce());
+    expect(replace).not.toHaveBeenCalled();
+    expect(refresh).not.toHaveBeenCalled();
   });
 
   it("requires matching passwords before sending a sign-up request", async () => {
@@ -200,8 +202,20 @@ describe("Assessment interactions", () => {
     await userEvent.type(screen.getByLabelText("Password (required)"), "sample-password");
     await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-    await waitFor(() => expect(replace).toHaveBeenCalledWith("/assessment"));
-    expect(refresh).toHaveBeenCalledOnce();
+    await waitFor(() => expect(openWorkspace).toHaveBeenCalledOnce());
+    expect(replace).not.toHaveBeenCalled();
+    expect(refresh).not.toHaveBeenCalled();
+  });
+
+  it("keeps the form and rejects a sign-in response without a session", async () => {
+    signIn.mockResolvedValue({ data: { session: null }, error: null });
+    render(<AuthControls appearance="standalone" />);
+    await userEvent.type(screen.getByLabelText("Email (required)"), "sample@example.invalid");
+    await userEvent.type(screen.getByLabelText("Password (required)"), "sample-password");
+    await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    await screen.findByRole("alert");
+    expect(openWorkspace).not.toHaveBeenCalled();
+    expect((screen.getByLabelText("Email (required)") as HTMLInputElement).value).toBe("sample@example.invalid");
   });
 
   it("does not announce success when CV retry saves a failed parse state", async () => {

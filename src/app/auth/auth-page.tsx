@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/supabase/server";
 import AuthControls from "../assessment/auth-controls";
 
 type AuthMode = "signIn" | "signUp";
 
-export default function AuthPage({ mode, notice }: { mode: AuthMode; notice?: string }) {
+export default async function AuthPage({ mode, notice }: { mode: AuthMode; notice?: string }) {
+  if (await getCurrentUser()) redirect("/assessment");
   const isSignUp = mode === "signUp";
 
   return (
