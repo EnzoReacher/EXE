@@ -101,7 +101,7 @@ test("local landing and Supabase email/password account flow", async ({ browser 
     await test.step("LOCAL_SUPABASE_SIGNUP_AND_PERSISTENT_SESSION", async () => {
       await landing.getByLabel("Confirm password (required)").fill(fixtures.authCandidate.password);
       const signupResponsePromise = landing.waitForResponse((response) =>
-        response.url() === supabase + "/auth/v1/signup"
+        new URL(response.url()).origin === supabase && new URL(response.url()).pathname === "/auth/v1/signup"
           && response.request().method() === "POST",
       { timeout: 30000 });
       await landing.getByRole("button", { name: "Create account", exact: true }).press("Enter");
