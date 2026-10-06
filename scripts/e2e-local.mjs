@@ -68,7 +68,9 @@ async function main() {
     let ready = false;
     for (let count = 0; count < 90 && !interrupted; count++) {
       if (serverSpawnFailed || server.exitCode !== null) break;
-      try { const response = await localFetch([app])(`${app}/credential-versions`, { signal: AbortSignal.timeout(3000) }); if (response.ok) { ready = true; break; } } catch { /* No raw URLs/errors are printed. */ }
+      // Private pages now redirect anonymous requests; keep redirect rejection
+      // enabled and probe the actual public account-entry page instead.
+      try { const response = await localFetch([app])(`${app}/sign-in`, { signal: AbortSignal.timeout(3000) }); if (response.ok) { ready = true; break; } } catch { /* No raw URLs/errors are printed. */ }
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
     if (!ready) throw new Error("LOCAL_APP_START_FAILED");

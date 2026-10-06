@@ -21,6 +21,7 @@ The regression-only [baseline run 37407419870](https://github.com/EnzoReacher/EX
 - The existing proxy preserves refresh cache headers and cookie updates, including deletions on redirects. The public confirmation callback and selected public review links remain accessible.
 - Regression coverage clicks the standalone button with cold and previously visited routes, delays real RSC requests, checks actual workspace content and auth cookies, calls private APIs immediately and after reload, revisits sign-in/sign-up, and checks sign-out, cookie removal and private-page/API denial. All accounts are generated synthetic fixtures and cleaned up; no owner credentials are stored.
 - The follow-up branch runs the existing full disposable backend/browser acceptance workflow as well as Quality. Unit coverage checks document navigation, server identity verification, account-entry redirects, missing-session responses, and request/response cookie propagation.
+- The browser harness probes the public sign-in page for startup readiness. Its local HTTP client continues rejecting redirects; private-page redirects must not be treated as startup failures. Private redirects retain the incoming Host header so NextURL loopback normalization cannot change the browser's cookie scope.
 
 No dependency, database, migration, RLS or Storage-policy change is required. Full results are available in GitHub Actions for this branch and the final engineering handoff. Genuine integration checks run in CI; they do not establish a reproduction on the owner's computer.
 
