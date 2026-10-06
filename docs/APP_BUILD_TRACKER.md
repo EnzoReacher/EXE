@@ -2,7 +2,54 @@
 
 This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. The GitHub feature branch is for source review; do not merge to `main` or deploy without the project owner's approval.
 
-## Latest — M18 authorization check: feature implementation blocked
+## Latest — M17 survey readiness follow-up
+
+2026-10-06: Started from clean `codex/exe-m18-decision-gate` / `ec563c8666cc5ddae14949586b542334a096750e`, matching fetched origin. Preserved the existing M17/M18 tracker history. The survey template lacked the requested owner status panel and collection/closeout log; it asserted anonymity without recorded platform review. Created `codex/exe-m17-survey-readiness` for the authorized documentation follow-up. Actual product decision/approval and feature-matrix cells remain unfilled: M18 coding is gated.
+
+### Section 1 complete — survey flow and owner controls
+
+Updated [the existing survey template](SURVEY_TEMPLATE.md) with an internal-only status panel (approval, audience, recruitment, platform, dates/counts, evidence/review fields), pending pre-launch checks and a blank non-identifying collection/closeout log. Separated participant-facing text, removed unconditional anonymity promises, added explicit consent/decline and optional/skip/stop instructions with platform-specific handling placeholders. Added no-difficulty/not-applicable/non-use responses, fully labelled rating scales and neutral expectation/value questions. Actual participant wording/platform approval remains pending; no launch, recruitment, instructor contact, dates/counts or research results supplied by this edit.
+
+### Section 2 complete — aggregate handoff review
+
+Compared the import schema and validator/summarizer implementation with documented scripts in `package.json`. Survey handoff now lists exact input fields, questionnaire/type mapping, completed-response denominators, screening/partial-response distinctions, skipped versus explicit non-answer options, coding limits and the existing private-draft commands. CSV/JSON fixtures are synthetic software inputs only. Existing register/source/decision statuses remain consistent: 9 public-source rows, 0 reviewed, 9 pending; no TU/EX/SV results or recorded M7/CP1 manual review; no selected/approved M18 feature. Course participant requirements/ambiguities remain owner/instructor inputs rather than inferred targets.
+
+### Section 3 complete — status consistency and structural verification
+
+Linked survey readiness from CP2 execution status and clarified the import schema's aggregate-only anonymity and completed-response denominators. Survey wording/platform launch approval, primary research, manual reviews and M18 approval remain pending. No source/evidence facts or review statuses were altered.
+
+| Command / check run in this follow-up | Actual result |
+|---|---|
+| `pnpm cp2:validate` | PASS: 9 collected rows, 0 owner-reviewed, 9 pending; structural only. |
+| `pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md` | PASS: source-log structure/completeness; no URLs fetched. |
+| `pnpm cp2:survey:validate -- --file scripts/fixtures/cp2-research/survey-valid.csv` | PASS: synthetic CSV schema smoke check; not research evidence. |
+| `pnpm cp2:survey:validate -- --file scripts/fixtures/cp2-research/survey-valid.json` | PASS: synthetic JSON schema smoke check; not research evidence. |
+| `pnpm cp2:survey:summarize -- --file scripts/fixtures/cp2-research/survey-valid.csv` | PASS: stdout draft labelled SYNTHETIC TEST ONLY; no output file or evidence row created. |
+| Read-only local documentation link/anchor check | PASS: 4 changed Markdown files, 18 local links/anchors resolve. |
+| `git diff --check` and full diff/scope review | PASS: four intended documentation files only; no credentials, tokens, personal research data or generated artifacts added. Staged check precedes commit. |
+
+Documentation-only follow-up: unit/lint/typecheck/build, auth/browser and Supabase/RLS/Storage suites not run. No actual aggregate was provided or validated. Template-mode validation is not applicable to a collected register. Synthetic counts/dates are software fixtures, not collection outcomes. No survey launch, recruitment, instructor message, M18 feature, merge, deployment or release.
+
+### Remaining owner actions and local retest
+
+Review/finalize participant-facing wording and actual platform/recruitment metadata, access, retention, anonymity/confidentiality and stop/partial-save/withdrawal behavior; complete the pending owner panel and record wording/settings/launch approval before any launch. Resolve instructor counts/options and sampling, then record only actual safe collection/closeout events and manually anonymized TU/EX/SV results. Review the nine sources and limitations, document M7/CP1/current manual outcomes and complete the direction/feature/evidence/criteria/implementation approval records before M18 coding.
+
+In a clean checkout after preserving local changes:
+
+```sh
+git fetch origin
+git switch codex/exe-m17-survey-readiness
+git pull --ff-only origin codex/exe-m17-survey-readiness
+pnpm install --frozen-lockfile
+pnpm cp2:validate
+pnpm cp2:sources:validate -- --file docs/evidence/cp2-public-source-log-2026-10-05.md
+pnpm cp2:survey:validate -- --file scripts/fixtures/cp2-research/survey-valid.csv
+pnpm cp2:survey:validate -- --file scripts/fixtures/cp2-research/survey-valid.json
+pnpm cp2:survey:summarize -- --file scripts/fixtures/cp2-research/survey-valid.csv
+git diff --check
+```
+
+## Prior — M18 authorization check: feature implementation blocked
 
 2026-10-06: Inspected clean local branch `codex/exe-m17-cp2-evidence-review` at `3131c51de370c9c5c906d1ab9ffcb7b004fe6c96`; `git fetch origin` confirmed that exact published M17 HEAD and preserved M16 baseline `ca4046010d23f1a4da0d21567e8e07e66eec9c7d`. No M18 branch existed locally or on fetched origin. Read the actual decision, evidence register, execution status, M17 handoff/source records and feature matrix; searched tracked documentation for M18 selection/approval. M17 preparation is published, but actual owner/team evidence review and product decision are still unrecorded. Created documentation-only `codex/exe-m18-decision-gate` from that verified M17 HEAD.
 

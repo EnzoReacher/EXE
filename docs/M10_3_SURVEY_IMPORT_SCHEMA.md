@@ -2,6 +2,8 @@
 
 The input is **aggregate category counts**, never one row per person. CSV uses a single header row; JSON uses an array of flat row objects with exactly the documented fields. UTF-8/BOM, CSV quoted commas/newlines and doubled quotes are supported. Maximum file size: 2 MiB. No raw platform export, contact/name column, free-text respondent answer, CV, recording or credential is allowed.
 
+“Anonymous” here describes the manually anonymized aggregate input, not an unverified property of the original survey platform or recruitment. The owner must approve truthful participant wording and actual platform settings using [the survey pre-launch checklist](SURVEY_TEMPLATE.md) before launch; identifiable/confidential collection must not be advertised as anonymous.
+
 ## Required fields on every category row
 
 | Field | Format / rule |
@@ -21,6 +23,8 @@ The input is **aggregate category counts**, never one row per person. CSV uses a
 | `theme_category` (optional) | Already anonymized/coded broad snake_case category; no generated theme or quotation |
 
 CSV counts use integer digits only; JSON counts may be integer numbers or digit strings. All file-level metadata/totals must be identical across rows. Each question needs unique response labels, consistent type and unanswered count. Single-choice counts plus unanswered must equal completed. Multi-select category counts each cannot exceed answered respondents, but their sum may exceed the denominator. Keep zero-count categories if needed; never infer absent questionnaire items. No percentages, respondent IDs or automatic hypothesis classification.
+
+All question distributions use completed eligible respondents. Screening-out/dropout totals are metadata or separately reviewed safe summaries, not extra respondents in question distributions. Define started/eligible/completed against actual consent and platform behavior. Count skipped or not-shown questions among completed respondents as unanswered; explicit “prefer not to say” is a category. Preserve the actual questionnaire version, question IDs, choice types and any manual text-coding rules in a non-identifying map. The validator does not check survey routing, exclusive choices, selection limits or coverage of omitted questions; those need owner review. Synthetic fixture question IDs demonstrate software structure, not this template's questionnaire mapping.
 
 ## Examples and fixtures
 

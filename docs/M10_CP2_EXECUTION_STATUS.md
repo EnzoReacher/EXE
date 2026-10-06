@@ -12,6 +12,12 @@ The [existing owner review packet](evidence/CP2_GATE_RECONCILIATION_2026-10-05.m
 
 Next owner actions: confirm instructor requirements; provide actual anonymized participant/expert summaries and survey aggregates if applicable; review the nine source rows and limitations; record fictional manual walkthrough/rehearsal results; complete the existing reviewed direction/feature records and explicit approval. A validator pass does not authorize M18.
 
+### Survey-readiness follow-up — 2026-10-06
+
+The [survey template](SURVEY_TEMPLATE.md) now separates an internal owner status panel/pre-launch checks/non-identifying collection log from a participant-facing draft. Owner/team approval of wording and actual platform/recruitment settings is still pending. No survey was launched or participant/instructor contacted in this follow-up; no collection dates, counts, evidence IDs or approvals were supplied. Finalize truthful anonymity or confidentiality limits and test consent/decline/skip/stop/submit routing before launch. Do not describe identifiable collection as anonymous; only manually anonymized aggregates may enter the research handoff.
+
+The template's aggregate instructions match [the import schema](M10_3_SURVEY_IMPORT_SCHEMA.md) and current CLI fields/commands. Software validation/summarization using committed synthetic fixtures checks that handoff only; it supplies no primary evidence. See [the tracker](APP_BUILD_TRACKER.md) for exact commands/results. Counts remain 9 public-source rows, 0 reviewed, 9 pending; primary research and M7/CP1 manual evidence remain unrecorded. M18 direction/feature/criteria/approval fields remain unfilled.
+
 ## M10 execution review — 2026-10-02
 
 **Evidence IDs or source IDs used:** none. The CP2 register contains only explicitly labelled example rows; no anonymized participant, expert, survey, competitor, pricing, or market evidence was supplied for this review.
@@ -120,7 +126,8 @@ Confirm any ambiguity with the instructor before marking CP2 complete. The numbe
 - [ ] Confirm consent wording and safe note storage.
 - [ ] Conduct the target-user interviews.
 - [ ] Conduct the expert interviews.
-- [ ] Run the anonymous survey, if required.
+- [ ] Review participant wording and actual platform/recruitment settings; approve launch with accurate anonymity or confidentiality limits.
+- [ ] Run the owner-approved survey, if required, and manually anonymize aggregates before evidence entry.
 - [ ] Keep names, contacts, recordings, full CVs, credentials, and confidential applications outside Git.
 
 ### Desk research
