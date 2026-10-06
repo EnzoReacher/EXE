@@ -108,7 +108,8 @@ export default function AssessmentForm() {
       (form.elements.namedItem("companyName") as HTMLInputElement).value = job.companyName ?? "";
       (form.elements.namedItem("jobDescription") as HTMLTextAreaElement).value = job.jobDescription;
       setFieldErrors({}); setNotice({ tone: "info", text: "Edit these details and save a new target job. Existing reports keep their original job." });
-      document.getElementById("role-title")?.focus();
+      // Move focus after the pending state has re-enabled the form.
+      window.requestAnimationFrame(() => document.getElementById("role-title")?.focus());
     } catch { setNotice({ tone: "error", text: "This target job could not be loaded. Reload your workspace and retry." }); }
     finally { setMutatingCv(false); }
   }

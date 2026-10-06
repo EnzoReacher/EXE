@@ -83,6 +83,7 @@ test("complete private CV job report roadmap review and opportunity journey", as
       await page.goto("/assessment"); await page.getByRole("button", { name: "Copy target job M15 fictional analyst" }).click();
       await page.getByText("Edit these details and save a new target job. Existing reports keep their original job.").waitFor();
       check((await page.getByLabel("Job description (required)").inputValue()).includes("Python"), "CORE_JOB_COPY_DETAILS_REQUIRED");
+      await page.waitForFunction(() => document.activeElement === document.getElementById("role-title"));
       for (const width of [320, 375, 768, 1024, 1440]) { await page.setViewportSize({ width, height: 900 }); check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "CORE_WORKSPACE_OVERFLOW"); }
       page.once("dialog", (dialog) => dialog.accept());
       await page.getByRole("button", { name: "Delete target job M15 fictional analyst" }).click();
