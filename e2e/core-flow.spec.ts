@@ -26,7 +26,7 @@ test("complete private CV job report roadmap review and opportunity journey", as
     return page;
   }
   try {
-    const page = await pageFor("owner"); let runId = ""; let jobId = ""; let cvId = "";
+    const page = await pageFor("unassigned"); let runId = ""; let jobId = ""; let cvId = "";
     await test.step("CORE_PRIVATE_INTAKE_AND_ANALYSIS", async () => {
       const buffer = await Packer.toBuffer(new Document({ sections: [{ children: [new Paragraph("Fictional student. Completed a SQL coursework project using SQL queries. Built a dashboard for fictional coursework.")] }] }));
       await page.getByLabel("CV file (required)").setInputFiles({ name: "m15-fictional-core.docx", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", buffer });

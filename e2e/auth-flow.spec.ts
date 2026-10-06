@@ -118,13 +118,13 @@ test("local landing and Supabase email/password account flow", async ({ browser 
       await signIn.getByLabel("Email (required)").fill(fixtures.authCandidate.email);
       await signIn.getByLabel("Password (required)", { exact: true }).fill(fixtures.authCandidate.password + "-wrong");
       await submitAndWait(signIn, "Sign in", 400);
-      const knownFailure = signIn.getByRole("alert");
+      const knownFailure = signIn.getByRole("alert").filter({ hasText: GENERIC_AUTH_FAILURE });
       await knownFailure.waitFor();
       check((await knownFailure.textContent())?.trim() === GENERIC_AUTH_FAILURE, "KNOWN_ACCOUNT_FAILURE_NOT_GENERIC");
       await signIn.getByLabel("Email (required)").fill(fixtures.run + "-missing@example.invalid");
       await signIn.getByLabel("Password (required)", { exact: true }).fill(fixtures.authCandidate.password + "-wrong");
       await submitAndWait(signIn, "Sign in", 400);
-      const unknownFailure = signIn.getByRole("alert");
+      const unknownFailure = signIn.getByRole("alert").filter({ hasText: GENERIC_AUTH_FAILURE });
       await unknownFailure.waitFor();
       check((await unknownFailure.textContent())?.trim() === GENERIC_AUTH_FAILURE, "UNKNOWN_ACCOUNT_FAILURE_NOT_GENERIC");
       await signIn.getByLabel("Email (required)").fill(fixtures.authCandidate.email);

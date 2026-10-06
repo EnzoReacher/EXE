@@ -14,12 +14,13 @@ export default class SafeReporter implements Reporter {
     }
     const code = result.error?.message?.match(/^(?:Error: )?([A-Z0-9_]+)(?:\n|$)/)?.[1]
       ?? (result.error?.message?.includes("Test timeout") ? "TEST_TIMEOUT"
+        : result.error?.message?.includes("strict mode violation") ? "LOCATOR_MATCHES_MULTIPLE_ELEMENTS"
         : result.error?.message?.includes("apiRequestContext.get") ? "API_REQUEST_FAILURE"
         : result.error?.message?.includes("locator.waitFor") ? "ELEMENT_WAIT_FAILURE"
         : result.error?.message?.includes("page.goto") ? "NAVIGATION_FAILURE" : "ASSERTION_OR_TIMEOUT");
     const locations = [...(result.error?.stack ?? "").matchAll(/(?:credential-flow|proof-preview|workspace-ui|auth-flow|core-flow)\.spec\.ts:(\d+):(\d+)/g)];
-    const line = locations.at(0)?.[1];
-    console.log(result.status === "passed" ? "Synthetic browser checks: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${line ? ` (spec line ${line})` : ""}.`);
+    const lines = [...new Set(locations.map((item) => item[1]))].slice(0, 4).join(", ");
+    console.log(result.status === "passed" ? "Synthetic browser checks: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${lines ? ` (spec lines ${lines})` : ""}.`);
   }
   onError(error: { message?: string; stack?: string }) {
     const message = error.message ?? "";

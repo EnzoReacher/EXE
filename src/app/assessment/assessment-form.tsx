@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 type Cv = { id: string; originalFilename: string; byteSize: number; processingStatus: "processing" | "ready" | "failed" | "deleting" | "delete_failed"; parseErrorCode: string | null };
@@ -31,6 +31,14 @@ export default function AssessmentForm() {
   const [analyzing, setAnalyzing] = useState(false);
   const [mutatingCv, setMutatingCv] = useState(false);
   const [replaceCvId, setReplaceCvId] = useState<string | null>(null);
+  const copyFocusPending = useRef(false);
+
+  useEffect(() => {
+    if (!mutatingCv && copyFocusPending.current) {
+      copyFocusPending.current = false;
+      document.getElementById("role-title")?.focus();
+    }
+  }, [mutatingCv]);
 
   async function loadWorkspace() {
     setLoading(true);
@@ -108,8 +116,8 @@ export default function AssessmentForm() {
       (form.elements.namedItem("companyName") as HTMLInputElement).value = job.companyName ?? "";
       (form.elements.namedItem("jobDescription") as HTMLTextAreaElement).value = job.jobDescription;
       setFieldErrors({}); setNotice({ tone: "info", text: "Edit these details and save a new target job. Existing reports keep their original job." });
-      // Move focus after the pending state has re-enabled the form.
-      window.requestAnimationFrame(() => document.getElementById("role-title")?.focus());
+      // The effect moves focus after React re-enables the form.
+      copyFocusPending.current = true;
     } catch { setNotice({ tone: "error", text: "This target job could not be loaded. Reload your workspace and retry." }); }
     finally { setMutatingCv(false); }
   }
