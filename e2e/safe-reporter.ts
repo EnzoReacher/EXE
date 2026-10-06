@@ -18,7 +18,7 @@ export default class SafeReporter implements Reporter {
         : result.error?.message?.includes("locator.waitFor") ? "ELEMENT_WAIT_FAILURE"
         : result.error?.message?.includes("page.goto") ? "NAVIGATION_FAILURE" : "ASSERTION_OR_TIMEOUT");
     const locations = [...(result.error?.stack ?? "").matchAll(/(?:credential-flow|proof-preview|workspace-ui|auth-flow|core-flow)\.spec\.ts:(\d+):(\d+)/g)];
-    const line = locations.at(-1)?.[1];
+    const line = locations.at(0)?.[1];
     console.log(result.status === "passed" ? "Synthetic browser checks: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${line ? ` (spec line ${line})` : ""}.`);
   }
   onError(error: { message?: string; stack?: string }) {

@@ -35,7 +35,7 @@ async function signedIn(page: Page, actor: Actor) {
   await type(page.getByLabel("Email (required)"), actor.email);
   await type(page.getByLabel("Password (required)"), actor.password);
   await keyClick(page.getByRole("button", { name: "Sign in", exact: true }));
-  await page.getByText("Signed in. Reloading", { exact: false }).waitFor();
+  await page.getByText("Signed in. Opening your workspace…", { exact: true }).waitFor();
 }
 async function json(page: Page, path: string) {
   const response = await page.context().request.get(path, { maxRedirects: 0 });
