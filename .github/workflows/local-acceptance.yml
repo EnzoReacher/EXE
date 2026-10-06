@@ -1,0 +1,51 @@
+name: Local backend and browser acceptance
+
+on:
+  push:
+    branches: [codex/exe-web-app-m15-complete-workspace]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: local-acceptance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Preserve installed framework guides and fictional fixture
+        run: |
+          mkdir -p "${{ runner.temp }}/exe-guides"
+          cp -R node_modules/next/dist/docs "${{ runner.temp }}/exe-guides/next-docs"
+          cp docs/demo/fixtures/aria-vale-fictional-cv.docx "${{ runner.temp }}/exe-guides/"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exe-framework-guides
+          path: ${{ runner.temp }}/exe-guides
+          retention-days: 3
+      - run: pnpm exec playwright install --with-deps chromium
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.119.0
+      - name: Start disposable runner database
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector
+      - name: Verify engineering, real policies, and synthetic browser journeys
+        run: node scripts/ci-local-acceptance.mjs
+      - name: Stop disposable runner stack
+        if: always()
+        run: supabase stop --no-backup

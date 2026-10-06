@@ -4,6 +4,7 @@ import { createServer } from "node:net";
 import { spawn, execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { tmpdir } from "node:os";
 import { chromium } from "@playwright/test";
 import { parseEnv, verifyReviewPreflight } from "./review-preflight.mjs";
 import { loopbackOrigin, publicLocalSettings, localFetch, provisionFixtures } from "./e2e-local-support.mjs";
@@ -43,7 +44,7 @@ async function main() {
     phase = "owned application port";
     const url = new URL(app); const host = url.hostname.replace(/^\[|\]$/g, ""); const port = Number(url.port || 80);
     await new Promise((resolve, reject) => { const probe = createServer(); probe.once("error", () => reject(new Error("APPLICATION_PORT_OCCUPIED"))); probe.listen(port, host, () => probe.close(resolve)); });
-    temporary = await mkdtemp("/tmp/opencode/exe-browser-");
+    temporary = await mkdtemp(path.join(tmpdir(), "exe-browser-"));
     phase = "isolated application copy";
     const serverRoot = path.join(temporary, "application"); await mkdir(serverRoot);
     // Run an unchanged copy of the real application so Next's caches and server

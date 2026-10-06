@@ -1,7 +1,9 @@
 import { defineConfig } from "@playwright/test";
 import { loopbackOrigin } from "../scripts/e2e-local-support.mjs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 
-if (!process.env.E2E_TEMP || !/^\/tmp\/opencode\/exe-browser-[A-Za-z0-9]+$/.test(process.env.E2E_TEMP) || !process.env.E2E_FIXTURES) throw new Error("RUN_ONLY_THROUGH_LOCAL_HARNESS");
+if (!process.env.E2E_TEMP || path.dirname(process.env.E2E_TEMP) !== tmpdir() || !/^exe-browser-[A-Za-z0-9]+$/.test(path.basename(process.env.E2E_TEMP)) || !process.env.E2E_FIXTURES) throw new Error("RUN_ONLY_THROUGH_LOCAL_HARNESS");
 const baseURL = loopbackOrigin(process.env.E2E_APP_URL);
 loopbackOrigin(process.env.E2E_SUPABASE_URL);
 export default defineConfig({
