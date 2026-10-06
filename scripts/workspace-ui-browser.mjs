@@ -1,23 +1,32 @@
-import { constants, accessSync, cpSync, mkdirSync, mkdtempSync, rmSync, statSync, symlinkSync } from "node:fs";
+import { constants, accessSync, cpSync, mkdirSync, mkdtempSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { createServer } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const binary = process.env.PROOF_BROWSER_EXECUTABLE;
 try {
-  if (!statSync(path.join(root, ".next/BUILD_ID")).isFile()) throw new Error();
   if (binary) { if (!path.isAbsolute(binary) || !statSync(binary).isFile()) throw new Error(); accessSync(binary, constants.X_OK); }
-} catch { console.error("UI rendering blocked: run pnpm build and make a local Chromium executable available first."); process.exit(1); }
+} catch { console.error("UI rendering blocked: make the selected local Chromium executable available first."); process.exit(1); }
 const temporary = mkdtempSync(path.join(tmpdir(), "exe-ui-render-"));
 try {
   const app = path.join(temporary, "app"); mkdirSync(app);
-  // No environment file, source document, credential or account data copied.
-  cpSync(path.join(root, ".next"), path.join(app, ".next"), { recursive: true, mode: constants.COPYFILE_FICLONE, filter: (source) => source !== path.join(root, ".next/cache") });
-  cpSync(path.join(root, "package.json"), path.join(app, "package.json"));
-  symlinkSync(path.join(root, "node_modules"), path.join(app, "node_modules"), "dir");
+  // Component-only fixture host: no API routes, proxy, Auth configuration,
+  // account data or production build are copied. Real session/backend coverage
+  // remains in test:e2e:local, which runs the unchanged complete application.
+  for (const name of ["package.json", "tsconfig.json", "src/lib"]) {
+    cpSync(path.join(root, name), path.join(app, name), { recursive: true });
+  }
+  const files = ["src/app/layout.tsx", "src/app/globals.css", "src/components/workspace-header.tsx",
+    ...["page.tsx", "workspace.tsx", "workspace-summary.tsx", "export-controls.tsx"].map((name) => "src/app/credential-versions/" + name)];
+  for (const name of files) {
+    mkdirSync(path.dirname(path.join(app, name)), { recursive: true });
+    cpSync(path.join(root, name), path.join(app, name));
+  }
+  // Retain pnpm's relative dependency links without installation/downloads.
+  execFileSync("cp", ["-a", "--reflink=auto", path.join(root, "node_modules"), path.join(app, "node_modules")], { stdio: "ignore" });
   const probe = createServer();
   await new Promise((resolve, reject) => { probe.once("error", reject); probe.listen(0, "127.0.0.1", resolve); });
   const address = probe.address();

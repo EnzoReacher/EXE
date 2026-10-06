@@ -6,10 +6,8 @@ const privatePages = ["/assessment", "/saved-work", "/analysis", "/credential-ve
 
 export async function updateSupabaseSession(request: NextRequest) {
   let response = NextResponse.next({ request });
-  // Read runtime settings: isolated fixture rendering has no configured Auth.
-  const settings = process.env;
-  const url = settings.NEXT_PUBLIC_SUPABASE_URL;
-  const key = settings.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return response;
 
   const supabase = createServerClient(url, key, {
