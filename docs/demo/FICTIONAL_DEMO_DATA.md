@@ -69,9 +69,11 @@ Use the job description above without changing its requirement wording. M2 is a 
 | Requirement | Expected state | What to point out |
 |---|---|---|
 | `accessible web interfaces` | **Supported** | The report should quote the project sentence: “Built accessible web interfaces in TypeScript and React …” as CV example context. |
-| `Build TypeScript components` | **Partly supported** | The CV contains `TypeScript` and `components`, but does not repeat the full requirement wording. The report should show the nearby CV excerpt and explain that the wording is incomplete. |
+| `Build TypeScript components` | **Unclear** | The CV mentions `TypeScript` and `components` in separate sentences, and does not repeat the full requirement wording. The conservative matcher evaluates the quoted excerpt rather than combining separate claims. Review the related wording; it does not establish the full requirement. |
 | `experiment design` | **Unclear** | The CV says “No experiment design experience yet.” The app must show the nearby text and require the user's interpretation; it must not call this proof of an absent skill. |
 | `user research` | **Missing** | The CV has no direct wording for this requirement. The report should say no CV text was found, not that Aria lacks the skill. |
+
+M16 acceptance on 2026-10-06 verified these labels against the committed DOCX and current parser/matcher. This fixture demonstrates three of the four available states: supported, unclear and missing. Its earlier partly-supported expectation for `Build TypeScript components` was stale; the fixture and matching rules were not changed to force a label.
 
 ## Expected M3 roadmap actions
 

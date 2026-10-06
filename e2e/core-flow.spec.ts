@@ -1,10 +1,16 @@
 import { test, type BrowserContext, type Page } from "@playwright/test";
-import { Document, Packer, Paragraph } from "docx";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { loopbackOrigin } from "../scripts/e2e-local-support.mjs";
 
 const fixtures = JSON.parse(process.env.E2E_FIXTURES!) as { actors: Array<{ label: string; email: string; password: string }> };
 const app = loopbackOrigin(process.env.E2E_APP_URL!);
 const supabase = loopbackOrigin(process.env.E2E_SUPABASE_URL!);
+const demoCv = path.resolve("docs/demo/fixtures/aria-vale-fictional-cv.docx");
+const demoRole = "Junior Front-end Developer";
+const demoPack = readFileSync(path.resolve("docs/demo/FICTIONAL_DEMO_DATA.md"), "utf8");
+const demoDescription = demoPack
+  .split("## Fictional job description\n\n")[1].split("## Fictional CV content")[0].replaceAll("**", "").trim();
 function check(value: unknown, code: string): asserts value { if (!value) throw new Error(code); }
 async function json(page: Page, path: string) { const result = await page.context().request.get(path); check(result.ok(), "CORE_API_READ_FAILED"); return result.json(); }
 
@@ -28,18 +34,41 @@ test("complete private CV job report roadmap review and opportunity journey", as
   try {
     const page = await pageFor("unassigned"); let runId = ""; let jobId = ""; let cvId = "";
     await test.step("CORE_PRIVATE_INTAKE_AND_ANALYSIS", async () => {
-      const buffer = await Packer.toBuffer(new Document({ sections: [{ children: [new Paragraph("Fictional student. Completed a SQL coursework project using SQL queries. Built a dashboard for fictional coursework.")] }] }));
-      await page.getByLabel("CV file (required)").setInputFiles({ name: "m15-fictional-core.docx", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", buffer });
-      await page.getByLabel("Target role (required)").fill("M15 fictional analyst");
-      await page.getByLabel("Job description (required)").fill("Requirements:\n- SQL queries\n- Python programming\n- Dashboard development");
+      let uploads = 0; let jobAttempts = 0;
+      await page.route("**/api/intake/cv", (route) => {
+        if (route.request().method() === "POST") uploads++;
+        return route.fallback();
+      });
+      await page.route("**/api/intake/jobs", (route) => {
+        if (route.request().method() !== "POST") return route.fallback();
+        jobAttempts++;
+        if (jobAttempts === 1) return route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ error: "Synthetic job save interruption." }) });
+        return route.fallback();
+      });
+      await page.getByLabel("CV file (required)").setInputFiles(demoCv);
+      await page.getByLabel("Target role (required)").fill(demoRole);
+      await page.getByLabel("Company Optional").fill("BrightPath Studio");
+      await page.getByLabel("Job description (required)").fill(demoDescription);
       await page.getByRole("button", { name: "Save CV and target job", exact: true }).click();
+      await page.getByRole("alert").filter({ hasText: /Synthetic job save interruption.*Your uploaded CV is kept/ }).waitFor();
+      check((await json(page, "/api/intake/cv")).cvs.length === 1, "CORE_PARTIAL_INTAKE_RETAINS_CV");
+      check(await page.getByLabel("Target role (required)").inputValue() === demoRole, "CORE_PARTIAL_INTAKE_RETAINS_JOB_INPUT");
+      await page.getByRole("button", { name: "Save target job", exact: true }).click();
       await page.getByText("Your target job was saved. Choose a processed CV below to create a report.").waitFor();
+      check(uploads === 1 && jobAttempts === 2, "CORE_INTAKE_RECOVERY_NO_DUPLICATE_UPLOAD");
+      await page.unroute("**/api/intake/cv"); await page.unroute("**/api/intake/jobs");
       cvId = await page.getByLabel("Saved CV for report").inputValue(); jobId = await page.getByLabel("Saved target job for report").inputValue(); check(cvId && jobId, "CORE_SAVED_SELECTIONS_REQUIRED");
       await page.getByRole("button", { name: "Create evidence report" }).click();
       await page.waitForURL(/\/analysis\/[a-f0-9-]+$/); runId = new URL(page.url()).pathname.split("/").pop()!;
       await page.getByRole("heading", { name: "Requirements and CV evidence" }).waitFor();
       const { details } = await json(page, `/api/analysis/${runId}`); check(details.run.status === "completed" && details.findings.length > 0, "CORE_ANALYSIS_COMPLETED");
       check(details.findings.some((item: { status: string }) => item.status === "missing"), "CORE_DOCUMENT_GAP_REQUIRED");
+      const examples = [...demoPack.matchAll(/\| `([^`]+)` \| \*\*([^*]+)\*\*/g)];
+      check(examples.length === 4, "CORE_FOUR_DOCUMENTED_DEMO_EXAMPLES_REQUIRED");
+      for (const [, requirement, label] of examples) {
+        const status = label.toLowerCase().replaceAll(" ", "_");
+        check(details.findings.some((item: { requirement: string; status: string }) => item.requirement === requirement && item.status === status), "CORE_DEMO_EVIDENCE_STATE_" + status.toUpperCase());
+      }
     });
     await test.step("CORE_ATOMIC_ROADMAP_DRAFT_AND_ACCEPTANCE", async () => {
       await page.getByRole("link", { name: "Open next steps" }).click();
@@ -53,6 +82,25 @@ test("complete private CV job report roadmap review and opportunity journey", as
       await page.getByRole("button", { name: "Accept after review" }).click();
       await page.getByText("You accepted this draft. It remains private and editable.").waitFor();
       check((await json(page, `/api/analysis/${runId}/next-steps`)).details.draft.acceptedAt, "CORE_ACCEPTANCE_PERSISTED");
+    });
+    await test.step("CORE_SAVED_WORK_REOPEN_REFRESH_AND_FRESH_SIGNIN", async () => {
+      await page.getByRole("link", { name: "Saved work", exact: true }).click();
+      const report = page.getByRole("link", { name: `Open report for ${demoRole}, aria-vale-fictional-cv.docx`, exact: true });
+      await report.waitFor(); await page.reload(); await report.waitFor();
+      await report.click(); await page.waitForURL(`**/analysis/${runId}`);
+      await page.getByRole("heading", { name: "Requirements and CV evidence" }).waitFor();
+      await page.getByRole("link", { name: "Saved work", exact: true }).click();
+      await page.getByRole("link", { name: `Open next steps and draft for ${demoRole}, aria-vale-fictional-cv.docx`, exact: true }).click();
+      await page.waitForURL(`**/analysis/${runId}/next-steps`);
+      await page.getByText("Saved version accepted", { exact: true }).waitFor();
+      await page.reload(); await page.getByText("Saved version accepted", { exact: true }).waitFor();
+      const fresh = await pageFor("unassigned");
+      for (const reload of [false, true]) {
+        if (reload) await fresh.reload();
+        await fresh.getByRole("button", { name: "Copy target job " + demoRole, exact: true }).waitFor();
+        check((await json(fresh, "/api/intake/cv")).cvs.some((item: { id: string }) => item.id === cvId), "CORE_EXISTING_CV_AFTER_SIGNIN_OR_REFRESH");
+        check((await json(fresh, "/api/saved-work")).items.some((item: { analysisId: string }) => item.analysisId === runId), "CORE_EXISTING_REPORT_AFTER_SIGNIN_OR_REFRESH");
+      }
     });
     await test.step("CORE_REVIEW_FEEDBACK_AND_REVOCATION", async () => {
       await page.goto(`/analysis/${runId}`);
@@ -80,18 +128,24 @@ test("complete private CV job report roadmap review and opportunity journey", as
       const stranger = await pageFor(); check((await stranger.context().request.delete(`/api/intake/jobs/${jobId}`)).status() === 401, "CORE_ANONYMOUS_DELETE_DENIED");
     });
     await test.step("CORE_JOB_COPY_CASCADE_DELETE_RESPONSIVE_AND_SIGNOUT", async () => {
-      await page.goto("/assessment"); await page.getByRole("button", { name: "Copy target job M15 fictional analyst" }).click();
+      await page.goto("/assessment"); await page.getByRole("button", { name: "Copy target job " + demoRole, exact: true }).click();
       await page.getByText("Edit these details and save a new target job. Existing reports keep their original job.").waitFor();
-      check((await page.getByLabel("Job description (required)").inputValue()).includes("Python"), "CORE_JOB_COPY_DETAILS_REQUIRED");
+      check(await page.getByLabel("Job description (required)").inputValue() === demoDescription, "CORE_JOB_COPY_DETAILS_REQUIRED");
       await page.waitForFunction(() => document.activeElement === document.getElementById("role-title"));
       for (const width of [320, 375, 768, 1024, 1440]) { await page.setViewportSize({ width, height: 900 }); check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "CORE_WORKSPACE_OVERFLOW"); }
       page.once("dialog", (dialog) => dialog.accept());
-      await page.getByRole("button", { name: "Delete target job M15 fictional analyst" }).click();
+      await page.getByRole("button", { name: "Delete target job " + demoRole, exact: true }).click();
       await page.getByText(/The target job and its related reports/).waitFor();
       check((await page.context().request.get(`/api/analysis/${runId}`)).status() === 404, "CORE_JOB_DELETE_CASCADES_REPORT");
       check((await json(page, "/api/intake/cv")).cvs.some((item: { id: string }) => item.id === cvId), "CORE_JOB_DELETE_RETAINS_CV");
       check(!(await json(page, "/api/opportunities")).items.some((item: { targetJobId: string }) => item.targetJobId === jobId), "CORE_JOB_DELETE_CASCADES_OPPORTUNITIES");
-      check((await page.context().request.delete(`/api/intake/cv/${cvId}`)).status() === 204, "CORE_FIXTURE_CV_CLEANUP");
+      await page.getByRole("button", { name: "Replace aria-vale-fictional-cv.docx", exact: true }).click();
+      await page.getByLabel("CV file (required)").setInputFiles({ name: "aria-vale-fictional-replacement.docx", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", buffer: readFileSync(demoCv) });
+      await page.getByRole("button", { name: "Save CV and target job", exact: true }).click();
+      await page.getByText("Your target job was saved. Choose a processed CV below to create a report.").waitFor();
+      const replaced = (await json(page, "/api/intake/cv")).cvs;
+      check(replaced.length === 1 && replaced[0].id !== cvId && replaced[0].processingStatus === "ready", "CORE_SAFE_READY_REPLACEMENT_REMOVES_OLD_CV");
+      check((await page.context().request.delete(`/api/intake/cv/${replaced[0].id}`)).status() === 204, "CORE_FIXTURE_CV_CLEANUP");
       await page.getByRole("button", { name: "Sign out", exact: true }).click(); await page.waitForURL("**/sign-in");
       check((await page.context().request.get("/api/intake/cv")).status() === 401, "CORE_SIGNOUT_SESSION_DENIED");
       check(blocked === 0 && pageErrors === 0, "CORE_BROWSER_ERROR_OR_EXTERNAL_REQUEST");

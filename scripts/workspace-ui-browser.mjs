@@ -19,12 +19,15 @@ try {
   for (const name of ["package.json", "tsconfig.json", "src/lib"]) {
     cpSync(path.join(root, name), path.join(app, name), { recursive: true });
   }
-  const files = ["src/app/layout.tsx", "src/app/globals.css", "src/components/workspace-header.tsx",
+  const files = ["src/app/layout.tsx", "src/app/globals.css", "src/components/workspace-header.tsx", "src/app/assessment/assessment-form.tsx",
     ...["page.tsx", "workspace.tsx", "workspace-summary.tsx", "export-controls.tsx"].map((name) => "src/app/credential-versions/" + name)];
   for (const name of files) {
     mkdirSync(path.dirname(path.join(app, name)), { recursive: true });
     cpSync(path.join(root, name), path.join(app, name));
   }
+  // Render the real intake component without copying its protected server page.
+  // This fixture host has no APIs or Auth; the layout test intercepts demo DTOs.
+  writeFileSync(path.join(app, "src/app/assessment/page.tsx"), 'import AssessmentForm from "./assessment-form";\nexport default function Page() { return <main className="assessment-page"><div className="assessment-wrap"><AssessmentForm /></div></main>; }\n');
   // Retain pnpm's relative dependency links without installation/downloads.
   execFileSync("cp", ["-a", "--reflink=auto", path.join(root, "node_modules"), path.join(app, "node_modules")], { stdio: "ignore" });
   const probe = createServer();
@@ -32,7 +35,7 @@ try {
   const address = probe.address();
   if (!address || typeof address === "string") throw new Error();
   const port = address.port; await new Promise((resolve) => probe.close(resolve));
-  const env = { UI_TEST_TEMP: temporary, UI_TEST_PORT: String(port), NEXT_TELEMETRY_DISABLED: "1" };
+  const env = { UI_TEST_TEMP: temporary, UI_TEST_PORT: String(port), TMPDIR: tmpdir(), NEXT_TELEMETRY_DISABLED: "1" };
   for (const name of ["PATH", "HOME", "XDG_CACHE_HOME", "PLAYWRIGHT_BROWSERS_PATH", "LD_LIBRARY_PATH", "FONTCONFIG_PATH", "PROOF_BROWSER_EXECUTABLE"]) if (process.env[name]) env[name] = process.env[name];
   // Keep production React effect behavior, including one initial workspace
   // load, while compiling only this account-free component fixture.

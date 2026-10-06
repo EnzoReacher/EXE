@@ -2,7 +2,11 @@
 
 This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. The GitHub feature branch is for source review; do not merge to `main` or deploy without the project owner's approval.
 
-## Latest — M15 complete private workspace
+## Latest — M16 owner pilot walkthrough and friction closure
+
+2026-10-06: M16 engineering and automated pilot readiness complete on `codex/exe-m16-pilot-readiness`, based on verified M15 auth-follow-up `e4d3e4e066d11bdfe872d1176983a702b7791aaa`. Closed reproduced narrow assessment-selector overflow, a rendering-harness temporary-directory handoff defect and stale fictional-demo guidance with failing-before/passing-after regressions. All four required final verification commands passed, including genuine local Supabase/browser acceptance and verified synthetic cleanup. Owner manual walkthrough and CP2 evidence remain separate and pending.
+
+## Prior — M15 complete private workspace
 
 Owner-authorized completion on `codex/exe-web-app-m15-complete-workspace`: shared private navigation and sign-out, job-only save using an existing CV, recoverable partial intake, safe replacement parsing, job copy/delete, private-page headers and additive atomic-next-steps migration. Quality checks passed on `79a375d`: 331 tests/43 files, lint/typecheck/build, script syntax, CP2 structural validation and whitespace. Disposable database/browser acceptance passed in run `37397936139`, including all three genuine journeys, protected proof rendering, fixture UI and verified cleanup. See [M15 handoff](M15_COMPLETE_WORKSPACE.md) for migration/update commands and observed results. No main merge or deployment; manual owner/research records remain pending.
 
@@ -29,6 +33,82 @@ Prepared on `codex/exe-web-app-m14-visual-foundation` from M13 head `b8e5cbb6c00
 | M13 — Local landing and account acceptance | Engineering and genuine synthetic account acceptance passed in M15 | Synthetic local account journey, session persistence, generic failures, anonymous denial, and collected-mode CP2 CI repair | M15 GitHub Quality and the genuine signup/signin/session/denial journey passed against disposable local Supabase; manual owner review remains pending. |
 | M14 — Public visual foundation | Engineering checks passed — owner review pending | Shared visual tokens, landing/auth styling, responsive and reduced-motion rules, review documentation | GitHub Quality run `37332982645` passed 321 tests/41 files and all workflow steps. Owner must record actual visual, keyboard, responsive, and accessibility review. No backend or auth behavior changes. |
 | M15 — Complete private workspace and backend acceptance | Engineering and automated integration acceptance passed | Navigation/sign-out, intake recovery, job copy/delete, atomic next steps, private-page headers, genuine core browser journey and disposable Supabase CI | 331 tests/43 files, all database policy checks, three genuine browser journeys, proof/UI rendering and cleanup pass; owner manual review remains separate. |
+| M16 — Owner pilot walkthrough and friction closure | Engineering and automated pilot readiness complete — owner manual review pending | Verified M15 auth handoff and existing private flows with synthetic local accounts and the committed fictional demo; closed reproduced layout, harness and guidance friction | 349 tests/48 files, lint/typecheck/build, four genuine browser tests, proof rendering, two fixture UI tests and verified cleanup passed. Owner walkthrough, accessibility/privacy decisions and CP2 remain pending; M17 not started. |
+
+## M16 verification and owner handoff
+
+### Baseline and scope
+
+- Repository root: `/home/enzoreacher/EXE`. Initial branch/HEAD: `codex/exe-m15-auth-handoff-fix` / `e4d3e4e066d11bdfe872d1176983a702b7791aaa`; `git fetch origin` confirmed the same remote-tracking HEAD. Full working/staged diffs and untracked-file status were empty. Created the M16 branch from that exact base.
+- The checked-out tracker contained M15 history but no M16–M18 planning entries or local edits. M16 follows the owner's supplied scope. M17 and M18 remain future, unstarted work requiring explicit owner approval; this entry does not select their features or authorize their execution.
+- Reviewed the SSR browser client, installed SSR cookie persistence, server identity/cookie handling, proxy refresh/redirects, standalone account entry, authenticated assessment, sign-out and private API authorization. Existing document navigation and cookie-backed SSR handoff are retained.
+- Reused the existing local Supabase stack/database. The owner's server on port 3000 was left running; the genuine browser harness owned an isolated unchanged application copy at `http://127.0.0.1:3111`. Auth tests consistently used that application hostname. No environment values or session cookies were emitted.
+
+### Reproduced friction and fixes
+
+`TMPDIR=/tmp/opencode pnpm test:proof-preview` and `TMPDIR=/tmp/opencode pnpm test:workspace-ui` both exited 1 with `RUN_ONLY_THROUGH_PROOF_RENDER_HARNESS` / `RUN_ONLY_THROUGH_UI_RENDER_HARNESS` before browser execution. Each parent created its run directory beneath the selected temporary root but omitted `TMPDIR` from its allowlisted child environment. The child consequently resolved a different temporary root and correctly rejected the fixture path.
+
+Added `scripts/render-harness.test.mjs`: both cases failed before the correction and passed afterward (2/2). The smallest correction forwards the parent's resolved `tmpdir()` in both child environments; run-scope guards and the private-configuration allowlist remain enforced. Both original failing commands then completed successfully.
+
+Expanded genuine core acceptance failed with `CORE_DEMO_EVIDENCE_STATE_PARTLY_SUPPORTED`: the demo documentation/runbook promised **Partly supported** for `Build TypeScript components`, while the existing local matcher returned **Unclear**. `scripts/demo-fixture.test.mjs` reproduced this independently using the committed DOCX, real parser, matcher and output validator. Related terms occur in separate sentences; the matcher evaluates one quoted excerpt rather than combining separate claims. Corrected only the demo's expected label, presenter explanation and owner checklist; the fixture/matching rules remain intact. The regression failed before the guidance correction and passed afterward (1/1). Four example requirements now correctly demonstrate three available states: supported, unclear and missing.
+
+After evidence/reopen acceptance passed, the genuine core journey failed with `CORE_WORKSPACE_OVERFLOW` using the committed demo's longer role/company option. Added `e2e/assessment-layout.spec.ts` to the existing account-free component harness: the real assessment form with fictional CV/job DTOs failed at **320×900** with `ASSESSMENT_OVERFLOW_AT_320` before the CSS correction. Isolated browser layout inspection identified the report launcher's saved-job select extending beyond its container; its intrinsic automatic minimum width resisted shrinking to the grid cell. Changing grid tracks alone did not correct it. The smallest application fix adds **`min-width: 0`** only to `.report-launcher .form-field select`. Read the installed Next.js global CSS guide before changing `src/app/globals.css`. The new browser regression checks both selectors' bounds and document overflow at all five widths.
+
+No auth/session/API/backend defect reproduced. API, schema, migrations, RLS and Storage policies have no M16 changes. The core acceptance harness now reads the committed Aria Vale DOCX and fictional JD, checks the documented evidence examples, injects one clearly synthetic pre-save job failure to verify recovery without another CV upload, and checks saved-report/draft reopening, fresh sign-in with populated data, full refresh and a ready CV replacement. The injected failure is an acceptance exercise, not an observed backend defect. An initial new reopen assertion failed with `ELEMENT_WAIT_FAILURE` because it waited for the action-only acceptance notification after navigation. Corrected the test to check the persisted **Saved version accepted** indicator; this was a test-authoring error, not a reproduced application defect.
+
+### Observed verification — 2026-10-06
+
+| Command / evidence | Actual result |
+|---|---|
+| Baseline `TMPDIR=/tmp/opencode pnpm review:verify` | PASS: preflight, lint, typecheck, 346 tests in 46 files, production build. |
+| Baseline `TMPDIR=/tmp/opencode pnpm test:e2e:local` | PASS: all four genuine browser tests (cold/warm auth handoff; account flow; core journey; credential workflow), with current-run account/private-object cleanup verified. |
+| `pnpm exec vitest run scripts/render-harness.test.mjs` | FAIL before fix: 2 failed; PASS after fix: 2 passed. |
+| `pnpm exec vitest run scripts/demo-fixture.test.mjs` | FAIL before guidance correction: expected partly supported, received unclear. Focused combined retest with `scripts/render-harness.test.mjs` PASS: 3 tests in 2 files. |
+| Final `TMPDIR=/tmp/opencode pnpm review:verify` | PASS after CSS fix: preflight, lint, typecheck, 349 tests in 48 files and production build. |
+| `TMPDIR=/tmp/opencode pnpm test:proof-preview` | Initial TMPDIR FAIL; final post-CSS command PASS: one browser test, three rendering steps. |
+| `TMPDIR=/tmp/opencode pnpm test:workspace-ui` | Initial TMPDIR FAIL; new assessment layout regression FAIL before CSS fix at 320×900; final post-CSS command PASS: two browser tests, three steps, including assessment selectors at all five widths and original credential UI checks. |
+| Expanded `TMPDIR=/tmp/opencode pnpm test:e2e:local` | PASS after corrections: all four genuine browser tests, including committed-demo recovery/report/next-steps/saved-work reopen, populated-data refresh, ready CV replacement, review/opportunity/job-deletion/sign-out and credential-proof workflows. Current-run synthetic account/private-object cleanup verified. Earlier failures and their causes are retained above. |
+| `pnpm cp2:validate` | PASS structural check: 9 syntactically complete collected rows, 0 owner-reviewed, 9 pending. This is not CP2 evidence approval. |
+| `node --check scripts/proof-preview-browser.mjs`; `node --check scripts/workspace-ui-browser.mjs` | PASS. |
+| `git diff --check` and final diff review | PASS: only M16-related styling, tests/harness and documentation; no environment values, session cookies, owner credentials, real CVs or personal research data included. |
+| `pnpm test:supabase:local` | Not rerun in M16: no API/database/RLS/Storage code changes. Historical M15 policy acceptance remains recorded above; genuine local browser tests exercise current ownership and unauthenticated API denials. |
+| GitHub CI | Verified both M15 auth-follow-up workflows completed successfully at `e4d3e4e`: [Quality 37409493928](https://github.com/EnzoReacher/EXE/actions/runs/37409493928), [backend/browser 37409493999](https://github.com/EnzoReacher/EXE/actions/runs/37409493999). No M16 CI result claimed here; these are historical baseline results. |
+
+Environment observed: Linux; headless Playwright Chromium **149.0.7827.55**. Automated layout checks exercise widths **320, 375, 768, 1024 and 1440 CSS px** (900px height in genuine auth/core/credential journeys). These are simulated browser viewports, not physical-device or manual accessibility results. Screenshots, traces and videos are disabled by the existing harness.
+
+Automated acceptance observed:
+
+- [x] Valid synthetic sign-in reaches authenticated `/assessment` without a sign-in form, with cold/warm router state and delayed router requests.
+- [x] Authenticated `/sign-in` and `/sign-up` visits redirect to assessment; private APIs succeed immediately after sign-in and after full refresh, including an already populated workspace.
+- [x] Sign-out removes the active browser session; signed-out private-page visits redirect to sign-in and intake APIs return 401. Cross-owner report/job reads return 404; credential/proof/export ownership and anonymous denial checks pass.
+- [x] Committed fictional CV/JD → evidence report → roadmap/source-grounded accepted draft → saved-work report/draft reopen and full refresh pass.
+- [x] M15 recovery without a duplicate CV upload, ready replacement, job copy/delete cascades, repeat-safe next steps, selected private review/feedback/revoke, opportunity persistence and credential expert-review/acceptance/export/withdrawal checks pass. Unreadable-replacement preservation remains covered by the existing passing route regression; no real malformed owner document was used.
+- [x] All current-run generated synthetic accounts and private objects were cleaned up, including failed acceptance attempts. The existing Supabase stack/database and owner's app server were preserved; its public sign-in route returned HTTP 200 after verification.
+
+### Owner-only checks — explicitly pending
+
+- [ ] Perform the fictional-demo walkthrough in the owner's actual browser; record date, browser/version, viewport/device, concrete friction and any retest. Confirm sign-in, immediate private data, full refresh, authenticated account-entry redirects and sign-out/private denials using one hostname.
+- [ ] Manually review intake recovery and replacement explanations, copied/deleted jobs, report evidence caveats, saved-work reopening, selected private review links/revocation, opportunities and credential-proof/acceptance/export/withdrawal workflows.
+- [ ] Complete actual keyboard, visual/narrow-screen, screen-reader/assistive-technology and accessibility review using the existing owner checklists. Native proof viewing, actual printing/PDF saving and exported-document editor review remain human checks.
+- [ ] Record the owner's pilot decision and remaining privacy/backup/retention/deletion and expert-administration decisions before real-data or release authorization.
+- [ ] Collect and review CP2 evidence; the existing research/product-decision gate remains pending.
+
+### Pull and retest
+
+In the existing checkout, reuse its local settings and already-running Supabase stack:
+
+```sh
+git fetch origin
+git switch codex/exe-m16-pilot-readiness
+git pull --ff-only origin codex/exe-m16-pilot-readiness
+pnpm install --frozen-lockfile
+pnpm review:verify
+pnpm test:e2e:local
+pnpm test:proof-preview
+pnpm test:workspace-ui
+```
+
+For the owner walkthrough, use the existing app server or run `pnpm dev` if none is running, then open `http://127.0.0.1:3000/sign-in` and keep that hostname throughout. The automated E2E command provisions and removes its own synthetic accounts; manual demonstrations use only fictional local accounts/content and require their own cleanup. No new migration or database reset is needed for M16. Stop at M16; owner approval is required before M17 or another feature.
 
 ## M10.2 existing-experience hardening
 

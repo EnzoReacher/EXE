@@ -14,7 +14,7 @@ Complete this review before presenting or approving the M5 package. A checked it
 ## Core flow
 
 - [ ] The evidence report creates successfully.
-- [ ] The report visibly distinguishes supported, partly supported, unclear, and no-CV-text-found findings.
+- [ ] The report visibly distinguishes this fixture's supported, unclear, and no-CV-text-found findings. Partly supported is another available state, but is not demonstrated by this fixture.
 - [ ] At least one evidence excerpt and its traceability are shown.
 - [ ] The presenter states that the report does not verify skills, predict hiring, or guarantee an outcome.
 - [ ] The roadmap and source-grounded CV draft create successfully.

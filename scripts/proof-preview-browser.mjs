@@ -18,7 +18,7 @@ if (binary) {
   }
 }
 const temporary = mkdtempSync(path.join(tmpdir(), "exe-proof-render-"));
-const env = { PROOF_TEST_TEMP: temporary };
+const env = { PROOF_TEST_TEMP: temporary, TMPDIR: tmpdir() };
 for (const name of ["PATH", "HOME", "XDG_CACHE_HOME", "PLAYWRIGHT_BROWSERS_PATH", "LD_LIBRARY_PATH", "FONTCONFIG_PATH", "PROOF_BROWSER_EXECUTABLE"]) {
   if (process.env[name]) env[name] = process.env[name];
 }
