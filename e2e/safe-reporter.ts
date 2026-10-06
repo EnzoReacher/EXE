@@ -20,7 +20,7 @@ export default class SafeReporter implements Reporter {
         : result.error?.message?.includes("page.goto") ? "NAVIGATION_FAILURE" : "ASSERTION_OR_TIMEOUT");
     const locations = [...(result.error?.stack ?? "").matchAll(/(?:credential-flow|proof-preview|workspace-ui|auth-flow|core-flow)\.spec\.ts:(\d+):(\d+)/g)];
     const lines = [...new Set(locations.map((item) => item[1]))].slice(0, 4).join(", ");
-    console.log(result.status === "passed" ? "Synthetic browser checks: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${lines ? ` (spec lines ${lines})` : ""}.`);
+    console.log(result.status === "passed" ? "Synthetic browser checks: PASS." : `Synthetic browser failure during ${this.phase}: ${code}${lines ? ` (spec ${lines.includes(",") ? "lines" : "line"} ${lines})` : ""}.`);
   }
   onError(error: { message?: string; stack?: string }) {
     const message = error.message ?? "";
