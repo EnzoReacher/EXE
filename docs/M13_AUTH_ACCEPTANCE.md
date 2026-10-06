@@ -1,5 +1,11 @@
 # M13 — Local landing and account acceptance
 
+## Current acceptance — M15, 2026-10-06
+
+**PASS.** Implementation `79a375da4c905c0a2c7790a55dff3fd90614bf00` passed the genuine account journey in [combined run 37397936139](https://github.com/EnzoReacher/EXE/actions/runs/37397936139) against a disposable loopback Supabase stack in CI. Landing navigation, five-width bounds, confirmation-mismatch announcement/focus, synthetic signup, session persistence/reload, generic wrong-password/unknown-account failures, fresh signin and anonymous denial all passed. No external browser requests or uncaught page errors were observed; current-run accounts/private objects were cleaned up and verified. Manual owner review and real email confirmation/delivery remain separate.
+
+Use [the current M15 branch, additive migration and testing handoff](M15_COMPLETE_WORKSPACE.md). The original M13 instructions and engineering evidence below are historical.
+
 **Purpose:** Verify M12's public entry and Supabase email/password flow against the owner's already-running local Supabase stack. This is synthetic local acceptance, not owner usability review, production readiness, or release approval.
 
 ## Run on the feature branch
@@ -30,9 +36,9 @@ The harness accepts only these local public settings in root .env.local:
 
 The site URL must be an HTTP loopback origin allowed by the local Supabase Auth redirect list. The repository's local config uses 127.0.0.1:3000 for the email callback while the isolated browser app defaults to 127.0.0.1:3111; local email confirmations are disabled so automated sign-up returns a test session. No private Supabase key is allowed. Values are never printed.
 
-## Engineering verification
+## Historical M13 engineering verification
 
-GitHub Quality passed for implementation commit 5efd0f7e9fef5f4905eccecf08d292d98bab62d7 in [run 37329809259](https://github.com/EnzoReacher/EXE/actions/runs/37329809259): 321 tests across 41 files, lint, typecheck (including the new Playwright TypeScript), production build, required script syntax checks, collected-mode CP2 validation, and git diff --check. CI does not run the local browser journey because it requires the owner's existing local Supabase stack. CP2 validation reports 9 collected source rows, 0 owner-reviewed and 9 pending; this does not approve evidence or claims.
+GitHub Quality passed for implementation commit 5efd0f7e9fef5f4905eccecf08d292d98bab62d7 in [run 37329809259](https://github.com/EnzoReacher/EXE/actions/runs/37329809259): 321 tests across 41 files, lint, typecheck (including the new Playwright TypeScript), production build, required script syntax checks, collected-mode CP2 validation, and git diff --check. The original M13 workflow did not run the browser journey; M15 now runs it with its own disposable Supabase stack. CP2 validation reports 9 collected source rows, 0 owner-reviewed and 9 pending; this does not approve evidence or claims.
 
 ## Journeys covered
 

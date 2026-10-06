@@ -2,13 +2,23 @@
 
 **Project:** EXE — AI Career Readiness Platform
 **Report owner:** Project owner / team
-**Last updated:** 2026-10-05
-**Working branch:** `codex/exe-web-app-m14-visual-foundation`
+**Last updated:** 2026-10-06
+**Working branch:** `codex/exe-web-app-m15-complete-workspace`
 **Live status:** Nothing is merged to `main`, deployed, or available to real users.
 
 This is the single working report for the web app. It combines the product map, course delivery plan, engineering milestones, current evidence, decisions, acceptance checks, and next actions. Update this file whenever a section is completed.
 
-## Current status — M14 visual foundation
+## Current status — M15 complete private workspace
+
+The owner authorized completing documented engineering tasks without waiting for stage approvals. M15 adds shared workspace navigation/sign-out, reuse of existing CVs for new jobs, recovery after a successful upload and failed job save, safe unreadable replacements, target-job copy/deletion, private-page response headers, and transactional roadmap/draft/provenance creation. The implementation is on `codex/exe-web-app-m15-complete-workspace`. No main merge or deployment occurred. See [M15 changes and test handoff](M15_COMPLETE_WORKSPACE.md).
+
+Verified implementation `79a375da4c905c0a2c7790a55dff3fd90614bf00` passed [Quality run 37397936335](https://github.com/EnzoReacher/EXE/actions/runs/37397936335): **331 tests in 43 files**, lint, typecheck, production build, required script syntax, CP2 structural validation and whitespace checks. [Combined acceptance run 37397936139](https://github.com/EnzoReacher/EXE/actions/runs/37397936139) passed all six engineering/database/browser/rendering/structural commands. The real loopback Supabase policies, M15 atomic rollback/concurrent retry/provenance/accepted-edit preservation, all three genuine account/core/credential journeys, protected proof rendering, fixture UI and synthetic account/object cleanup passed. The disposable runner stack was stopped successfully. See the M15 handoff for exact coverage and update commands.
+
+Verification corrected temporary-directory and ESM browser loading, stale control/message selectors, signup redirect-query matching, an alert collision and copy-job focus after React enables the form. Tests use separate actors so one journey cannot contaminate another. No application code changed after the successful implementation checks. Full execution ran in GitHub CI because this workspace lacks Docker and a complete dependency installation; local standalone syntax, spec collection and whitespace checks passed.
+
+Research surveys/interviews and the owner/manual/assistive-technology test records remain genuine pending work; code tests do not fabricate them. The deterministic local matcher/composer remains the selected working implementation, and no external AI provider, pricing, real curated listing or production-data decision was invented.
+
+## Prior status — M14 visual foundation
 
 M14 refreshes shared color tokens and the public landing/sign-in/sign-up styling, with improved hierarchy, responsive layouts, focus visibility, and reduced-motion behavior. GitHub Quality passed on implementation commit a483db69c731a329288262e035433be1dab15681 (run 37332982645): 321 tests/41 files, lint, typecheck, production build, script syntax, collected-mode CP2 validation, and diff check. The [visual design system](M14_VISUAL_DESIGN_SYSTEM.md) and [owner acceptance checklist](M14_VISUAL_ACCEPTANCE.md) describe the design and pending real review. No authentication, data, or backend behavior changed.
 
@@ -28,11 +38,11 @@ Owner reruns on 2026-10-05: `pnpm review:verify` passed all five checks (includi
 
 | Track | Current status | Evidence / next action |
 |---|---|---|
-| Public landing and account access | M12 landing/sign-in/sign-up implemented; M13 CI passed | Run the genuine local Supabase browser journey and record observed results. Manual usability/accessibility review remains separate. |
-| Core CV → JD → report → roadmap → grounded draft → saved work | Implemented; prior fictional local policy acceptance passed | Manual owner review still pending |
+| Public landing and account access | Implemented; M15 genuine account journey passed | Signup/signin, persistent session, generic failures and anonymous denial passed on disposable local Supabase. Manual review remains separate. |
+| Core CV → JD → report → roadmap → grounded draft → saved work | Implemented; M15 database and genuine core journey passed | Atomic persistence, acceptance, review/feedback/revocation, opportunities, copy/delete, responsive bounds and signout passed; manual owner review remains pending. |
 | Private proof → expert review → immutable CV version → owner acceptance → export | Implemented; owner synthetic local browser journey passed on `b7807e5` | All journey steps and fixture cleanup passed; manual usability/accessibility review remains pending |
 | M11C proof/workflow improvements | Implementation and local synthetic integration acceptance passed | 300 tests/37 files and owner verification/build passed; proof-preview, workspace UI, and full local Supabase journey passed |
-| Local automated verification | M13 GitHub quality gate passed; owner local auth journey pending | 321 tests/41 files, lint, typecheck, build and CP2 structural validation passed. The real-local Supabase sign-up/sign-in browser run remains an owner action. Manual review remains separate. |
+| Local automated verification | M15 Quality and combined CI acceptance passed | 331 tests/43 files, lint/typecheck/build, genuine database and all three browser journeys, proof/UI rendering, structural validation and cleanup passed. Manual review remains separate. |
 | CP2 / target segment / pricing / competitiveness | Evidence collection pending | Seven public vendor records plus two official national context sources (CM-001–CM-009) were recorded on 2026-10-05 in `docs/evidence/CP2_PUBLIC_SOURCE_SNAPSHOT_2026-10-05.md`; owner/team review, course clarification, and primary research remain pending. A bilingual instructor clarification draft is prepared but not sent. No segment, price, differentiation, or product-direction decision is approved. |
 | Real experts, privacy/backup/retention and real data | Approval pending | Team must review qualification, role/revocation/conflict and data-handling policies |
 | Main / deployment / release | Owner decision pending | Feature-branch source review only; no PR, main merge or deployment |

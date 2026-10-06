@@ -1,5 +1,9 @@
 # M14 Visual Acceptance Checklist
 
+## Current automated continuation — M15, 2026-10-06
+
+[Combined acceptance run 37397936139](https://github.com/EnzoReacher/EXE/actions/runs/37397936139) passed genuine landing/account/core/credential journeys, protected proof rendering and isolated workspace UI checks, including 320/375/768/1024/1440px bounds and exercised keyboard/focus behavior. See [M15 testing handoff](M15_COMPLETE_WORKSPACE.md). The owner's actual visual/usability/assistive-technology results remain unrecorded; the manual checklist below is retained for that session.
+
 **Status:** Pending owner review. Fill only with actions actually performed.  
 **Build:** M14 public landing and account-entry visual foundation.  
 **Data:** Use the clearly fictional example only. Do not upload a real CV or enter real account credentials.

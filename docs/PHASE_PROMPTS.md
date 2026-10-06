@@ -1,5 +1,7 @@
 # EXE Build Prompts by Phase
 
+Current engineering completion and observed acceptance are in [M15 complete workspace](M15_COMPLETE_WORKSPACE.md). The owner authorized the 2026-10-06 autonomous engineering completion across the documented phases. These phase prompts remain available for future staged work; research and manual/course decisions still require actual results.
+
 These prompts are designed for a coding assistant or research assistant. Start with the **Shared Execution Contract**, then paste only the prompt for the phase you are doing. Work in order and stop at each phase's exit criteria. The repository docs are the source of truth; if the team changes a decision, update the decision log and scope first.
 
 ## Shared Execution Contract

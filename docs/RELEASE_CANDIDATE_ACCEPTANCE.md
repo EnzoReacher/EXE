@@ -3,6 +3,10 @@
 **Date:** 2026-10-02  
 **Scope:** Local-only, fictional data. This document is acceptance evidence for the internal M7 branch; it is not permission to use real CVs or deploy.
 
+## Current continuation
+
+M15 on 2026-10-06 passed 331 engineering tests, genuine database policies, all three backend/browser journeys, proof/UI rendering and cleanup in CI run `37397936139`. The results below remain the historical M7 record. Use [M15 completion and acceptance](M15_COMPLETE_WORKSPACE.md) for current changes, additive migration and testing instructions. The owner's manual release review remains separate from synthetic automation.
+
 ## Result
 
 **PASS with one explicitly recorded manual-owner follow-up.** The automated local acceptance used two temporary fictional accounts and the fictional records in `scripts/m1-local-policy-check.mjs`. The end-to-end screen flow is documented in `docs/demo/` using `docs/demo/fixtures/aria-vale-fictional-cv.docx`. No personal data, hosted project, screenshot, or external opportunity URL was used.

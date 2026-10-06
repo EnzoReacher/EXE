@@ -1,7 +1,7 @@
 # EXE101 — AI Career Readiness Platform
 
 
-Latest review build: **M15 complete private workspace** on `codex/exe-web-app-m15-complete-workspace`. See [changes, additive migration, verification and owner testing](docs/M15_COMPLETE_WORKSPACE.md).
+Latest review build: **M15 complete private workspace** on `codex/exe-web-app-m15-complete-workspace`. See [changes, additive migration, verification and owner testing](docs/M15_COMPLETE_WORKSPACE.md). Apply the additive migration to the existing local database with `pnpm dlx supabase db push --local` before testing roadmap creation.
 
 A course project for helping students and recent graduates understand how their current CV matches a specific job, identify evidence and skill gaps, and decide what to improve next.
 

@@ -1,6 +1,10 @@
 # M7 Owner Review — Internal Release Candidate
 
-**Branch:** `codex/exe-web-app-m7`  
+## Current testing handoff — 2026-10-06
+
+Use the complete workspace on `codex/exe-web-app-m15-complete-workspace` and [M15 update, migration and test instructions](M15_COMPLETE_WORKSPACE.md) for the next owner test session. The M7 record below is historical; its manual checklist remains useful. Actual manual outcomes have not been recorded by automation.
+
+**Historical M7 branch:** `codex/exe-web-app-m7`
 **Baseline:** M6b commit `4527301`  
 **Release state:** Ready for owner review only. No merge, production environment, deployment, or public release has occurred.
 

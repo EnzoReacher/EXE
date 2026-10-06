@@ -1,12 +1,18 @@
 # EXE Project Current State
 
-**Last updated:** 2026-10-05
-**Status:** M14 public visual-foundation styling and design/acceptance Markdown are implemented on `codex/exe-web-app-m14-visual-foundation`, based on M13 head `b8e5cbb6c00222215d5382f17274480698b0f018`. GitHub Quality run `37332982645` passed 321 tests/41 files, lint, typecheck, production build, script syntax, CP2 structural validation, and diff check. Owner browser review remains pending. M13 engineering/CI passed; its local Supabase browser journey remains an owner action. No authentication behavior, database, RLS, Storage, or API change in M14. No PR, merge, deployment or release approval. See `M14_VISUAL_DESIGN_SYSTEM.md`, `M14_VISUAL_ACCEPTANCE.md`, and the single `PROJECT_MASTER_REPORT.md`.
+**Last updated:** 2026-10-06
+**Status:** M15 complete private workspace implemented and automated acceptance passed on `79a375da4c905c0a2c7790a55dff3fd90614bf00` (`codex/exe-web-app-m15-complete-workspace`). Quality run `37397936335` passed 331 tests/43 files, lint, typecheck and build. Combined run `37397936139` passed real database policies, all three backend/browser journeys, proof rendering, workspace UI, structural validation and synthetic cleanup. Manual owner/research and production decisions remain pending. No main merge or deployment occurred.
 
-## M14 current work
+## M15 current work — 2026-10-06
+
+Latest branch: `codex/exe-web-app-m15-complete-workspace`. The screenshot tasks were audited against code. M15 implements private navigation/sign-out, reusable CV intake, partial-save recovery, replacement ownership/readability guards, job copy/deletion and focus, private-response headers and atomic roadmap/draft/provenance persistence. Engineering checks pass with 331 tests/43 files. Disposable local-Supabase/Chromium acceptance passed every database, account, core, credential/export, proof and UI check. See [current M15 handoff](M15_COMPLETE_WORKSPACE.md) and [master report](PROJECT_MASTER_REPORT.md).
+
+Migration `20261008_m15_atomic_next_steps.sql` must be applied to the existing local database with `pnpm dlx supabase db push --local` before the new roadmap creation endpoint is used. No database reset is needed. Research and manual owner acceptance remain pending; no merge or deployment occurred.
+
+## Prior M14 current work
 
 - M14 applies the shared palette refresh and visual hierarchy to the public landing and sign-in/sign-up surfaces. The design-system and owner-review Markdown document intent and actual results separately. GitHub Quality passed run `37332982645`; owner review remains pending until actual results are supplied.
-- M13 engineering checks passed, but the genuine browser sign-up/sign-in journey against the owner's local Supabase stack has not been recorded here. Keep this local account acceptance pending.
+- M13 engineering checks passed, but its original owner-local browser run was pending. M15 subsequently passed the genuine sign-up/sign-in journey on a disposable CI Supabase stack; manual owner review remains pending.
 
 ## Completed in this build part
 

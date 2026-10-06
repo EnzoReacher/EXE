@@ -9,7 +9,7 @@ The owner authorized completing the documented engineering work without waiting 
 - Shared navigation connects assessment, saved work, credential CV versions, opportunities, and assigned expert reviews. Sign out clears the local Supabase session and replaces the page so private client/router state is discarded.
 - An existing CV can be reused when saving another target job. A completed upload is visible immediately and is retained if job persistence fails. Retry saves the job without uploading the CV again.
 - A replacement checks ownership before upload. An unreadable replacement stays available for retry while the previous CV remains available. Storage uses the validated format's canonical MIME type.
-- Target jobs can be copied into the intake form to prepare a new job without changing historical reports. Confirmed deletion removes the selected job's reports, roadmap, drafts, review links, feedback, and opportunities through existing database cascades, while preserving CV files and credential versions.
+- Target jobs can be copied into the intake form to prepare a new job without changing historical reports. After loading, focus moves to the role field. Confirmed deletion removes the selected job's reports, roadmap, drafts, review links, feedback, and opportunities through existing database cascades, while preserving CV files and credential versions.
 - Migration `20261008_m15_atomic_next_steps.sql` creates an authenticated SECURITY INVOKER RPC. It locks the completed owned run and commits roadmap, draft and exact finding provenance together. Errors roll back all writes. Concurrent/repeated requests return the same draft; retries preserve existing edits and acceptance. Old orphan roadmap rows are replaced transactionally only when no draft exists.
 - Private workspace responses receive no-store/noindex headers. Existing owner RLS, private buckets, expert assignment, acceptance and withdrawal checks remain enforced.
 - Disposable GitHub CI installs a local Supabase stack and Chromium, runs the engineering gate, database policies, actual synthetic browser journeys, proof rendering and UI checks, and stops its own stack.
@@ -64,7 +64,22 @@ The database-policy command additionally needs the local public Supabase URL/key
 
 ## Verification record
 
-Verification in progress. Final observed counts, commit and CI run links will be recorded after the checks finish.
+**PASS — observed on 2026-10-06.** Verified implementation: `79a375da4c905c0a2c7790a55dff3fd90614bf00`. These checks ran against the real application and a disposable loopback Supabase stack in GitHub CI, rather than the owner's computer.
+
+| Check | Observed result |
+|---|---|
+| [Quality run 37397936335](https://github.com/EnzoReacher/EXE/actions/runs/37397936335) | 331 tests in 43 files; lint, typecheck, production build, required script syntax, CP2 collected-mode structural validation and whitespace checks passed. |
+| [Combined acceptance run 37397936139](https://github.com/EnzoReacher/EXE/actions/runs/37397936139) | All six commands passed: `review:verify`, `test:supabase:local`, `test:e2e:local`, `test:proof-preview`, `test:workspace-ui`, `cp2:validate`. Disposable stack shutdown passed. |
+| Genuine database acceptance | M1–M6b RLS, private Storage, review/feedback/opportunities and cascades; M11A assignment, immutable versions, acceptance and withdrawal; M15 rollback, concurrent retry, exact provenance, accepted-draft preservation and owner isolation passed. |
+| Genuine backend/browser journeys | All three passed: landing/signup/signin/persistent sessions and denial; CV/job/report/roadmap/acceptance/private review/opportunities/copy/deletion/signout; credential proof/expert decision/owner acceptance/DOCX/TXT/print/withdrawal. |
+| Protected proof rendering | Image rendering, PNG/JPEG scaling at five widths and private PDF download guidance passed. |
+| Fixture UI regression | Keyboard validation/source filters, five-width layout and stale-candidate closure passed. This isolated fixture check is distinct from the genuine backend journeys. |
+| Synthetic cleanup | Current-run accounts and private objects were deleted and cleanup verified. Screenshots, traces and videos were disabled. |
+| CP2 structural check | Nine collected source rows are structurally complete; zero are owner-reviewed and nine remain pending. This is not research or course acceptance. |
+
+Verification exposed and corrected browser-harness temporary-directory/module loading, stale control/message selectors, the signup redirect query matcher, an alert-locator collision and job-copy focus timing. Browser journeys now use isolated accounts, wait for asynchronous actions and verify focus after the form is enabled. The final successful runs above cover these corrections.
+
+Local standalone script syntax, browser-spec collection and whitespace checks also passed. Docker and a complete dependency installation were unavailable in this execution workspace, so full engineering/backend/browser execution was performed in CI. The final documentation publication records this tested implementation without changing application code.
 
 ## Remaining decisions
 

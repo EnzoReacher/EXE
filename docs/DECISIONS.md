@@ -36,6 +36,12 @@ Use this file to keep team decisions visible. A proposed choice is not approved 
 
 ## Decision log
 
+### M15 complete-workspace authorization and atomic persistence — 2026-10-06
+
+The owner authorized finishing the documented website engineering work autonomously, including missing backend behavior, without waiting for phase-by-phase input. Work remains on `codex/exe-web-app-m15-complete-workspace`. Research, real expert identity, market/pricing conclusions and production handling are recorded only when supported by real evidence.
+
+Roadmap, draft and exact finding provenance now use one authenticated SECURITY INVOKER Postgres transaction with a lock on the completed owned analysis. Concurrent retries return the existing draft and preserve edits/acceptance. This additive migration retains existing RLS and avoids partial multi-write state. Job copying creates a new record instead of changing historical report inputs; job deletion uses existing cascades while retaining CV files and credential versions. Supabase/Chromium acceptance runs only on a disposable CI stack; ordinary local commands reuse the existing stack. See [M15 changes and observed acceptance](M15_COMPLETE_WORKSPACE.md).
+
 ### M11C direct development authorization — 2026-10-04
 
 The owner requested direct work in ChatGPT after publishing M11B.1 `e15d9584fa67230024ed21cc6258f29a1353726b`. M11C improves proof-display compatibility, expert form safety and owner usability on a separate feature branch. Source review publication is within the existing GitHub-update authorization. Missing local-stack configuration in this execution environment is recorded as an integration limitation; no synthetic setting is substituted to claim a preflight or genuine-authentication pass. New isolated browser tests explicitly use rendering fixtures and do not establish approval or evidence. Original database/RLS/Storage, expert authorization and immutable acceptance/export/withdrawal contracts remain unchanged. CP2, expert enrollment/privacy/retention and manual owner review remain pending; this authorization does not permit a main merge, deployment, real data or release.
