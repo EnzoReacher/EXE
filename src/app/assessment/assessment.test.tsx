@@ -130,7 +130,7 @@ describe("Assessment interactions", () => {
     await userEvent.click(button);
     expect((button as HTMLButtonElement).disabled).toBe(true);
     expect((screen.getByRole("button", { name: "Delete CV sample.pdf" }) as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByRole("button", { name: "Save CV and target job" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "Save target job" }) as HTMLButtonElement).disabled).toBe(true);
     resolveRetry(json({ cv: { ...cv, processingStatus: "ready" } }));
     await screen.findByText("Your CV was processed successfully.");
   });

@@ -1,5 +1,8 @@
 # EXE101 — AI Career Readiness Platform
 
+
+Latest review build: **M15 complete private workspace** on `codex/exe-web-app-m15-complete-workspace`. See [changes, additive migration, verification and owner testing](docs/M15_COMPLETE_WORKSPACE.md).
+
 A course project for helping students and recent graduates understand how their current CV matches a specific job, identify evidence and skill gaps, and decide what to improve next.
 
 ## Start here

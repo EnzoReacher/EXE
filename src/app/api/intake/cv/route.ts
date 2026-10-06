@@ -11,6 +11,7 @@ function failure(error: unknown) { const safe = error instanceof IntakeError ? e
 export async function POST(request: Request) {
   try {
     const { supabase, user } = await requireCurrentUser();
+    if (Number(request.headers.get("content-length")) > 6 * 1024 * 1024) throw new IntakeError("file_too_large", "Your CV must be 5 MiB or smaller.");
     const formData = await request.formData();
     const file = formData.get("file");
     const replaceCvId = formData.get("replaceCvId");

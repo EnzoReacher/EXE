@@ -24,12 +24,12 @@ export default async function NextStepsPage({ params }: { params: Promise<{ id: 
     else throw error;
   }
 
-  if (reportStillProcessing) return <main id="main-content" tabIndex={-1} className="analysis-page"><div className="analysis-wrap"><p className="eyebrow">MILESTONE 3 · NEXT STEPS</p><section className="analysis-empty"><h1>Finish the evidence report first</h1><p>The roadmap and CV draft need a completed evidence report so every action has a visible reason. Return to the report to check its status or retry a failed report.</p><Link className="text-link" href={`/analysis/${id}`}>Return to your report <span aria-hidden="true">→</span></Link></section></div></main>;
+  if (reportStillProcessing) return <main id="main-content" tabIndex={-1} className="analysis-page"><div className="analysis-wrap"><p className="eyebrow">YOUR NEXT STEPS</p><section className="analysis-empty"><h1>Finish the evidence report first</h1><p>The roadmap and CV draft need a completed evidence report so every action has a visible reason. Return to the report to check its status or retry a failed report.</p><Link className="text-link" href={`/analysis/${id}`}>Return to your report <span aria-hidden="true">→</span></Link></section></div></main>;
   if (!analysis) notFound();
   return <main id="main-content" tabIndex={-1} className="analysis-page">
     <WorkspaceHeader active="/saved-work" />
     <div className="analysis-wrap">
-      <p className="eyebrow">MILESTONE 3 · NEXT STEPS</p>
+      <p className="eyebrow">YOUR NEXT STEPS</p>
       <h1>{analysis.roleTitle}</h1>
       <p className="analysis-subtitle">{analysis.companyName ? `${analysis.companyName} · ` : ""}{analysis.cvFilename}</p>
       <NextStepsWorkspace analysisId={id} initialDetails={nextSteps} />

@@ -41,7 +41,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
   return <main id="main-content" tabIndex={-1} className="analysis-page">
     <WorkspaceHeader active="/saved-work" />
     <div className="analysis-wrap">
-      <p className="eyebrow">MILESTONE 2 · EVIDENCE REPORT</p>
+      <p className="eyebrow">PRIVATE EVIDENCE REPORT</p>
       <h1>Evidence report: {details.roleTitle}</h1>
       <p className="analysis-subtitle">{details.companyName ? `${details.companyName} · ` : ""}{details.cvFilename}</p>
 
@@ -49,7 +49,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
       {run.status === "failed" && <section className="analysis-failure" role="alert"><div><strong>We could not complete this report.</strong><p>Your CV and job are still saved privately. You can retry the local text check.</p></div><RetryAnalysis id={id} /></section>}
 
       {run.status === "completed" && <>
-        <section className="analysis-method" aria-label="How to read this report"><strong>How to read this report</strong><p>This M2 prototype checks wording from your job description against extracted CV text. The requirement list is heuristic and may miss or combine details, so review it against the job description. It does not call an AI provider, verify skills, or predict hiring outcomes.</p></section>
+        <section className="analysis-method" aria-label="How to read this report"><strong>How to read this report</strong><p>EXE checks wording from your job description against extracted CV text. The requirement list is heuristic and may miss or combine details, so review it against the job description. It does not call an AI provider, verify skills, or predict hiring outcomes.</p></section>
         {findings.length > 0 ? <>
           <section className="analysis-counts" aria-label="Finding counts">{counts.map(({ status, count }) => <div className={`analysis-count ${status}`} key={status}><span>{count}</span><small>{labels[status]}</small></div>)}</section>
           <section className="analysis-method" aria-label="Finding status definitions"><h2>What the four finding states mean</h2><dl>{counts.map(({ status }) => <div key={status}><dt>{labels[status]}</dt><dd>{descriptions[status]}</dd></div>)}</dl></section>
