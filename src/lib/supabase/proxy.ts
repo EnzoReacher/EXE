@@ -35,9 +35,11 @@ export async function updateSupabaseSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
   if (!authenticated && privatePages.some((prefix) => path === prefix || path.startsWith(prefix + "/"))) {
-    const target = request.nextUrl.clone();
-    target.pathname = "/sign-in";
-    target.search = "";
+    const target = new URL("/sign-in", request.url);
+    // NextURL normalizes loopback hosts to localhost. Preserve the browser's
+    // actual request host so redirects do not cross Auth cookie scopes.
+    const requestHost = request.headers.get("host");
+    if (requestHost) target.host = requestHost;
     const redirect = NextResponse.redirect(target);
     // Retain rotations/deletions from the refresh layer when redirecting.
     response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));

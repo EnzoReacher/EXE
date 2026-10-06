@@ -35,7 +35,7 @@ describe("Supabase session refresh proxy", () => {
       options.cookies.setAll([{ name: "exe-session", value: "", options: { path: "/", maxAge: 0 } }], { Pragma: "no-cache" });
       return { data: null, error: null };
     } } }));
-    const response = await updateSupabaseSession(new NextRequest("http://127.0.0.1:3000/analysis/private-run?tab=draft"));
+    const response = await updateSupabaseSession(new NextRequest("http://127.0.0.1:3000/analysis/private-run?tab=draft", { headers: { host: "127.0.0.1:3000" } }));
     expect(response.status).toBe(307);
     expect(response.headers.get("Location")).toBe("http://127.0.0.1:3000/sign-in");
     expect(response.cookies.get("exe-session")?.maxAge).toBe(0);
