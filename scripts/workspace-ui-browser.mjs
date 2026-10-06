@@ -1,4 +1,4 @@
-import { constants, accessSync, cpSync, mkdirSync, mkdtempSync, rmSync, statSync } from "node:fs";
+import { constants, accessSync, cpSync, mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { createServer } from "node:net";
 import path from "node:path";
@@ -34,6 +34,13 @@ try {
   const port = address.port; await new Promise((resolve) => probe.close(resolve));
   const env = { UI_TEST_TEMP: temporary, UI_TEST_PORT: String(port), NEXT_TELEMETRY_DISABLED: "1" };
   for (const name of ["PATH", "HOME", "XDG_CACHE_HOME", "PLAYWRIGHT_BROWSERS_PATH", "LD_LIBRARY_PATH", "FONTCONFIG_PATH", "PROOF_BROWSER_EXECUTABLE"]) if (process.env[name]) env[name] = process.env[name];
+  // Keep production React effect behavior, including one initial workspace
+  // load, while compiling only this account-free component fixture.
+  writeFileSync(path.join(app, "next.config.mjs"), "export default { experimental: { useTypeScriptCli: false } };\n");
+  const build = spawn(process.execPath, [path.join(app, "node_modules/next/dist/bin/next"), "build"], { cwd: app, env, stdio: "ignore" });
+  for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => build.kill(signal));
+  const built = await new Promise((resolve) => { build.once("error", () => resolve(false)); build.once("exit", (code) => resolve(code === 0)); });
+  if (!built) throw new Error("FIXTURE_BUILD_FAILED");
   const child = spawn(process.execPath, [path.join(root, "node_modules/@playwright/test/cli.js"), "test", "--config", "e2e/workspace-ui.config.mts"], { cwd: root, env, stdio: "inherit" });
   for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => child.kill(signal));
   process.exitCode = await new Promise((resolve) => { child.once("error", () => resolve(1)); child.once("exit", (code) => resolve(code === 0 ? 0 : 1)); });
