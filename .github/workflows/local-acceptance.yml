@@ -2,7 +2,7 @@ name: Local backend and browser acceptance
 
 on:
   push:
-    branches: [codex/exe-web-app-m15-complete-workspace]
+    branches: [codex/exe-web-app-m15-complete-workspace, codex/exe-m15-auth-handoff-fix]
   workflow_dispatch:
 
 permissions:

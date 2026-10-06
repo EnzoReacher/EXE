@@ -40,6 +40,76 @@ async function privateWorkspace(page: Page, prefix: string) {
   const savedJobs = await jobs.json();
   check(Array.isArray(savedJobs.jobs) && savedJobs.jobs.length === 0, prefix + "_JOB_WORKSPACE_NOT_EMPTY");
 }
+
+test("standalone owner sign-in hands cookies to the workspace despite slow router requests", async ({ browser }) => {
+  const owner = fixtures.actors.find((actor) => actor.label === "owner")!;
+  check(owner, "SYNTHETIC_OWNER_REQUIRED");
+  for (const warmWorkspace of [false, true]) {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    let pageErrors = 0;
+    try {
+      await context.route("**/*", async (route) => {
+        const request = route.request();
+        const url = new URL(request.url());
+        if (![app, supabase].includes(url.origin)) return route.abort();
+        // Exercise the pending App Router transition that replace + refresh races.
+        // Real Auth and application responses are untouched; only delivery is delayed.
+        if (url.origin === app && url.pathname === "/assessment" && request.headers().rsc === "1") {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+        return route.continue();
+      });
+      const page = await context.newPage();
+      page.on("pageerror", () => { pageErrors += 1; });
+      await test.step(warmWorkspace ? "OWNER_SIGNIN_WARM_ROUTER" : "OWNER_SIGNIN_COLD_ROUTER", async () => {
+        if (warmWorkspace) await page.goto("/assessment");
+        await page.goto("/sign-in");
+        await page.getByLabel("Email (required)").fill(owner.email);
+        await page.getByLabel("Password (required)", { exact: true }).fill(owner.password);
+        const token = page.waitForResponse((response) => response.url().startsWith(supabase + "/auth/v1/token") && response.request().method() === "POST");
+        await page.getByRole("button", { name: "Sign in", exact: true }).click();
+        check((await token).ok(), "OWNER_SIGNIN_AUTH_REJECTED");
+        await page.waitForURL((url) => url.pathname === "/assessment", { timeout: 30000 });
+        await page.getByRole("heading", { name: "Save a CV and target job privately." }).waitFor();
+        check(await page.getByRole("form", { name: "Sign in", exact: true }).count() === 0, "SIGNED_IN_WORKSPACE_STILL_SHOWS_SIGNIN");
+        const cookies = await context.cookies(app);
+        check(cookies.some((cookie) => /^sb-.*-auth-token(?:\.\d+)?$/.test(cookie.name) && cookie.value.length > 0), "OWNER_AUTH_COOKIE_MISSING");
+        await privateWorkspace(page, "OWNER_IMMEDIATE");
+        await page.reload();
+        await page.getByRole("heading", { name: "Save a CV and target job privately." }).waitFor();
+        await privateWorkspace(page, "OWNER_RELOADED");
+      });
+      await test.step("AUTHENTICATED_SIGNIN_AND_SIGNUP_REDIRECT", async () => {
+        for (const path of ["/sign-in", "/sign-up", "/sign-in?status=confirmation-failed"]) {
+          await page.goto(path);
+          await page.waitForURL((url) => url.pathname === "/assessment");
+          await page.getByRole("heading", { name: "Save a CV and target job privately." }).waitFor();
+          check(await page.getByRole("form", { name: /Sign in|Create an account/ }).count() === 0, "AUTHENTICATED_ENTRY_STILL_SHOWS_SIGNIN");
+          await privateWorkspace(page, "AUTHENTICATED_ENTRY");
+        }
+      });
+      await test.step("OWNER_SIGNOUT_CLEARS_SESSION_AND_PROTECTS_WORKSPACE", async () => {
+        await page.getByRole("button", { name: "Sign out", exact: true }).click();
+        await page.waitForURL((url) => url.pathname === "/sign-in");
+        await page.getByRole("heading", { name: "Welcome back", exact: true }).waitFor();
+        const cookies = await context.cookies(app);
+        check(!cookies.some((cookie) => /^sb-.*-auth-token(?:\.\d+)?$/.test(cookie.name) && cookie.value.length > 0), "SIGNOUT_AUTH_COOKIE_REMAINED");
+        for (const path of ["/api/intake/cv", "/api/intake/jobs"]) {
+          check((await context.request.get(app + path, { maxRedirects: 0 })).status() === 401, "SIGNOUT_API_NOT_DENIED");
+        }
+        for (const path of ["/assessment", "/saved-work", "/credential-versions", "/opportunities", "/expert/credential-reviews"]) {
+          await page.goto(path);
+          await page.waitForURL((url) => url.pathname === "/sign-in");
+          await page.reload();
+          check(new URL(page.url()).pathname === "/sign-in", "SIGNOUT_PRIVATE_PAGE_NOT_PROTECTED");
+        }
+        check(pageErrors === 0, "OWNER_AUTH_PAGE_ERROR");
+      });
+    } finally {
+      await context.close();
+    }
+  }
+});
 test("local landing and Supabase email/password account flow", async ({ browser }) => {
   check(fixtures.authCandidate?.email.endsWith("@example.invalid") && fixtures.authCandidate.password.length >= 8, "SYNTHETIC_AUTH_ACCOUNT_REQUIRED");
   const contexts: BrowserContext[] = [];
