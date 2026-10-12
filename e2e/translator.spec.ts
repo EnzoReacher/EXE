@@ -39,8 +39,8 @@ async function createGoldenWithMouse(page: Page, sentinel: string) {
   await page.getByRole("button", { name: "Load fictional example" }).click();
   const project=page.getByLabel("Your project or experience"); await project.fill((await project.inputValue())+"\n"+sentinel);
   await page.getByRole("button",{name:"Continue to details"}).click();
-  await page.getByLabel("What did you personally implement?").fill(goldenAnswers.contribution);
-  await page.getByLabel("Which technologies did you directly use?").fill(goldenAnswers.technology);
+  await page.getByLabel("What did you personally implement?", { exact: true }).fill(goldenAnswers.contribution);
+  await page.getByLabel("Which technologies did you directly use?", { exact: true }).fill(goldenAnswers.technology);
   await page.getByRole("button",{name:"Review source facts"}).click();
   const facts=page.getByRole("group",{name:"Confirm facts about your own work"}).getByRole("checkbox");
   await expect(facts.first()).toBeVisible();
@@ -61,8 +61,8 @@ for (const width of [320, 375, 768, 1440]) {
       await fits(); await page.getByRole("button", { name: "Continue to details" }).click();
     });
     await test.step(`INTERVIEW_${width}`, async () => {
-      await page.getByLabel("What did you personally implement?").fill("Mình phụ trách product listing và tìm kiếm. Mình gọi REST API và xử lý lỗi.");
-      await page.getByLabel("Which technologies did you directly use?").fill("React và JavaScript");
+      await page.getByLabel("What did you personally implement?", { exact: true }).fill("Mình phụ trách product listing và tìm kiếm. Mình gọi REST API và xử lý lỗi.");
+      await page.getByLabel("Which technologies did you directly use?", { exact: true }).fill("React và JavaScript");
       await page.getByRole("button", { name: "Review source facts" }).click();
       const facts = page.getByRole("group", { name: "Confirm facts about your own work" }).getByRole("checkbox");
       for (const checkbox of await facts.all()) await checkbox.check();
@@ -111,9 +111,9 @@ test("keyboard-only fictional intake, targeted skip, approval and rejection", as
     await expect(page.getByRole("heading",{name:"Make your contribution clear"})).toBeFocused();
   });
   await test.step("KEYBOARD_INTERVIEW_SKIP", async () => {
-    await tabTo(page,page.getByLabel("What did you personally implement?")); await page.keyboard.insertText(goldenAnswers.contribution);
-    const technology=page.getByLabel("Which technologies did you directly use?"); await tabTo(page,technology); await page.keyboard.insertText(goldenAnswers.technology);
-    const reference=page.getByLabel("Is there a repo or demo you can refer to?"); await tabTo(page,reference); await page.keyboard.insertText("https://example.invalid/fictional-reference");
+    await tabTo(page,page.getByLabel("What did you personally implement?", { exact: true })); await page.keyboard.insertText(goldenAnswers.contribution);
+    const technology=page.getByLabel("Which technologies did you directly use?", { exact: true }); await tabTo(page,technology); await page.keyboard.insertText(goldenAnswers.technology);
+    const reference=page.getByLabel("Is there a repo or demo you can refer to?", { exact: true }); await tabTo(page,reference); await page.keyboard.insertText("https://example.invalid/fictional-reference");
     await tabTo(page,page.getByRole("button",{name:"Skip this question: Is there a repo or demo you can refer to?"})); await page.keyboard.press("Enter");
     await expect(reference).toHaveValue(""); await expect(technology).toHaveValue(goldenAnswers.technology);
     await page.keyboard.press("Shift+Tab"); await expect(reference).toBeFocused();
