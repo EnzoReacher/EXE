@@ -12,5 +12,5 @@ it("provides a descriptive title and focusable shared skip-link destination", ()
   expect(main.tabIndex).toBe(-1);
   main.focus();
   expect(document.activeElement).toBe(main);
-  expect(metadata.title).toBe("Private opportunities | EXE");
+  expect(metadata.title).toBe("Private opportunities | OwnPath");
 });

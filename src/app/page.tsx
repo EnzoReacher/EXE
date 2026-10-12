@@ -2,58 +2,58 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "EXE | Understand your CV for a target role",
-  description: "Compare CV wording with a target job and review evidence-based next steps.",
+  title: "OwnPath | Turn Your Experience Into Career Value",
+  description: "Turn one student project into truthful English CV bullets for a Frontend Intern role.",
 };
 
 const findings = [
-  { title: "Data visualization", status: "Supported", tone: "supported", detail: "A dashboard project is described in the example CV." },
-  { title: "SQL querying", status: "Partly supported", tone: "partial", detail: "Coursework is listed, but no project example is shown." },
-  { title: "Experiment design", status: "Not found in this CV", tone: "missing", detail: "This describes the submitted wording; it does not mean the person lacks the skill." },
+  { title: "Your contribution", status: "User statement", tone: "supported", detail: "Product listing and search using React and JavaScript." },
+  { title: "API integration", status: "User statement", tone: "supported", detail: "REST API data and request error handling." },
+  { title: "Git and responsive UI", status: "Not mentioned", tone: "missing", detail: "These are JD requirements, not claims we can add to your experience." },
 ];
 
 const steps = [
-  { number: "01", title: "Add a CV and target role", detail: "Choose one CV and paste one job description." },
-  { number: "02", title: "Review the evidence", detail: "See which requirements the wording supports, partly supports, or does not mention." },
-  { number: "03", title: "Choose a next step", detail: "Use the roadmap and edit any CV draft yourself before using it." },
+  { number: "01", title: "Describe one project", detail: "Add your actual work and one Frontend Intern JD. No CV required." },
+  { number: "02", title: "Clarify your contribution", detail: "Answer a few selected questions and confirm the source facts." },
+  { number: "03", title: "Review your English bullets", detail: "Check sources, edit, accept individual bullets and copy your wording." },
 ];
 
 export default function Home() {
   return (
     <main className="landing-page" id="main-content" tabIndex={-1}>
       <header className="landing-header">
-        <Link className="brand landing-brand" href="/" aria-label="EXE career readiness home">
-          <span className="brand-mark" aria-hidden="true">E</span>
-          <span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span>
+        <Link className="brand landing-brand" href="/" aria-label="OwnPath career readiness home">
+          <span className="brand-mark" aria-hidden="true">O</span>
+          <span className="brand-copy"><strong>OwnPath</strong><span>Experience Translator</span></span>
         </Link>
         <nav className="landing-nav" aria-label="Main navigation">
           <Link href="#how-it-works">How it works</Link>
-          <Link href="#example-report">Example report</Link>
+          <Link href="#example-report">Fictional example</Link>
           <Link href="/sign-in">Sign in</Link>
-          <Link className="button button-primary" href="/sign-up">Create account</Link>
+          <Link className="button button-primary" href="/experience-translator">Try the prototype</Link>
         </nav>
       </header>
 
       <section className="landing-hero" aria-labelledby="landing-title">
         <div className="landing-hero-copy">
-          <p className="eyebrow">A clearer way to review one application</p>
-          <h1 id="landing-title">See how your CV connects to a target role.</h1>
+          <p className="eyebrow">OWNPATH EXPERIENCE TRANSLATOR</p>
+          <h1 id="landing-title">Turn Your Experience Into Career Value.</h1>
           <p className="landing-intro">
-            Compare the wording in your CV with one job description. Review what is supported, what is unclear, and what you might work on next.
+            You have the experience. OwnPath helps you show its value. Describe one project, clarify what you did, and review English CV bullets for a Frontend Intern role.
           </p>
           <div className="landing-actions">
-            <Link className="button button-primary" href="/sign-up">Create account</Link>
+            <Link className="button button-primary" href="/experience-translator">Translate a project</Link>
             <Link className="button button-secondary" href="#example-report">View fictional example</Link>
           </div>
-          <p className="landing-caveat">EXE provides advisory guidance. It does not score your hiring chances, verify qualifications, or guarantee a job.</p>
+          <p className="landing-caveat">Fictional-data prototype using local templates. It does not score your hiring chances, verify qualifications, or guarantee a job.</p>
         </div>
 
         <aside className="landing-preview" aria-labelledby="preview-title">
           <div className="landing-preview-heading">
-            <div><p className="report-label">FICTIONAL EXAMPLE</p><h2 id="preview-title">Data Analyst Intern</h2></div>
+            <div><p className="report-label">FICTIONAL EXAMPLE</p><h2 id="preview-title">Frontend Developer Intern</h2></div>
             <span className="report-status">Example only</span>
           </div>
-          <p className="landing-preview-caption">A finding describes wording in a sample CV, not a verified skill.</p>
+          <p className="landing-preview-caption">One team project. Only the student’s own contribution becomes a bullet.</p>
           <ul className="landing-finding-list">
             {findings.map((finding) => (
               <li className="landing-finding" key={finding.title}>
@@ -63,7 +63,7 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          <p className="landing-preview-footnote">This example contains fictional CV and job information.</p>
+          <p className="landing-preview-footnote">This example contains fictional project and job information. All statements remain unverified.</p>
         </aside>
       </section>
 
@@ -87,13 +87,13 @@ export default function Home() {
         <div>
           <p className="eyebrow">KEEP CONTROL OF YOUR CV</p>
           <h2 id="example-title">Check every suggestion before you use it.</h2>
-          <p>EXE keeps each finding connected to the wording it came from. It will not add a skill or qualification just because a job description asks for it.</p>
+          <p>Each generated bullet shows its source facts. Review every line and approve it yourself before copying. A JD requirement alone never supplies an experience claim.</p>
         </div>
-        <Link className="button button-primary" href="/sign-up">Create your account</Link>
+        <Link className="button button-primary" href="/experience-translator">Try Experience Translator</Link>
       </section>
 
       <footer className="landing-footer">
-        <span>EXE · Career readiness</span>
+        <span>OwnPath · Experience Translator</span>
         <span>Prototype status: use fictional data until privacy and retention review is complete.</span>
       </footer>
     </main>

@@ -9,7 +9,7 @@ import type { FindingStatus } from "@/lib/analysis/types";
 import { evidenceLabels as labels } from "@/components/evidence-labels";
 
 export const metadata = {
-  title: "Evidence report | EXE",
+  title: "Evidence report | OwnPath",
   description: "Review CV evidence against one saved target job.",
 };
 
@@ -49,7 +49,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
       {run.status === "failed" && <section className="analysis-failure" role="alert"><div><strong>We could not complete this report.</strong><p>Your CV and job are still saved privately. You can retry the local text check.</p></div><RetryAnalysis id={id} /></section>}
 
       {run.status === "completed" && <>
-        <section className="analysis-method" aria-label="How to read this report"><strong>How to read this report</strong><p>EXE checks wording from your job description against extracted CV text. The requirement list is heuristic and may miss or combine details, so review it against the job description. It does not call an AI provider, verify skills, or predict hiring outcomes.</p></section>
+        <section className="analysis-method" aria-label="How to read this report"><strong>How to read this report</strong><p>OwnPath checks wording from your job description against extracted CV text. The requirement list is heuristic and may miss or combine details, so review it against the job description. It does not call an AI provider, verify skills, or predict hiring outcomes.</p></section>
         {findings.length > 0 ? <>
           <section className="analysis-counts" aria-label="Finding counts">{counts.map(({ status, count }) => <div className={`analysis-count ${status}`} key={status}><span>{count}</span><small>{labels[status]}</small></div>)}</section>
           <section className="analysis-method" aria-label="Finding status definitions"><h2>What the four finding states mean</h2><dl>{counts.map(({ status }) => <div key={status}><dt>{labels[status]}</dt><dd>{descriptions[status]}</dd></div>)}</dl></section>
@@ -61,7 +61,7 @@ export default async function AnalysisReportPage({ params }: { params: Promise<{
             {finding.evidenceExcerpt && <p className="analysis-caveat">{finding.caveat}</p>}
           </article>)}</div>
           <section className="analysis-next-step"><div><strong>Ready to decide what to do next?</strong><p>Create a private roadmap from the gaps in this report and review a source-grounded CV draft.</p></div><Link className="button button-primary" href={`/analysis/${id}/next-steps`}>Open next steps <span aria-hidden="true">→</span></Link></section>
-          <section className="analysis-next-step"><div><strong>Found a job page yourself?</strong><p>Save its private reference link and track your own process. EXE does not check the page or confirm it fits your CV.</p></div><Link className="button button-secondary" href="/opportunities">Save an opportunity <span aria-hidden="true">→</span></Link></section>
+          <section className="analysis-next-step"><div><strong>Found a job page yourself?</strong><p>Save its private reference link and track your own process. OwnPath does not check the page or confirm it fits your CV.</p></div><Link className="button button-secondary" href="/opportunities">Save an opportunity <span aria-hidden="true">→</span></Link></section>
         </> : <section className="analysis-empty"><h2>No requirements were extracted</h2><p>This local prototype looks for bullet points and clearly labeled requirements in the job description. Edit the saved job to make the required skills or experience easier to identify.</p><Link className="text-link" href="/assessment">Update your intake <span aria-hidden="true">→</span></Link></section>}
         <ReviewLinks analysisId={id} />
       </>}

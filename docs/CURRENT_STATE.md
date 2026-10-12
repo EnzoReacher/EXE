@@ -1,4 +1,6 @@
-# EXE Project Current State
+# OwnPath Project Current State
+
+**2026-10-12 current handoff:** Experience Translator synthetic preparation proceeds on `feat/ownpath-experience-translator` from cumulative M17 `ae25276`. The supplied owner prompt authorizes audit/config/docs and an isolated fictional-data prototype while research/production gates remain open. See [OwnPath STATUS](ownpath/STATUS.md) for fresh test evidence, actual limitations and next task. The existing M10 formal direction approval remains unfilled. Historical milestones below are retained, not used as current acceptance.
 
 **M15 owner-auth follow-up:** `codex/exe-m15-auth-handoff-fix` starts from completed M15 head `4f8bb42`. It replaces the standalone auth document after cookie persistence, makes account/assessment pages session-aware, removes misleading authenticated sign-in UI, and preserves proxy cookies/cache headers through private-page redirects. The new real-Auth regression exposed the missing UI assertion on unchanged M15. See [findings, verification boundary and retest commands](M15_AUTH_HANDOFF_FIX.md); the existing M15 record below is retained.
 

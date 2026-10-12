@@ -79,7 +79,7 @@ export default function NextStepsWorkspace({ analysisId, initialDetails }: { ana
   }
 
   if (!details) return <>
-    <section className="next-steps-intro"><strong>Turn this report into a practical plan</strong><p>EXE will create a short action list from missing, partial, and unclear findings. It will also arrange only traceable CV excerpts into a private draft. No AI provider is connected and no new qualifications are generated.</p><button className="button button-primary" type="button" onClick={() => void generate()} disabled={busy === "generate"}>{busy === "generate" ? "Creating next steps…" : "Create my roadmap and draft"}<span aria-hidden="true">→</span></button></section>
+    <section className="next-steps-intro"><strong>Turn this report into a practical plan</strong><p>OwnPath will create a short action list from missing, partial, and unclear findings. It will also arrange only traceable CV excerpts into a private draft. No AI provider is connected and no new qualifications are generated.</p><button className="button button-primary" type="button" onClick={() => void generate()} disabled={busy === "generate"}>{busy === "generate" ? "Creating next steps…" : "Create my roadmap and draft"}<span aria-hidden="true">→</span></button></section>
     <StatusNotice error={notice?.tone === "error"}>{notice?.text ?? ""}</StatusNotice>
   </>;
 

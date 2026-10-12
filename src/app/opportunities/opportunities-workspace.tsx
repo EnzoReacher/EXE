@@ -73,7 +73,7 @@ export default function OpportunitiesWorkspace() {
   const noJobs = targetJobs.length === 0;
   if (loadFailed) return <><div className="form-notice error" role="alert">{notice?.text} Your saved opportunities could not be checked.</div><button className="button button-secondary" type="button" onClick={() => void load()}>Try loading again</button></>;
   return <>
-    <section className="opportunity-guidance"><strong>Save a link to a job you found.</strong><p>EXE does not check the page or confirm that it fits your CV. This link was saved by you. A saved link is not a confirmed job match.</p></section>
+    <section className="opportunity-guidance"><strong>Save a link to a job you found.</strong><p>OwnPath does not check the page or confirm that it fits your CV. This link was saved by you. A saved link is not a confirmed job match.</p></section>
     {notice && <div className={`form-notice ${notice.tone}`} role={notice.tone === "error" ? "alert" : "status"}>{notice.text}</div>}
     <p className="sr-only" role="status">{busy === "save" ? "Saving your private opportunity. Please wait." : busy ? "Deleting your private opportunity. Please wait." : ""}</p>
     <section className="opportunity-form-card" aria-labelledby="opportunity-form-title"><div><h2 id="opportunity-form-title">{editing ? "Edit private opportunity" : "Add a private opportunity"}</h2><p>{editing ? "Change your private status, company name, or note." : "Opening a saved link takes you to an external website."}</p></div>
@@ -95,7 +95,7 @@ export default function OpportunitiesWorkspace() {
           <div className="opportunity-card-heading"><div><p className="opportunity-role">{item.targetRoleTitle}</p>{item.companyName && <h3>{item.companyName}</h3>}</div><span className="opportunity-status">{statuses.find((status) => status.value === item.status)?.label}</span></div>
           <p className="opportunity-date">Saved {date(item.createdAt)}{item.updatedAt !== item.createdAt ? ` · Updated ${date(item.updatedAt)}` : ""}</p>
           {item.note && <p className="opportunity-note">{item.note}</p>}
-          <p className="external-disclosure">Opening this link takes you to an external website. EXE does not check whether the vacancy is still open.</p>
+          <p className="external-disclosure">Opening this link takes you to an external website. OwnPath does not check whether the vacancy is still open.</p>
           <div className="opportunity-actions">
             <a className="button button-secondary" href={item.sourceUrl} target="_blank" rel="noopener noreferrer">Open external link <span className="sr-only">for {name} (opens another website in a new tab)</span><span aria-hidden="true">↗</span></a>
             <button className="button button-secondary" type="button" disabled={!!busy} aria-label={`Edit ${name}`} onClick={(event) => { editTrigger.current = event.currentTarget; beginEdit(item); }}>Edit</button>

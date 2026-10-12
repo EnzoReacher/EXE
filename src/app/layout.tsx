@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "EXE | Career readiness workspace",
-  description: "Understand how your CV supports a target role and decide what to strengthen next.",
+  title: "OwnPath | Experience Translator",
+  description: "You have the experience. OwnPath helps you show its value.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

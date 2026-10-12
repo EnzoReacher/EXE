@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import AuthPage from "../auth/auth-page";
 
 export const metadata: Metadata = {
-  title: "Sign in | EXE",
-  description: "Sign in to your private EXE career workspace.",
+  title: "Sign in | OwnPath",
+  description: "Sign in to your private OwnPath career workspace.",
 };
 
 type SignInPageProps = {

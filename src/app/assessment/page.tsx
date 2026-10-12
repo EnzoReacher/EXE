@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Start an assessment | EXE",
-  description: "Prepare your CV and target job for an EXE assessment.",
+  title: "Start an assessment | OwnPath",
+  description: "Prepare your CV and target job for an OwnPath assessment.",
 };
 
 export default async function AssessmentPage() {
@@ -29,7 +29,7 @@ export default async function AssessmentPage() {
           <div className="privacy-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.6"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/><path d="M12 14v2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg></div>
           <div><strong>Before you upload</strong><p>This prototype checks wording locally; no AI provider receives your CV or job text. Files and extracted text are stored in your account’s Supabase workspace. Findings can miss meaning, and CV claims are not independently verified. Use sample information, not a real CV, until your team has reviewed storage backups, retention, and deletion settings.</p></div>
         </div>
-        <p className="assessment-disclaimer">EXE provides advisory career guidance. It does not make hiring decisions or guarantee job outcomes.</p>
+        <p className="assessment-disclaimer">OwnPath provides advisory career guidance. It does not make hiring decisions or guarantee job outcomes.</p>
       </div>
     </main>
   );

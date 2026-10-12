@@ -1,7 +1,7 @@
 import WorkspaceHeader from "@/components/workspace-header";
 import { requireCurrentUser } from "@/lib/intake/repository";
 import CredentialWorkspace from "@/app/credential-versions/workspace";
-export const metadata = { title: "Assigned credential reviews | EXE", robots: { index: false, follow: false } };
+export const metadata = { title: "Assigned credential reviews | OwnPath", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 export default async function Page() {
   let allowed = false;
