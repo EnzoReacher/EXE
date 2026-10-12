@@ -64,7 +64,7 @@ try {
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   if (!ready) throw new Error("COMPILED_TRANSLATOR_START_FAILED");
-  phase = "four responsive browser journeys";
+  phase = "compiled Translator browser journeys";
   await run(process.execPath, [path.join(root, "node_modules/@playwright/test/cli.js"), "test", "--config", "e2e/translator.config.mts"], root,
     { ...env, NODE_ENV: "test", TMPDIR: tmpdir(), OWNPATH_TEST_URL: origin, OWNPATH_BROWSER_TEMP: temporary }, "inherit");
   console.log("OwnPath compiled desktop/mobile-width browser acceptance: PASS.");

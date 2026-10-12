@@ -28,6 +28,7 @@
 .translator-questions { display: grid; gap: 24px; margin-bottom: 20px; }
 .translator-facts { border: 1px solid #cadad3; border-radius: 10px; padding: 18px; margin: 24px 0 0; min-width: 0; }
 .translator-fact { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px; cursor: pointer; }
+.translator-fact > span { min-width: 0; overflow-wrap: anywhere; }
 .translator-source { display: block; font-size: 13px; font-weight: 400; color: #50616b; line-height: 1.6; margin-top: 5px; }
 .translator-bullets { display: grid; gap: 20px; }
 .translator-bullet { border: 1px solid #d2e1da; background: #fbfdfc; border-radius: 12px; padding: 22px; min-width: 0; }
@@ -36,7 +37,7 @@
 .translator-bullet-heading > span { font-size: 12px; color: #49645b; }
 .translator-bullet details { margin: 16px 0; font-size: 13px; line-height: 1.6; }
 .translator-bullet summary { font-weight: 650; cursor: pointer; padding: 8px 0; }
-.translator-bullet li { margin-bottom: 8px; }
+.translator-bullet li { margin-bottom: 8px; overflow-wrap: anywhere; }
 .translator-bullet-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 .translator-bullet-actions label { display: flex; gap: 8px; align-items: center; font-size: 13px; }
 .translator-rejected { background: #f5f5f5; border-style: dashed; }

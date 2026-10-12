@@ -24,9 +24,22 @@ describe("Translator synthetic journey", () => {
   });
   it("TC07 skips questions without fabricated facts and keeps generation disabled", () => {
     render(<Translator />); click("Load fictional example"); click("Continue to details");
-    expect(screen.getAllByRole("button", { name: "Skip this question" })).toHaveLength(4);
+    expect(screen.getAllByRole("button", { name: /^Skip this question:/ })).toHaveLength(4);
     click("Review source facts"); expect(screen.getByText(/No personal implementation facts were recognized/)).toBeTruthy();
     expect((screen.getByRole("button", { name: "Create CV bullets" }) as HTMLButtonElement).disabled).toBe(true);
+  });
+  it("targeted skip clears only that answer and requires fresh fact review", () => {
+    render(<Translator />); click("Load fictional example"); click("Continue to details");
+    const technology=screen.getByLabelText("Which technologies did you directly use?");
+    const contribution=screen.getByLabelText("What did you personally implement?");
+    fireEvent.change(technology,{target:{value:"React and JavaScript"}});
+    fireEvent.change(contribution,{target:{value:"I built product listing and search."}});
+    click("Review source facts");
+    click("Skip this question: Which technologies did you directly use?");
+    expect((technology as HTMLTextAreaElement).value).toBe("");
+    expect((contribution as HTMLTextAreaElement).value).toBe("I built product listing and search.");
+    expect(screen.queryByRole("group",{name:"Confirm facts about your own work"})).toBeNull();
+    expect((screen.getByRole("button",{name:"Create CV bullets"}) as HTMLButtonElement).disabled).toBe(true);
   });
   it("end-to-end component journey gates copying on current per-bullet acceptance", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined); Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
