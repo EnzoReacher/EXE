@@ -49,7 +49,7 @@ A synthetic vertical slice can advance ahead of this schedule; that does not adv
 
 ## Current checkpoint
 
-At current code/test SHA `c89fc32b28ca015f0ffbf5c60ee5d70709295e43`, OP-04–10 synthetic implementation and OP-11 automated/independent acceptance passed, including seven compiled Translator cases / 30 steps and disposable backend regression. OP-13 synthetic demo/handoff is ready. OP-02/12 real research and final OP-13 release decision remain pending; OP-14 provider remains conditional. Manual device/accessibility checks and owner-local Factory tool execution are still open. See STATUS for exact commands/run links; the schedule above remains an estimate, not a claim of completed human evidence.
+At current code/test SHA `d2979c6a8c074dabe245ba5fa79991d65ae6de93`, OP-04–10 synthetic implementation and OP-11 automated/independent acceptance passed, including seven compiled Translator cases / 30 steps and disposable backend regression. OP-13 synthetic demo/handoff is ready. OP-02/12 real research and final OP-13 release decision remain pending; OP-14 provider remains conditional. Manual device/accessibility checks and owner-local Factory tool execution are still open. See STATUS for exact commands/run links; the schedule above remains an estimate, not a claim of completed human evidence.
 
 ## Follow-up preparation scope
 
@@ -66,3 +66,5 @@ Completed at source `c89fc32b28ca015f0ffbf5c60ee5d70709295e43`: 417 tests / 53 f
 ## Next workflow support — private pilot instrument
 
 Owner instructed continuing on 2026-10-12. Root sole writer owns `scripts/ownpath-pilot.mjs`, its synthetic regression tests and `docs/ownpath/PILOT_DATA_RUNBOOK.md` plus protocol/research/status/handoff links. Bounded E02/E03 preparation: strict private structured observations, fixed sequence/checkpoint, explicit missing slots/failures/caps, human-review-gated completion, separate coaching/fact requests and generated/final safety, within-pair statistics and private drafts requiring review. No collection, recruitment, raw research record, app/API/DB/provider/migration or register/approval write. Independent reviewer reads only. DoD: meaningful tests, engineering checks, exact-tree branch publication and CI evidence; actual E02/E03 stay open. Rollback reverts these scripts/docs without changing app source or private observations.
+
+Private instrument preparation completed at `d2979c6a8c074dabe245ba5fa79991d65ae6de93`: 12 focused tests, full 429/54, lint/types/build, Quality push/PR, [compiled seven cases/30 steps + backend acceptance](https://github.com/EnzoReacher/EXE/actions/runs/38219710485) and cleanup PASS. Independent read-only QA cleared schema/missing-data/math/privacy/template/runbook corrections. No participants/data/approvals added; E02/E03 actual work remains pending.
