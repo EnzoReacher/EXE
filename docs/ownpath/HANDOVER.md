@@ -1,6 +1,6 @@
 # OwnPath handoff
 
-Published branch: `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1), based on cumulative M17 `ae2527633733fc5081a96ecb2c16e09081a8c878`. **Automated acceptance checkpoint is `2cee287135d22234a77e288cf1c04d905dfd2ea9`**, tree `023ae3922ceb1eeb1b4b04c57b467b11a3d2ce3a`: 416 tests / 53 files, lint/types/build, four compiled Translator browser journeys and disposable Supabase/legacy regression all passed. See [acceptance run](https://github.com/EnzoReacher/EXE/actions/runs/38210654756) and [STATUS](STATUS.md) for exact Quality runs and boundaries. Documentation-only follow-ups may advance HEAD. Original worktrees/local histories are preserved. Owner approved branch publication/draft PR; merge, deployment, research and provider decisions remain separate. [BACKLOG](BACKLOG.md) records issue dependencies/file ownership.
+Published branch: `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1), based on cumulative M17 `ae2527633733fc5081a96ecb2c16e09081a8c878`. **Automated acceptance checkpoint is `c89fc32b28ca015f0ffbf5c60ee5d70709295e43`**, tree `cd4a7ef9eba13bf2d533bbc367acd4e576293e30`: 417 tests / 53 files, lint/types/build, seven compiled Translator cases / 30 steps (four widths plus keyboard-only, injected clipboard failure and long-source layout) and disposable Supabase/legacy regression all passed. See [acceptance run](https://github.com/EnzoReacher/EXE/actions/runs/38216785533) and [STATUS](STATUS.md) for exact Quality runs and boundaries. Documentation-only follow-ups may advance HEAD. Original worktrees/local histories are preserved. Owner approved branch publication/draft PR; merge, deployment, research and provider decisions remain separate. [BACKLOG](BACKLOG.md) records issue dependencies/file ownership.
 
 ## Earlier local patch handoff (optional)
 
@@ -45,7 +45,7 @@ pnpm start --hostname 127.0.0.1 --port 3000
 pnpm test:translator:browser
 ```
 
-Tests are loopback-only, fictional and do not start containers or download browsers. Current CI already passed the actual compiled browser bodies at four widths; rerun locally only for relevant changes or manual investigation. Report actual pass/fail; do not treat component tests or `--list` as browser acceptance. Existing real-stack journeys/policy suite passed on disposable CI. Local repetition needs a configured disposable Supabase stack and established scripts; reuse running local infrastructure without reset or duplicate containers. No migration is needed for Translator.
+Tests are loopback-only, fictional and do not start containers or download browsers. Current CI already passed the actual compiled browser bodies at four widths plus three focused cases; rerun locally only for relevant changes or manual investigation. Report actual pass/fail; do not treat component tests or `--list` as browser acceptance. Existing real-stack journeys/policy suite passed on disposable CI. Local repetition needs a configured disposable Supabase stack and established scripts; reuse running local infrastructure without reset or duplicate containers. No migration is needed for Translator.
 
 ## Decisions only the owner/team can complete
 
@@ -58,3 +58,7 @@ Scoped code/test/config pushes automatically run compiled Translator plus the re
 For manual checks, use the fictional demo at 200% zoom, a physical mobile keyboard and a screen reader; inspect tab order, labels, source disclosure, heading focus and clipboard-denial fallback. Record actual observations using RESEARCH_PLAN. These remain open even with green CI. Synthetic OP-13 demo/handoff is ready; actual OP-12 study and final release decision are not completed by automation.
 
 The next owner-local actions are concrete in [MANUAL_ACCEPTANCE](MANUAL_ACCEPTANCE.md); its outcome rows remain NOT RUN until executed. [PILOT_PROTOCOL](PILOT_PROTOCOL.md) defines E01 task sheets/counterbalance/scoring and blank private worksheets; it supplies no participant outcomes.
+
+## Resumed QA evidence
+
+Question-specific Skip accessible names and scoped long-source wrapping are included in the tested source. Browser question-input selectors use exact labels to avoid matching named Skip controls. All seven cases share automatic traffic/input-sentinel/socket/page-error guards and passed actual compiled execution with cleanup. QA reviewed the selector correction read-only. Injected clipboard rejection is failure-path coverage; retain blank manual outcomes until actual owner/device checks. See TEST_STRATEGY and STATUS for source/run IDs and the first-run selector failure.

@@ -49,7 +49,7 @@ A synthetic vertical slice can advance ahead of this schedule; that does not adv
 
 ## Current checkpoint
 
-At code/test SHA `a7260d58a738057c77a7b7723829dcb72a7d2e39`, OP-04–10 synthetic implementation and OP-11 automated/independent acceptance passed, including compiled four-width Translator and disposable backend regression. OP-13 synthetic demo/handoff is ready. OP-02/12 real research and final OP-13 release decision remain pending; OP-14 provider remains conditional. Manual device/accessibility checks and owner-local Factory tool execution are still open. See STATUS for exact commands/run links; the schedule above remains an estimate, not a claim of completed human evidence.
+At current code/test SHA `c89fc32b28ca015f0ffbf5c60ee5d70709295e43`, OP-04–10 synthetic implementation and OP-11 automated/independent acceptance passed, including seven compiled Translator cases / 30 steps and disposable backend regression. OP-13 synthetic demo/handoff is ready. OP-02/12 real research and final OP-13 release decision remain pending; OP-14 provider remains conditional. Manual device/accessibility checks and owner-local Factory tool execution are still open. See STATUS for exact commands/run links; the schedule above remains an estimate, not a claim of completed human evidence.
 
 ## Follow-up preparation scope
 
@@ -60,3 +60,5 @@ Follow-up source checkpoint `2cee287135d22234a77e288cf1c04d905dfd2ea9` passed fu
 ## Keyboard and fallback acceptance follow-up
 
 Authorized synthetic QA continuation owns `src/app/experience-translator/translator.tsx`, `translator.test.tsx`, `translator.css`, `e2e/translator.spec.ts`, `scripts/ci-ownpath-browser.mjs` and relevant status/test docs only. Fix repeated Skip accessible names; exercise keyboard-only transitions/selective skip/reject/restore, injected clipboard rejection and long-source narrow layout in the existing compiled loopback CI harness. DoD is local checks, actual browser/legacy CI results and read-only independent review; whole manual/device/participant/release gates stay open. No DB/provider/migration change; revert this isolated UI-label/test diff if needed.
+
+Completed at source `c89fc32b28ca015f0ffbf5c60ee5d70709295e43`: 417 tests / 53 files, Quality push/PR, [synthetic acceptance](https://github.com/EnzoReacher/EXE/actions/runs/38216785533) seven compiled cases / 30 steps, all six disposable backend commands and cleanup passed. Read-only QA reviewed the UI/test scope and exact question-label correction after the first compiled run exposed partial-label collisions. No unresolved concrete blocker in this bounded synthetic scope. C01–C06 evidence renewed; C07–C10, owner-local/research/release gates remain open.
