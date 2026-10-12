@@ -25,4 +25,15 @@ describe("content-free browser reporting", () => {
       expect(result).toContain("Screenshots/traces/videos disabled");
     } finally { log.mockRestore(); }
   });
+  it("locates Translator failures and width steps without exposing assertion values", () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+    try {
+      const reporter = new SafeReporter();
+      reporter.onStepBegin({}, {}, { category: "test.step", title: "ACCEPTED_TXT_375" });
+      reporter.onTestEnd({}, { status: "failed", error: { message: "private-input-sentinel", stack: "/private/path/translator.spec.ts:74:9" } });
+      const result = log.mock.calls.flat().join("\n");
+      expect(result).toContain("ACCEPTED_TXT_375"); expect(result).toContain("spec line 74");
+      expect(result).not.toContain("private-input-sentinel"); expect(result).not.toContain("/private/path/");
+    } finally { log.mockRestore(); }
+  });
 });
