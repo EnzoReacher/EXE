@@ -18,6 +18,7 @@ pnpm install --frozen-lockfile
 opencode --version
 node scripts/setup-ownpath-factory.mjs
 node scripts/setup-ownpath-factory.mjs --write
+node scripts/verify-ownpath-factory.mjs
 opencode
 ```
 
@@ -47,3 +48,9 @@ Read denies conventional env/PEM file patterns; content grep is disabled because
 A audit observed; B synthetic scope supplied but human CP2/production pending; C ADR proposed; D controlled feature tests; E independent QA plus browser/RLS evidence; F owner release. Write actual state in `docs/ownpath/STATUS.md`. Preserve failed attempts and clearly distinguish historical tests from fresh results. Backlog→audit→scope→one writer→tests→independent QA→draft PR→owner approval→merge/deploy is diagrammed in FLOWS.
 
 No auto-created GitHub Issues, recruitment messages, merge or deployment. A draft PR supplies a concrete review surface. Human research stays with the team using RESEARCH_PLAN and existing CP2 records.
+
+## Reproducible V1 configuration self-check
+
+`node scripts/verify-ownpath-factory.mjs` checks the current project with the actual installed CLI; run setup first. `--isolated` checks generated profiles in an owned temporary fixture with separate XDG settings, disabled auto-update/model-metadata fetching and no inherited provider credentials. It does not install OpenCode, browsers, models or dependencies and removes its fixture afterward. It captures config/debug JSON and CLI stderr privately; output contains only fixed status/failure codes and validated version.
+
+The check requires exact generated modes/prompts/permission maps and command bindings, checks the actual ordered custom permission block and rejects later overrides except the canonical managed `opencode/tool-output/*` allowance. Expected tools must be enabled for each role; read-only roles cannot expose shell/write/task or unexpected tools. A passing `--pure` inspection does not exercise resource matching, permission prompts, delegation, plugins/MCP or provider/model execution. V2 self-check deliberately reports not verified; V2 installer templates remain separately prepared. A06 still requires owner-local inspection and workflow execution; an isolated fixture pass closes no human gate. Scope for this bounded tooling includes `scripts/setup-ownpath-factory*` and `scripts/verify-ownpath-factory*`; roles otherwise retain existing file limits.

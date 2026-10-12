@@ -26,6 +26,7 @@ Open `http://127.0.0.1:3000/experience-translator`. This fictional-data prototyp
 opencode --version
 node scripts/setup-ownpath-factory.mjs
 node scripts/setup-ownpath-factory.mjs --write
+node scripts/verify-ownpath-factory.mjs
 opencode
 ```
 
@@ -55,3 +56,5 @@ Actual CP2 evidence review and course/deadline requirements; consented user-stud
 Scoped code/test/config pushes automatically run compiled Translator plus the reusable backend acceptance workflow. Both jobs have separate temporary infrastructure and cleanup; no production settings/data or browser failure screenshots are uploaded. Legacy regression stays serial because it shares fictional actors. Exact source SHA/run evidence is in STATUS.
 
 For manual checks, use the fictional demo at 200% zoom, a physical mobile keyboard and a screen reader; inspect tab order, labels, source disclosure, heading focus and clipboard-denial fallback. Record actual observations using RESEARCH_PLAN. These remain open even with green CI. Synthetic OP-13 demo/handoff is ready; actual OP-12 study and final release decision are not completed by automation.
+
+The next owner-local actions are concrete in [MANUAL_ACCEPTANCE](MANUAL_ACCEPTANCE.md); its outcome rows remain NOT RUN until executed. [PILOT_PROTOCOL](PILOT_PROTOCOL.md) defines E01 task sheets/counterbalance/scoring and blank private worksheets; it supplies no participant outcomes.

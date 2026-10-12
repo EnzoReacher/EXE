@@ -43,3 +43,7 @@ Student stage; applying for Frontend Intern yes/no; project-CV-writing frequency
 |---|---|---|---|---|---|---|---|---|
 
 No rows are filled until actual sessions occur. Use `TU-###`, `SV-###` and dated limitations in existing register. Owner/team reviews evidence and completes existing direction decision before approved persistence/provider/release work. Validator success proves structure only.
+
+## Operational pilot protocol
+
+Measurement definitions, fictional fact sheets, counterbalanced task/tool allocation, fixed caps, blinded claim rubric and prespecified formative criteria are now defined in [PILOT_PROTOCOL](PILOT_PROTOCOL.md) (E01, v1 dated 2026-10-12). This closes preparation of the measurement/rubric only. Recruitment, consent/retention decisions, actual observations, evidence review and course requirements remain pending. Use existing CP2 session/evidence records; no respondent-level output is committed.
