@@ -2,14 +2,14 @@
 
 Synthetic engineering preparation and first vertical slice completed. **Not a production release, AI-provider deployment, owner research approval or completed course checkpoint.**
 
-**Local code checkpoint:** `074bde4eaae0c59e8acd59efd5f5022134e57295`. Commit is clean locally. GitHub push was rejected by automatic approval review, which stated that remote code export/branch/PR creation lacked explicit authorization. Read-only branch inventory confirmed no remote Translator branch. No feature PR or new feature CI exists; this is not a CI pass/fail. A reviewable patch/archive handoff is prepared; remote publication awaits explicit owner confirmation. No indirect push workaround was attempted.
+**Published review checkpoint:** `21845b1e3cdf89be9fdcee04d3a6754bbdada0e7` on `feat/ownpath-experience-translator`, [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1), based on cumulative M17. The owner explicitly approved remote branch publication and draft PR on 2026-10-12. Its Git tree exactly matches tested local snapshot `c7edaaea3c113e1b321f880c75b9bf88d1f3337e` (`49e5c79514ba19ae84015cfdeb9b96b0caab001e`); implementation test checkpoint was `074bde4eaae0c59e8acd59efd5f5022134e57295`. The original local history is preserved on `checkpoint/ownpath-experience-translator-local`. Initial automatic approval rejection is historical; after explicit approval, Git CLI publication lacked credentials, so the authenticated GitHub connection published the verified tree. No merge/deploy, research or provider approval was supplied. Later documentation-only commits may advance branch HEAD; PR checks report the exact current SHA.
 
 ## Observed repository state / base decision
 
 - Repository: `EnzoReacher/EXE`, default branch `main` at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`; main is the older documentation foundation, not the cumulative app.
 - Fresh `git fetch origin`, connector repo/branch queries and local branch/history inspection confirmed cumulative `codex/exe-m17-survey-readiness` at **`ae2527633733fc5081a96ecb2c16e09081a8c878`**. It contains M18 `ec563c8666cc5ddae14949586b542334a096750e` and later survey/status work. This is the selected base, not an assumed M18 HEAD.
 - New isolated worktree `/workspace/scratch/beb51ea3bd99/EXE`, branch **`feat/ownpath-experience-translator`**. Original clean M17 checkout was not switched; original dirty M15 snapshot and its modified/untracked files were not changed.
-- Pre-change GitHub Quality run [37427631042](https://github.com/EnzoReacher/EXE/actions/runs/37427631042) passed on M17 `ae25276`. Historical CI is not proof of this feature's acceptance. Feature CI is recorded in the PR/final handoff when available.
+- Pre-change GitHub Quality run [37427631042](https://github.com/EnzoReacher/EXE/actions/runs/37427631042) passed on M17 `ae25276`. Historical CI is not proof of this feature's acceptance. New Quality runs [push](https://github.com/EnzoReacher/EXE/actions/runs/38197145020) and [draft PR](https://github.com/EnzoReacher/EXE/actions/runs/38197173911) were observed running on published checkpoint `21845b1`; terminal results and current-head checks are reported in PR #1/final handoff.
 - Eight existing migrations retained unchanged. No DB/Storage/RLS/Auth API modifications. Existing exact-excerpt and credential/export acceptance rules preserved.
 - Installed stack: Next 16.3.7, React 19.2.8, TypeScript 5.9.3, Supabase JS 2.117.2/SSR 0.12.7, pnpm 11.25.0, Vitest 5.0.2, Playwright 1.61.1. Read installed Next docs for client boundaries/forms/pages/headers before coding. Actual PostgreSQL server and owner OpenCode versions were not available.
 
@@ -39,7 +39,7 @@ Synthetic engineering preparation and first vertical slice completed. **Not a pr
 | `pnpm test:translator:browser` | **Not run**: no Chromium installation/approved browser surface. Four loopback-only desktop/mobile tests implemented. |
 | `pnpm test:e2e:local`, `pnpm test:supabase:local` | **Not run**: no Docker/local Supabase/browser available; no migration or policy changed. Historical backend passes are not current passes. |
 | Physical mobile keyboard / screen reader / manual owner walkthrough | Not performed. |
-| Feature GitHub Actions / draft PR | Not run / not created: push blocked by automatic approval review. Historical base Quality remains the only remotely queried result. |
+| Feature GitHub Actions / draft PR | Draft PR #1 created after explicit owner approval. Quality push/PR runs started for the verified published snapshot; inspect current-head checks for terminal results. Backend/browser workflow is not automatically triggered on this feature branch. |
 
 Initial lint found one unescaped JSX apostrophe; corrected. Adversarial QA exposed actor/curly-negation/authoring/technology/reference/error-target/React.js and stale-edit defects that initial tests missed. All were fixed with regressions before final green results. The final fixture result is not a guarantee of universal semantic correctness.
 

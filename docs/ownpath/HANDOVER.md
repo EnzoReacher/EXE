@@ -1,12 +1,12 @@
 # OwnPath handoff
 
-Local branch: `feat/ownpath-experience-translator`; audited base `ae2527633733fc5081a96ecb2c16e09081a8c878`; tested code commit `074bde4eaae0c59e8acd59efd5f5022134e57295`. GitHub push was blocked by automatic approval review, so no remote feature branch, PR or feature CI is claimed. The accompanying patch can be reviewed/applied locally while remote publication awaits explicit confirmation. [STATUS](STATUS.md) records code changes, actual checks and gates; [BACKLOG](BACKLOG.md) records dependencies/file ownership.
+Published branch: `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1); audited base `ae2527633733fc5081a96ecb2c16e09081a8c878`. Initial published checkpoint `21845b1e3cdf89be9fdcee04d3a6754bbdada0e7` has the exact tree of local snapshot `c7edaaea3c113e1b321f880c75b9bf88d1f3337e`; code was tested at `074bde4eaae0c59e8acd59efd5f5022134e57295`. Original local history is preserved under `checkpoint/ownpath-experience-translator-local`. Owner approved publication/draft PR on 2026-10-12; no merge/deployment/research/provider decision is implied. Follow current PR HEAD/checks for documentation follow-ups. [STATUS](STATUS.md) records code changes, actual checks and gates; [BACKLOG](BACKLOG.md) records dependencies/file ownership.
 
-## Apply the local handoff before remote publication
+## Earlier local patch handoff (optional)
 
-Extract `OwnPath_Translator_2026-10-12.zip`; follow its `README_APPLY.md`. Create a separate worktree at the exact audited base and run `git apply --check` before applying `OwnPath_Translator.patch`; preserve current modified/untracked work. The patch contains only this branch's changes, no dependencies, environment settings or Git credentials.
+The previously supplied `OwnPath_Translator_2026-10-12.zip` preserves the initial local snapshot and its historical publication-blocker note. Prefer the published branch below for current documentation. If using the archive offline, follow README_APPLY, start from the exact audited base and run `git apply --check`; preserve current modified/untracked work. The patch contains no dependencies, environment settings or Git credentials.
 
-## Bring the review branch to the development machine (after authorized publication)
+## Bring the published review branch to the development machine
 
 ```bash
 cd ~/EXE
