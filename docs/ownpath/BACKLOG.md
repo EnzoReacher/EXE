@@ -54,3 +54,5 @@ At code/test SHA `a7260d58a738057c77a7b7723829dcb72a7d2e39`, OP-04–10 syntheti
 ## Follow-up preparation scope
 
 User instructed continuing the checklist/workflow on 2026-10-12. The bounded follow-up adds `scripts/verify-ownpath-factory.mjs` and its policy-regression tests, fixes explicit docs paths in Factory prompts, and updates `docs/ownpath/PILOT_PROTOCOL.md`, `MANUAL_ACCEPTANCE.md` plus planning/runbook/handoff records. E01 operational measurement/rubric definition is complete as preparation; actual study and owner-machine/manual gates stay open. Single writer; independent reviewer reads only. No app/DB/provider implementation or migration change. Rollback is removal/revert of these isolated scripts/docs; existing profiles are never automatically overwritten.
+
+Follow-up source checkpoint `2cee287135d22234a77e288cf1c04d905dfd2ea9` passed full Quality push/PR and [synthetic acceptance](https://github.com/EnzoReacher/EXE/actions/runs/38210654756), including both cleanup steps, with 416 tests / 53 files. E01 protocol preparation is done; A06, manual device/owner checks and D03–D07/E02–E05 human study remain open.
