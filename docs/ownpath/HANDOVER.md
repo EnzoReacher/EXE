@@ -62,3 +62,7 @@ The next owner-local actions are concrete in [MANUAL_ACCEPTANCE](MANUAL_ACCEPTAN
 ## Resumed QA evidence
 
 Question-specific Skip accessible names and scoped long-source wrapping are included in the tested source. Browser question-input selectors use exact labels to avoid matching named Skip controls. All seven cases share automatic traffic/input-sentinel/socket/page-error guards and passed actual compiled execution with cleanup. QA reviewed the selector correction read-only. Injected clipboard rejection is failure-path coverage; retain blank manual outcomes until actual owner/device checks. See TEST_STRATEGY and STATUS for source/run IDs and the first-run selector failure.
+
+## Next workflow: actual sessions and private analysis
+
+[PILOT_DATA_RUNBOOK](PILOT_DATA_RUNBOOK.md) makes E02/E03 execution preparation concrete: create a blank worksheet outside Git, record only actual eligible/retained observations after owner consent/rubric decisions, then generate a new private aggregate draft. Tool checks preserve attempted failures/time caps, explicit missing slots, pending claim review, comparator family mix, separate help/fact access, generated safety findings and within-pair differences. It does not conduct or approve a study. Review consent/completeness/scoring/anonymity before adding genuine summaries to existing CP2 records. No participants or outcomes have been added; manual/research/release gates remain open.

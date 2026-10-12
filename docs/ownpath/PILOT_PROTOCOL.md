@@ -99,3 +99,7 @@ Owner review status:
 ```
 
 For repo-safe results: aggregate denominators/counts, median/range of completed-task times, paired comparisons when both conditions completed, safe themes, documented failures and limitations. Keep incomplete pair counts visible. Suppress identifying small combinations; manual review is required. Update existing session log/register with genuine dated summaries and reviewer status; validators do not constitute research approval.
+
+## Private recording and aggregate preparation tool
+
+[PILOT_DATA_RUNBOOK](PILOT_DATA_RUNBOOK.md) documents `scripts/ownpath-pilot.mjs`: a blank, deliberately non-evidence worksheet and private structured-record validator/aggregate draft generator. It implements this frozen protocol's attempted-task denominators, failure/cap retention, separate fact access/coaching, human claim review and within-pair differences. It cannot collect observations or verify consent, completeness, scoring, blinding or anonymity. Synthetic fixtures remain labelled; no record/register/approval is auto-published. E02/E03 actual study and analysis remain open.
