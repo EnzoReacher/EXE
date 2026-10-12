@@ -16,3 +16,5 @@ Say clearly: this is a deterministic fictional-data prototype, not an approved e
 Fallback: if clipboard is denied, select the review textarea manually. If unsupported natural wording produces fewer/no bullets, disclose the template vocabulary limit and clarify the fictional sentence; do not claim a model analyzed it. No production/provider/database save demo.
 
 After demo, use the neutral questions in RESEARCH_PLAN; record actual observations separately from interpretation. Do not call this demo a completed CP1/CP2 or mentor approval.
+
+Engineering rehearsal: the four-width compiled-browser run exercised this same fictional journey and first-bullet wording, editing/regeneration, individual approval, exact accepted TXT and reset at code checkpoint `a7260d58a738057c77a7b7723829dcb72a7d2e39`. The REST API golden bullet has engine-unit coverage; the browser assertion accepts only bullet 1. Use STATUS for the CI link. This automated rehearsal does not represent a participant usability observation or owner walkthrough.

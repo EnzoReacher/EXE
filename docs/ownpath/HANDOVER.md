@@ -1,6 +1,6 @@
 # OwnPath handoff
 
-Published branch: `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1); audited base `ae2527633733fc5081a96ecb2c16e09081a8c878`. Initial published checkpoint `21845b1e3cdf89be9fdcee04d3a6754bbdada0e7` has the exact tree of local snapshot `c7edaaea3c113e1b321f880c75b9bf88d1f3337e`; code was tested at `074bde4eaae0c59e8acd59efd5f5022134e57295`. Original local history is preserved under `checkpoint/ownpath-experience-translator-local`. Owner approved publication/draft PR on 2026-10-12; no merge/deployment/research/provider decision is implied. Follow current PR HEAD/checks for documentation follow-ups. [STATUS](STATUS.md) records code changes, actual checks and gates; [BACKLOG](BACKLOG.md) records dependencies/file ownership.
+Published branch: `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1), based on cumulative M17 `ae2527633733fc5081a96ecb2c16e09081a8c878`. **Automated acceptance checkpoint is `a7260d58a738057c77a7b7723829dcb72a7d2e39`**, tree `d0371842707c9196717bd19a2cac71d99d431af8`: 406 tests / 52 files, lint/types/build, four compiled Translator browser journeys and disposable Supabase/legacy regression all passed. See [acceptance run](https://github.com/EnzoReacher/EXE/actions/runs/38199040491) and [STATUS](STATUS.md) for exact Quality runs and boundaries. Documentation-only follow-ups may advance HEAD. Original worktrees/local histories are preserved. Owner approved branch publication/draft PR; merge, deployment, research and provider decisions remain separate. [BACKLOG](BACKLOG.md) records issue dependencies/file ownership.
 
 ## Earlier local patch handoff (optional)
 
@@ -29,7 +29,7 @@ node scripts/setup-ownpath-factory.mjs --write
 opencode
 ```
 
-Select `ownpath-lead`. Verify four discovered agents, four commands and actual loaded permissions; then `/ownpath-audit`, `/ownpath-build OP-11`, `/ownpath-verify`. Installer selects version from the actual local CLI, refuses differing config and does not choose/charge a provider. [Runbook](../ai-factory/AI_FACTORY_RUNBOOK.md) explains shell approvals and limits. OpenCode is not installed in Work, so successful owner-local runtime acceptance remains required.
+Select `ownpath-lead`. Inspect four discovered agents, four commands and actual loaded permissions; then `/ownpath-audit`, `/ownpath-scope`, and `/ownpath-build <authorized issue>` only when there is a concrete remaining issue. OP-11 automated acceptance is complete; do not restart it from an old handoff. Use `/ownpath-verify` for current evidence. Installer selects version from the actual local CLI, refuses differing config and does not choose/charge a provider. [Runbook](../ai-factory/AI_FACTORY_RUNBOOK.md) explains shell approvals and limits. Official OpenCode 1.18.35 was tested in an isolated scratch fixture: agent/command discovery and loaded permission rules passed without model calls. Owner-local global/MCP settings, real permission prompts/tool resource matching and V2 runtime remain unverified.
 
 ## Browser acceptance (existing Chromium required)
 
@@ -44,8 +44,14 @@ pnpm start --hostname 127.0.0.1 --port 3000
 pnpm test:translator:browser
 ```
 
-Tests are loopback-only, fictional and do not start containers or download browsers. Report actual pass/fail; do not treat component tests as browser acceptance. Existing real-stack journeys/policy suite need a configured disposable Supabase stack and established scripts; reuse running local infrastructure without reset or duplicate containers. No migration is needed for Translator.
+Tests are loopback-only, fictional and do not start containers or download browsers. Current CI already passed the actual compiled browser bodies at four widths; rerun locally only for relevant changes or manual investigation. Report actual pass/fail; do not treat component tests or `--list` as browser acceptance. Existing real-stack journeys/policy suite passed on disposable CI. Local repetition needs a configured disposable Supabase stack and established scripts; reuse running local infrastructure without reset or duplicate containers. No migration is needed for Translator.
 
 ## Decisions only the owner/team can complete
 
-Actual CP2 evidence review and course/deadline requirements; consented user-study execution; browser/Factory/manual acceptance; real-data privacy/retention; approved provider/model/budget if wanted; final merge/deploy decision. These are not silently approved by this prototype. Continue synthetic fixes independently while collecting those records; do not fabricate interviews, signatures or mentor transcripts.
+Actual CP2 evidence review and course/deadline requirements; consented user-study execution; physical mobile keyboard/screen-reader/zoom walkthrough and owner-local Factory settings/execution; real-data privacy/retention; approved provider/model/budget if wanted; final merge/deploy decision. These are not silently approved by this prototype. Continue synthetic fixes independently while collecting those records; do not fabricate interviews, signatures or mentor transcripts.
+
+## CI and manual follow-up
+
+Scoped code/test/config pushes automatically run compiled Translator plus the reusable backend acceptance workflow. Both jobs have separate temporary infrastructure and cleanup; no production settings/data or browser failure screenshots are uploaded. Legacy regression stays serial because it shares fictional actors. Exact source SHA/run evidence is in STATUS.
+
+For manual checks, use the fictional demo at 200% zoom, a physical mobile keyboard and a screen reader; inspect tab order, labels, source disclosure, heading focus and clipboard-denial fallback. Record actual observations using RESEARCH_PLAN. These remain open even with green CI. Synthetic OP-13 demo/handoff is ready; actual OP-12 study and final release decision are not completed by automation.

@@ -15,12 +15,12 @@ One writer per worktree. Read-only reviewers may run concurrently. Every issue r
 | OP-08 Interview | engine/client | OP-07 | Core Engineer | No repeated known facts; 2–4 missing questions; skip | TC03/07 | 0.5 | Synthetic only; revert own files |
 | OP-09 Bullets | composer/adapter/validator | OP-08 | Core Engineer | 0–3 English bullets, exact facts, no fabricated metrics; malformed/timeout bounded | TC04/05/09/10/14 | 1 | Synthetic only; adapter stays local |
 | OP-10 Review/copy | client/review helpers | OP-09 | Core Engineer | Edit resets approval, regenerate preserves edit, accepted-only copy/TXT, clear | TC11/13 interactions | 0.75 | Memory only; DB/save/export integration blocked |
-| OP-11 QA/security | tests, TEST_STRATEGY, STATUS | OP-10 | Independent QA | Full unit/integration/lint/types/build; injection; existing regression; browser/mobile and RLS boundaries explicit | Fresh commands and reviewer findings | 1 | No 'production ready'; revert branch changes |
+| OP-11 QA/security | e2e/translator*, e2e/auth-flow.spec.ts, e2e/safe-reporter.ts; scripts/ci-ownpath-browser*, e2e-local-reporter.test.mjs; ownpath/local-acceptance workflows, .gitignore, TEST_STRATEGY, STATUS | OP-10 | Independent QA | Full unit/integration/lint/types/build; injection; existing regression; browser/mobile and RLS boundaries explicit | Fresh commands and reviewer findings | 1 | No 'production ready'; revert branch changes |
 | OP-12 Usability study | real research records | OP-02, OP-11 | Owner/team | Counterbalanced actual observations, accuracy/time/edit comparison | Pending actual evidence | 1 | Real consent/course gate; no invented data |
 | OP-13 Demo/RC/handoff | STATUS, demo script, pitch | OP-11, OP-12 | Lead + Owner | Honest deterministic demo, exact commands/limitations, explicit release decision | Draft PR + acceptance | 0.75 | Owner release pending; no merge/deploy |
 | OP-14 Provider (conditional) | future server adapter/contracts | OP-02/03/05 + approval | Core Engineer + Owner | Model/budget/consent/privacy approved, server validation/rate-limit/Auth/isolation/idempotency, timeout tests | Approval not supplied | TBD | Blocked; local adapter fallback |
 
-Factory configuration and version-aware setup belong to OP-00/01, `docs/ai-factory/` and `scripts/setup-ownpath-factory.mjs`. Runtime validation waits for actual owner OpenCode installation; no cost/provider is selected.
+Factory configuration and version-aware setup belong to OP-00/01, `docs/ai-factory/` and `scripts/setup-ownpath-factory.mjs`. Agent/command discovery and loaded permission rules passed using actual official OpenCode 1.18.35 in an isolated synthetic fixture. Owner-local global/MCP settings, permission tool execution and V2 runtime remain unverified; no cost/provider is selected.
 
 ## Ten working days (estimate; research and engineering can overlap)
 
@@ -46,3 +46,7 @@ gantt
 ```
 
 A synthetic vertical slice can advance ahead of this schedule; that does not advance the human gates. Re-estimate after owner study availability and actual browser results.
+
+## Current checkpoint
+
+At code/test SHA `a7260d58a738057c77a7b7723829dcb72a7d2e39`, OP-04–10 synthetic implementation and OP-11 automated/independent acceptance passed, including compiled four-width Translator and disposable backend regression. OP-13 synthetic demo/handoff is ready. OP-02/12 real research and final OP-13 release decision remain pending; OP-14 provider remains conditional. Manual device/accessibility checks and owner-local Factory tool execution are still open. See STATUS for exact commands/run links; the schedule above remains an estimate, not a claim of completed human evidence.

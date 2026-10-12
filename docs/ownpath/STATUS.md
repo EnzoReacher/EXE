@@ -1,64 +1,65 @@
 # OwnPath implementation status — 2026-10-12
 
-Synthetic engineering preparation and first vertical slice completed. **Not a production release, AI-provider deployment, owner research approval or completed course checkpoint.**
+The synthetic Translator vertical slice and **OP-11 automated acceptance are complete**. This is an engineering review candidate, not a production release, completed user study, external AI-provider integration or course approval.
 
-**Published review checkpoint:** `21845b1e3cdf89be9fdcee04d3a6754bbdada0e7` on `feat/ownpath-experience-translator`, [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1), based on cumulative M17. The owner explicitly approved remote branch publication and draft PR on 2026-10-12. Its Git tree exactly matches tested local snapshot `c7edaaea3c113e1b321f880c75b9bf88d1f3337e` (`49e5c79514ba19ae84015cfdeb9b96b0caab001e`); implementation test checkpoint was `074bde4eaae0c59e8acd59efd5f5022134e57295`. The original local history is preserved on `checkpoint/ownpath-experience-translator-local`. Initial automatic approval rejection is historical; after explicit approval, Git CLI publication lacked credentials, so the authenticated GitHub connection published the verified tree. No merge/deploy, research or provider approval was supplied. Later documentation-only commits may advance branch HEAD; PR checks report the exact current SHA.
+**Verified code/test checkpoint:** `a7260d58a738057c77a7b7723829dcb72a7d2e39`, tree `d0371842707c9196717bd19a2cac71d99d431af8`, on `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1). Both [Quality push](https://github.com/EnzoReacher/EXE/actions/runs/38199040243) and [Quality PR](https://github.com/EnzoReacher/EXE/actions/runs/38199044082) passed. [Synthetic acceptance run 38199040491](https://github.com/EnzoReacher/EXE/actions/runs/38199040491) completed successfully for that exact SHA. A subsequent documentation-only commit may advance HEAD; it does not replace this tested code checkpoint.
 
-## Observed repository state / base decision
+The owner approved branch publication and draft PR on 2026-10-12. No merge, deployment, paid provider or real-research approval is inferred from that publication approval.
 
-- Repository: `EnzoReacher/EXE`, default branch `main` at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`; main is the older documentation foundation, not the cumulative app.
-- Fresh `git fetch origin`, connector repo/branch queries and local branch/history inspection confirmed cumulative `codex/exe-m17-survey-readiness` at **`ae2527633733fc5081a96ecb2c16e09081a8c878`**. It contains M18 `ec563c8666cc5ddae14949586b542334a096750e` and later survey/status work. This is the selected base, not an assumed M18 HEAD.
-- New isolated worktree `/workspace/scratch/beb51ea3bd99/EXE`, branch **`feat/ownpath-experience-translator`**. Original clean M17 checkout was not switched; original dirty M15 snapshot and its modified/untracked files were not changed.
-- Pre-change GitHub Quality run [37427631042](https://github.com/EnzoReacher/EXE/actions/runs/37427631042) passed on M17 `ae25276`. Historical CI is not proof of this feature's acceptance. New Quality runs [push](https://github.com/EnzoReacher/EXE/actions/runs/38197145020) and [draft PR](https://github.com/EnzoReacher/EXE/actions/runs/38197173911) were observed running on published checkpoint `21845b1`; terminal results and current-head checks are reported in PR #1/final handoff.
-- Eight existing migrations retained unchanged. No DB/Storage/RLS/Auth API modifications. Existing exact-excerpt and credential/export acceptance rules preserved.
-- Installed stack: Next 16.3.7, React 19.2.8, TypeScript 5.9.3, Supabase JS 2.117.2/SSR 0.12.7, pnpm 11.25.0, Vitest 5.0.2, Playwright 1.61.1. Read installed Next docs for client boundaries/forms/pages/headers before coding. Actual PostgreSQL server and owner OpenCode versions were not available.
+## Audited base and preservation
+
+- Repository `EnzoReacher/EXE`; default `main` remains the older foundation at `d956118e3b89eb1fdcfd10fb48a45ba150fec20a`.
+- Selected cumulative base `codex/exe-m17-survey-readiness` is `ae2527633733fc5081a96ecb2c16e09081a8c878`; it already includes M18 `ec563c8666cc5ddae14949586b542334a096750e` and later survey/status work. Main is not the review base.
+- Isolated worktree `/workspace/scratch/beb51ea3bd99/EXE`. Original clean M17 checkout and dirty M15 modified/untracked work remain preserved.
+- Initial published snapshot `21845b1e3cdf89be9fdcee04d3a6754bbdada0e7` exactly matched local snapshot `c7edaaea3c113e1b321f880c75b9bf88d1f3337e`, tree `49e5c79514ba19ae84015cfdeb9b96b0caab001e`. Original local histories remain on checkpoint branches; the OP-11 local commit `69fb7514abac79a798bd69e4e37ac896cebc9103` has the exact accepted remote tree and is preserved as `checkpoint/ownpath-op11-local`.
+- Eight migrations retained unchanged. No Auth behavior/API/DB/Storage/RLS implementation change. Existing exact-excerpt and credential/export acceptance rules remain intact.
+- Stack: Next 16.3.7, React 19.2.8, TypeScript 5.9.3, Supabase JS 2.117.2/SSR 0.12.7, pnpm 11.25.0, Vitest 5.0.2, Playwright 1.61.1. Installed Next docs were read before code changes and production-build harness design. Disposable CI used Supabase CLI 2.119.0; owner PostgreSQL/OpenCode configuration remains unseen.
 
 ## Delivered
 
-1. OwnPath branding, primary Translator landing/demo route, existing private features retained.
-2. `/experience-translator`: bounded project/JD → selected questions/skip → exact-source personal fact confirmation → 0–3 English local-template bullets → source/JD relevance → edit/reject/regenerate → individual acceptance → copy/local TXT → clear. No CV prerequisite, database save, external provider or URL fetching.
-3. Provenance/schema/template guards, negation/actor/instruction constraints, contextual technology links, frozen adapter inputs, timeout/abort/bounded retry, stable regeneration. Edited text is human wording, with approval invalidated; detached edits retained without current provenance.
-4. PRD/frozen scope/persona/JTBD, ADR/reuse/contracts/threat model/data relationships, seven Mermaid diagrams (four in FLOWS, two in ARCHITECTURE, Gantt in BACKLOG), dependency issues/estimates/rollback/gates, research instruments, alternative source observations, test plan, demo/pitch and handoff.
-5. Version-aware Factory installer: four roles and four commands, V1/V2 templates, no overwrite of differing configs/AGENTS, symlink refusal, dry-run/idempotency, read-only reviewers, restricted writer, env/PEM read denial, grep disabled, shell approval for executing writable scripts. **Prepared, not installed in OpenCode here.**
+1. OwnPath branding and primary Translator landing/demo route; existing private features retained.
+2. `/experience-translator`: one bounded project/JD → selected questions/skip → exact-source personal fact confirmation → 0–3 grounded English local-template bullets → source/JD relevance → edit/reject/regenerate → individual acceptance → copy/local TXT → clear. No CV prerequisite, database save, external model or URL fetching.
+3. Schema/provenance/template guards, negation/actor/instruction constraints, contextual technology links, frozen adapter snapshots, timeout/abort/bounded retry and stable regeneration. Editing invalidates approval; detached revisions survive without false current provenance.
+4. PRD, ADR/reuse/contracts/threat model, seven Mermaid diagrams, issue dependencies/estimates/ownership/rollback, research instruments, alternative source observations, demo and handoff.
+5. Version-aware OpenCode Factory installer: four roles/four commands, V1/V2 templates, idempotent dry-run/install, differing-config/symlink refusal, root AGENTS preservation, restricted writer/read-only reviewers. Actual V1 discovery/loaded permissions passed; owner-local execution remains a separate check.
+6. Scoped feature CI: compiled Translator desktop/mobile-width browser journeys plus reusable disposable Supabase policy and legacy browser regression. Legacy Auth test locators now match OwnPath branding/navigation; app Auth behavior was not changed.
 
-## Fresh validation
+## Actual validation
 
-| Check actually executed | Result / boundary |
+| Executed check | Result and boundary |
 |---|---|
-| `pnpm install --frozen-lockfile` | Passed; dependency lock unchanged. Initial offline attempt failed due absent cached metadata, then normal installation passed supply-chain policy. |
-| Pre-change `pnpm test`, `pnpm lint` | Passed: 349 tests / 48 files; lint clean. |
-| Final `pnpm test` | **Passed: 403 tests / 51 files** (54 new tests). Includes old unit/integration/component regression. No external model calls. |
-| Independent QA targeted Vitest | **Passed: 54 tests / 3 files**, read-only reviewer; no unresolved blocker in synthetic scope. |
-| `pnpm lint`, `pnpm typecheck` | Passed. Fresh build additionally completed TypeScript checks. |
-| `pnpm build` | Passed; `/experience-translator` built, existing routes retained. Build output is not a deployment. |
-| Translator Playwright `--list` | Config/test discovery passed for four viewport cases; no browser body executed. Existing reporter's 'passed' listing output is not browser acceptance. |
-| CP2 collected-register validator | Passed structural checks: 9 rows, 0 owner-reviewed, 9 pending. |
-| Source-log validator with explicit file | Passed completeness checks; 2 new provisional official-page observations, original publication metadata unknown, not new register evidence. |
-| `node --check scripts/setup-ownpath-factory.mjs`, `git diff --check` | Passed. |
-| `node scripts/setup-ownpath-factory.mjs` | Controlled exit 1: OpenCode absent, no configuration activated/written. Installer behavior covered by tests. |
-| `pnpm test:translator:browser` | **Not run**: no Chromium installation/approved browser surface. Four loopback-only desktop/mobile tests implemented. |
-| `pnpm test:e2e:local`, `pnpm test:supabase:local` | **Not run**: no Docker/local Supabase/browser available; no migration or policy changed. Historical backend passes are not current passes. |
-| Physical mobile keyboard / screen reader / manual owner walkthrough | Not performed. |
-| Feature GitHub Actions / draft PR | Draft PR #1 created after explicit owner approval. Quality push/PR runs started for the verified published snapshot; inspect current-head checks for terminal results. Backend/browser workflow is not automatically triggered on this feature branch. |
+| Frozen dependency installation | Passed locally and on CI; lock unchanged. |
+| Pre-change tests/lint | Historical baseline: 349 tests / 48 files passed. |
+| Full current tests | **406 tests / 52 files passed**, locally, Quality CI and disposable backend engineering verification. Includes 54 Translator/Factory tests plus 3 new harness/reporter boundary checks. |
+| Lint, typecheck, production build | Passed locally/CI. Compiled Translator job independently built unchanged isolated source. No deployment. |
+| Independent QA | Prior 54 targeted tests / 3 files passed; new acceptance diff and actual V1 normalized permissions reviewed read-only. No unresolved concrete blocker in synthetic scope. |
+| Compiled Translator Chromium | **4 actual browser journeys, 20 named steps passed** at 320/375/768/1440px. Intake, fact confirmation, keyboard approval, edit invalidation, regenerate/preserve/reset, accepted-only exact TXT bytes, overflow on all screens, heading focus, no-store, clear/reload. Exact-origin GET allowlist, blocked-attempt/socket/page-error failure and source sentinel checks passed. No screenshots/traces/videos. Owned browser/server/download/output scope cleaned. |
+| Real local Supabase policies | **Passed** on disposable CI stack: M1–M6b ownership/private Storage/cascade checks; M15 atomic rollback, concurrency retry, exact provenance, accepted-draft preservation; M11A assigned-expert/immutable credential/acceptance/withdrawal policies. Fictional actors only. |
+| Legacy Auth/core/credential browser | **Passed**: cold/warm sign-in, sign-out/protected routes, signup/session, anonymous denial, core save/reopen/feedback/revocation/cascade, expert review, accepted export and withdrawal/stale-export denial. This existing harness uses a dev server, separately from compiled Translator acceptance. Current-run browser accounts/private objects cleaned. |
+| Proof-preview and workspace browser | **Passed** separate fictional suites, including responsive and keyboard checks. |
+| Disposable stack teardown | **Passed** `supabase stop --no-backup`; temporary startup/stop logs and `.env.local` removed. M1 policy Auth accounts survive until this stack teardown, not per-test deletion. |
+| CP2 register/source structure | Passed. Register remains 9 public-source rows, 0 owner-reviewed, 9 pending. Provisional Rezi/Teal source-log observations are not participant evidence. |
+| OpenCode 1.18.35 configuration | **Passed actual runtime discovery**: four agents/four commands, command→Lead binding, modes and normalized permissions via `agent list --pure`, `debug config --pure`, `debug agent <role> --pure`. Isolated settings, no credentials/model tasks. Runtime tool-output external-directory exception documented. V2 and owner-local permission execution not tested. |
+| Physical mobile keyboard, screen reader, 200% zoom, owner walkthrough | **Not performed**. Responsive Chromium widths do not substitute for these. |
+| Real usability/research, paid provider, merge/deploy | **Not performed / not approved**. |
 
-Initial lint found one unescaped JSX apostrophe; corrected. Adversarial QA exposed actor/curly-negation/authoring/technology/reference/error-target/React.js and stale-edit defects that initial tests missed. All were fixed with regressions before final green results. The final fixture result is not a guarantee of universal semantic correctness.
+The acceptance workflow records all six backend commands as PASS: `review:verify`, `test:supabase:local`, `test:e2e:local`, `test:proof-preview`, `test:workspace-ui`, `cp2:validate`. Both jobs and their cleanup steps passed. Work itself did not install/run Chromium or start a preview/database; browser infrastructure ran on disposable GitHub runners.
 
-## Research / gates
+Earlier adversarial review exposed actor/curly-negation/authoring/technology/reference/error-target/React.js and stale-edit defects; meaningful regressions fixed them before green results. This turn corrected stale legacy Auth locators before running real browser acceptance. A controlled fixture pass is not universal semantic correctness.
 
-| Gate | State |
+## Gates and next work
+
+| Gate / issue | Current state |
 |---|---|
-| A Repo audit | Observed, complete for accessible repo/CI/source; local owner runtime unseen |
-| B Scope/research | Owner handoff supplies planning direction and synthetic authorization; formal CP2/production approval remains pending |
-| C Architecture/design | Documented proposed design, synthetic in-memory implementation; owner design acceptance pending |
-| D Controlled feature tests | Passed in synthetic fixtures; no unsupported claims in that tested set |
-| E Independent QA/security | Synthetic code review passed; browser/mobile and real-stack acceptance outstanding |
-| F Release | Draft review branch only; owner merge/deploy decision absent |
+| A / OP-00 audit | Accessible repo/base/CI/reuse observed; V1 Factory config loading verified. Owner global/runtime execution unseen. |
+| B / OP-01–02 scope/research | Synthetic scope authorized. Formal CP2, consented interviews, real workaround trials and evidence review pending. |
+| C / OP-03 design | Proposed architecture and in-memory slice documented. Production persistence/provider design acceptance pending. |
+| D / OP-04–10 controlled feature | Implemented; current unit/component and compiled-browser acceptance passed. |
+| E / OP-11 independent QA/security | Automated acceptance complete, including real disposable policies and regression. Manual accessibility/device checks open. |
+| OP-12 usability | Actual counterbalanced observations and accuracy/time/edit comparison pending; no participant outcomes invented. |
+| OP-13 demo/handoff | Synthetic engineering candidate and deterministic demo ready. Final study-backed release decision still depends on OP-12/owner. |
+| F / release; OP-14 provider | Draft review branch only. No merge/deployment or approved model/budget/real-data retention. |
 
-Existing CP2 register: nine public-source rows, zero owner-reviewed; no recorded real TU/EX/SV results. New Rezi/Teal public-page observations are provisional source-log items, not participant evidence or approval. No audio transcript supplied/verified. Actual owner signature/date fields in M10 remain blank. No recruitment messages sent.
+No real TU/EX/SV results, verified mentor transcript, recruitment messages or owner signatures were added. Inputs/edits remain React memory; reload/clear discards them. Clipboard/TXT are deliberate user actions. Existing configured Supabase navigation proxy may refresh Auth but does not receive Translator input. Templates may omit genuine facts; there is no general AI translation or arbitrary-model fact verifier.
 
-## Material limits and next task
-
-- Narrow deterministic grammar may omit genuine facts or produce fewer bullets. Templates provide no general AI translation or arbitrary-model semantic verification. Do not advertise an AI model that has not been approved/wired.
-- Inputs/edits remain in React memory. Clipboard/TXT are user actions; reload/clear discards session. Supabase proxy can refresh existing Auth on navigation if configured, but does not receive project/JD input. Production retention/backup remains unreviewed.
-- OP-00/01/03 planning + OP-04–10 synthetic slice are prepared/implemented; OP-11 code checks/review passed with browser/backend limits. OP-02 real research/alternative trials, OP-12 actual usability and OP-14 provider remain pending. OP-13 synthetic demo/handoff ready; real release blocked.
-- Next: **OP-11 owner-local browser/Factory acceptance**, then actual user research/course decision. Use HANDOVER and AI_FACTORY_RUNBOOK exact commands. Preserve existing local worktrees; no main merge, deployment, paid model connection or real data introduced by this work.
+Next follow the existing lifecycle: review this concrete engineering candidate, use RESEARCH_PLAN for actual consented OP-02/12 evidence, perform outstanding manual checks, and make the separate release/provider decision when that evidence exists. Continue bounded synthetic fixes if actual findings arise; do not repeat completed acceptance as if it were pending.
