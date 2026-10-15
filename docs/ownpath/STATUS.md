@@ -35,7 +35,7 @@ Owner authorized execution of the approved plan and specified two other frontend
 
 Intermediate checks are not final evidence: a check before all deletions were reflected still included legacy APIs and passed 435 tests; a partial-retirement attempt then failed two suites importing removed handlers (400 assertions passed). Completed/staged all 23 removals, preserved the mixed print-route coverage, and reran the final retained suite successfully. No assertion was removed merely to conceal a retained runtime failure.
 
-Current candidate CI/publication is recorded below after publication; historical green at the starting SHA is not a new-candidate CI pass. Two commits separate shareable ownership/factory tooling from API retirement for coordinated integration.
+Published to existing draft PR #2 without changing its integration base. Shareable tooling commit: `74b11d2330696490dc1433d6a1e0c0e07c40e3ae`. Verified API retirement source: `b515ff1d75781b6033ceaf81ced744d2cecf8da5`, tree `74b3fc30493b323192339baf8ef6ec2b574aea88`; published tree was compared with the local candidate index before ref update. Fresh [Quality PR run 38699141055](https://github.com/EnzoReacher/EXE/actions/runs/38699141055) completed successfully for that exact source SHA. Backend worktree was clean and synchronized after publication; no integration/main merge or deployment. A later docs-only checkpoint records these results and does not imply another browser execution. These two implementation commits separate shareable ownership/factory tooling from API retirement for coordinated integration.
 
 ## Current core-only continuation: CF-00–03
 

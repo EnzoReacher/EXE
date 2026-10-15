@@ -10,6 +10,8 @@ Fresh results: baseline 429/55; candidate 403/52; lint/types/build and ownership
 
 Next: frontend owners take FE1-CF04B and FE2-CF06-UI task cards. Keep backend retirement staged; obtain separate review, rerun compiled browser acceptance where Chromium is available, combine page removal, then audit consumers before any library/Auth/package/proxy/config cleanup. Actual manual acceptance/research/release remain open.
 
+Published source checkpoint: `b515ff1d75781b6033ceaf81ced744d2cecf8da5` in draft PR #2; fresh Quality PR run `38699141055` passed. Tooling-only predecessor `74b11d2330696490dc1433d6a1e0c0e07c40e3ae` can be adopted separately for coordination. Subsequent publication-evidence edits are docs-only. Branch remains `feat/ownpath-backend` targeting integration, with no merge/deploy.
+
 ## Current continuation — 15 October 2026
 
 Owner decision supersedes old preserve-all-routes guidance: reduce the active app to the Experience Translator journey. Current personal branch `feat/ownpath-backend` starts at integration `d1ec1a076155b76a503693ff9fe411b933b62f8c`, in `/home/enzoreacher/EXE-ownpath-backend`; original `/home/enzoreacher/EXE` remains at clean M17 `ae25276`. New PRs target `feat/ownpath-experience-translator`. Existing PR #1 remains draft against `codex/exe-m17-survey-readiness`.
