@@ -1,5 +1,15 @@
 # OwnPath handoff
 
+## Active backend-only build — CF-04A
+
+The owner instructed starting the approved plan with two frontend developers. Continue backend `feat/ownpath-backend`, PR #2 → `feat/ownpath-experience-translator`; [TEAM_WORKFLOW](TEAM_WORKFLOW.md) is the file-ownership and combined integration contract. No frontend file is edited by this slice. Do not integrate API retirement without matching frontend page removal.
+
+Implemented: 17 legacy API handlers removed, six API route test files retired and three still-relevant print-route cases relocated to `src/lib/cv-export/print-route.test.ts`. Existing domain/Auth/proxy/packages/config/CI/migrations remain. Added backend/shell/Translator ownership preflight and 119-check compiled retired-API acceptance. Factory engineer templates now target backend roots, exclude both frontend owners and explicitly freeze shared types; setup still refuses differing installed profiles.
+
+Fresh results: baseline 429/55; candidate 403/52; lint/types/build and ownership passed; owned compiled server served landing/Translator and returned intended absence for 17 API patterns × 7 methods. Chromium installation failed (invalid/truncated archive), so full browser journey is not freshly verified. OpenCode is absent; no model task/delegation/runtime permission acceptance or independent review occurred. See current STATUS for failed attempts and provenance.
+
+Next: frontend owners take FE1-CF04B and FE2-CF06-UI task cards. Keep backend retirement staged; obtain separate review, rerun compiled browser acceptance where Chromium is available, combine page removal, then audit consumers before any library/Auth/package/proxy/config cleanup. Actual manual acceptance/research/release remain open.
+
 ## Current continuation — 15 October 2026
 
 Owner decision supersedes old preserve-all-routes guidance: reduce the active app to the Experience Translator journey. Current personal branch `feat/ownpath-backend` starts at integration `d1ec1a076155b76a503693ff9fe411b933b62f8c`, in `/home/enzoreacher/EXE-ownpath-backend`; original `/home/enzoreacher/EXE` remains at clean M17 `ae25276`. New PRs target `feat/ownpath-experience-translator`. Existing PR #1 remains draft against `codex/exe-m17-survey-readiness`.

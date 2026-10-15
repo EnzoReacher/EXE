@@ -1,5 +1,42 @@
 # OwnPath implementation status — 2026-10-15
 
+## Active CF-04A backend candidate — three-person build
+
+Owner authorized execution of the approved plan and specified two other frontend developers. This session cloned `feat/ownpath-backend` into an isolated Work checkout from `3223484b78c05784112de48810ecc72c2c2a2860`. Clean initial git status and recent log inspected. GitHub PR #2 remained open/draft against integration `d1ec1a0`; exact-head PR Quality run `38682665717` was freshly observed successful. Only backend/integration OwnPath branches were published at this refresh; frontend local work is unknown. The owner's original machine/worktrees were not available and were not modified.
+
+### Implementation and integration boundary
+
+- Removed all 17 inventoried legacy `src/app/api/**/route.ts` handlers and six API test files. Three print-route cases from the mixed export suite were relocated to `src/lib/cv-export/print-route.test.ts` because the frontend-owned print route remains active.
+- Preserved every frontend page/component/style, existing domain implementation, shared types/adapter, Auth/proxy, root package/lock/config/CI and applied migration. No database operation or new app/API/provider was introduced.
+- Added `check-ownpath-ownership` preflight, covering committed/staged/unstaged/untracked paths and both sides of renames against an explicit baseline. Backend, shell and Translator roots are disjoint; root/shared tooling and types are reserved.
+- Added `check-ownpath-retired-apis`: verifies source/build handler absence and probes 17 fictional route patterns over seven HTTP methods on a disposable numeric loopback server. Redirects, successful legacy responses, authorization-only responses and 500s fail.
+- Updated version-aware factory templates to a backend-only engineer and explicit shared-type edit deny. Added policy regressions for both template versions; real resource matching is not established by these tests.
+- [TEAM_WORKFLOW](TEAM_WORKFLOW.md) supplies file ownership, FE1/FE2/backend/integration task cards, frozen contract, branch procedure and combined integration gate. No teammate messages sent or acknowledgment invented.
+
+**Staged backend candidate only:** old frontend source still calls retired APIs. Do not merge/deploy API removal alone. Frontend owners must supply matching page/navigation removal before combined acceptance and later library/Auth/package/config cleanup. CF-04 overall and CF-05–09 remain pending.
+
+### Fresh verification
+
+| Check | Actual result |
+|---|---|
+| Frozen install | PASS; Node 24.19.0 / pnpm 11.25.0; manifest/lock unchanged |
+| Unchanged baseline full suite | PASS: 429 tests / 55 files |
+| Focused ownership/retirement/factory tests | PASS: 21 tests / 4 files |
+| Final retained suite | PASS: 403 tests / 52 files: baseline minus 35 retired cases, plus six guard/template cases and three relocated print cases |
+| `pnpm lint`, `pnpm typecheck` | PASS |
+| `pnpm build` | PASS: no `/api/**` route in compiled route inventory; legacy pages/Auth/print/proxy remain intentionally |
+| Backend ownership guard against full starting SHA | PASS; no frontend/shared-config/type edit |
+| Owned compiled HTTP checks, no service/provider env | PASS: landing and Translator HTTP 200, landing Translator CTA; 17 patterns × seven methods = 119 absence checks, all 404/405; server stopped in finally |
+| `git diff --check` | PASS |
+| OpenCode setup/runtime | BLOCKED: executable absent; setup exits without generating profiles |
+| Fresh compiled Chromium journey | BLOCKED: browser installation failed with invalid/truncated download archives; no cached/system Chromium available. No bypass of the CI-only harness |
+| Legacy real-stack/browser suite | NOT RUN: API retirement intentionally invalidates old browser flows; workflows untouched until coordinated integration cleanup |
+| Separate review / actual devices / screen reader / zoom / real clipboard denial | NOT RUN; self-review only |
+
+Intermediate checks are not final evidence: a check before all deletions were reflected still included legacy APIs and passed 435 tests; a partial-retirement attempt then failed two suites importing removed handlers (400 assertions passed). Completed/staged all 23 removals, preserved the mixed print-route coverage, and reran the final retained suite successfully. No assertion was removed merely to conceal a retained runtime failure.
+
+Current candidate CI/publication is recorded below after publication; historical green at the starting SHA is not a new-candidate CI pass. Two commits separate shareable ownership/factory tooling from API retirement for coordinated integration.
+
 ## Current core-only continuation: CF-00–03
 
 **Completed first cleanup slice: isolate shared requirement extraction.** Core-only pruning is authorized by the owner; actual route/API/package removal remains CF-04–05, pending the coordinated frontend patch boundary in [BACKLOG](BACKLOG.md). The historical prototype results below remain dated evidence.

@@ -1,5 +1,20 @@
 # Execution backlog and estimated roadmap
 
+## Active three-person execution — CF-04A
+
+Owner approved starting the plan on 15 October with two separate frontend developers. [TEAM_WORKFLOW](TEAM_WORKFLOW.md) assigns disjoint backend/shell/Translator roots, preserves the types contract and defines the combined integration gate. Their local state/acknowledgment is still unknown.
+
+- [x] Refresh published backend PR/head and reproduce baseline: 429 tests / 55 files.
+- [x] Prepare ownership preflight, backend-only factory templates and ready task cards for both frontend developers. Templates are tested; actual OpenCode activation remains unavailable here.
+- [x] CF-04A implementation: retire 17 API handlers and six API test files; relocate three retained print-route cases. All frontend source and existing domain libraries remain untouched.
+- [x] Backend candidate verification: 403 tests / 52 files, lint/types/build, ownership check, 119 compiled API absence checks, landing/Translator HTTP smoke.
+- [ ] Separate reviewer acceptance; this execution has self-review only.
+- [ ] Fresh compiled Chromium journey: download failed in this environment; prior browser passes are historical.
+- [ ] FE1-CF04B legacy pages/navigation removal and FE2 retained-UI review by frontend owners.
+- [ ] Combined integration followed by CF-04C/05 consumer/Auth/package/config retirement.
+
+CF-04 as a whole and CF-05–09 remain open. Do not merge/deploy API retirement alone: preserved legacy pages still call the retired endpoints. Tooling/docs can land separately from API retirement so frontend branches can share the guard without losing their old APIs early.
+
 ## Core-only execution tracker — 15 October 2026
 
 This owner-authorized reduction supersedes older preserve-all-modules instructions and the historical ten-day estimate below. One writer: backend owner/OpenCode on `feat/ownpath-backend`. Integration/PR base: `feat/ownpath-experience-translator`; never reset an existing personal branch. The first slice isolates the shared extractor; product removal remains pending.
