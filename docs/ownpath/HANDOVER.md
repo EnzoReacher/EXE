@@ -2,6 +2,8 @@
 
 Published branch: `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1), based on cumulative M17 `ae2527633733fc5081a96ecb2c16e09081a8c878`. **Automated acceptance checkpoint is `d2979c6a8c074dabe245ba5fa79991d65ae6de93`**, tree `10b12995c74476b99cf5353367b07d52f190181d`: 429 tests / 54 files, lint/types/build, seven compiled Translator cases / 30 steps (four widths plus keyboard-only, injected clipboard failure and long-source layout) and disposable Supabase/legacy regression all passed. See [acceptance run](https://github.com/EnzoReacher/EXE/actions/runs/38219710485) and [STATUS](STATUS.md) for exact Quality runs and boundaries. Documentation-only follow-ups may advance HEAD. Original worktrees/local histories are preserved. Owner approved branch publication/draft PR; merge, deployment, research and provider decisions remain separate. [BACKLOG](BACKLOG.md) records issue dependencies/file ownership.
 
+Reference review: [F-Career Bridge QN](REFERENCE_REVIEW_FCAREER.md) records reusable safeguards and scope decisions. No F-Career product code or stack was copied into the prototype.
+
 ## Earlier local patch handoff (optional)
 
 The previously supplied `OwnPath_Translator_2026-10-12.zip` preserves the initial local snapshot and its historical publication-blocker note. Prefer the published branch below for current documentation. If using the archive offline, follow README_APPLY, start from the exact audited base and run `git apply --check`; preserve current modified/untracked work. The patch contains no dependencies, environment settings or Git credentials.
