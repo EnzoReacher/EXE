@@ -1,4 +1,4 @@
-import { extractRequirements } from "@/lib/analysis/requirements";
+import { extractRequirements } from "@/lib/job-description/requirements";
 import type { Answers, Bullet, Fact, FactCode, Intake, PreparedSession, Question, Requirement, Source } from "./types";
 
 export class TranslatorError extends Error {
@@ -38,7 +38,7 @@ export function validateIntake(input: unknown): Intake {
 }
 
 export function extractFrontendRequirements(jd: string): Requirement[] {
-  // Filter negated lines before legacy splitting loses their negative scope.
+  // Filter negated lines before requirement splitting loses their negative scope.
   const safeLines = jd.split(/\n/).filter((line) => !instruction.test(line) && !limiting.test(line.replace(/[’‘]/g, "'")));
   const safeText = safeLines.join("\n");
   // Existing extraction is reused; a narrow fallback supports the golden short JD.

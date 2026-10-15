@@ -1,5 +1,5 @@
 import "server-only";
-import { extractRequirements } from "./requirements";
+import { extractRequirements } from "@/lib/job-description/requirements";
 import { matchRequirements } from "./matcher";
 import { ANALYSIS_PROVIDER_NAME, ANALYSIS_PROVIDER_VERSION, type AnalysisProvider } from "./types";
 

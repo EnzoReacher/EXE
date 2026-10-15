@@ -1,5 +1,5 @@
 import "server-only";
-import { extractRequirements } from "./requirements";
+import { extractRequirements } from "@/lib/job-description/requirements";
 import { localEvidenceProvider } from "./provider";
 import { validateAnalysisOutput } from "./schema";
 import type { AnalysisInput, AnalysisProvider } from "./types";
