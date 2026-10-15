@@ -13,7 +13,7 @@ const golden = () => {
 };
 
 describe("CF-06 backend audit regressions", () => {
-  it.each(["instead of", "rather than"])("rejects exclusion-bearing excerpts: %s", (exclusion) => {
+  it.each(["instead of", "rather than", "as opposed to"])("rejects exclusion-bearing excerpts: %s", (exclusion) => {
     const session = confirmed(`I built product listing using JavaScript ${exclusion} TypeScript.`, "Frontend Developer Intern\nRequirements:\n- JavaScript\n- TypeScript");
     expect(session.facts).toEqual([]);
     expect(composeBullets(session)).toEqual([]);
@@ -24,6 +24,8 @@ describe("CF-06 backend audit regressions", () => {
     "I built product listing using React and Morgan integrated a REST API.",
     "I built product listing using React and Priya handled error handling.",
     "I built product listing using React and Jordan wrote responsive UI.",
+    "I built product listing using React, Alex designed responsive UI.",
+    "I built product listing using React,Alex designed responsive UI.",
   ])("rejects mixed-subject action excerpts without a name blacklist: %s", (project) => {
     const session = confirmed(project, "Frontend Developer Intern\nRequirements:\n- React\n- Responsive UI\n- REST API");
     expect(session.facts).toEqual([]);
@@ -34,6 +36,9 @@ describe("CF-06 backend audit regressions", () => {
     "I built product listing and search using React and JavaScript.",
     "I built product listing using React and implemented search.",
     "I built product listing using React and I designed responsive UI.",
+    "I built product listing using React, I designed responsive UI.",
+    "I built product listing using React,I designed responsive UI.",
+    "I built product listing using React, JavaScript and TypeScript.",
   ])("preserves coordinated personal actions and technology lists: %s", (project) => {
     const session = confirmed(project);
     expect(session.facts.some((fact) => fact.code === "listing")).toBe(true);

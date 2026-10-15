@@ -60,9 +60,9 @@ export function extractPersonalFacts(sources: Source[]): Fact[] {
       const excerpt = match[0].trim();
       const start = (match.index ?? 0) + match[0].indexOf(excerpt);
       const normalized = excerpt.replace(/[’‘]/g, "'");
-      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than)\b|trong khi|nhưng/i.test(normalized)) continue;
+      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than|as opposed to)\b|trong khi|nhưng/i.test(normalized)) continue;
       // Reject ambiguous subject changes for supported personal-action verbs, not names.
-      if (/\band\s+(?!i\b)(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched)\b/iu.test(normalized)) continue;
+      if (/(?:\band\s+|,\s*)(?!i\b)(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched)\b/iu.test(normalized)) continue;
       if (!source.personalContext && /\bteam\b|nhóm/i.test(excerpt) && !/\bi (?:built|developed|implemented|created)\b|(?:mình|tôi|em) (?:tự|phụ trách)/i.test(excerpt)) continue;
       const bare = normalized.replace(/\b(?:and|using|with)\b|và|bằng|[,/]/gi, " ").trim();
       const recognizedList = /^(?:(?:product listing|danh sách sản phẩm|tìm kiếm|search|responsive(?: ui)?|react(?:\.js|js)?|javascript|js|typescript|html|css|rest api|git)\s*)+$/i.test(bare);
