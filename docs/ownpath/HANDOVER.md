@@ -1,5 +1,17 @@
 # OwnPath handoff
 
+## Current continuation — 15 October 2026
+
+Owner decision supersedes old preserve-all-routes guidance: reduce the active app to the Experience Translator journey. Current personal branch `feat/ownpath-backend` starts at integration `d1ec1a076155b76a503693ff9fe411b933b62f8c`, in `/home/enzoreacher/EXE-ownpath-backend`; original `/home/enzoreacher/EXE` remains at clean M17 `ae25276`. New PRs target `feat/ownpath-experience-translator`. Existing PR #1 remains draft against `codex/exe-m17-survey-readiness`.
+
+First implementation slice: move requirement extraction to `src/lib/job-description/`, migrate its existing three tests there and point both core and legacy consumers at the single implementation. Core public types/props/labels are unchanged. Legacy routes, Auth and packages remain active at this slice. [BACKLOG](BACKLOG.md) contains the keep/cut inventory, CF checklist and exact frontend coordination request; [ARCHITECTURE](ARCHITECTURE.md) freezes the current contract. Fresh execution evidence belongs in the current section of STATUS.
+
+Teammate branches `feat/ownpath-ui-shell` and `feat/ownpath-translator-ui` are not published as of the audit; local-only work is unknown. Frontend owners must reconcile their current local work before the route/shell removal batch. No external team messages sent. Next safe backend work: audit/retire obsolete API handlers and tests in dependency batches while preserving modules still imported by frontend pages. Broad library/package/Auth removal follows the coordinated route patch.
+
+Local OpenCode reports `v2.0.7`. No Factory generated files/settings were installed or changed and no delegation/independent review occurred in this slice. Earlier V1 configuration acceptance below is historical. Physical device, screen-reader, actual zoom, real clipboard denial and owner walkthrough remain pending.
+
+## Historical published prototype handoff
+
 Published branch: `feat/ownpath-experience-translator`; [draft PR #1](https://github.com/EnzoReacher/EXE/pull/1), based on cumulative M17 `ae2527633733fc5081a96ecb2c16e09081a8c878`. **Automated acceptance checkpoint is `d2979c6a8c074dabe245ba5fa79991d65ae6de93`**, tree `10b12995c74476b99cf5353367b07d52f190181d`: 429 tests / 54 files, lint/types/build, seven compiled Translator cases / 30 steps (four widths plus keyboard-only, injected clipboard failure and long-source layout) and disposable Supabase/legacy regression all passed. See [acceptance run](https://github.com/EnzoReacher/EXE/actions/runs/38219710485) and [STATUS](STATUS.md) for exact Quality runs and boundaries. Documentation-only follow-ups may advance HEAD. Original worktrees/local histories are preserved. Owner approved branch publication/draft PR; merge, deployment, research and provider decisions remain separate. [BACKLOG](BACKLOG.md) records issue dependencies/file ownership.
 
 Reference review: [F-Career Bridge QN](REFERENCE_REVIEW_FCAREER.md) records reusable safeguards and scope decisions. No F-Career product code or stack was copied into the prototype.

@@ -1,6 +1,6 @@
 # OwnPath — Experience Translator
 
-Planning direction supplied by the owner on 2026-10-12; synthetic engineering prototype authorized. Formal research/production approval is pending in [the existing decision record](../M10_PRODUCT_DIRECTION_DECISION.md). This document does not fill that approval.
+Current direction: owner-authorized core-only reduction, 2026-10-15. Keep one useful Experience Translator journey; remove unnecessary legacy runtime features after dependency/ownership audit. One to three supporting capabilities is a ceiling, not a feature quota. This supersedes older instructions to preserve every old product route. Formal research/production approval remains pending in [the existing decision record](../M10_PRODUCT_DIRECTION_DECISION.md).
 
 **Turn Your Experience Into Career Value.**
 
@@ -17,6 +17,8 @@ One project text, one pasted Frontend Intern JD, bounded intake, requirement/fac
 Prototype output is deterministic and supports a small vocabulary of frontend actions and technologies in Vietnamese/English. Unknown descriptions fall back to clarification, never invented translation. Inputs and edits stay in React memory; closing/reloading clears them. Only explicitly accepted text can be copied/downloaded as TXT. No database save or existing credential/export integration.
 
 Deferred: external model, paid APIs, real user data, persistence/export to CV, production launch. Excluded: Career GPS, NextMove, ProofLoop/ProofSprint, RealityLab, SkillPassport, mentors, job board, scraping, career chatbot, hiring probability, subscriptions, all industries, native mobile, Factory dashboard.
+
+The retained capabilities are guided intake/fact confirmation, JD-relevant grounded drafting, and review/accepted-only output. CV upload/parsing, generic assessment/scoring, roadmap, opportunities, saved-work, expert/share/credential flows and full-document export are scheduled for actual source removal. Auth/Supabase may be removed only after their consumers are retired. No new server, database, login or provider is required. Applied migrations and historical research/evidence remain preserved. [BACKLOG](BACKLOG.md) records the staged inventory and frontend ownership boundaries; the first extraction slice does not itself retire those routes.
 
 ## Acceptance
 

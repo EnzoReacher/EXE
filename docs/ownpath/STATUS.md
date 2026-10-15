@@ -1,4 +1,46 @@
-# OwnPath implementation status — 2026-10-12
+# OwnPath implementation status — 2026-10-15
+
+## Current core-only continuation: CF-00–03
+
+**Completed first cleanup slice: isolate shared requirement extraction.** Core-only pruning is authorized by the owner; actual route/API/package removal remains CF-04–05, pending the coordinated frontend patch boundary in [BACKLOG](BACKLOG.md). The historical prototype results below remain dated evidence.
+
+### Refreshed baseline and preservation
+
+- Started in clean `/home/enzoreacher/EXE` on `codex/exe-m17-survey-readiness`, HEAD `ae2527633733fc5081a96ecb2c16e09081a8c878`, no modified/untracked files. One existing worktree; no existing local backend or frontend team branches. Original checkout preserved.
+- `git fetch origin`, remote branch listing and GitHub PR/run inspection confirmed integration still at `d1ec1a076155b76a503693ff9fe411b933b62f8c`. Only published `feat/ownpath-*` branch is integration; teammates' local-only work is unknown. PR [#1](https://github.com/EnzoReacher/EXE/pull/1) remains open/draft with base `codex/exe-m17-survey-readiness`; no retarget/merge.
+- Latest historical integration [Quality PR run](https://github.com/EnzoReacher/EXE/actions/runs/38676238316) and [push run](https://github.com/EnzoReacher/EXE/actions/runs/38676230646) succeeded at `d1ec1a0`. These precede this extraction.
+- Created `feat/ownpath-backend` from refreshed integration in `/home/enzoreacher/EXE-ownpath-backend` and moved this OpenCode session there. Personal PR base is integration. No other worktree/branch was edited.
+- Local Node `v24.19.0`, pnpm `11.25.0`, OpenCode `v2.0.7`. `pnpm install --frozen-lockfile` passed without package/lock changes; installed versions match the handoff (Next 16.3.7, React 19.2.8, TypeScript 5.9.3, Vitest 5.0.2, Playwright 1.61.1). Read project instructions/source/docs, proxy/header config and all three CI workflows; installed Next project-structure/header guides consulted. No Factory configuration installation/change, delegation or independent review performed.
+
+### Implemented scope and contract
+
+- Moved `src/lib/analysis/requirements.ts` to `src/lib/job-description/requirements.ts`, retaining the algorithm unchanged. Updated core engine, legacy analysis provider/workflow and demo-fixture imports to that single implementation.
+- Moved the existing three extractor tests into `job-description/requirements.test.ts` so future analysis deletion preserves them. No assertions removed; no compatibility duplicate left behind.
+- Updated PRD/README/architecture/backlog/handoff for the 15 October decision, keep/cut/dependency inventory, CF checkbox tracker and concrete frontend coordination list. Current type/adapter/error/state/memory contract recorded in ARCHITECTURE.
+- Frontend-owned source, props/types/adapters/accessible labels untouched. No routes/APIs/packages retired in CF-03; build still lists legacy routes and the Auth proxy. No migration/data changes. This is a prerequisite cleanup, not completion of the smaller runtime.
+
+### Fresh checks on the extraction candidate
+
+Verified source commit: `f3ed7ad` (`refactor(ownpath): isolate shared job requirement extraction`). Subsequent first-slice commits update documentation only.
+
+| Command / check actually run | Result |
+|---|---|
+| `pnpm install --frozen-lockfile` | PASS; lockfile unchanged |
+| Before extraction: `pnpm exec vitest run src/lib/analysis/analysis.test.ts src/lib/experience-translator/engine.test.ts src/app/experience-translator/translator.test.tsx` | PASS: 66 tests / 3 files |
+| After extraction: same targeted tests plus `src/lib/job-description/requirements.test.ts` | PASS: 66 tests / 4 files |
+| First full-suite attempt | FAIL: stale `analysis/requirements` import in `scripts/demo-fixture.test.mjs`, 428 tests passed / one suite failed to import; build not reached. Updated that import, keeping its assertion |
+| Final `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` | PASS: 429 tests / 55 files; production compilation completed. Extra file is the relocated extractor test group; total test count unchanged |
+| `pnpm test:translator:browser` against this `pnpm build`, cached Chromium | PASS: seven executed cases / 30 named steps, 320/375/768/1440 widths, keyboard, injected clipboard rejection, long content, exact TXT/approval/edit/regeneration/clear/reload/traffic guards. Owned loopback compiled server on port 53431, no Auth/provider settings, stopped in `finally`; no Supabase/browser install or CI-only harness bypass |
+| `git diff --check` | PASS |
+| `pnpm cp2:validate` | PASS structure only: 9 rows, 0 owner-reviewed, 9 pending; no research outcome established |
+
+No fresh disposable Supabase/legacy real-stack acceptance was run; runtime consumers remain, but this slice only relocates the pure shared helper and tests. No actual device, screen-reader, 200% zoom, real clipboard permission denial, owner walkthrough or participant study result is supplied. Browser rejection is injected. CF-07 reduced-product route-removal acceptance remains pending. Source publication/checkpoint is recorded in the first-slice draft PR; later docs-only changes do not imply a new browser execution.
+
+### Next bounded work
+
+CF-04: audit/retire obsolete API handlers and exclusive tests in feature-sized batches, preserving libraries still imported by legacy frontend pages. Owner coordinates the explicit obsolete route/navigation patch in BACKLOG with frontend owners before page/component removal. Then remove unused runtime libraries/packages/proxy/config and obsolete CI/harnesses together; retain core quality/browser/security gates. Final reduced suite, compiled acceptance and retired route/API absence checks follow that candidate. Physical/manual/research/owner decisions remain open.
+
+## Historical prototype status — 12 October 2026
 
 The synthetic Translator vertical slice and **OP-11 automated acceptance are complete**. This is an engineering review candidate, not a production release, completed user study, external AI-provider integration or course approval.
 
