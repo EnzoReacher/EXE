@@ -1,5 +1,15 @@
 # Execution backlog and estimated roadmap
 
+## Current owner priority — debugging only
+
+Audit at `7d7d401` reproduced two grounding defects outside the passing 424-test suite and one shell-test ownership gap. Owner approved debugging first, leaving remaining work to others. Execute [OPENCODE_DEBUGGING](OPENCODE_DEBUGGING.md); tasks are not yet fixed by this handoff.
+
+- [ ] DBG-01: Vietnamese mixed-actor text must not offer another person's search work as the student's fact or bullet.
+- [ ] DBG-02: personal `React or TypeScript` alternatives must not become a claim of both technologies.
+- [ ] DBG-03: shell owner can edit its agreed landing/layout tests, preserving all other ownership denials.
+
+Backend writer scope: engine/grounding tests, ownership guard/tests and canonical evidence docs only. Red/green regression, positive controls, full retained checks, compiled acceptance and actual separate QA complete this batch. Frontend/integration/Auth/package/CI cleanup, broader V2 verification and release remain outside it.
+
 ## Owner-local continuation — CF-06-BE / CF-07-BE
 
 Fixed task baseline: `bdc77d0dd01d685f93e410d6a95c86fecf669702` after clean, non-divergent fast-forward from `3223484`. Original M17 worktree preserved. Backend/integration are the only published OwnPath branches at refresh; PR #2 remains draft against integration. Baseline Quality runs `38705343799` / `38705336526` passed. This baseline must not move to conceal scope changes.

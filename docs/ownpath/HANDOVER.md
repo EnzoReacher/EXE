@@ -1,5 +1,9 @@
 # OwnPath handoff
 
+## Active next run: debugging only
+
+Owner approved DBG-01/02/03 first; use [OPENCODE_DEBUGGING](OPENCODE_DEBUGGING.md). Fix reproduced Vietnamese actor attribution, technology-alternative grounding and shell-test ownership allowance through OpenCode with regressions/positive controls and separate QA. Implementation has not run as part of this instruction preparation. Keep both frontend owners' source untouched and leave later integration/Auth/package/CI/factory-expansion/release work to its assigned owners.
+
 ## Next implementation executor: OpenCode
 
 Owner-local ready tasks in [OPENCODE_NEXT_BUILD](OPENCODE_NEXT_BUILD.md) have now executed. Tested source `7965c2945f8e4acfa6034c9b869f98b65de1423f`, fixed task baseline `bdc77d0dd01d685f93e410d6a95c86fecf669702`; subsequent evidence commits are docs-only. Continue `feat/ownpath-backend`, existing draft PR #2 → integration. Preserve both frontend owners' files. Coordinated Auth/package/CI cleanup remains blocked by their page retirement.

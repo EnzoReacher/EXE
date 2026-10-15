@@ -1,5 +1,7 @@
 # OpenCode next build — CF-06-BE and pending verification
 
+Current owner order: debugging only. Execute [OPENCODE_DEBUGGING](OPENCODE_DEBUGGING.md) for the two reproduced grounding defects and shell-test ownership gap. Do not restart the broader historical scope below or advance to integration work after debugging.
+
 Execution checkpoint, 15 October2026: ready owner-local CF-06-BE and CF-07-BE work below executed at source `7965c2945f8e4acfa6034c9b869f98b65de1423f` after clean fast-forward to fixed baseline `bdc77d0dd01d685f93e410d6a95c86fecf669702`. Final424/53 tests, lint/types/build, seven compiled cases/30 steps,119 API probes and separate controlled-fixture QA completed. Actual Factory roles ran; full V2 verifier remains BLOCKED. Publication/current CI belong to draft PR #2. This instruction remains the task history, not a reason to repeat completed work. Next integration tasks still require frontend retirement and the designated cross-owner writer; see STATUS/BACKLOG/HANDOVER.
 
 Owner instruction: subsequent implementation runs in OpenCode. Paste the instruction below into OpenCode in the existing backend worktree. This is an execution handoff, not evidence that the tasks have run.
