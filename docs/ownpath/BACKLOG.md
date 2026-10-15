@@ -2,13 +2,17 @@
 
 ## Current owner priority — debugging only
 
-Audit at `7d7d401` reproduced two grounding defects outside the passing 424-test suite and one shell-test ownership gap. Owner approved debugging first, leaving remaining work to others. Execute [OPENCODE_DEBUGGING](OPENCODE_DEBUGGING.md); tasks are not yet fixed by this handoff.
+Audit at `7d7d401` reproduced two grounding defects outside the passing 424-test suite and one shell-test ownership gap. Owner approved debugging first, leaving remaining work to others. Execution uses fixed baseline `c3d8ae9795c19506a33cc0d33c292878aa484bf4`; [DBG_01_03_EVIDENCE](DBG_01_03_EVIDENCE.md) records task cards, actual RED/GREEN attempts and acceptance.
 
-- [ ] DBG-01: Vietnamese mixed-actor text must not offer another person's search work as the student's fact or bullet.
-- [ ] DBG-02: personal `React or TypeScript` alternatives must not become a claim of both technologies.
-- [ ] DBG-03: shell owner can edit its agreed landing/layout tests, preserving all other ownership denials.
+- [x] DBG-01: Vietnamese mixed-actor text no longer offers the reproduced other-person search work as the student's fact or bullet; bounded positive/provenance controls pass.
+- [x] DBG-02: reproduced personal technology alternatives are rejected instead of becoming cumulative tool claims; JD relevance and affirmative tool controls pass.
+- [x] DBG-03: shell owns explicit root `page.test.tsx` / `layout.test.tsx`; other ownership denials remain enforced.
+
+Verified source: `55d29cc8cbba3fccbd7091755cbbc43ebef007d0`. RED for all three, post-QA focused **91/3**, final retained **450/53**, lint/types/build/diff PASS; unchanged runtime compiled browser **7 cases/30 steps**, API **119**, landing/Translator smoke PASS. Separate read-only QA found no remaining scoped blocker after the same writer corrected a misleading positive fixture. Clean committed-source ownership PASS4 paths; active ownership FAIL only the8 preserved profiles. Publication/exact-head CI are recorded in STATUS and PR #2; later docs-only changes do not imply another browser execution.
 
 Backend writer scope: engine/grounding tests, ownership guard/tests and canonical evidence docs only. Red/green regression, positive controls, full retained checks, compiled acceptance and actual separate QA complete this batch. Frontend/integration/Auth/package/CI cleanup, broader V2 verification and release remain outside it.
+
+Separate domain-owner follow-up (outside DBG-01/02/03): action alternatives such as `listing or search` remain a known grounding limitation. QA rejected a misleading positive fixture endorsing both actions; correcting that fixture does not close the runtime limitation. No additional implementation task is automatically started.
 
 ## Owner-local continuation — CF-06-BE / CF-07-BE
 

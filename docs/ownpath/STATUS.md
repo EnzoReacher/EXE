@@ -1,5 +1,30 @@
 # OwnPath implementation status — 2026-10-15
 
+## DBG-01 / DBG-02 / DBG-03 debugging batch
+
+**Verified source:** `55d29cc8cbba3fccbd7091755cbbc43ebef007d0`, branch `feat/ownpath-backend`, existing draft PR #2 against integration. Fixed task baseline: `c3d8ae9795c19506a33cc0d33c292878aa484bf4` after safe fast-forward of the existing backend worktree from `7d7d401`. Eight local untracked Factory profiles and original M17 worktree are preserved. Baseline exact-head Quality runs `38712669937` / `38712664302` passed.
+
+**DBG-01/02/03 PASS in bounded reviewed scope.** One `ownpath-engineer` writer corrected supported Vietnamese actor boundaries, personal technology alternatives and explicit root shell page/layout test ownership. Frontend, frozen types/interfaces/IDs/labels, adapter/review, Auth/packages/config/workflows/migrations were untouched. Task cards, exact commands, RED evidence and acceptance are in [DBG_01_03_EVIDENCE](DBG_01_03_EVIDENCE.md).
+
+| Check | Actual outcome |
+|---|---|
+| Original RED | DBG-01:5 failed; DBG-02:5 failed/1 passed; DBG-03:1 failed/1 passed; name-filtered skipped cases recorded separately |
+| Post-QA focused regressions | PASS91 tests/3 files; original facts-before-confirmation and bullets-after-confirmation, genuine personal coordination, tool lists/JD relevance, exact offsets and role denials |
+| Final full retained suite | PASS450 tests/53 files:424 baseline +24 grounding +2 ownership cases; no previous assertions removed |
+| Lint/typecheck/production build/diff | PASS; sanitized build, no source/config workarounds |
+| Actual compiled browser | PASS7 cases/30 named steps at320/375/768/1440 plus keyboard, injected clipboard rejection and long content; existing no-store/traffic/sentinel/socket/error/overflow/TXT guards intact |
+| Compiled APIs + smoke | PASS119 HTTP probes across17 patterns; source/build inventory absent; landing/Translator HTTP200 and CTA |
+| Owned cleanup | PASS in finally; server port33757 subsequently rebound successfully; matching cached Chromium, no service/provider settings or CI spoofing |
+| Separate audit and QA | Actual read-only `ownpath-auditor` acceptance audit and `ownpath-qa` complete-diff/evidence review. QA PASS on all three after one fixture correction; no independent shell/test rerun by QA |
+| Committed-source ownership | Clean detached source55d29cc against unchanged baseline:PASS4 paths; owned worktree removed normally in finally |
+| Active-tree ownership | FAIL precisely8 preserved local `.opencode` profiles; checksums match, guard not weakened |
+
+QA rejected a misleading positive fixture that asserted both actions for `listing or search`. The same writer replaced it with unrelated `for sorting or filtering`; focused and full suites reran afterward. Runtime hashes matched the compiled checkpoints, so no new browser execution is claimed after the test-only correction. Action-alternative grounding remains a separately recorded domain-owner limitation outside DBG-01/02/03.
+
+The writer invocation stalled across parent interruption; only that owned child execution was interrupted and the same writer resumed synchronously to finish the fixture correction. No service restart, factory installation/configuration change or second source writer was introduced. Later canonical docs are docs-only. Publication/exact-head CI follow below/on PR #2; the earlier source checkpoints remain historical.
+
+Frontend integration, later Auth/package/config/CI cleanup, broader V2 verification, manual/device/research and release remain open for their owners. This batch does not authorize merge/deployment of API retirement alone.
+
 ## Current owner-local CF-06-BE / CF-07-BE candidate
 
 **Verified source:** `7965c2945f8e4acfa6034c9b869f98b65de1423f` on `feat/ownpath-backend`; subsequent evidence/handoff changes are docs-only. Existing [draft PR #2](https://github.com/EnzoReacher/EXE/pull/2) still targets `feat/ownpath-experience-translator`. Backend checks and separate controlled-fixture QA completed. Full product reduction remains blocked by matching frontend retirement; do not merge/deploy staged API retirement alone.

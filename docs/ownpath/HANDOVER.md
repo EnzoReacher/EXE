@@ -1,8 +1,14 @@
 # OwnPath handoff
 
-## Active next run: debugging only
+## Completed debugging-only batch: DBG-01 / DBG-02 / DBG-03
 
-Owner approved DBG-01/02/03 first; use [OPENCODE_DEBUGGING](OPENCODE_DEBUGGING.md). Fix reproduced Vietnamese actor attribution, technology-alternative grounding and shell-test ownership allowance through OpenCode with regressions/positive controls and separate QA. Implementation has not run as part of this instruction preparation. Keep both frontend owners' source untouched and leave later integration/Auth/package/CI/factory-expansion/release work to its assigned owners.
+All three approved debugging cards passed bounded regression and separate read-only QA at source **`55d29cc8cbba3fccbd7091755cbbc43ebef007d0`**, fixed baseline `c3d8ae9795c19506a33cc0d33c292878aa484bf4`. Existing backend worktree safely fast-forwarded; eight untracked profiles preserved byte-for-byte. One source writer changed only engine/grounding tests and ownership guard/tests. Both frontend owners' source and all frozen contracts remain untouched.
+
+Actual RED for each defect; post-QA focused91 tests/3 files and full450/53 PASS, lint/types/build/diff PASS. Compiled runtime browser7 cases/30 steps,119 retired-API probes and landing/Translator smoke PASS using cached Chromium and an owned settings-free numeric-loopback production server, cleaned in finally. Clean detached source ownership PASS4 paths against the fixed baseline; active guard FAIL precisely8 preserved profiles, not relabeled PASS.
+
+QA required correction of one misleading positive fixture; the same engineer corrected it and reran focused checks, then Lead reran the full suite. Only that test fixture changed after compiled acceptance; runtime hashes matched and no later browser rerun is implied. Known action-alternative grounding (`listing or search`) remains separately open for the domain owner. See [DBG_01_03_EVIDENCE](DBG_01_03_EVIDENCE.md), current STATUS and draft PR #2 for exact commands, source/publication/CI and honest execution limits.
+
+This batch is complete; do not automatically proceed to later work. Frontend/integration/Auth/package/config/CI cleanup, broader Factory V2 verification, manual/research and release remain assigned/open. Do not merge or deploy staged API retirement alone.
 
 ## Next implementation executor: OpenCode
 
