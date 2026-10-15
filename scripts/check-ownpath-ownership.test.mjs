@@ -6,6 +6,17 @@ import { describe, expect, it } from "vitest";
 import { checkOwnership, ownsPath } from "./check-ownpath-ownership.mjs";
 
 describe("three-person OwnPath ownership", () => {
+  it("DBG-03 grants only explicit root page/layout colocated tests to shell", () => {
+    for (const filename of ["src/app/page.test.tsx", "src/app/layout.test.tsx"]) {
+      expect(ownsPath("shell", filename)).toBe(true);
+      expect(ownsPath("backend", filename)).toBe(false);
+      expect(ownsPath("translator", filename)).toBe(false);
+    }
+  });
+  it("DBG-03 preserves role, traversal, config and local-profile denials", () => {
+    for (const filename of ["src/app/experience-translator/translator.test.tsx", "src/app/api/example/route.ts", "src/lib/experience-translator/types.ts", "src/app/unassigned.test.tsx", "src/app/page.spec.tsx", "src/app/page.test.ts", "src/app/page.test.tsx/child", "src/app/../app/page.test.tsx", "src/app/./page.test.tsx", "/src/app/page.test.tsx", "src\\app\\page.test.tsx", "src/app//page.test.tsx", "next.config.ts", "package.json", ".github/workflows/quality.yml", ".opencode/agents/ownpath-engineer.md"]) expect(ownsPath("shell", filename)).toBe(false);
+    for (const role of ["backend", "shell", "translator"]) expect(ownsPath(role, ".opencode/agents/ownpath-engineer.md")).toBe(false);
+  });
   it("separates backend, shell and Translator files; shared contracts/tooling are frozen", () => {
     for (const name of ["src/app/api/intake/cv/route.ts", "src/lib/experience-translator/engine.ts", "docs/ownpath/TEAM_WORKFLOW.md"]) expect(ownsPath("backend", name)).toBe(true);
     for (const name of ["src/app/page.tsx", "src/components/header.tsx", "src/app/assessment/page.tsx"]) {

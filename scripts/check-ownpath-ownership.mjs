@@ -10,7 +10,7 @@ export function ownsPath(role, filename) {
   if (filename.startsWith("/") || filename.includes("\\") || filename.split("/").some((part) => ["..", ".", ""].includes(part))) return false;
   if (shared.has(filename)) return false;
   if (role === "backend") return filename.startsWith("src/app/api/") || filename.startsWith("src/lib/") || filename.startsWith("docs/ownpath/") || filename.startsWith("docs/ai-factory/") || backendScripts.test(filename);
-  if (role === "shell") return /^src\/app\/(?:page\.tsx|layout\.tsx|globals\.css)$/.test(filename) || filename.startsWith("src/components/") || legacyPages.test(filename);
+  if (role === "shell") return /^src\/app\/(?:(?:page|layout)(?:\.test)?\.tsx|globals\.css)$/.test(filename) || filename.startsWith("src/components/") || legacyPages.test(filename);
   if (role === "translator") return filename.startsWith("src/app/experience-translator/");
   throw new Error("Unknown ownership role: use backend, shell or translator.");
 }

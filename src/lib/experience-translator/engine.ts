@@ -24,6 +24,27 @@ const otherActor = /\b(?:teammate|colleague|we|they|our team)\b|cả nhóm|chún
 const authored = /\b(?:built|developed|implemented|created)\b|(?:tự\s+)?(?:làm|xây dựng|phát triển|triển khai|phụ trách)/i;
 const nonAuthoring = /\b(?:review(?:ed|ing)?|test(?:ed|ing|s)?|document(?:ed|ing|ation)?|readme|docs|debugg(?:ed|ing)|used|watched|read|copied|index|backend|server|algorithm)\b|kiểm thử|tài liệu|xem|đọc|sao chép/i;
 
+function hasMixedActor(excerpt: string) {
+  // Inspect only coordinated clause starts. Repeated first-person subjects and
+  // subjectless personal actions remain valid; names are never enumerated.
+  return excerpt.split(/\s+(?:and|và)\s+|,\s*/iu).slice(1).some((clause) =>
+    !/^(?:i|mình|tôi|em|bản thân)\s/iu.test(clause) &&
+    !personal.test(`I ${clause}`) &&
+    /^(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched|làm|xây dựng|phát triển|triển khai|tích hợp|dùng|sử dụng|phụ trách|gọi|xử lý)(?=\s|$)/iu.test(clause));
+}
+
+function hasAlternativeTechnologies(excerpt: string) {
+  // Reuse the supported tool vocabulary and inspect only the connector between
+  // adjacent tool mentions, not "or" inside words or unrelated prose/the JD.
+  const mentions = definitions.filter((definition) => !definition.action).flatMap((definition) =>
+    [...excerpt.matchAll(new RegExp(definition.pattern.source, "gi"))]);
+  mentions.sort((a, b) => a.index - b.index);
+  return mentions.some((mention, index) => {
+    const next = mentions[index + 1];
+    return next && /^\s*,?\s*(?:or|versus|vs|hoặc|hay)(?:\s+là)?\s*$/iu.test(excerpt.slice(mention.index + mention[0].length, next.index));
+  });
+}
+
 function text(value: unknown, min: number, max: number, label: string) {
   if (typeof value !== "string" || value.trim().length < min || value.trim().length > max || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(value)) throw new TranslatorError(`${label}: enter ${min}–${max} characters. Describe specific work you actually did.`);
   return value.trim();
@@ -62,7 +83,7 @@ export function extractPersonalFacts(sources: Source[]): Fact[] {
       const normalized = excerpt.replace(/[’‘]/g, "'");
       if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than|as opposed to)\b|trong khi|nhưng/i.test(normalized)) continue;
       // Reject ambiguous subject changes for supported personal-action verbs, not names.
-      if (/(?:\band\s+|,\s*)(?!i\b)(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched)\b/iu.test(normalized)) continue;
+      if (hasMixedActor(normalized) || hasAlternativeTechnologies(normalized)) continue;
       if (!source.personalContext && /\bteam\b|nhóm/i.test(excerpt) && !/\bi (?:built|developed|implemented|created)\b|(?:mình|tôi|em) (?:tự|phụ trách)/i.test(excerpt)) continue;
       const bare = normalized.replace(/\b(?:and|using|with)\b|và|bằng|[,/]/gi, " ").trim();
       const recognizedList = /^(?:(?:product listing|danh sách sản phẩm|tìm kiếm|search|responsive(?: ui)?|react(?:\.js|js)?|javascript|js|typescript|html|css|rest api|git)\s*)+$/i.test(bare);

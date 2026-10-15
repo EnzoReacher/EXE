@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generateBullets } from "./adapter";
-import { composeBullets, confirmFacts, prepareSession, TranslatorError } from "./engine";
+import { composeBullets, confirmFacts, prepareSession, TranslatorError, validateBulletOutput } from "./engine";
 import { goldenAnswers, goldenIntake } from "./fixtures";
 
 const confirmed = (project: string, jd = goldenIntake.jd) => {
@@ -11,6 +11,98 @@ const golden = () => {
   const session = prepareSession(goldenIntake, goldenAnswers);
   return confirmFacts(session, session.facts.map((fact) => fact.id));
 };
+
+const debuggingJd = "Frontend Developer Intern\nRequirements:\n- React\n- TypeScript";
+
+describe("DBG-01 Vietnamese actor boundaries", () => {
+  it.each([
+    "Mình làm danh sách sản phẩm bằng React và An làm tìm kiếm.",
+    "Tôi làm danh sách sản phẩm bằng React và Minh đã xây dựng tìm kiếm.",
+    "Em làm danh sách sản phẩm bằng React, Linh triển khai tìm kiếm.",
+    "Mình làm danh sách sản phẩm bằng React,Hà phụ trách tìm kiếm.",
+    "Mình làm danh sách sản phẩm bằng React và Nguyễn Văn Bình phát triển tìm kiếm.",
+  ])("does not offer or compose another actor's search: %s", (project) => {
+    const session = prepareSession({ project, jd: debuggingJd });
+    expect(session.facts.map((fact) => fact.code)).not.toContain("search");
+    const accepted = confirmFacts(session, session.facts.map((fact) => fact.id));
+    expect(composeBullets(accepted).some((bullet) => /search/i.test(bullet.text))).toBe(false);
+  });
+});
+
+describe("DBG-02 technology alternatives", () => {
+  it.each([
+    "I built product listing using React or TypeScript.",
+    "I built product listing using either React or TypeScript.",
+    "I built product listing using React versus TypeScript.",
+    "Mình làm danh sách sản phẩm bằng React hoặc TypeScript.",
+    "Tôi làm danh sách sản phẩm bằng React hay TypeScript.",
+  ])("does not treat alternative tools as established use: %s", (project) => {
+    const session = prepareSession({ project, jd: debuggingJd });
+    expect(session.facts.filter((fact) => ["react", "typescript"].includes(fact.code))).toEqual([]);
+    expect(composeBullets(confirmFacts(session, session.facts.map((fact) => fact.id)))).toEqual([]);
+    expect(session.requirements.map((requirement) => requirement.code)).toEqual(["react", "typescript"]);
+  });
+
+  it("rejects alternatives in contextual technology answers too", () => {
+    const session = prepareSession({ project: "A coursework catalog project for a student demo.", jd: debuggingJd }, { contribution: "product listing", technology: "React hoặc TypeScript" });
+    expect(session.facts.filter((fact) => fact.sourceId === "answer-technology")).toEqual([]);
+    expect(composeBullets(confirmFacts(session, session.facts.map((fact) => fact.id)))).toEqual([]);
+  });
+});
+
+describe("DBG positive controls and exact provenance", () => {
+  it.each([
+    ["Mình làm danh sách sản phẩm bằng React.", ["react", "listing"]],
+    ["Mình làm danh sách sản phẩm và tìm kiếm bằng React.", ["react", "listing", "search"]],
+    ["Mình làm danh sách sản phẩm bằng React và tự triển khai tìm kiếm.", ["react", "listing", "search"]],
+    ["I built product listing using React and personally implemented search.", ["react", "listing", "search"]],
+    ["Mình làm danh sách sản phẩm bằng React và mình làm tìm kiếm.", ["react", "listing", "search"]],
+    ["Tôi làm danh sách sản phẩm bằng React,tôi triển khai tìm kiếm.", ["react", "listing", "search"]],
+    ["I built product listing using React and TypeScript.", ["react", "typescript", "listing"]],
+    ["Mình làm danh sách sản phẩm bằng React và TypeScript.", ["react", "typescript", "listing"]],
+    ["I built product listing using React, TypeScript and JavaScript.", ["react", "javascript", "typescript", "listing"]],
+    ["I built product listing using React and TypeScript for sorting.", ["react", "typescript", "listing"]],
+    ["I built product listing using React and TypeScript for sorting or filtering.", ["react", "typescript", "listing"]],
+  ])("preserves supported personal evidence: %s", (project, codes) => {
+    const session = prepareSession({ project, jd: debuggingJd });
+    expect(session.facts.map((fact) => fact.code)).toEqual(codes);
+    for (const fact of session.facts) {
+      expect(fact.excerpt).toBe(project.slice(0, -1));
+      expect(fact.start).toBe(0);
+      expect(fact.end).toBe(project.length - 1);
+      expect(fact.sourceId).toBe("project");
+      expect(session.sources[0].text.slice(fact.start, fact.end)).toBe(fact.excerpt);
+    }
+    const accepted = confirmFacts(session, session.facts.map((fact) => fact.id));
+    const bullets = composeBullets(accepted);
+    expect(bullets).toHaveLength(1);
+    expect(bullets[0].factIds).toEqual([...session.facts.filter((fact) => ["listing", "search"].includes(fact.code)), ...session.facts.filter((fact) => !["listing", "search"].includes(fact.code))].map((fact) => fact.id));
+    expect(validateBulletOutput({ bullets }, accepted)).toEqual(bullets);
+  });
+
+  it("retains clean evidence with nonzero offsets beside a rejected mixed-actor sentence", () => {
+    const clean = "Mình làm danh sách sản phẩm bằng React";
+    const project = `A student catalog demo. ${clean}. Mình dùng TypeScript và Hà làm tìm kiếm.`;
+    const session = prepareSession({ project, jd: debuggingJd });
+    expect(session.facts.map((fact) => fact.code)).toEqual(["react", "listing"]);
+    for (const fact of session.facts) {
+      expect(fact.start).toBe(project.indexOf(clean));
+      expect(fact.end).toBe(project.indexOf(clean) + clean.length);
+      expect(fact.excerpt).toBe(clean);
+      expect(project.slice(fact.start, fact.end)).toBe(clean);
+    }
+    const accepted = confirmFacts(session, session.facts.map((fact) => fact.id));
+    const bullets = composeBullets(accepted);
+    expect(bullets.map((bullet) => bullet.text)).toEqual(["Implemented product listing using React."]);
+    expect(validateBulletOutput({ bullets }, accepted)).toEqual(bullets);
+  });
+
+  it("leaves alternative JD relevance separate from affirmative personal tool evidence", () => {
+    const session = confirmed("I built product listing using React and TypeScript.", "Frontend Developer Intern\nRequirements:\n- React or TypeScript");
+    expect(session.requirements.map((requirement) => requirement.code)).toEqual(["react", "typescript"]);
+    expect(composeBullets(session).map((bullet) => bullet.text)).toEqual(["Implemented product listing using React and TypeScript."]);
+  });
+});
 
 describe("CF-06 backend audit regressions", () => {
   it.each(["instead of", "rather than", "as opposed to"])("rejects exclusion-bearing excerpts: %s", (exclusion) => {
