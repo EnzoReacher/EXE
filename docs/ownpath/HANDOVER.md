@@ -1,5 +1,9 @@
 # OwnPath handoff
 
+## Next implementation executor: OpenCode
+
+Owner requested subsequent builds through OpenCode. Use [OPENCODE_NEXT_BUILD](OPENCODE_NEXT_BUILD.md): refresh/preserve the actual local backend worktree, validate the actual factory runtime without pretending V2 acceptance, audit/fix concrete CF-06 backend defects, run pending compiled browser/API acceptance and obtain separate QA where available. Preserve both frontend owners' files; coordinated Auth/package/CI cleanup remains blocked by their page retirement. This handoff is preparation only, not another implementation/test execution. Quality PR run `38699400376` passed for `459c17aaa7f5be677c6def08fdd777191dad1a74`.
+
 ## Active backend-only build — CF-04A
 
 The owner instructed starting the approved plan with two frontend developers. Continue backend `feat/ownpath-backend`, PR #2 → `feat/ownpath-experience-translator`; [TEAM_WORKFLOW](TEAM_WORKFLOW.md) is the file-ownership and combined integration contract. No frontend file is edited by this slice. Do not integrate API retirement without matching frontend page removal.

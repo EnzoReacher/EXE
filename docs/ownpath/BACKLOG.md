@@ -2,6 +2,8 @@
 
 ## Active three-person execution — CF-04A
 
+Next owner-directed implementation runs in OpenCode. [OPENCODE_NEXT_BUILD](OPENCODE_NEXT_BUILD.md) is the execution instruction for F-00-RUNTIME, CF-06-BE concrete-defect hardening, pending compiled acceptance and separate review. Preparation does not complete those tasks. Latest handoff checkpoint `459c17a` Quality PR run `38699400376` was freshly observed successful; frontend branches remained unpublished at this refresh.
+
 Owner approved starting the plan on 15 October with two separate frontend developers. [TEAM_WORKFLOW](TEAM_WORKFLOW.md) assigns disjoint backend/shell/Translator roots, preserves the types contract and defines the combined integration gate. Their local state/acknowledgment is still unknown.
 
 - [x] Refresh published backend PR/head and reproduce baseline: 429 tests / 55 files.
