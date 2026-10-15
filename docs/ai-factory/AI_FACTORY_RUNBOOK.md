@@ -1,5 +1,13 @@
 # OwnPath OpenCode Factory
 
+## Owner-local runtime checkpoint — 15 October 2026
+
+Actual OpenCode `v2.0.7` setup dry run and activation succeeded in the existing backend worktree without differing profiles. Four agent modes/system prompts/ordered terminal policy blocks matched the generated V2 definitions in `debug agents`; explicit-location command discovery returned four OwnPath names (not full binding/template/tool detail). Actual read-only OwnPath Auditor, single Core Engineer and separate read-only QA tasks ran through the existing coding session/provider. Local generated profiles remain untracked and outside source commits. No owner global/model/provider settings were changed.
+
+**Full V2 runtime verification remains BLOCKED:** `node scripts/verify-ownpath-factory.mjs` exits1 with `FACTORY_V2_RUNTIME_NOT_VERIFIED`. The diagnostic previously hid that fixed code because its allowlist omitted digits; a real CLI regression reproduced the failure, and the narrow correction plus11 verifier tests passed. Discovery/selected child execution does not establish comprehensive permission matching, denied operations, command binding/tool-catalog parity or universal isolation. No V2 PASS, broad permission grant or expanded orchestrator was introduced.
+
+The ownership guard intentionally flags eight local activation paths in the active tree. Preserve them; do not weaken the guard or delete/ignore profiles to manufacture PASS. Check the committed backend source separately in a clean disposable detached worktree against the unchanged task baseline, and report both results. Source `7965c29` has final424/53 tests and compiled browser/API acceptance; current STATUS records scope/review/limitations. Earlier Work-container absence and V1-only evidence below retain their historical environment boundaries.
+
 ## Current backend-only continuation — 15 October 2026
 
 The owner approved execution with two other people handling frontend. [TEAM_WORKFLOW](../ownpath/TEAM_WORKFLOW.md) now defines backend/shell/Translator file boundaries and task cards. This supersedes the historical engineer frontend allowlist described below: current generated engineer profiles permit backend `src/lib/*` and `src/app/api/*` plus scoped docs/scripts, explicitly deny shared `types.ts`, and do not permit frontend pages/components/styles or root package/config/CI/proxy changes. Updated template/policy tests pass for V1 and V2; neither updated profile has runtime permission-matching acceptance here.

@@ -1,5 +1,22 @@
 # Execution backlog and estimated roadmap
 
+## Owner-local continuation — CF-06-BE / CF-07-BE
+
+Fixed task baseline: `bdc77d0dd01d685f93e410d6a95c86fecf669702` after clean, non-divergent fast-forward from `3223484`. Original M17 worktree preserved. Backend/integration are the only published OwnPath branches at refresh; PR #2 remains draft against integration. Baseline Quality runs `38705343799` / `38705336526` passed. This baseline must not move to conceal scope changes.
+
+| Task | Owner / permitted files | Failure example / expected behavior | Checks / rollback | State |
+|---|---|---|---|---|
+| F-00-RUNTIME | Lead; existing setup/verifier/tests, local generated profiles only | V2 verifier hid its explicit limitation behind `FACTORY_CHECK_FAILED` because its diagnostic allowlist omitted digits. Must report `FACTORY_V2_RUNTIME_NOT_VERIFIED`, never PASS | CLI regression reproduced red then 11 verifier tests passed; actual v2.0.7 prints explicit limitation. Revert scoped verifier commit; preserve local activation files | Diagnostic fix done; runtime inspection recorded in STATUS, full V2 verification remains blocked |
+| CF-06-BE | One backend engineer; engine/adapter and colocated regression tests only | Exclusion phrases incorrectly offered excluded technology; another actor's conjunction/comma clause became personal work; sparse adapter arrays skipped validation; abort rejection hid timeout message | Initial RED 9/14 failed; QA follow-up RED 3 cases failed. Final 63 focused tests passed; separate QA closed reproduced findings. Source `7965c29`; revert source commits in reverse order | [x] Controlled-fixture hardening and review complete |
+| CF-07-BE | Lead verification; canonical evidence docs only | Current source must pass full retained checks, compiled Translator and 119 API-absence probes on an owned settings-free server | At `7965c29`: lint/types, 424 tests/53 files, build, diff; seven compiled browser cases/30 steps and 119 API probes PASS, cleanup complete. Final committed-source ownership checked separately; local activation exception below | [x] Backend checks complete; full reduced-product CF-07 still blocked by frontend integration |
+| CF-09-BE | Lead; STATUS/HANDOVER/BACKLOG/runbook and existing draft PR #2 | Publish exact scoped source, review evidence and current CI without force; preserve local profiles | Source `df6874a` → `5203720` → `7965c29` published after refresh confirmed remote baseline unchanged; docs-only follow-up and exact-head CI evidence recorded on PR #2 | [x] Backend source publication/handoff; CI completion reported on draft PR, final reduced-product CF-09 remains open |
+
+Frontend pages/components/styles/UI tests/browser specs, frozen types, packages/lock, root config/workflows/proxy/Auth/migrations are outside this run. INT-CF04C/05 remains blocked on reviewed FE1-CF04B page/caller retirement and a separately designated integration writer. No teammate message, merge or deployment is authorized by these task cards.
+
+Twenty new core cases plus one verifier case explain 403 → 424 tests and 52 → 53 files; none removed in this run. Core source changes are conservative and may reject genuine mixed/exclusion-bearing excerpts rather than guess. The canonical data shape, wording templates and UI contracts remain unchanged. Separate read-only QA found two additional examples, which the same sole engineer reproduced/fixed before final verification. See STATUS for failed setup attempts and exact results.
+
+Eight matching project-local Factory profiles were created and preserved untracked by authorized runtime activation. The active-tree ownership guard reports FAIL for precisely those eight paths; it is not relabeled PASS. Committed-source ownership is checked in a clean disposable detached worktree against the same full baseline, without deleting/ignoring profiles or changing the guard. No `.opencode/**` files enter source commits.
+
 ## Active three-person execution — CF-04A
 
 Next owner-directed implementation runs in OpenCode. [OPENCODE_NEXT_BUILD](OPENCODE_NEXT_BUILD.md) is the execution instruction for F-00-RUNTIME, CF-06-BE concrete-defect hardening, pending compiled acceptance and separate review. Preparation does not complete those tasks. Latest handoff checkpoint `459c17a` Quality PR run `38699400376` was freshly observed successful; frontend branches remained unpublished at this refresh.
@@ -10,8 +27,8 @@ Owner approved starting the plan on 15 October with two separate frontend develo
 - [x] Prepare ownership preflight, backend-only factory templates and ready task cards for both frontend developers. Templates are tested; actual OpenCode activation remains unavailable here.
 - [x] CF-04A implementation: retire 17 API handlers and six API test files; relocate three retained print-route cases. All frontend source and existing domain libraries remain untouched.
 - [x] Backend candidate verification: 403 tests / 52 files, lint/types/build, ownership check, 119 compiled API absence checks, landing/Translator HTTP smoke.
-- [ ] Separate reviewer acceptance; this execution has self-review only.
-- [ ] Fresh compiled Chromium journey: download failed in this environment; prior browser passes are historical.
+- [x] Separate reviewer acceptance for owner-local candidate `7965c29`; read-only source review, execution evidence supplied by Lead. Earlier Work execution had self-review only.
+- [x] Fresh owner-local compiled Chromium journey at `7965c29`: seven cases/30 steps passed using cached browser. Earlier Work download failure remains historical.
 - [ ] FE1-CF04B legacy pages/navigation removal and FE2 retained-UI review by frontend owners.
 - [ ] Combined integration followed by CF-04C/05 consumer/Auth/package/config retirement.
 

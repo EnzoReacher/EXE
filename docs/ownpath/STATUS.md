@@ -1,6 +1,62 @@
 # OwnPath implementation status — 2026-10-15
 
-## Active CF-04A backend candidate — three-person build
+## Current owner-local CF-06-BE / CF-07-BE candidate
+
+**Verified source:** `7965c2945f8e4acfa6034c9b869f98b65de1423f` on `feat/ownpath-backend`; subsequent evidence/handoff changes are docs-only. Existing [draft PR #2](https://github.com/EnzoReacher/EXE/pull/2) still targets `feat/ownpath-experience-translator`. Backend checks and separate controlled-fixture QA completed. Full product reduction remains blocked by matching frontend retirement; do not merge/deploy staged API retirement alone.
+
+### Baseline and scope
+
+Inspected status/logs/worktrees/diffs, fetched origin and fast-forwarded clean, non-divergent backend from `3223484` to fixed task baseline `bdc77d0dd01d685f93e410d6a95c86fecf669702` (four incoming commits). Original `/home/enzoreacher/EXE` at M17 remains preserved; backend worktree `/home/enzoreacher/EXE-ownpath-backend`. Baseline Quality [PR](https://github.com/EnzoReacher/EXE/actions/runs/38705343799) and [push](https://github.com/EnzoReacher/EXE/actions/runs/38705336526) were observed successful. Only backend and integration OwnPath branches and PRs #1/#2 were published at refresh; frontend local-only work remains unknown.
+
+One Core Engineer writer changed only `src/lib/experience-translator/engine.ts`, `adapter.ts`, new `hardening.test.ts`; Lead changed the existing verifier and its test plus canonical docs. No frontend pages/components/styles/UI tests/browser specs, frozen types, public signatures/IDs/labels, root config/packages/lock/workflows/proxy/Auth/migrations changed. The installed Next testing and CLI type-generation guides were consulted. Existing frozen dependency installation was reused: manifest/lock did not change during fast-forward or this task.
+
+### Concrete corrections and review
+
+- Reject whole excerpts containing `instead of`, `rather than`, `as opposed to` instead of turning excluded technologies into personally-used facts.
+- Extend the bounded mixed-subject guard to supported action verbs and conjunction/comma separators (including no-space commas), avoiding name blacklists. Genuine repeated first-person clauses and technology lists retain positive coverage and exact source offsets.
+- Validate every numeric adapter-array slot so wholly/partly sparse arrays cannot bypass bullet/source validation. Return trusted recomposed bullets.
+- Settle timeout rejection before abort dispatch so a signal-aware adapter's abort rejection cannot replace timeout-specific guidance. Retry/abort limits and immediate non-timeout failure behavior remain intact.
+- Preserve the explicit `FACTORY_V2_RUNTIME_NOT_VERIFIED` diagnostic by allowing digits in fixed diagnostic codes; no false PASS or raw CLI/config diagnostic output.
+
+Separate read-only `reviewer` audit found the initial four core defects. Actual `ownpath-auditor` inspected ownership and the retained frontend/print integration gate. Actual `ownpath-engineer` was the sole runtime writer. Actual separate `ownpath-qa` reviewed the diff/evidence, identified two additional comma/exclusion examples, and re-reviewed their corrections: no remaining blocking defect identified in the inspected correction; fixture closure only. QA did not independently run shell/tests. Optional stronger positive fact-set assertions remain a non-blocking coverage improvement. This is bounded heuristic grounding, not arbitrary-language verification.
+
+### Actual checks and failed attempts
+
+| Executed check | Outcome / exact boundary |
+|---|---|
+| Verifier CLI RED → GREEN | Initial 10 PASS/1 FAIL (V2 code hidden); corrected 11/11 PASS; actual verifier exits1 with explicit V2-not-verified code |
+| Core initial RED → GREEN | Engineer's 14-case suite:9 FAIL/5 PASS before fixes; existing+new core suite then57 PASS/2 files |
+| QA follow-up RED → GREEN | Three new exclusion/comma reproductions FAIL before fix; final core suite63 PASS/2 files (43 existing+20 hardening) |
+| Focused Factory/ownership/retired-API/print tests | 25 PASS/5 files, including3 retained print security cases |
+| `pnpm lint` | PASS at final source |
+| `pnpm typecheck` | Initial FAIL: ignored `.next/types/validator.ts` still referenced17 deleted API handlers after fast-forward. Installed-guide `pnpm exec next typegen` regenerated types; final typecheck PASS. No source/config workaround |
+| `pnpm test` | Final424 PASS/53 files =403 baseline+20 core+1 verifier. No test retirement in this run. Intermediate418/53 run preceded QA follow-up and is superseded |
+| Sanitized `pnpm build` | PASS at final source; no `/api/**` in compiled inventory. Legacy frontend/Auth/print/proxy intentionally remain |
+| First compiled-browser launch | FAIL before browser bodies: Python random temp suffix violated existing alphanumeric owned-temp guard (`OWNED_TRANSLATOR_TEMP_REQUIRED`). Changed only temporary runner name; existing config/spec/guard preserved; owned server/temp cleaned |
+| Final `pnpm test:translator:browser` | PASS at `7965c29`:7 executed Chromium cases/30 named steps, all four widths320/375/768/1440, keyboard/focus, injected clipboard rejection, long sources/edits, approval/edit/regeneration, accepted TXT, clear/reload and traffic/privacy guards. Cached matching Chromium; no browser download or CI spoofing |
+| Final compiled API/smoke | `node scripts/check-ownpath-retired-apis.mjs http://127.0.0.1:53337`:119 PASS/17 patterns ×7 methods; source/build handlers absent. Landing+Translator HTTP200 and landing CTA PASS |
+| Owned server/temp cleanup | PASS in finally (including failed launch); service/provider env absent, no loaded `.env` files (only example), process env allowlisted. Existing services/Supabase/owner servers untouched. Browser/download/results/log scope removed |
+| `git diff --check` | PASS |
+| Active-tree ownership guard | FAIL for precisely8 preserved untracked local `.opencode` activation files. No source-scope violation observed; guard not weakened and profiles not deleted/ignored/committed |
+| Committed-source ownership | Clean disposable detached worktree, same fixed baseline; initial source `5203720` PASS5 paths. Final documentation/source candidate checked separately before publication; exact result recorded in PR evidence |
+
+Final source/build/browser/API checks supersede the intermediate candidate `5203720` (418 tests and its browser/API pass). The full retained suite contains mocked legacy component/library tests; this does not establish working retired legacy API flows. No unrelated disposable Supabase or legacy real-stack acceptance was rerun.
+
+### F-00-RUNTIME: actual activation with explicit limits
+
+Actual installed OpenCode `v2.0.7`. Setup dry run found no differing profiles; `--write` created four agents/four commands, preserving existing settings. Eight activation files remain untracked. `opencode debug agents` inspection confirmed each OwnPath role's mode/system and exact ordered terminal V2 policy block matched the generated profile; backend has no frontend edit grant and explicitly denies shared types; auditors/QA retain default-deny/read-only policies. Explicit-location `/api/command` discovery returned the four OwnPath command names; the public command listing did not expose template/binding/tool details. An initial unlocated API query did not identify the project commands; no discovery pass was inferred from it.
+
+Actual auditor/engineer/QA child tasks ran through this existing configured session/provider; no new model/provider/global settings selected or installed. The full verifier still exits `FACTORY_V2_RUNTIME_NOT_VERIFIED`: command binding/tool-catalog parity, comprehensive resource matching, prompts and universal isolation are not established by role discovery or these tasks. No broad runtime-verifier rewrite or permission bypass was made. F-00 activation/inspection is recorded; full V2 verification remains BLOCKED, not PASS. Historical Work-container OpenCode absence below does not describe this owner-local environment.
+
+### Integration and next work
+
+FE1-CF04B remains unobserved as published/reviewed. Caller paths include assessment form, analysis status/review links/next-steps workspace, opportunities workspace, saved-work list, credential workspace/export controls and review feedback. Direct repository/Auth consumers and WorkspaceHeader navigation also remain. The retained print route still requires owner-checked accepted snapshot, no-store, escaping/CSP; preserve its dependencies until the frontend owner retires it. All frontend source remains untouched.
+
+Next: owner/frontend supplies reviewed page/navigation retirement; then one designated integration writer combines BE-CF04A+FE1-CF04B and audits transitive consumers before library/Auth/package/proxy/config/legacy-CI cleanup. Full reduced-product CF-07/09, physical mobile keyboard, actual200% zoom/screen reader/clipboard denial, owner walkthrough and participant/research/release decisions remain pending. No external team messages, merge, deployment, database mutation or fabricated approval occurred.
+
+Rollback: revert runtime commits in reverse order `7965c29`, `5203720`, `df6874a` on a feature branch if needed; preserve other work and local activation settings. Source `7965c29` was published to existing draft PR #2 after a fresh fetch confirmed remote backend still matched the fixed baseline (three local commits ahead, zero remote-only commits); no force. Exact-head CI completion is recorded on the PR to avoid confusing docs-only follow-ups with newly tested runtime.
+
+## Previous Work CF-04A backend candidate — three-person build
 
 Owner authorized execution of the approved plan and specified two other frontend developers. This session cloned `feat/ownpath-backend` into an isolated Work checkout from `3223484b78c05784112de48810ecc72c2c2a2860`. Clean initial git status and recent log inspected. GitHub PR #2 remained open/draft against integration `d1ec1a0`; exact-head PR Quality run `38682665717` was freshly observed successful. Only backend/integration OwnPath branches were published at this refresh; frontend local work is unknown. The owner's original machine/worktrees were not available and were not modified.
 
