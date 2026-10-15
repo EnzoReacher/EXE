@@ -1,4 +1,12 @@
-# EXE101 — AI Career Readiness Platform
+# OwnPath — Experience Translator
+
+**Turn Your Experience Into Career Value.** You have the experience. OwnPath helps you show its value.
+
+Current feature branch: `feat/ownpath-experience-translator`, based on audited cumulative M17 `ae2527633733fc5081a96ecb2c16e09081a8c878`. Open `/experience-translator` for the fictional-data prototype: project + Frontend Intern JD → selected questions → confirmed personal facts → English bullets with sources → edit/accept/copy or local TXT. No CV is required. It uses controlled local templates, not external AI, and keeps input in tab memory. It is not a production release or completed CP2 research.
+
+Start with [current OwnPath status and handoff](docs/ownpath/STATUS.md), [PRD/scope](docs/ownpath/PRD.md), [ADR/contracts](docs/ownpath/ARCHITECTURE.md), [workflow diagrams](docs/ownpath/FLOWS.md), [backlog/roadmap](docs/ownpath/BACKLOG.md), [research instruments](docs/ownpath/RESEARCH_PLAN.md), [tests](docs/ownpath/TEST_STRATEGY.md), and [OpenCode Factory runbook](docs/ai-factory/AI_FACTORY_RUNBOOK.md). Actual owner research/production approval remains in the existing decision record. `EXE` is the repository name; EXE101 is the course.
+
+The earlier milestones below remain historical/reusable modules. The Translator is the primary demo path. No main merge, deployment, migration, paid provider or production data processing is authorized by this branch.
 
 Owner sign-in follow-up: [M15 auth handoff fix and local retest commands](docs/M15_AUTH_HANDOFF_FIX.md) on `codex/exe-m15-auth-handoff-fix`.
 

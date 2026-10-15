@@ -4,11 +4,11 @@ import { getPublicReview } from "@/lib/review-links/repository";
 import ReviewFeedbackForm from "./review-feedback-form";
 import { evidenceLabels } from "@/components/evidence-labels";
 
-export const metadata: Metadata = { title: "Private EXE review", description: "Review an owner-selected report and leave advisory feedback.", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Private OwnPath review", description: "Review an owner-selected report and leave advisory feedback.", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 function Unavailable() {
-  return <main id="main-content" tabIndex={-1} className="reviewer-page"><div className="reviewer-wrap reviewer-unavailable"><p className="eyebrow">PRIVATE EXE REVIEW</p><h1>This private review link is not available.</h1><p>It may have expired, been revoked, or no longer be available. Ask the owner for a new link if needed.</p></div></main>;
+  return <main id="main-content" tabIndex={-1} className="reviewer-page"><div className="reviewer-wrap reviewer-unavailable"><p className="eyebrow">PRIVATE OwnPath REVIEW</p><h1>This private review link is not available.</h1><p>It may have expired, been revoked, or no longer be available. Ask the owner for a new link if needed.</p></div></main>;
 }
 
 export default async function PrivateReviewPage({ params }: { params: Promise<{ token: string }> }) {
@@ -17,7 +17,7 @@ export default async function PrivateReviewPage({ params }: { params: Promise<{ 
   const review = await getPublicReview(token);
   if (!review) return <Unavailable />;
   return <main id="main-content" tabIndex={-1} className="reviewer-page"><div className="reviewer-wrap">
-    <p className="eyebrow">PRIVATE EXE REVIEW</p><h1>Review: {review.roleTitle}</h1><p className="analysis-subtitle">{review.companyName ?? "Company not included"}</p>
+    <p className="eyebrow">PRIVATE OwnPath REVIEW</p><h1>Review: {review.roleTitle}</h1><p className="analysis-subtitle">{review.companyName ?? "Company not included"}</p>
     <section className="reviewer-notice"><strong>Private and advisory</strong><p>This selected report is shared by its owner. CV wording is self-reported and not independently verified. This is not a hiring prediction or employment guarantee.</p></section>
     <section className="reviewer-findings" aria-labelledby="reviewer-findings-heading">
       <h2 id="reviewer-findings-heading">Selected evidence report</h2>

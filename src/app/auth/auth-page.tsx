@@ -12,11 +12,11 @@ export default async function AuthPage({ mode, notice }: { mode: AuthMode; notic
   return (
     <main className="auth-entry" id="main-content" tabIndex={-1}>
       <header className="auth-entry-header">
-        <Link className="brand" href="/" aria-label="EXE career readiness home">
-          <span className="brand-mark" aria-hidden="true">E</span>
-          <span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span>
+        <Link className="brand" href="/" aria-label="OwnPath career readiness home">
+          <span className="brand-mark" aria-hidden="true">O</span>
+          <span className="brand-copy"><strong>OwnPath</strong><span>Career readiness</span></span>
         </Link>
-        <Link href="/" className="auth-back-link">Back to EXE</Link>
+        <Link href="/" className="auth-back-link">Back to OwnPath</Link>
       </header>
 
       <section className="auth-entry-card" aria-labelledby="auth-entry-title">
@@ -30,12 +30,12 @@ export default async function AuthPage({ mode, notice }: { mode: AuthMode; notic
         {notice && <p className="auth-entry-notice" role="status">{notice}</p>}
         <AuthControls appearance="standalone" initialMode={mode} />
         <p className="auth-entry-privacy">
-          Use fictional data while EXE is a prototype. CV files and extracted text are stored in your account’s private Supabase workspace; the team has not completed production backup, retention, or deletion review.
+          Use fictional data while OwnPath is a prototype. CV files and extracted text are stored in your account’s private Supabase workspace; the team has not completed production backup, retention, or deletion review.
         </p>
       </section>
 
       <footer className="auth-entry-footer">
-        EXE offers advisory career guidance. It does not make hiring decisions, verify qualifications, or guarantee employment.
+        OwnPath offers advisory career guidance. It does not make hiring decisions, verify qualifications, or guarantee employment.
       </footer>
     </main>
   );

@@ -64,7 +64,7 @@ test("standalone owner sign-in hands cookies to the workspace despite slow route
       await test.step(warmWorkspace ? "OWNER_SIGNIN_WARM_ROUTER" : "OWNER_SIGNIN_COLD_ROUTER", async () => {
         if (warmWorkspace) {
           await page.goto("/assessment");
-          await page.getByRole("link", { name: "EXE career readiness home", exact: true }).click();
+          await page.getByRole("link", { name: "OwnPath career readiness home", exact: true }).click();
           await page.waitForURL((url) => url.pathname === "/");
           await page.getByRole("link", { name: "Sign in", exact: true }).click();
           await page.waitForURL((url) => url.pathname === "/sign-in");
@@ -151,18 +151,20 @@ test("local landing and Supabase email/password account flow", async ({ browser 
     await test.step("LANDING_NAVIGATION_AND_FICTIONAL_EXAMPLE", async () => {
       const response = await landing.goto("/");
       check(response?.ok(), "LANDING_PAGE_UNAVAILABLE");
-      check(await landing.getByRole("heading", { name: "See how your CV connects to a target role." }).count() === 1, "LANDING_PRIMARY_HEADING_MISSING");
+      check(await landing.getByRole("heading", { name: "Turn Your Experience Into Career Value." }).count() === 1, "LANDING_PRIMARY_HEADING_MISSING");
       check(await landing.getByText("FICTIONAL EXAMPLE", { exact: true }).isVisible(), "FICTIONAL_EXAMPLE_LABEL_MISSING");
       check(await landing.getByRole("link", { name: "Sign in", exact: true }).getAttribute("href") === "/sign-in", "SIGN_IN_LINK_MISSING");
-      check(await landing.getByRole("link", { name: "Create account", exact: true }).first().getAttribute("href") === "/sign-up", "SIGN_UP_LINK_MISSING");
+      check(await landing.getByRole("link", { name: "Translate a project", exact: true }).getAttribute("href") === "/experience-translator", "TRANSLATOR_LINK_MISSING");
       await noHorizontalOverflow(landing, "LANDING");
       await landing.getByRole("link", { name: "Sign in", exact: true }).click();
       await landing.waitForURL((url) => url.pathname === "/sign-in");
       check(await landing.getByRole("heading", { name: "Welcome back", exact: true }).isVisible(), "SIGNIN_ROUTE_UNAVAILABLE");
       await noHorizontalOverflow(landing, "SIGNIN");
-      await landing.goto("/");
-      await landing.getByRole("link", { name: "Create account", exact: true }).first().click();
-      await landing.waitForURL((url) => url.pathname === "/sign-up");
+      await landing.getByRole("button", { name: "Create account", exact: true }).click();
+      check(await landing.getByRole("form", { name: "Create an account", exact: true }).count() === 1, "SIGNUP_MODE_UNAVAILABLE");
+      // The mode toggle changes the client form; separately exercise the
+      // retained dedicated signup route and its server-rendered heading.
+      await landing.goto("/sign-up");
     });
     await test.step("SIGNUP_FORM_VALIDATION_AND_RESPONSIVE_LAYOUT", async () => {
       check(await landing.getByRole("heading", { name: "Create your account", exact: true }).isVisible(), "SIGNUP_HEADING_MISSING");

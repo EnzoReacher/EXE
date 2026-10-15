@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import AuthPage from "../auth/auth-page";
 
 export const metadata: Metadata = {
-  title: "Create an account | EXE",
-  description: "Create a private EXE career workspace.",
+  title: "Create an account | OwnPath",
+  description: "Create a private OwnPath career workspace.",
 };
 
 export default function SignUpPage() {

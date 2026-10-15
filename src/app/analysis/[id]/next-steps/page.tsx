@@ -7,7 +7,7 @@ import { getOwnedNextSteps } from "@/lib/next-steps/repository";
 import NextStepsWorkspace from "./next-steps-workspace";
 
 export const metadata = {
-  title: "Next steps and CV draft | EXE",
+  title: "Next steps and CV draft | OwnPath",
   description: "Turn an evidence report into a private action plan and source-grounded CV draft.",
 };
 

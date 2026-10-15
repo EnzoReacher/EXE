@@ -144,3 +144,35 @@ data_kind: source_log
 - supported_fact: The source states in its indexed text that 243 universities and 2,355,711 undergraduate students were reported for academic year 2023 to 2024, including 1,819,416 at public institutions and 536,295 at non-public institutions.
 - limitation: The M17 original PDF URL returned Page not found HTML on 2026-10-06; no table or publication date was directly inspected. Historical indexed counts require a working official original and owner review; enrolment is not a job-seeker, CV-demand or willingness-to-pay count.
 - owner_review_status: pending
+
+## CM-010
+- evidence_id: CM-010
+- source_category: alternative
+- source_quality: official_primary
+- source_url: https://www.rezi.ai/tools/resume-bullet-point-generator
+- date_accessed: 2026-10-12
+- source_date: not_stated
+- region: Public English-language page; geographic product access was not assessed.
+- currency: not_applicable
+- plan_access_context: Public tool page; in-product account requirements, plan restrictions and price were not examined.
+- billing_context: not_applicable
+- tax_promotion_caveat: not_applicable
+- supported_fact: The source describes bullet suggestions based on role and company context, followed by apply, edit or regenerate options.
+- limitation: Official public description retrieved directly; no account, task trial, question flow, source grounding, output quality, plan access or price was tested. Page publication date was not established from retrieved text.
+- owner_review_status: pending
+
+## CM-011
+- evidence_id: CM-011
+- source_category: alternative
+- source_quality: official_primary
+- source_url: https://www.tealhq.com/tools
+- date_accessed: 2026-10-12
+- source_date: not_stated
+- region: Public English-language page; geographic product access was not assessed.
+- currency: not_applicable
+- plan_access_context: Public tool list; no in-product trial, account restrictions or pricing inspection.
+- billing_context: not_applicable
+- tax_promotion_caveat: not_applicable
+- supported_fact: The source lists an AI resume bullet generator and a resume-to-job-description comparison tool.
+- limitation: Official feature listing retrieved directly; no actual interface, grounding behavior, output quality, time saving, plan restrictions or price was tested. No independent outcome is established.
+- owner_review_status: pending

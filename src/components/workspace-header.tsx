@@ -27,7 +27,7 @@ export default function WorkspaceHeader({ active }: { active?: string }) {
   }
   return <header className="workspace-header">
     <div className="workspace-header-row">
-      <Link className="brand" href="/" aria-label="EXE career readiness home"><span className="brand-mark" aria-hidden="true">E</span><span className="brand-copy"><strong>EXE</strong><span>Career readiness</span></span></Link>
+      <Link className="brand" href="/" aria-label="OwnPath career readiness home"><span className="brand-mark" aria-hidden="true">O</span><span className="brand-copy"><strong>OwnPath</strong><span>Career readiness</span></span></Link>
       <button type="button" className="button button-secondary" disabled={busy} onClick={() => void signOut()}>{busy ? "Signing out…" : "Sign out"}</button>
     </div>
     <nav className="workspace-navigation" aria-label="Workspace navigation">{sections.map(([href, label]) => <Link key={href} href={href} aria-current={active === href ? "page" : undefined}>{label}</Link>)}</nav>

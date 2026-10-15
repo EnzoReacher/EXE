@@ -1,4 +1,6 @@
-# EXE Web App Build Tracker
+# OwnPath Web App Build Tracker
+
+**Current 2026-10-12 branch:** `feat/ownpath-experience-translator` (base: cumulative M17 `ae25276`, which includes M18). Primary proposed MVP is Experience Translator; old modules remain reusable/history. [OwnPath backlog](ownpath/BACKLOG.md), [current test/handoff evidence](ownpath/STATUS.md), [PRD/scope](ownpath/PRD.md) and [Factory runbook](ai-factory/AI_FACTORY_RUNBOOK.md) govern synthetic preparation. Owner formal CP2/production approval is pending; no approval or research result was manufactured.
 
 This tracks engineering work separately from course grading checkpoints. Mark a part complete only after its acceptance criteria and checks have been reviewed. The GitHub feature branch is for source review; do not merge to `main` or deploy without the project owner's approval.
 

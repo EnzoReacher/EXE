@@ -2,7 +2,7 @@ import WorkspaceHeader from "@/components/workspace-header";
 import Link from "next/link";
 import SavedWorkList from "./saved-work-list";
 
-export const metadata = { title: "Saved work | EXE", description: "Return to your private EXE evidence reports and next steps." };
+export const metadata = { title: "Saved work | OwnPath", description: "Return to your private OwnPath evidence reports and next steps." };
 
 export default function SavedWorkPage() {
   return <main id="main-content" tabIndex={-1} className="analysis-page">

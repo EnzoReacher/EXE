@@ -1,7 +1,7 @@
 import WorkspaceHeader from "@/components/workspace-header";
 import OpportunitiesWorkspace from "./opportunities-workspace";
 
-export const metadata = { title: "Private opportunities | EXE", description: "Keep private references to job links you found yourself." };
+export const metadata = { title: "Private opportunities | OwnPath", description: "Keep private references to job links you found yourself." };
 
 export default function OpportunitiesPage() {
   return <main id="main-content" tabIndex={-1} className="analysis-page">
