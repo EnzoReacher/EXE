@@ -29,6 +29,15 @@ describe("version-aware OwnPath Factory", () => {
       expect(readFileSync(path.join(directory, "AGENTS.md"), "utf8")).toBe("Existing instructions");
     } finally { rmSync(directory, { recursive: true }); }
   });
+  it.each([1, 2])("keeps the backend writer out of both frontend owners' files on v%s", (major) => {
+    const writer = JSON.parse(factoryFiles(major).get(".opencode/agents/ownpath-engineer.md").split("---\n")[1]);
+    const grants = major === 1 ? Object.entries(writer.permission.edit).filter(([, effect]) => effect === "allow").map(([resource]) => resource) : writer.permissions.filter((p) => p.action === "edit" && p.effect === "allow").map((p) => p.resource);
+    expect(grants).toContain("src/app/api/*"); expect(grants).toContain("src/lib/*");
+    expect(grants.filter((p) => p.startsWith("src/app/") && p !== "src/app/api/*")).toEqual([]);
+    expect(grants.some((p) => p.startsWith("src/components/"))).toBe(false);
+    if (major === 1) expect(writer.permission.edit["src/lib/experience-translator/types.ts"]).toBe("deny");
+    else expect(writer.permissions.filter((p) => p.action === "edit").at(-1)).toEqual({ action: "edit", resource: "src/lib/experience-translator/types.ts", effect: "deny" });
+  });
   it("preflights all names before writes and refuses differing config or symlinks", () => {
     const directory = mkdtempSync(path.join(tmpdir(), "ownpath-factory-")); const outside = mkdtempSync(path.join(tmpdir(), "ownpath-outside-"));
     try {
