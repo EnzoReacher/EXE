@@ -60,8 +60,9 @@ export function extractPersonalFacts(sources: Source[]): Fact[] {
       const excerpt = match[0].trim();
       const start = (match.index ?? 0) + match[0].indexOf(excerpt);
       const normalized = excerpt.replace(/[’‘]/g, "'");
-      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by)\b|trong khi|nhưng/i.test(normalized)) continue;
-      if (/\band\s+(?!i\b)(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created)\b/iu.test(normalized)) continue;
+      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than)\b|trong khi|nhưng/i.test(normalized)) continue;
+      // Reject ambiguous subject changes for supported personal-action verbs, not names.
+      if (/\band\s+(?!i\b)(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched)\b/iu.test(normalized)) continue;
       if (!source.personalContext && /\bteam\b|nhóm/i.test(excerpt) && !/\bi (?:built|developed|implemented|created)\b|(?:mình|tôi|em) (?:tự|phụ trách)/i.test(excerpt)) continue;
       const bare = normalized.replace(/\b(?:and|using|with)\b|và|bằng|[,/]/gi, " ").trim();
       const recognizedList = /^(?:(?:product listing|danh sách sản phẩm|tìm kiếm|search|responsive(?: ui)?|react(?:\.js|js)?|javascript|js|typescript|html|css|rest api|git)\s*)+$/i.test(bare);
@@ -154,7 +155,9 @@ export function validateBulletOutput(output: unknown, session: PreparedSession):
   const bullets = (parsed as Record<string, unknown>).bullets;
   const expected = composeBullets(session);
   if (!Array.isArray(bullets) || bullets.length !== expected.length) throw new TranslatorError();
-  return bullets.map((bullet, index) => {
+  // Indexed access visits sparse slots too; Array.map would skip their validation.
+  for (let index = 0; index < bullets.length; index++) {
+    const bullet = bullets[index];
     if (!bullet || typeof bullet !== "object" || Array.isArray(bullet)) throw new TranslatorError();
     const b = bullet as Record<string, unknown>; const e = expected[index];
     if (Object.keys(b).sort().join() !== "factIds,id,requirementIds,text" || b.id !== e.id || b.text !== e.text || JSON.stringify(b.factIds) !== JSON.stringify(e.factIds) || JSON.stringify(b.requirementIds) !== JSON.stringify(e.requirementIds)) throw new TranslatorError();
@@ -164,6 +167,6 @@ export function validateBulletOutput(output: unknown, session: PreparedSession):
       const source = f && session.sources.find((s) => s.id === f.sourceId);
       if (!f?.confirmed || !source || f.evidenceKind !== "user_statement" || source.text.slice(f.start, f.end) !== f.excerpt || !extractPersonalFacts([source]).some((candidate) => candidate.id === f.id && candidate.code === f.code && candidate.label === f.label && candidate.start === f.start && candidate.end === f.end)) throw new TranslatorError();
     }
-    return e;
-  });
+  }
+  return expected;
 }
