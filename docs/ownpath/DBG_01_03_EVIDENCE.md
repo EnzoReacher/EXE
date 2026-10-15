@@ -124,4 +124,12 @@ Across the parent interruption, the original engineer invocation remained stalle
 
 ## Publication / CI
 
-Source checkpoint: **`55d29cc8cbba3fccbd7091755cbbc43ebef007d0`**. Canonical evidence/handoff updates are docs-only. Publication uses normal non-force push on the existing backend branch and maintains draft PR #2 against integration. Exact published-head Quality results are recorded on the PR and in the final documentation checkpoint; they are distinct from actual local compiled-browser execution.
+Source checkpoint: **`55d29cc8cbba3fccbd7091755cbbc43ebef007d0`**. Published evidence checkpoint: **`b041ae413667cff07a268e954bedd4399d6025ab`**. Fresh fetch confirmed `2 0` ahead/behind before normal non-force publication to the existing backend branch. Draft PR #2 was updated and remains based on `feat/ownpath-experience-translator`.
+
+At exact head `b041ae413667cff07a268e954bedd4399d6025ab`, both Quality checks completed **SUCCESS**:
+- [PR run 38723535938](https://github.com/EnzoReacher/EXE/actions/runs/38723535938)
+- [Push run 38723530453](https://github.com/EnzoReacher/EXE/actions/runs/38723530453)
+
+Clean detached ownership for that published source+docs checkpoint against the unchanged task baseline: **PASS, 8 paths**; removed normally in finally. Active checkout remained **FAIL only the 8 local profiles**. This final publication/CI follow-up changes documentation only, not the verified runtime or its tests; no new browser execution is implied. Exact-head checks for any subsequent docs-only SHA are recorded in PR #2's current checks/evidence comment rather than recursively advancing a document to record its own hash.
+
+**Final batch state:** DBG-01 PASS; DBG-02 PASS; DBG-03 PASS; automated scoped regression/compiled acceptance and separate bounded QA PASS. Active-tree profile ownership FAIL (explained preservation exception). Full Factory V2/integration/release gates remain BLOCKED or open as previously assigned; manual/research/legacy authenticated flows and deployment NOT RUN in this batch.

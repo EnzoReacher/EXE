@@ -8,6 +8,8 @@ Actual RED for each defect; post-QA focused91 tests/3 files and full450/53 PASS,
 
 QA required correction of one misleading positive fixture; the same engineer corrected it and reran focused checks, then Lead reran the full suite. Only that test fixture changed after compiled acceptance; runtime hashes matched and no later browser rerun is implied. Known action-alternative grounding (`listing or search`) remains separately open for the domain owner. See [DBG_01_03_EVIDENCE](DBG_01_03_EVIDENCE.md), current STATUS and draft PR #2 for exact commands, source/publication/CI and honest execution limits.
 
+Publication checkpoint `b041ae413667cff07a268e954bedd4399d6025ab` was pushed without force to the existing branch; PR #2 remains draft against integration and its description reflects this batch. Exact-head Quality PR38723535938 and push38723530453 both SUCCESS; clean source+docs ownership PASS8 paths against the same baseline. This final handoff follow-up is documentation-only; current-head CI is also recorded on the PR.
+
 This batch is complete; do not automatically proceed to later work. Frontend/integration/Auth/package/config/CI cleanup, broader Factory V2 verification, manual/research and release remain assigned/open. Do not merge or deploy staged API retirement alone.
 
 ## Next implementation executor: OpenCode

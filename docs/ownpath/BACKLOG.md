@@ -10,6 +10,8 @@ Audit at `7d7d401` reproduced two grounding defects outside the passing 424-test
 
 Verified source: `55d29cc8cbba3fccbd7091755cbbc43ebef007d0`. RED for all three, post-QA focused **91/3**, final retained **450/53**, lint/types/build/diff PASS; unchanged runtime compiled browser **7 cases/30 steps**, API **119**, landing/Translator smoke PASS. Separate read-only QA found no remaining scoped blocker after the same writer corrected a misleading positive fixture. Clean committed-source ownership PASS4 paths; active ownership FAIL only the8 preserved profiles. Publication/exact-head CI are recorded in STATUS and PR #2; later docs-only changes do not imply another browser execution.
 
+Source+evidence checkpoint `b041ae413667cff07a268e954bedd4399d6025ab` published normally to draft PR #2; exact-head Quality PR38723535938/push38723530453 SUCCESS, clean source+docs ownership PASS8 paths. Current documentation-only follow-up leaves runtime/tests unchanged; subsequent exact-head checks are retained on the PR.
+
 Backend writer scope: engine/grounding tests, ownership guard/tests and canonical evidence docs only. Red/green regression, positive controls, full retained checks, compiled acceptance and actual separate QA complete this batch. Frontend/integration/Auth/package/CI cleanup, broader V2 verification and release remain outside it.
 
 Separate domain-owner follow-up (outside DBG-01/02/03): action alternatives such as `listing or search` remain a known grounding limitation. QA rejected a misleading positive fixture endorsing both actions; correcting that fixture does not close the runtime limitation. No additional implementation task is automatically started.

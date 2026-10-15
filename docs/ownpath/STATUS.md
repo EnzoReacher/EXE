@@ -21,7 +21,9 @@
 
 QA rejected a misleading positive fixture that asserted both actions for `listing or search`. The same writer replaced it with unrelated `for sorting or filtering`; focused and full suites reran afterward. Runtime hashes matched the compiled checkpoints, so no new browser execution is claimed after the test-only correction. Action-alternative grounding remains a separately recorded domain-owner limitation outside DBG-01/02/03.
 
-The writer invocation stalled across parent interruption; only that owned child execution was interrupted and the same writer resumed synchronously to finish the fixture correction. No service restart, factory installation/configuration change or second source writer was introduced. Later canonical docs are docs-only. Publication/exact-head CI follow below/on PR #2; the earlier source checkpoints remain historical.
+The writer invocation stalled across parent interruption; only that owned child execution was interrupted and the same writer resumed synchronously to finish the fixture correction. No service restart, factory installation/configuration change or second source writer was introduced. The earlier source checkpoints remain historical.
+
+**Published:** normal non-force push after fresh fetch showed2 ahead/0 behind; source55d29cc and docs checkpoint **`b041ae413667cff07a268e954bedd4399d6025ab`** are on existing draft PR #2, whose description was updated. Exact-head Quality [PR38723535938](https://github.com/EnzoReacher/EXE/actions/runs/38723535938) and [push38723530453](https://github.com/EnzoReacher/EXE/actions/runs/38723530453) both completed SUCCESS at b041ae4. Clean detached committed-source+docs ownership PASS8 paths against the fixed baseline; active checkout still FAIL only8 local profiles. This publication/CI follow-up is docs-only; later exact-head checks are recorded on PR #2 and do not imply another browser execution.
 
 Frontend integration, later Auth/package/config/CI cleanup, broader V2 verification, manual/device/research and release remain open for their owners. This batch does not authorize merge/deployment of API retirement alone.
 
