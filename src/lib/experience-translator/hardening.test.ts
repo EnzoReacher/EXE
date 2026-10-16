@@ -14,6 +14,90 @@ const golden = () => {
 
 const debuggingJd = "Frontend Developer Intern\nRequirements:\n- React\n- TypeScript";
 
+describe("DBG-04 action alternatives", () => {
+  const alternatives = [
+    "I built product listing or search using React.",
+    "I built either product listing or search using React.",
+    "I built product listing versus search using React.",
+    "I built product listing vs search using React.",
+    "Mình làm danh sách sản phẩm hoặc tìm kiếm bằng React.",
+    "Tôi làm danh sách sản phẩm hay tìm kiếm bằng React.",
+    "Em làm danh sách sản phẩm hay là tìm kiếm bằng React.",
+    "I built responsive UI or product listing using React.",
+    "I built product listing or implemented search using React.",
+    "Mình làm danh sách sản phẩm hoặc triển khai tìm kiếm bằng React.",
+  ];
+
+  it.each(alternatives)("does not offer ambiguous action facts: %s", (project) => {
+    const session = prepareSession({ project, jd: debuggingJd });
+    expect(session.facts).toEqual([]);
+    expect(session.questions.map((question) => question.id)).toContain("contribution");
+    expect(session.requirements.map((requirement) => requirement.code)).toEqual(["react", "typescript"]);
+  });
+
+  it.each(alternatives)("does not compose alternatives after confirming remaining facts: %s", (project) => {
+    const session = prepareSession({ project, jd: debuggingJd });
+    const accepted = confirmFacts(session, session.facts.map((fact) => fact.id));
+    expect(composeBullets(accepted)).toEqual([]);
+  });
+
+  it("rejects alternative actions in a contextual contribution answer", () => {
+    const session = prepareSession({ project: "A coursework catalog project for a student demo.", jd: debuggingJd }, {
+      contribution: "product listing or search", technology: "React and TypeScript",
+    });
+    expect(session.facts.map((fact) => [fact.sourceId, fact.code])).toEqual([
+      ["answer-technology", "react"], ["answer-technology", "typescript"],
+    ]);
+    expect(composeBullets(confirmFacts(session, session.facts.map((fact) => fact.id)))).toEqual([]);
+  });
+
+  it.each([
+    ["I built product listing and search using React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
+    ["Mình làm danh sách sản phẩm và tìm kiếm bằng React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
+    ["I built product listing and implemented search using React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
+    ["Mình làm danh sách sản phẩm và triển khai tìm kiếm bằng React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
+    ["I built product listing using React.", ["react", "listing"], "Implemented product listing using React."],
+    ["I built product listing using React and TypeScript.", ["react", "typescript", "listing"], "Implemented product listing using React and TypeScript."],
+    ["I built product listing using React for sorting or filtering.", ["react", "listing"], "Implemented product listing using React."],
+  ])("preserves unambiguous supported evidence: %s", (project, codes, wording) => {
+    const session = prepareSession({ project, jd: debuggingJd });
+    expect(session.facts.map((fact) => fact.code)).toEqual(codes);
+    expect(session.facts.every((fact) => !fact.confirmed)).toBe(true);
+    for (const fact of session.facts) {
+      expect(fact.sourceId).toBe("project");
+      expect(fact.start).toBe(0);
+      expect(fact.end).toBe(project.length - 1);
+      expect(fact.excerpt).toBe(project.slice(0, -1));
+    }
+    const accepted = confirmFacts(session, session.facts.map((fact) => fact.id));
+    const bullets = composeBullets(accepted);
+    expect(bullets.map((bullet) => bullet.text)).toEqual([wording]);
+    expect(validateBulletOutput({ bullets }, accepted)).toEqual(bullets);
+  });
+
+  it.each([
+    "I built product listing using React",
+    "Mình làm danh sách sản phẩm bằng React",
+  ])("retains an independent personal sentence and exact nonzero provenance: %s", (clean) => {
+    const ambiguous = "I built product listing or search using TypeScript.";
+    const project = `${ambiguous} ${clean}.`;
+    const session = prepareSession({ project, jd: debuggingJd });
+    expect(session.facts.map((fact) => fact.code)).toEqual(["react", "listing"]);
+    for (const fact of session.facts) {
+      expect(fact.confirmed).toBe(false);
+      expect(fact.sourceId).toBe("project");
+      expect(fact.start).toBe(ambiguous.length + 1);
+      expect(fact.end).toBe(ambiguous.length + 1 + clean.length);
+      expect(fact.excerpt).toBe(clean);
+      expect(project.slice(fact.start, fact.end)).toBe(clean);
+    }
+    const accepted = confirmFacts(session, session.facts.map((fact) => fact.id));
+    const bullets = composeBullets(accepted);
+    expect(bullets.map((bullet) => bullet.text)).toEqual(["Implemented product listing using React."]);
+    expect(validateBulletOutput({ bullets }, accepted)).toEqual(bullets);
+  });
+});
+
 describe("DBG-01 Vietnamese actor boundaries", () => {
   it.each([
     "Mình làm danh sách sản phẩm bằng React và An làm tìm kiếm.",

@@ -45,6 +45,22 @@ function hasAlternativeTechnologies(excerpt: string) {
   });
 }
 
+function hasAlternativeActions(excerpt: string) {
+  // Only direct alternatives between supported action mentions are ambiguous.
+  // Leave conjunctions and unrelated alternative purposes alone.
+  const mentions = definitions.filter((definition) => definition.action).flatMap((definition) =>
+    [...excerpt.matchAll(new RegExp(definition.pattern.source, "gi"))]);
+  mentions.sort((a, b) => a.index - b.index);
+  return mentions.some((mention, index) => {
+    const next = mentions[index + 1];
+    const connector = next && excerpt.slice(mention.index + mention[0].length, next.index);
+    // Allow the ordinary "responsive UI" noun form and a repeated supported
+    // authoring predicate, but no arbitrary prose between the action mentions.
+    const alternative = new RegExp(`^\\s*(?:ui\\s+)?(?:or|versus|vs|hoặc|hay)(?:\\s+là)?\\s*(?:(?:${authored.source})\\s*)?$`, "iu");
+    return connector !== undefined && alternative.test(connector);
+  });
+}
+
 function text(value: unknown, min: number, max: number, label: string) {
   if (typeof value !== "string" || value.trim().length < min || value.trim().length > max || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(value)) throw new TranslatorError(`${label}: enter ${min}–${max} characters. Describe specific work you actually did.`);
   return value.trim();
@@ -83,7 +99,7 @@ export function extractPersonalFacts(sources: Source[]): Fact[] {
       const normalized = excerpt.replace(/[’‘]/g, "'");
       if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than|as opposed to)\b|trong khi|nhưng/i.test(normalized)) continue;
       // Reject ambiguous subject changes for supported personal-action verbs, not names.
-      if (hasMixedActor(normalized) || hasAlternativeTechnologies(normalized)) continue;
+      if (hasMixedActor(normalized) || hasAlternativeTechnologies(normalized) || hasAlternativeActions(normalized)) continue;
       if (!source.personalContext && /\bteam\b|nhóm/i.test(excerpt) && !/\bi (?:built|developed|implemented|created)\b|(?:mình|tôi|em) (?:tự|phụ trách)/i.test(excerpt)) continue;
       const bare = normalized.replace(/\b(?:and|using|with)\b|và|bằng|[,/]/gi, " ").trim();
       const recognizedList = /^(?:(?:product listing|danh sách sản phẩm|tìm kiếm|search|responsive(?: ui)?|react(?:\.js|js)?|javascript|js|typescript|html|css|rest api|git)\s*)+$/i.test(bare);
