@@ -3,6 +3,16 @@ import { mkdtempSync, mkdirSync, lstatSync, writeFileSync, readFileSync, rmSync 
 import { createServer } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createInterface } from "node:readline";
+
+export function safeEmulatorLine(line) {
+  return /(?:oobCode|actionCode|newPassword)\s*[=:]|To (?:verify the email|reset the password)/i.test(line) ? "[EMULATOR_ACTION_DETAILS_REDACTED]" : line;
+}
+export function forwardEmulatorOutput(input, output) {
+  const lines = createInterface({ input });
+  lines.on("line", line => output.write(`${safeEmulatorLine(line)}\n`));
+  return lines;
+}
 
 export function assertDemoEnvironment(env) {
   if (!/^demo-ownpath-[a-z0-9-]+$/.test(env.GCLOUD_PROJECT || "")) throw new Error("DEMO_PROJECT_REQUIRED");
@@ -59,7 +69,11 @@ export async function runEmulators({ browser = false } = {}) {
     const filename = path.join(owned, "firebase.json");
     writeFileSync(filename, JSON.stringify(config));
     const code = await new Promise((resolve, reject) => {
-      const child = spawn(path.join(root, "node_modules/.bin/firebase"), ["emulators:exec", "--project", env.GCLOUD_PROJECT, "--config", filename, "--only", "auth,firestore", `node ${path.join(root, "scripts/accounts-emulator-check.mjs")}`], { cwd: owned, env, stdio: "inherit" });
+      const child = spawn(path.join(root, "node_modules/.bin/firebase"), ["emulators:exec", "--project", env.GCLOUD_PROJECT, "--config", filename, "--only", "auth,firestore", `node ${path.join(root, "scripts/accounts-emulator-check.mjs")}`], { cwd: owned, env, stdio: ["ignore", "pipe", "pipe"] });
+      // Buffer complete lines, including split chunks, before publishing CLI output.
+      for (const [stream, output] of [[child.stdout, process.stdout], [child.stderr, process.stderr]]) {
+        forwardEmulatorOutput(stream, output);
+      }
       const stop = () => child.kill("SIGTERM");
       process.once("SIGINT", stop); process.once("SIGTERM", stop);
       child.once("error", reject);

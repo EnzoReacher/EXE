@@ -21,6 +21,7 @@ const roles = {
 // AB-06-I is an explicit extension, not a grant over all workflows/harnesses.
 roles["ownpath-integration"].edits.push(".github/workflows/ownpath-accounts.yml", "scripts/ci-ownpath-browser.mjs", "e2e/translator.spec.ts");
 roles["ownpath-integration"].edits.push("scripts/accounts-browser-check.mjs", "scripts/accounts-browser-check.test.mjs", "e2e/accounts-api.spec.ts", "e2e/accounts-api.config.mts", "e2e/safe-reporter.ts");
+roles["ownpath-integration"].edits.push("e2e/accounts-auth.spec.ts");
 roles["ownpath-engineer"].edits.push("src/app/api/auth/csrf/*");
 const commands = {
   "ownpath-audit": "Delegate a read-only repo audit to ownpath-auditor. Inspect current branch/SHA, dirty/untracked work, remote main/branches and latest CI where accessible. Read current evidence/reuse contracts. Compare observed state with docs/ownpath/STATUS.md; do not redo completed work. Target: $ARGUMENTS",

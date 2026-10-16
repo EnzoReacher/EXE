@@ -12,6 +12,7 @@ on:
       - scripts/ci-ownpath-browser.mjs
       - e2e/translator*
       - e2e/accounts-api*
+      - e2e/accounts-auth.spec.ts
       - e2e/safe-reporter.ts
       - firebase.json
       - firestore.*

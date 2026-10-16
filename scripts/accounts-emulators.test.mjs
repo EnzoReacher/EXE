@@ -2,9 +2,29 @@ import { describe, it, expect } from "vitest";
 import { mkdtempSync, existsSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { assertDemoEnvironment, createOwnedDirectory } from "./accounts-emulators.mjs";
+import { assertDemoEnvironment, createOwnedDirectory, safeEmulatorLine, forwardEmulatorOutput } from "./accounts-emulators.mjs";
+import { PassThrough } from "node:stream";
+import { once } from "node:events";
 
 describe("owned emulator guard", () => {
+  it("buffers split secret-bearing chunks on both CLI output streams and flushes final unterminated lines safely", async () => {
+    for (const label of ["stdout", "stderr"]) {
+      const input = new PassThrough(), output = new PassThrough(); let text = "";
+      output.on("data", chunk => { text += chunk.toString(); });
+      const lines = forwardEmulatorOutput(input, output), closed = once(lines, "close");
+      input.write(`${label} ready\noob`); input.write("Code=PRIVATE");
+      expect(text).toBe(`${label} ready\n`);
+      input.end("_SYNTHETIC_ACTION"); await closed;
+      expect(text).toBe(`${label} ready\n[EMULATOR_ACTION_DETAILS_REDACTED]\n`);
+    }
+  });
+  it("redacts CLI verification/reset links and action secrets while retaining safe acceptance output", () => {
+    for (const line of ["i To verify the email synthetic@example.test follow http://127.0.0.1/emulator/action?oobCode=PRIVATE", "reset URL newPassword=PRIVATE", "oobCode=PRIVATE", "actionCode=PRIVATE"]) {
+      expect(safeEmulatorLine(line)).toBe("[EMULATOR_ACTION_DETAILS_REDACTED]");
+      expect(safeEmulatorLine(line)).not.toContain("PRIVATE");
+    }
+    expect(safeEmulatorLine("21 backend cases PASS")).toBe("21 backend cases PASS");
+  });
   it("creates a missing temporary parent and refuses symlink parents", () => {
     const root = mkdtempSync(path.join(tmpdir(), "ownpath-parent-"));
     try {

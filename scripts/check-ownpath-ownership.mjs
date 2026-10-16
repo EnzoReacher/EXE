@@ -9,7 +9,7 @@ const legacyPages = /^src\/app\/(?:assessment|analysis|opportunities|saved-work|
 export function ownsPath(role, filename) {
   if (filename.startsWith("/") || filename.includes("\\") || filename.split("/").some((part) => ["..", ".", ""].includes(part))) return false;
   if (shared.has(filename)) return false;
-  if (role === "accounts-integration" && [".github/workflows/ownpath-accounts.yml", "scripts/ci-ownpath-browser.mjs", "scripts/accounts-browser-check.mjs", "scripts/accounts-browser-check.test.mjs", "e2e/translator.spec.ts", "e2e/accounts-api.spec.ts", "e2e/accounts-api.config.mts", "e2e/safe-reporter.ts"].includes(filename)) return true;
+  if (role === "accounts-integration" && [".github/workflows/ownpath-accounts.yml", "scripts/ci-ownpath-browser.mjs", "scripts/accounts-browser-check.mjs", "scripts/accounts-browser-check.test.mjs", "e2e/translator.spec.ts", "e2e/accounts-api.spec.ts", "e2e/accounts-auth.spec.ts", "e2e/accounts-api.config.mts", "e2e/safe-reporter.ts"].includes(filename)) return true;
   if (role === "accounts-backend") return /^src\/lib\/accounts-billing\//.test(filename) || /^src\/app\/api\/(?:auth\/(?:csrf|session)|account|billing\/(?:plans|status|checkout|portal)|webhooks\/stripe|sessions(?:\/\[id\])?)\//.test(filename) || filename.startsWith("docs/ownpath/");
   if (role === "auth-ui" && filename.startsWith("src/components/accounts-auth/")) return true;
   if (role === "billing-ui" && filename.startsWith("src/components/accounts-billing/")) return true;

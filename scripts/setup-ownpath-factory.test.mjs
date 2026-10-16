@@ -34,6 +34,8 @@ describe("version-aware OwnPath Factory", () => {
     const grants = major === 1 ? Object.entries(writer.permission.edit).filter(([, effect]) => effect === "allow").map(([resource]) => resource) : writer.permissions.filter((p) => p.action === "edit" && p.effect === "allow").map((p) => p.resource);
     expect(grants).toContain("firebase.json"); expect(grants).toContain("package.json");
     expect(grants).toContain("scripts/verify-ownpath-factory.mjs"); expect(grants).toContain("scripts/verify-ownpath-factory.test.mjs");
+    expect(grants).toContain("e2e/accounts-auth.spec.ts");
+    expect(grants).not.toContain("e2e/*"); expect(grants).not.toContain("e2e/accounts-auth*");
     expect(grants.some((p) => p.startsWith("src/") || p.startsWith(".opencode/"))).toBe(false);
     if (major === 1) expect(writer.permission.bash["*"]).toBe("ask");
     else expect(writer.permissions).toContainEqual({ action: "shell", resource: "*", effect: "ask" });
