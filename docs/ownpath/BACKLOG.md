@@ -7,8 +7,8 @@ Scope and test-payments choice: [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.
 - [x] AB-00: scope/ownership/contract freeze at `4269e82`, scoped integration permissions, retired-API checker allows declared APIs (including reviewed CSRF bootstrap) without reviving old ones. Full V2 permission-runtime verification remains separately blocked.
 - [x] AB-01 local/backend slice: `15d8c6a` + reviewed corrections `9a56dc9`; **9 actual Auth/Firestore backend cases +24 direct-client denials**, **519 retained default tests (9 explicitly skipped emulator cases)**, lint/types/build pass. Separate read-only QA closed all3 findings. Cloud/email and FE entry cutover remain separate gates.
 - [ ] AB-02: FE1 revamped registration/login/verification/reset/recovery and account entry.
-- [ ] AB-03: transactional account/history/restore repository implemented; quota/idempotency QA corrections reviewed and closed, billing authority still pending. Current Pro persistence tests use a labeled server fixture.
-- [ ] AB-04: test-only provider adapter, checkout/portal, signed durable webhooks and canonical subscription reconciliation.
+- [x] AB-03 local/backend slice: transactional owned history/restore/quota/revisions and reviewed billing authority integrated; actual Firestore with fake-provider payment state proves consistent quota/downgrade access. FE2 restore review/UI and actual external provider acceptance remain separate gates.
+- [x] AB-04 deterministic/backend slice: real Stripe23 adapter, durable checkout/customer/portal, signed receipts/retry/canonical reconciliation implemented; separate QA closed3 findings, default-off activation gate. Actual Stripe sandbox matrix remains BLOCKED (no keys/account/Price/webhook secret);21 actual Firebase cases include12 fake-provider billing cases, not Stripe acceptance.
 - [ ] AB-05: FE2 Free/Pro pricing, hosted payment/return/cancel/management UI and saved-session controls.
 - [ ] AB-06: reviewed combined candidate, core regression + new emulator/auth/billing/browser/sandbox acceptance, separate QA and exact-head CI.
 - [ ] AB-07: reproducible setup, measured evidence, missing configuration/production gates and handoff.
