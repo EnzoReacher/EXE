@@ -1,5 +1,9 @@
 # OwnPath handoff
 
+## Morning 16 October: next debugging task
+
+Published checkpoint `295306b` has completed DBG-01/02/03; source `55d29cc`, exact-head Quality PR `38723771422`/push `38723765300` green. Work audit reproduced 450 tests/53 files, original grounding fixes and shell/backend landing-test separation. Continue with [OPENCODE_DBG04](OPENCODE_DBG04.md): fix the known action-alternative grounding defect in the engine with narrow regressions and acceptance. This is an OpenCode execution handoff, not another runtime fix. Do not restart completed tasks or take frontend/integration/cleanup work from its owners.
+
 ## Completed debugging-only batch: DBG-01 / DBG-02 / DBG-03
 
 All three approved debugging cards passed bounded regression and separate read-only QA at source **`55d29cc8cbba3fccbd7091755cbbc43ebef007d0`**, fixed baseline `c3d8ae9795c19506a33cc0d33c292878aa484bf4`. Existing backend worktree safely fast-forwarded; eight untracked profiles preserved byte-for-byte. One source writer changed only engine/grounding tests and ownership guard/tests. Both frontend owners' source and all frozen contracts remain untouched.

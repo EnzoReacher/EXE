@@ -1,5 +1,11 @@
 # Execution backlog and estimated roadmap
 
+## Morning continuation — 16 October 2026
+
+Fresh Work audit at `295306b` confirmed published DBG-01/02/03, green exact-head Quality and 450/53 passing tests; reproduced original fixes and scoped ownership. Next debugging-only task: [OPENCODE_DBG04](OPENCODE_DBG04.md), the previously logged action-alternative limitation. No frontend/integration/cleanup work is taken over.
+
+- [ ] DBG-04: `I built product listing or search using React.` must not propose both implemented actions or generate `listing and search`; retain genuine conjunctions and independent personal facts. Engine + scoped regressions + evidence docs only, RED/GREEN, acceptance and separate QA before closure. Preparation is not completion.
+
 ## Current owner priority — debugging only
 
 Audit at `7d7d401` reproduced two grounding defects outside the passing 424-test suite and one shell-test ownership gap. Owner approved debugging first, leaving remaining work to others. Execution uses fixed baseline `c3d8ae9795c19506a33cc0d33c292878aa484bf4`; [DBG_01_03_EVIDENCE](DBG_01_03_EVIDENCE.md) records task cards, actual RED/GREEN attempts and acceptance.

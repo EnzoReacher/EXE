@@ -1,5 +1,7 @@
 # OpenCode debugging-only run — 15 October 2026
 
+Completed checkpoint: DBG-01/02/03 passed at source `55d29cc` and published HEAD `295306b`; see DBG_01_03_EVIDENCE. On 16 October, morning verification confirmed their original corrections. Do not repeat this historical run; the next debugging instruction is [OPENCODE_DBG04](OPENCODE_DBG04.md).
+
 Owner approved this order: debug the audit findings first; leave frontend, integration and remaining work to the assigned people later. This instruction supersedes the broader next-build prompt for this run. These are reproduced audit findings, not completed fixes.
 
 ## Execute now in the existing backend OpenCode session
