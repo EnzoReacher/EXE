@@ -31,7 +31,7 @@ export function createOwnedDirectory(parent = "/tmp/opencode") {
   return mkdtempSync(path.join(parent, "ownpathaccounts-"));
 }
 
-export async function runEmulators() {
+export async function runEmulators({ browser = false } = {}) {
   // Never inherit credentials, owner emulator hosts or a cloud project.
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
   const java = spawnSync("java", ["-version"], { stdio: "ignore" });
@@ -48,6 +48,7 @@ export async function runEmulators() {
     Object.assign(env, { HOME: path.join(owned, "home"), XDG_CONFIG_HOME: path.join(owned, "config"), TMPDIR: path.join(owned, "tmp"), FIREBASE_EMULATORS_PATH: emulatorCache });
     mkdirSync(env.HOME, { recursive: true, mode: 0o700 });
     mkdirSync(env.TMPDIR, { recursive: true, mode: 0o700 });
+    if (browser) Object.assign(env, { OWNPATH_ACCOUNTS_BROWSER_ACCEPTANCE: "1", PLAYWRIGHT_BROWSERS_PATH: process.env.PLAYWRIGHT_BROWSERS_PATH ?? path.join(process.env.HOME || owned, ".cache", "ms-playwright") });
     Object.assign(env, { GCLOUD_PROJECT: projectId, OWNPATH_FIREBASE_PROJECT_ID: projectId, OWNPATH_ACCOUNTS_MODE: "emulator", OWNPATH_APP_ORIGIN: "http://127.0.0.1:3000", FIREBASE_AUTH_EMULATOR_HOST: `127.0.0.1:${ports[0]}`, FIRESTORE_EMULATOR_HOST: `127.0.0.1:${ports[1]}`, FIREBASE_CLI_DISABLE_MOTD: "1", CI: "true" });
     assertDemoEnvironment(env);
     const config = JSON.parse(readFileSync(path.join(root, "firebase.json"), "utf8"));
@@ -77,5 +78,7 @@ export async function runEmulators() {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  runEmulators().catch((error) => { console.error(error.message); process.exitCode = 1; });
+  const args = process.argv.slice(2);
+  if (args.length > 1 || args.some(arg => arg !== "--browser")) { console.error("Usage: accounts-emulators.mjs [--browser]"); process.exitCode = 1; }
+  else runEmulators({ browser: args.includes("--browser") }).catch((error) => { console.error(error.message); process.exitCode = 1; });
 }

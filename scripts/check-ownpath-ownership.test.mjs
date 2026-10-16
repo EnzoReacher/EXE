@@ -13,6 +13,8 @@ describe("three-person OwnPath ownership", () => {
     expect(ownsPath("accounts-integration", "firebase.json")).toBe(true);
     expect(ownsPath("accounts-integration", ".github/workflows/ownpath-accounts.yml")).toBe(true);
     expect(ownsPath("accounts-integration", "e2e/translator.spec.ts")).toBe(true);
+    for (const filename of ["scripts/accounts-browser-check.mjs", "scripts/accounts-browser-check.test.mjs", "e2e/accounts-api.spec.ts", "e2e/accounts-api.config.mts", "e2e/safe-reporter.ts"]) expect(ownsPath("accounts-integration", filename)).toBe(true);
+    expect(ownsPath("accounts-integration", "e2e/other.spec.ts")).toBe(false);
     expect(ownsPath("accounts-integration", "e2e/translator.config.mts")).toBe(false);
     expect(ownsPath("accounts-backend", "e2e/translator.spec.ts")).toBe(false);
     expect(ownsPath("accounts-integration", ".github/workflows/quality.yml")).toBe(false);

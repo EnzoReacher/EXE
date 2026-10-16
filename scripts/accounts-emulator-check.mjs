@@ -37,3 +37,7 @@ try {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const backend = spawnSync(process.execPath, [path.join(root, "node_modules/vitest/vitest.mjs"), "run", "src/lib/accounts-billing/emulator.integration.test.ts", "src/lib/accounts-billing/billing-emulator.test.ts"], { cwd: root, env: { ...process.env, OWNPATH_EMULATOR_ACCEPTANCE: "1" }, stdio: "inherit", timeout: 180000 });
 if (backend.status !== 0) throw new Error("ACTUAL_BACKEND_EMULATOR_ACCEPTANCE_FAILED");
+if (process.env.OWNPATH_ACCOUNTS_BROWSER_ACCEPTANCE === "1") {
+  const browser = spawnSync(process.execPath, [path.join(root, "scripts/accounts-browser-check.mjs")], { cwd: root, env: process.env, stdio: "inherit", timeout: 240000 });
+  if (browser.status !== 0) throw new Error("ACTUAL_ACCOUNTS_BROWSER_ACCEPTANCE_FAILED");
+}

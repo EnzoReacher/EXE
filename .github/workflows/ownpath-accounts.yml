@@ -11,6 +11,8 @@ on:
       - scripts/check-ownpath-retired-apis*.mjs
       - scripts/ci-ownpath-browser.mjs
       - e2e/translator*
+      - e2e/accounts-api*
+      - e2e/safe-reporter.ts
       - firebase.json
       - firestore.*
       - package.json
@@ -23,7 +25,7 @@ permissions:
 
 jobs:
   firebase:
-    name: Actual demo Auth and Firestore acceptance
+    name: Actual demo Firebase and authenticated browser transport
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -40,7 +42,8 @@ jobs:
           distribution: temurin
           java-version: 21
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test:accounts:emulators
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:accounts:browser
   translator:
     name: Compiled guest Translator and retired APIs
     runs-on: ubuntu-latest
