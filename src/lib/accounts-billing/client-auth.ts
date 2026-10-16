@@ -165,7 +165,10 @@ export async function createAccountsAuthAdapter(options: FirebaseOptions, emulat
       try { await confirmPasswordReset(auth, code, password); }
       catch (error) { throw safeAuthError(error); }
     },
-    passwordPolicy: password => validatePassword(auth, password),
+    passwordPolicy: async password => {
+      try { return await validatePassword(auth, password); }
+      catch (error) { throw safeAuthError(error); }
+    },
     logout: (scope = "current") => serial(async () => {
       try { await accountsRequest(API_PATHS.session, "DELETE", { scope }); }
       finally { try { await signOut(auth); } catch (error) { throw safeAuthError(error, "session"); } }

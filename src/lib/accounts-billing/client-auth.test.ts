@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => {
     create: vi.fn(async () => ({ user })), login: vi.fn(async () => ({ user })),
     sendVerification: vi.fn(), reset: vi.fn(), checkAction: vi.fn(async () => ({ operation: "VERIFY_EMAIL" })),
     applyAction: vi.fn(), checkReset: vi.fn(), completeReset: vi.fn(), fetch: vi.fn(),
+    policy: vi.fn(async () => ({ isValid: true })),
   };
 });
 vi.mock("firebase/app", () => ({
@@ -19,7 +20,7 @@ vi.mock("firebase/auth", () => ({
   sendEmailVerification: mocks.sendVerification, sendPasswordResetEmail: mocks.reset,
   checkActionCode: mocks.checkAction, applyActionCode: mocks.applyAction,
   verifyPasswordResetCode: mocks.checkReset, confirmPasswordReset: mocks.completeReset,
-  reload: vi.fn(), validatePassword: vi.fn(async () => ({ isValid: true })),
+  reload: vi.fn(), validatePassword: mocks.policy,
 }));
 import { AccountAuthError, accountsRequest, createAccountsAuthAdapter } from "./client-auth";
 const options = { projectId: "demo-ownpath-accounts", apiKey: "synthetic-key" };
@@ -36,6 +37,16 @@ beforeEach(() => {
   vi.stubGlobal("fetch", mocks.fetch);
 });
 describe("official Firebase client adapter", () => {
+  it("preserves official password policy results and sanitizes provider failures", async () => {
+    const adapter = await createAccountsAuthAdapter(options, "http://127.0.0.1:9099");
+    await expect(adapter.passwordPolicy(credentials.password)).resolves.toEqual({ isValid: true });
+    expect(mocks.policy).toHaveBeenCalledWith(mocks.auth, credentials.password);
+    mocks.policy.mockRejectedValueOnce({ code: "auth/network-request-failed", message: "private SDK password-policy details" });
+    const error = await adapter.passwordPolicy(credentials.password).catch(error => error);
+    expect(error).toBeInstanceOf(AccountAuthError);
+    expect(error).toMatchObject({ code: "UNAVAILABLE", phase: "identity" });
+    expect(error.message).not.toContain("private SDK");
+  });
   it("uses memory persistence and clears credentials after cookie issuance", async () => {
     const adapter = await createAccountsAuthAdapter(options, "http://127.0.0.1:9099");
     await adapter.login(credentials);
