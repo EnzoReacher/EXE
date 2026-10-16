@@ -164,11 +164,17 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("billing: actua
   }, 30000);
   it("recovers a committed but unprocessed signed receipt with a fresh worker and keeps duplicates inert", async () => {
     const customerId = await active();
-    const originalVersion = (await service.entitlement(identity)).version;
+    const before = await service.entitlement(identity);
+    expect(before.planId).toBe("pro");
+    const originalVersion = before.version;
+    const repository = new SavedSessionRepository(db, service.authorizeWrite, () => now, service.readQuota);
+    const intake = { project: "I built product listing and search using React. The demo is working.", jd: "Frontend Developer Intern requirements: React, JavaScript and HTML and CSS." };
+    const save = () => ({ title: "Pending cancellation must block writes", operationId: randomUUID(), snapshot: { schemaVersion: 1 as const, intake, answers: {}, prepared: prepareSession(intake), candidates: [] } });
     provider.states.get(customerId)!.subscriptions[0].status = "canceled";
     const payload = await receive(customerId, undefined, "customer.subscription.deleted");
     expect((await db.collection("billingEvents").doc(payload.id).get()).data()).toMatchObject({ state: "pending", attempts: 0 });
     expect((await service.status(identity))).toMatchObject({ reconciliation: "pending", entitlement: { planId: "free" } });
+    await expect(repository.create(identity, save())).rejects.toMatchObject({ code: "PRO_REQUIRED" });
 
     // The request/worker ends after the durable receipt, without invoking processEvent.
     const restarted = new BillingService(db, provider, TEST_CATALOG, options(), () => now);
