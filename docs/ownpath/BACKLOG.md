@@ -4,7 +4,7 @@
 
 Fresh Work audit at `295306b` confirmed published DBG-01/02/03, green exact-head Quality and 450/53 passing tests; reproduced original fixes and scoped ownership. Next debugging-only task: [OPENCODE_DBG04](OPENCODE_DBG04.md), the previously logged action-alternative limitation. No frontend/integration/cleanup work is taken over.
 
-- [ ] DBG-04: `I built product listing or search using React.` must not propose both implemented actions or generate `listing and search`; retain genuine conjunctions and independent personal facts. Engine + scoped regressions + evidence docs only, RED/GREEN, acceptance and separate QA before closure. Preparation is not completion.
+- [x] DBG-04: ambiguous recognized action alternatives no longer propose both actions or generate their conjunction within the tested bounded grammar. Genuine conjunctions, independent sentences and exact provenance preserved. Fixed baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9`; final source `87e1f116b9a7df6b704af60a7e22d411422ee6e0`. Actual RED/GREEN, QA punctuation finding/correction, **123 focused / 486 full tests (53 files)**, lint/types/build, **7 browser cases/30 steps**, **119 API probes**, smoke and separate read-only QA PASS. See [DBG_04_EVIDENCE](DBG_04_EVIDENCE.md); publication/docs-only SHA and exact-head CI are recorded on draft PR #2. Committed source ownership PASS; active ownership FAIL only eight preserved local profiles. No broader language guarantee or automatic next task.
 
 ## Current owner priority — debugging only
 
@@ -20,7 +20,7 @@ Source+evidence checkpoint `b041ae413667cff07a268e954bedd4399d6025ab` published 
 
 Backend writer scope: engine/grounding tests, ownership guard/tests and canonical evidence docs only. Red/green regression, positive controls, full retained checks, compiled acceptance and actual separate QA complete this batch. Frontend/integration/Auth/package/CI cleanup, broader V2 verification and release remain outside it.
 
-Separate domain-owner follow-up (outside DBG-01/02/03): action alternatives such as `listing or search` remain a known grounding limitation. QA rejected a misleading positive fixture endorsing both actions; correcting that fixture does not close the runtime limitation. No additional implementation task is automatically started.
+Historical follow-up outside DBG-01/02/03: action alternatives such as `listing or search` were a known grounding limitation. The separately authorized DBG-04 above now closes its bounded direct-connector/repeated-predicate fixtures, including optional comma punctuation. This does not establish arbitrary-language grounding.
 
 ## Owner-local continuation — CF-06-BE / CF-07-BE
 

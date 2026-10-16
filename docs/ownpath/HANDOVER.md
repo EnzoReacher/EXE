@@ -1,5 +1,15 @@
 # OwnPath handoff
 
+## DBG-04 completed — stop checkpoint, 16 October
+
+Final source **`87e1f116b9a7df6b704af60a7e22d411422ee6e0`**, unchanged baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9`. Existing backend worktree safely fast-forwarded; eight untracked activation profiles remain byte-for-byte intact. One engineer changed only engine/grounding tests. Direct recognized English/Vietnamese action alternatives, repeated supported predicates and optional comma connectors are conservatively rejected per excerpt; genuine conjunctions and independent evidence retain exact linkage.
+
+Actual RED before fixes; separate QA found a punctuation bypass, reproduced/fixed by the same writer. Final **123 focused tests/2 files**, **486 retained tests/53 files**, lint/types/build/diff PASS; fresh final **7 compiled browser cases/30 steps**, **119 API probes**, landing/Translator smoke and owned cleanup/port33359 rebind PASS. Separate read-only QA re-review PASS; no independent QA shell rerun claimed. Clean detached source ownership PASS2 against original baseline; active guard FAIL only preserved profiles. Full evidence and bounded grammar limits: [DBG_04_EVIDENCE](DBG_04_EVIDENCE.md).
+
+Source commits `73ed2e9` → `87e1f11`; subsequent publication evidence is docs-only. Full published docs checkpoint, final clean source+docs ownership and exact-head Quality results are recorded on existing draft PR #2, whose integration base is unchanged. No new browser execution is implied by docs-only commits.
+
+DBG-01–04 scoped tasks complete. Stop here. Frontend, cross-owner integration, Auth/package/config/CI cleanup, full V2 runtime verification, manual/device/research and release remain assigned/open. Do not merge/deploy staged API retirement alone.
+
 ## Morning 16 October: next debugging task
 
 Published checkpoint `295306b` has completed DBG-01/02/03; source `55d29cc`, exact-head Quality PR `38723771422`/push `38723765300` green. Work audit reproduced 450 tests/53 files, original grounding fixes and shell/backend landing-test separation. Continue with [OPENCODE_DBG04](OPENCODE_DBG04.md): fix the known action-alternative grounding defect in the engine with narrow regressions and acceptance. This is an OpenCode execution handoff, not another runtime fix. Do not restart completed tasks or take frontend/integration/cleanup work from its owners.

@@ -1,5 +1,17 @@
 # OwnPath implementation status — 2026-10-15
 
+## DBG-04 completed — 16 October 2026
+
+**Final verified source:** `87e1f116b9a7df6b704af60a7e22d411422ee6e0`; fixed actual task baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9` after safe non-divergent fast-forward from `295306b`. Eight local `.opencode` profiles and original M17 worktree preserved; all profile checksums match. Baseline exact-head Quality PR38843614164/push38843610324 SUCCESS.
+
+**DBG-04 PASS within bounded scope.** One `ownpath-engineer` added an excerpt-level recognized-action alternative guard, preserving genuine conjunctions, single actions, affirmative tool lists, unrelated purposes and independent sentences with exact provenance. Only engine and colocated grounding tests changed. Actual read-only auditor and separate read-only QA executed; no factory/provider/config change or broader isolation claim.
+
+Initial RED18 failed/5 passed; repeated-predicate RED4 failed; separate QA found a comma-punctuation bypass, which the same writer reproduced RED4 failed/32 passed before the one-line correction. Skips are recorded separately. Final focused **123/2**, full retained **486/53**, lint/types/build/diff PASS. Fresh post-fix compiled browser **7 cases/30 steps**, **119** retired-API probes and landing/Translator smoke PASS. Owned settings-free loopback server/temp cleaned in `finally`; port33359 rebind PASS. Matching cached Chromium; no CI spoofing or service reuse. Final separate QA PASS, no remaining scoped blocker; QA reviewed supplied execution logs and independently analyzed source, but ran no shell/tests/Git/CI.
+
+Clean detached final-source ownership **PASS2 paths** against the unchanged baseline; final source+docs check recorded on PR #2. Active-tree ownership remains separately **FAIL** only eight preserved profiles; policy/baseline unchanged. [DBG_04_EVIDENCE](DBG_04_EVIDENCE.md) records task card, actual failed attempts, commands, counts and grammar limits. Source commits `73ed2e9` then `87e1f11`; evidence/checklist/handoff follow-up is docs-only. Existing draft PR #2 retains integration base; full publication SHA and exact-head CI results are recorded in its current evidence section.
+
+DBG-01–03 were not reopened. Frontend/integration/Auth/package/config/CI cleanup, broader V2 verification, manual/device/research and release stay open with assigned owners. Stop after DBG-04; no merge, deployment or database operation.
+
 ## DBG-01 / DBG-02 / DBG-03 debugging batch
 
 **Verified source:** `55d29cc8cbba3fccbd7091755cbbc43ebef007d0`, branch `feat/ownpath-backend`, existing draft PR #2 against integration. Fixed task baseline: `c3d8ae9795c19506a33cc0d33c292878aa484bf4` after safe fast-forward of the existing backend worktree from `7d7d401`. Eight local untracked Factory profiles and original M17 worktree are preserved. Baseline exact-head Quality runs `38712669937` / `38712664302` passed.
