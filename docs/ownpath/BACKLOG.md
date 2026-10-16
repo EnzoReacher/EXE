@@ -2,6 +2,8 @@
 
 ## Owner-authorized accounts/database/subscription stage — 16 October 2026
 
+Continuationfd0644b: [ledger](AB_EXECUTION_LEDGER.md) tracks dependencies/owners. Completed reviewed password-policy safe errors and distinct owned Firebase/browser API transport acceptance. Fresh539tests/63files(21emulator skips), actual21backend+24denials, transport3/6, guest7/30+119, install/lint/types/build/diff PASS. Both human frontend packets and external packet prepared; no deliveries/acknowledgment or external execution. AB-02, UI/restore/shell/legacy, actual-provider/cloud/recovery gates remain open.
+
 Scope and test-payments choice: [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md). Execute through [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md) on new isolated stage branch based on `7adbd6b`; preserve backend PR #2 and completed DBG-01–04. Execution is active in draft PR #3: scoped integration tooling/config and separate QA complete at `c32fc0a`; actual emulator rules checks passed. Backend/runtime/frontend/external gates remain separately tracked in [AB_EVIDENCE](AB_EVIDENCE.md), not completed by tooling alone.
 
 - [x] AB-00: scope/ownership/contract freeze at `4269e82`, scoped integration permissions, retired-API checker allows declared APIs (including reviewed CSRF bootstrap) without reviving old ones. Full V2 permission-runtime verification remains separately blocked.

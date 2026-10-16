@@ -68,6 +68,8 @@ FE2 must show restored wording separately as untrusted drafts, require renewed s
 
 ## Exact FE task cards / ownership
 
+Self-contained continuation packets: [FE1](AB_FE1_PACKET.md), [FE2](AB_FE2_PACKET.md); exact dependencies [AB_EXECUTION_LEDGER](AB_EXECUTION_LEDGER.md). FE1 owns account page; shared account layout coordinator-reserved. Packets prepared, not acknowledged/delivered; DTOs unchanged. Separate authenticated browser API transport is not frontend acceptance.
+
 ### FE1 — AB-02 auth/account
 
 - Separate `feat/ownpath-auth-ui` worktree after contract commit; inspect/preserve current progress.

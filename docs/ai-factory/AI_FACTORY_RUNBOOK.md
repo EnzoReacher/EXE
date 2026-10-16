@@ -1,5 +1,11 @@
 # OwnPath OpenCode Factory
 
+## Continuation permission inspection — 16 October 2026
+
+Actual CLIv2.0.7 help and loaded native role policies inspected again. `reviewer` has edit/shell deny, and supported read-only reviewer sessions executed source/log audits only. The native general `dev` writer remains broadly permitted; no narrowly isolated writer delegation is claimed. Full verifier still exits1 `FACTORY_V2_RUNTIME_NOT_VERIFIED`. No owner profile/global/provider change or new profile activation occurred. Coordinator handled one explicit two-file repair in a separate worktree with a serialized role handoff and separate review; this is not an independent writer-agent execution.
+
+W1-I adds exact integration tooling grants for the authenticated browser API suite and sanitized reporter filename only; [AB_EXECUTION_LEDGER](../ownpath/AB_EXECUTION_LEDGER.md) and [AB_TASKS](../ownpath/AB_TASKS.md) are authoritative. Loaded generated-template/resource-policy tests remain distinct from runtime matching. Backend's eight old local profiles remain uncommitted and are compared byte-for-byte after the run. Human FE1/FE2 are reserved, not replaced by agents.
+
 ## Accounts stage tooling — 16 October 2026
 
 Project generator now defines five agents/four commands: the backend engineer is limited to declared accounts/billing paths; `ownpath-integration` owns only AB-00-I/AB-01-I root tooling listed in `docs/ownpath/AB_TASKS.md`. Both reviewers retain default-deny/read-only policies. Lead may delegate the two disjoint scopes; shell execution still asks approval. Current owner-local profiles in the old backend worktree are preserved, not overwritten or activated by this change. Read-only QA is invoked separately through the existing harness. Generated-template tests are not runtime resource-matching evidence. The existing V2 verifier limitation remains explicit. V1 fixture expectations include the fifth integration role; no new V1 runtime execution is claimed.

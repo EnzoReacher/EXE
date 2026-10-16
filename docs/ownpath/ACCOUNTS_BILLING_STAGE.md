@@ -1,5 +1,7 @@
 # OwnPath accounts, Firebase and sandbox subscriptions
 
+**Planning baseline, retained for decisions/requirements.** Statements below about absent packages/runtime describe the initial checkpoint, not current implementation. Current continuation source/evidence/ownership: [AB_EVIDENCE](AB_EVIDENCE.md), [AB_EXECUTION_LEDGER](AB_EXECUTION_LEDGER.md), [STATUS](STATUS.md). Backend/local completion does not close human UI, actual Stripe, cloud/recovery or release gates.
+
 Decision date: 16 October 2026. Owner explicitly requested revamped login/registration, robust account creation, a reliable database and Free/Pro subscription payments. Owner selected **test payments first**. This authorizes the new implementation stage and supersedes the earlier no-Auth/no-persistence/no-subscriptions scope only for the bounded work below. No runtime feature is implemented by this planning checkpoint.
 
 ## Outcome and baseline
