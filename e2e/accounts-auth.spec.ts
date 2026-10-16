@@ -212,3 +212,64 @@ test("official SDK recovers created identity and mail failure under injected net
     await page.evaluate(() => window.ownpathBrowserAdapter.logout());
   });
 });
+
+test("all-session logout revokes a second browser cookie without touching its cookie jar", async ({ page, context, browser, baseURL, fixture }) => {
+  await test.step("TWO_BROWSER_SESSIONS_ACTIVE", async () => {
+    const first = await page.evaluate(credentials => window.ownpathBrowserAdapter.register(credentials), fixture.credentials);
+    expect(first.session.account.identity.email).toBe(fixture.credentials.email);
+    expect(await page.evaluate(async () => (await fetch("/api/account")).status)).toBe(200);
+  });
+
+  const secondContext = await browser.newContext({ baseURL });
+  try {
+    let unexpected = 0;
+    await secondContext.route("**/*", route => {
+      const request = route.request(), url = new URL(request.url());
+      const allowed = url.origin === baseURL && (
+        request.method() === "GET" && (["/experience-translator", "/", "/api/auth/csrf", "/api/account", "/favicon.ico", "/icon.svg"].includes(url.pathname) || url.pathname.startsWith("/_next/static/"))
+        || request.method() === "POST" && url.pathname === "/api/auth/session"
+      );
+      if (!allowed) { unexpected++; return route.abort(); }
+      return route.continue();
+    });
+    await secondContext.routeWebSocket("**/*", socket => { unexpected++; socket.close(); });
+    const second = await secondContext.newPage();
+    await second.goto("/experience-translator");
+    // Obtain a different recent provider token in memory from the same owned Auth emulator.
+    // The second browser uses the real cookie-exchange route, never an Admin-issued app cookie.
+    const provider = await fetch(`${emulatorOrigin}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=synthetic-emulator-key`, {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...fixture.credentials, returnSecureToken: true }), signal: AbortSignal.timeout(3000),
+    });
+    const token = (await provider.json() as { idToken?: string }).idToken;
+    if (!provider.ok || !token) throw new Error("SECOND_EMULATOR_IDENTITY_FAILED");
+    const authSecond = (JSON.parse(Buffer.from(token.split(".")[1], "base64url").toString()) as { auth_time?: number }).auth_time;
+    if (typeof authSecond !== "number" || !Number.isSafeInteger(authSecond) || authSecond <= 0) throw new Error("SECOND_EMULATOR_TOKEN_TIME_MISSING");
+    await test.step("SECOND_BROWSER_COOKIE_EXCHANGE", async () => {
+      const response = await second.evaluate(async idToken => {
+        const csrfResponse = await fetch("/api/auth/csrf", { credentials: "same-origin", cache: "no-store" });
+        const { csrfToken } = await csrfResponse.json() as { csrfToken: string };
+        const exchange = await fetch("/api/auth/session", { method: "POST", credentials: "same-origin", cache: "no-store", headers: { "content-type": "application/json", "x-csrf-token": csrfToken }, body: JSON.stringify({ idToken }) });
+        return { csrf: csrfResponse.status, exchange: exchange.status };
+      }, token);
+      expect(response).toEqual({ csrf: 200, exchange: 200 });
+      expect(await second.evaluate(async () => (await fetch("/api/account")).status)).toBe(200);
+      expect((await secondContext.cookies()).some(cookie => cookie.name === "ownpath_session" && cookie.httpOnly)).toBe(true);
+    });
+    await test.step("REVOKE_ALL_SECOND_COOKIE_REJECTED", async () => {
+      // Firebase's tokensValidAfterTime is whole-second precision. Cross the
+      // observed auth_time second before revoking; no arbitrary fixed sleep.
+      await expect.poll(() => Math.floor(Date.now() / 1000), { timeout: 3000, intervals: [25, 50, 100] }).toBeGreaterThan(authSecond);
+      await page.evaluate(() => window.ownpathBrowserAdapter.logout("all"));
+      expect((await context.cookies()).some(cookie => cookie.name === "ownpath_session")).toBe(false);
+      expect(await page.evaluate(async () => (await fetch("/api/account")).status)).toBe(401);
+      // No request in the second context cleared its cookie: server authorization must reject it.
+      expect((await secondContext.cookies()).some(cookie => cookie.name === "ownpath_session" && cookie.httpOnly)).toBe(true);
+      const result = await second.evaluate(async () => {
+        const response = await fetch("/api/account", { cache: "no-store", credentials: "same-origin" });
+        return { status: response.status, code: (await response.json() as { error?: { code?: string } }).error?.code };
+      });
+      expect(result).toEqual({ status: 401, code: "SESSION_EXPIRED" });
+      expect(unexpected).toBe(0);
+    });
+  } finally { await secondContext.close(); }
+});
