@@ -5,13 +5,11 @@ import type { ServerIdentity } from "./server-identity";
 import { freeEntitlement } from "./server-identity";
 import { failure } from "./server-errors";
 
-/** Deliberately false until durable checkout/event/reconciliation lifecycle is implemented and reviewed. */
-export const BILLING_LIFECYCLE_READY = false;
 export function unavailableCatalog(): CatalogResponse {
   return { environment: "sandbox", catalogVersion: "sandbox-v1-gated", free: { planId: "free", amount: 0 }, pro: { planId: "pro", availability: "unavailable", reason: "not_configured" } };
 }
-export function billingStatus(identity: ServerIdentity): BillingStatusResponse {
-  const entitlement = freeEntitlement(identity);
+export function billingStatus(identity: ServerIdentity, quota = 50): BillingStatusResponse {
+  const entitlement = freeEntitlement(identity, new Date(), quota);
   return { environment: "sandbox", entitlement, subscription: "none", cancelAtPeriodEnd: false, paidThrough: null, reconciliation: "unavailable", canManageBilling: false, asOf: entitlement.asOf };
 }
 export function sandboxStripe(env: Readonly<Record<string, string | undefined>> = process.env): { stripe: Stripe; accountId: string; priceId: string; webhookSecret: string } {

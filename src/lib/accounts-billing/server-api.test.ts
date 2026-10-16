@@ -90,10 +90,11 @@ describe("API error/security and recovery behavior", () => {
     expect((await result.json()).error.code).toBe("EMAIL_VERIFICATION_REQUIRED");
   });
 });
-describe("actual Stripe SDK signature gate without a payment lifecycle", () => {
+describe("actual Stripe SDK signature gate before durable processing", () => {
   it("rejects bad signatures/live mode/wrong account and never falsely acknowledges a valid test event", async () => {
     vi.stubEnv("STRIPE_SECRET_KEY", "sk_test_synthetic"); vi.stubEnv("STRIPE_ACCOUNT_ID", "acct_synthetic");
     vi.stubEnv("STRIPE_PRICE_ID", "price_synthetic"); vi.stubEnv("STRIPE_WEBHOOK_SECRET", "whsec_synthetic");
+    vi.stubEnv("OWNPATH_SANDBOX_BILLING_ENABLED", "true");
     const stripe = new Stripe("sk_test_synthetic");
     const send = async (event: object, validSignature = true) => {
       const payload = JSON.stringify(event);
@@ -104,9 +105,14 @@ describe("actual Stripe SDK signature gate without a payment lifecycle", () => {
     expect((await send(event, false)).status).toBe(400);
     expect((await send({ ...event, livemode: true })).status).toBe(400);
     expect((await send({ ...event, account: "acct_other" })).status).toBe(400);
+    expect(fake.services).not.toHaveBeenCalled();
     const valid = await send(event);
     expect(valid.status).toBe(503);
     expect(await valid.json()).toEqual({ received: false });
+    // A verified event now reaches the durable service boundary. This fixture lacks
+    // its Admin configuration, so it fails closed before any provider network call.
+    expect(fake.services).toHaveBeenCalledTimes(1);
+    fake.services.mockClear();
     const tooLarge = await handleApi("stripeWebhook", new Request(`${origin}/api/webhooks/stripe`, { method: "POST", headers: { "content-length": "1048577" }, body: "bounded" }));
     expect(tooLarge.status).toBe(413);
     expect(await tooLarge.json()).toEqual({ received: false });

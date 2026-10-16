@@ -43,10 +43,10 @@ export async function authenticate(auth: Auth, request: Request): Promise<Server
   try { token = await auth.verifySessionCookie(cookie, true); } catch (error) { return providerError(error); }
   return trustedIdentity(auth, token);
 }
-export function freeEntitlement(identity: ServerIdentity, now = new Date()): Entitlement {
-  // Billing lifecycle is intentionally gated off. No projection/client flag can grant Pro yet.
+export function freeEntitlement(identity: ServerIdentity, now = new Date(), savedSessionLimit = 50): Entitlement {
+  // Conservative fallback only. Positive Pro authorization belongs to BillingService's canonical projection.
   return {
-    planId: "free", capabilities: { canSave: false, canReadSaved: identity.emailVerified, canDeleteSaved: identity.emailVerified, savedSessionLimit: 50 },
+    planId: "free", capabilities: { canSave: false, canReadSaved: identity.emailVerified, canDeleteSaved: identity.emailVerified, savedSessionLimit },
     validUntil: null, version: 0, asOf: now.toISOString(),
   };
 }
