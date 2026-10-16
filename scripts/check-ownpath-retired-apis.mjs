@@ -22,7 +22,12 @@ export async function checkRetiredApis(root, origin, request = fetch) {
   const base = validateOrigin(origin);
   // Exact allowlist: unknown routes/catchalls could intercept retired paths.
   const manifest = JSON.parse(readFileSync(path.join(root, ".next/server/app-paths-manifest.json"), "utf8"));
-  if (Object.keys(manifest).some((name) => name.startsWith("/api/") && !declaredApis.includes(name.replace(/\/route$/, "")))) throw new Error("Compiled build contains an undeclared or retired API handler; rebuild the candidate.");
+  if (Object.keys(manifest).some((name) => {
+    if (!name.endsWith("/route")) return false;
+    const normalized = name.replace(/\/\([^/]+\)/g, "").replace(/\/route$/, "");
+    // A dynamic first segment can capture 'api', even outside the API tree.
+    return normalized.startsWith("/[") || ((normalized === "/api" || normalized.startsWith("/api/")) && !declaredApis.includes(normalized));
+  })) throw new Error("Compiled build contains an undeclared or retired API handler; rebuild the candidate.");
   for (const route of retiredApis) if (existsSync(path.join(root, "src/app", route.slice(1), "route.ts"))) throw new Error("Retired API source is still present.");
   let checked = 0;
   for (const route of retiredApis) {

@@ -1,5 +1,5 @@
 import { spawn, spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, lstatSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,12 +25,18 @@ async function freePort() {
   return port;
 }
 
+export function createOwnedDirectory(parent = "/tmp/opencode") {
+  mkdirSync(parent, { recursive: true, mode: 0o700 });
+  if (!lstatSync(parent).isDirectory() || lstatSync(parent).isSymbolicLink()) throw new Error("OWNED_TEMP_PARENT_REQUIRED");
+  return mkdtempSync(path.join(parent, "ownpathaccounts-"));
+}
+
 export async function runEmulators() {
   // Never inherit credentials, owner emulator hosts or a cloud project.
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
   const java = spawnSync("java", ["-version"], { stdio: "ignore" });
   if (java.status !== 0) throw new Error("BLOCKED_JAVA_REQUIRED: Firestore emulator needs Java 21+");
-  const owned = mkdtempSync("/tmp/opencode/ownpathaccounts-");
+  const owned = createOwnedDirectory();
   const ports = [];
   while (ports.length < 5) { const port = await freePort(); if (!ports.includes(port)) ports.push(port); }
   const env = Object.fromEntries(["PATH", "HOME", "JAVA_HOME", "SYSTEMROOT"].filter((key) => process.env[key]).map((key) => [key, process.env[key]]));
@@ -59,6 +65,7 @@ export async function runEmulators() {
       const probe = createServer();
       await new Promise((resolve, reject) => { probe.once("error", reject); probe.listen(port, "127.0.0.1", () => probe.close(resolve)); });
     }
+    console.log("Owned emulator cleanup: data directory removed; all five ports rebound successfully.");
   }
 }
 

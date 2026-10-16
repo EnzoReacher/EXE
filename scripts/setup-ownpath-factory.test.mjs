@@ -33,6 +33,7 @@ describe("version-aware OwnPath Factory", () => {
     const writer = JSON.parse(factoryFiles(major).get(".opencode/agents/ownpath-integration.md").split("---\n")[1]);
     const grants = major === 1 ? Object.entries(writer.permission.edit).filter(([, effect]) => effect === "allow").map(([resource]) => resource) : writer.permissions.filter((p) => p.action === "edit" && p.effect === "allow").map((p) => p.resource);
     expect(grants).toContain("firebase.json"); expect(grants).toContain("package.json");
+    expect(grants).toContain("scripts/verify-ownpath-factory.mjs"); expect(grants).toContain("scripts/verify-ownpath-factory.test.mjs");
     expect(grants.some((p) => p.startsWith("src/") || p.startsWith(".opencode/"))).toBe(false);
     if (major === 1) expect(writer.permission.bash["*"]).toBe("ask");
     else expect(writer.permissions).toContainEqual({ action: "shell", resource: "*", effect: "ask" });

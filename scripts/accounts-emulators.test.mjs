@@ -1,7 +1,20 @@
 import { describe, it, expect } from "vitest";
-import { assertDemoEnvironment } from "./accounts-emulators.mjs";
+import { mkdtempSync, existsSync, rmSync, symlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { assertDemoEnvironment, createOwnedDirectory } from "./accounts-emulators.mjs";
 
 describe("owned emulator guard", () => {
+  it("creates a missing temporary parent and refuses symlink parents", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "ownpath-parent-"));
+    try {
+      const parent = path.join(root, "missing", "parent");
+      const owned = createOwnedDirectory(parent);
+      expect(existsSync(owned)).toBe(true); expect(path.dirname(owned)).toBe(parent);
+      const link = path.join(root, "link"); symlinkSync(parent, link);
+      expect(() => createOwnedDirectory(link)).toThrow("OWNED_TEMP_PARENT_REQUIRED");
+    } finally { rmSync(root, { recursive: true, force: true }); }
+  });
   const safe = { GCLOUD_PROJECT: "demo-ownpath-accounts", FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:19099", FIRESTORE_EMULATOR_HOST: "127.0.0.1:18080" };
   it("rejects cloud targets, remote services and ambient credentials", () => {
     expect(() => assertDemoEnvironment(safe)).not.toThrow();

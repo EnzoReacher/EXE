@@ -26,7 +26,7 @@ describe("retired API acceptance", () => {
         writeFileSync(manifest, JSON.stringify({ [name]: "route.js" }));
         expect(await checkRetiredApis(root, "http://127.0.0.1:1234", request)).toBe(119);
       }
-      for (const name of ["/api/[...path]/route", "/api/[[...path]]/route", "/api/analysis/route", "/api/unknown/route"]) {
+      for (const name of ["/api/[...path]/route", "/api/[[...path]]/route", "/api/analysis/route", "/api/unknown/route", "/[...path]/route", "/[[...path]]/route", "/[prefix]/intake/cv/route", "/(group)/[...path]/route"]) {
         writeFileSync(manifest, JSON.stringify({ [name]: "route.js" })); request.mockClear();
         await expect(checkRetiredApis(root, "http://127.0.0.1:1234", request)).rejects.toThrow(/Compiled build/); expect(request).not.toHaveBeenCalled();
       }
