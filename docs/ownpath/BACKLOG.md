@@ -1,5 +1,18 @@
 # Execution backlog and estimated roadmap
 
+## Owner-authorized accounts/database/subscription stage — 16 October 2026
+
+Scope and test-payments choice: [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md). Execute through [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md) on new isolated stage branch based on `7adbd6b`; preserve backend PR #2 and completed DBG-01–04. All items below remain unimplemented at this planning checkpoint.
+
+- [ ] AB-00: scope/ownership/contract freeze, scoped integration permissions, retired-API checker allows new declared APIs without reviving old ones.
+- [ ] AB-01: Firebase Auth/Firestore emulator setup, server sessions, idempotent account bootstrap and ownership rules.
+- [ ] AB-02: FE1 revamped registration/login/verification/reset/recovery and account entry.
+- [ ] AB-03: validated account/profile and opt-in versioned session history with server Pro/quota enforcement.
+- [ ] AB-04: test-only provider adapter, checkout/portal, signed durable webhooks and canonical subscription reconciliation.
+- [ ] AB-05: FE2 Free/Pro pricing, hosted payment/return/cancel/management UI and saved-session controls.
+- [ ] AB-06: reviewed combined candidate, core regression + new emulator/auth/billing/browser/sandbox acceptance, separate QA and exact-head CI.
+- [ ] AB-07: reproducible setup, measured evidence, missing configuration/production gates and handoff.
+
 ## Morning continuation — 16 October 2026
 
 Fresh Work audit at `295306b` confirmed published DBG-01/02/03, green exact-head Quality and 450/53 passing tests; reproduced original fixes and scoped ownership. Next debugging-only task: [OPENCODE_DBG04](OPENCODE_DBG04.md), the previously logged action-alternative limitation. No frontend/integration/cleanup work is taken over.

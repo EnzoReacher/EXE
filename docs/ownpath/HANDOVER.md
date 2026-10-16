@@ -1,5 +1,9 @@
 # OwnPath handoff
 
+## New-stage executor — accounts and test subscriptions
+
+Owner requested Firebase-backed accounts, revamped registration/login and subscription payments; selected test payments first. New branch `feat/ownpath-accounts-billing` starts separately at backend `7adbd6b`. Read [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md) and execute [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md): backend and one scoped integration writer first; FE1 auth and FE2 billing in disjoint worktrees after frozen contracts. This handoff is planned work, not runtime implementation. Preserve DBG-01–04, old data/migrations, frontend ownership and PR #2. No live charges, external project credentials, automatic account/data migration, merge or deployment is claimed.
+
 ## DBG-04 completed — stop checkpoint, 16 October
 
 Final source **`87e1f116b9a7df6b704af60a7e22d411422ee6e0`**, unchanged baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9`. Existing backend worktree safely fast-forwarded; eight untracked activation profiles remain byte-for-byte intact. One engineer changed only engine/grounding tests. Direct recognized English/Vietnamese action alternatives, repeated supported predicates and optional comma connectors are conservatively rejected per excerpt; genuine conjunctions and independent evidence retain exact linkage.

@@ -1,5 +1,9 @@
 # OwnPath three-person build contract — 15 October 2026
 
+## New accounts/billing-stage ownership override — 16 October 2026
+
+The owner's new request authorizes auth/database/subscription work. Use the expanded matrix and task-scoped integration writer in [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md) and the three execution instructions in [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md). Backend owns new APIs/server contracts; FE1 auth entry/action/account UI; FE2 pricing/billing and reviewed opt-in Translator save UI. Root tooling/Firebase configs/proxy/shared tests have one integration writer. Existing frontend local work must be inspected before edits; this assignment does not claim acknowledgment. The earlier no-new-Auth/API scope is superseded only for declared AB tasks, not via blanket permission expansion.
+
 Owner instruction: start the approved core-only plan, with two other people handling frontend. This is the proposed file assignment for those two developers and the enforced scope of this backend slice. Their names, local work and acceptance of the assignment are not known; no messages were sent on their behalf.
 
 ## Current integration rule

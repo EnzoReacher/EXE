@@ -1,5 +1,9 @@
 # Architecture and ADR-001
 
+## New-stage decision — 16 October 2026
+
+Owner authorized new Firebase Auth + Firestore accounts and sandbox subscriptions. The implementation contract is [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md): Firebase authority for new accounts, protected server sessions/repositories, Stripe test-only hosted billing, verified server entitlements and explicit saved-session persistence. This is a planned new branch, not a claim those services are wired. Existing core-only architecture/history below remains authoritative for the preserved Translator. Supabase data/applied migrations stay intact; no UID linking by email or implicit production migration. Old conditional-auth designs below must not be mistaken for the new implementation contract.
+
 Status, 2026-10-15: browser-only deterministic core retained; legacy runtime reduction authorized and staged in [BACKLOG](BACKLOG.md). The persistence/provider diagram below is conditional historical design, not required implementation. Frozen installation reconfirmed Next.js 16.3.7 / React 19.2.8 / TypeScript 5.9.3 / pnpm 11.25.0 / Vitest 5.0.2 / Playwright 1.61.1, Supabase JS 2.117.2 and SSR 0.12.7. Actual PostgreSQL server version not inspected.
 
 ## Reuse decision

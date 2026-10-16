@@ -1,5 +1,9 @@
 # OwnPath implementation status — 2026-10-15
 
+## Accounts/Firebase/sandbox billing stage authorized — 16 October 2026
+
+Owner explicitly requested revamped login/registration, Firebase-backed account/database and subscription tiers; selected test payments first. New isolated `feat/ownpath-accounts-billing` is based on completed backend HEAD `7adbd6b77085318be43d55bff382d74b499e6350`. [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md) and [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md) define AB-00–07, frozen contract planning, ownership and real acceptance boundaries. Only documentation/scope preparation occurred at this checkpoint. No Firebase/Stripe dependency, account/database/cloud project, checkout, UI, live charge or deployment has been implemented/executed here. Earlier core-only restrictions remain historical for completed milestones; current user authorization supersedes them only within the declared AB scope.
+
 ## DBG-04 completed — 16 October 2026
 
 **Final verified source:** `87e1f116b9a7df6b704af60a7e22d411422ee6e0`; fixed actual task baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9` after safe non-divergent fast-forward from `295306b`. Eight local `.opencode` profiles and original M17 worktree preserved; all profile checksums match. Baseline exact-head Quality PR38843614164/push38843610324 SUCCESS.
