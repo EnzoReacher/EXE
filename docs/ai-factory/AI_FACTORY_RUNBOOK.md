@@ -1,5 +1,9 @@
 # OwnPath OpenCode Factory
 
+## Accounts stage tooling — 16 October 2026
+
+Project generator now defines five agents/four commands: the backend engineer is limited to declared accounts/billing paths; `ownpath-integration` owns only AB-00-I/AB-01-I root tooling listed in `docs/ownpath/AB_TASKS.md`. Both reviewers retain default-deny/read-only policies. Lead may delegate the two disjoint scopes; shell execution still asks approval. Current owner-local profiles in the old backend worktree are preserved, not overwritten or activated by this change. Read-only QA is invoked separately through the existing harness. Generated-template tests are not runtime resource-matching evidence. The existing V2 verifier limitation remains explicit. V1 fixture expectations include the fifth integration role; no new V1 runtime execution is claimed.
+
 ## Owner-local runtime checkpoint — 15 October 2026
 
 Actual OpenCode `v2.0.7` setup dry run and activation succeeded in the existing backend worktree without differing profiles. Four agent modes/system prompts/ordered terminal policy blocks matched the generated V2 definitions in `debug agents`; explicit-location command discovery returned four OwnPath names (not full binding/template/tool detail). Actual read-only OwnPath Auditor, single Core Engineer and separate read-only QA tasks ran through the existing coding session/provider. Local generated profiles remain untracked and outside source commits. No owner global/model/provider settings were changed.

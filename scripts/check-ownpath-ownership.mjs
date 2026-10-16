@@ -9,6 +9,10 @@ const legacyPages = /^src\/app\/(?:assessment|analysis|opportunities|saved-work|
 export function ownsPath(role, filename) {
   if (filename.startsWith("/") || filename.includes("\\") || filename.split("/").some((part) => ["..", ".", ""].includes(part))) return false;
   if (shared.has(filename)) return false;
+  if (role === "accounts-backend") return /^src\/lib\/accounts-billing\//.test(filename) || /^src\/app\/api\/(?:auth\/session|account|billing\/(?:plans|status|checkout|portal)|webhooks\/stripe|sessions(?:\/\[id\])?)\//.test(filename) || filename.startsWith("docs/ownpath/");
+  if (role === "accounts-integration") return ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".env.example", ".gitignore", "firebase.json", "firestore.rules", "firestore.indexes.json"].includes(filename) || /^scripts\/accounts-(?:emulators(?:\.test)?|emulator-check)\.mjs$/.test(filename) || backendScripts.test(filename) || filename.startsWith("docs/ownpath/") || filename.startsWith("docs/ai-factory/");
+  if (role === "auth-ui") return /^src\/app\/(?:sign-in|sign-up|auth|forgot-password|reset-password|verify-email)\//.test(filename) || (filename.startsWith("src/app/account/") && !filename.startsWith("src/app/account/billing/"));
+  if (role === "billing-ui") return /^src\/app\/(?:pricing|checkout|account\/billing|experience-translator)\//.test(filename);
   if (role === "backend") return filename.startsWith("src/app/api/") || filename.startsWith("src/lib/") || filename.startsWith("docs/ownpath/") || filename.startsWith("docs/ai-factory/") || backendScripts.test(filename);
   if (role === "shell") return /^src\/app\/(?:(?:page|layout)(?:\.test)?\.tsx|globals\.css)$/.test(filename) || filename.startsWith("src/components/") || legacyPages.test(filename);
   if (role === "translator") return filename.startsWith("src/app/experience-translator/");
