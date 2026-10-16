@@ -2,6 +2,8 @@
 
 ## Accounts stage active handoff — 16 October 2026
 
+Published continuation commits: **e498a98** repair, **5fbbb6b** tooling, **f22e49b** packets/evidence; existing [draft PR#3](https://github.com/EnzoReacher/EXE/pull/3) retains backend dependency. Exactf22e49b hosted push/PR Quality+acceptance all SUCCESS with inspected logs; links in AB_EVIDENCE. This follow-up records publication only; final-head CI status maintained on PR after inspection. No new local runtime changes/tests implied.
+
 Continuation pickup: [AB_EXECUTION_LEDGER](AB_EXECUTION_LEDGER.md) records verifiedfd0644b baseline, paths and rollback; [FE1](AB_FE1_PACKET.md)/[FE2](AB_FE2_PACKET.md) packets prepared, **not acknowledged/delivered**. Coordinator reserves shared layout/shell; no frontend/DTO edit. Repair02c2b22 integrated ase498a98 after RED/GREEN and independent closure. Fresh539default tests/21skips, actual Firebase21+24denials and authenticated **API transport** browser3cases/6steps, guest7/30+119probes, install/lint/types/build/diff PASS. Root harness's2P2findings corrected/closed with lifecycle RED/GREEN; reviewers ran no commands. Exact source/logs/publication: [AB_EVIDENCE](AB_EVIDENCE.md).
 
 Next: reviewed human FE1/FE2 full-SHA deliveries, explicit composition/legacy-retirement ownership, then combined UI acceptance. Real Stripe settings/account/endpoint and separate cloud design/project/region/IAM/mail/recovery decisions missing; [AB_EXTERNAL_PACKET](AB_EXTERNAL_PACKET.md) lists inputs/procedures. No demo-mode cloud bypass or reservation erasure. Rollback continuation commits in reverse dependency order, preserving data/worktrees/profiles. No merge/deploy/live activation.
