@@ -167,7 +167,12 @@ export async function createAccountsAuthAdapter(options: FirebaseOptions, emulat
     },
     passwordPolicy: async password => {
       try { return await validatePassword(auth, password); }
-      catch (error) { throw safeAuthError(error); }
+      catch (error) {
+        const safe = safeAuthError(error);
+        // Policy lookup does not authenticate credentials. An unsupported schema
+        // or malformed SDK response is unavailability, never a wrong password.
+        throw safe.code === "INVALID_CREDENTIALS" ? new AccountAuthError("UNAVAILABLE") : safe;
+      }
     },
     logout: (scope = "current") => serial(async () => {
       try { await accountsRequest(API_PATHS.session, "DELETE", { scope }); }

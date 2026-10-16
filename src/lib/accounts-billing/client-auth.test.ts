@@ -37,6 +37,15 @@ beforeEach(() => {
   vi.stubGlobal("fetch", mocks.fetch);
 });
 describe("official Firebase client adapter", () => {
+  it("treats malformed or unsupported password policy as unavailable, retaining throttle semantics", async () => {
+    const adapter = await createAccountsAuthAdapter(options, "http://127.0.0.1:9099");
+    for (const failure of [new TypeError("private malformed policy details"), { code: "auth/unsupported-password-policy-schema-version" }]) {
+      mocks.policy.mockRejectedValueOnce(failure);
+      await expect(adapter.passwordPolicy(credentials.password)).rejects.toMatchObject({ code: "UNAVAILABLE", phase: "identity" });
+    }
+    mocks.policy.mockRejectedValueOnce({ code: "auth/too-many-requests" });
+    await expect(adapter.passwordPolicy(credentials.password)).rejects.toMatchObject({ code: "RATE_LIMITED" });
+  });
   it("preserves official password policy results and sanitizes provider failures", async () => {
     const adapter = await createAccountsAuthAdapter(options, "http://127.0.0.1:9099");
     await expect(adapter.passwordPolicy(credentials.password)).resolves.toEqual({ isValid: true });
