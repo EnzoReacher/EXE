@@ -12,6 +12,7 @@ import { SavedSessionRepository } from "./server-sessions";
 import { failure } from "./server-errors";
 import { accountsConfig } from "./server-config";
 import { rateLimit } from "./server-rate-limit";
+import { hash } from "./server-security";
 
 /** Executed only by the owned emulator harness, never inferred from default-suite skip. */
 describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebase Auth/Firestore backend acceptance", () => {
@@ -28,7 +29,7 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebas
   const password = "Synthetic-only-9#password";
   const input = () => {
     const intake = { project: "I built product listing and search using React. My demo is working.", jd: "Frontend Developer Intern requirements: React and HTML and CSS." };
-    return { operationId: randomUUID(), title: "Explicit synthetic opt-in", snapshot: { schemaVersion: 1 as const, intake, answers: {}, prepared: prepareSession(intake), candidates: [] } };
+    return { operationId: randomUUID(), title: "Explicit synthetic opt-in", snapshot: { schemaVersion: 1 as const, intake, answers: { outcome: "", reference: "" }, prepared: prepareSession(intake), candidates: [] } };
   };
   function request(path: string, method = "GET", body?: unknown, session = cookie) {
     return new Request(`${origin}${path}`, {
@@ -36,6 +37,11 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebas
       headers: { origin, cookie: `ownpath_session=${session}; ownpath_csrf=${csrf}`, "x-csrf-token": csrf, "content-type": "application/json" },
       body: method === "GET" ? undefined : JSON.stringify(body),
     });
+  }
+  async function tokenFor(identity: ServerIdentity): Promise<string> {
+    const signed = await fetch(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=synthetic-emulator-key`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: identity.email, password, returnSecureToken: true }) });
+    expect(signed.status).toBe(200);
+    return (await signed.json()).idToken;
   }
   beforeAll(async () => {
     const config = accountsConfig();
@@ -65,7 +71,7 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebas
       const grant = (await transaction.get(db.collection("billingAccounts").doc(identity.uid))).data();
       if (grant?.fixturePro !== true || grant.validUntilMs <= Date.now()) failure("PRO_REQUIRED");
       return { limit: grant.limit };
-    });
+    }, Date.now, async () => ({ limit: 2 }));
   }, 30000);
   afterAll(async () => {
     for (const uid of uids) {
@@ -114,17 +120,24 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebas
     expect(invalid.status).toBe(401);
     expect((await invalid.json()).error.code).toBe("UNAUTHENTICATED");
   }, 30000);
+  it("reports the trusted read quota independently of Pro write authorization", async () => {
+    expect((await repo.list(owner, {})).quota).toEqual({ used: 0, limit: 2 });
+  });
   it("deduplicates concurrent saves and enforces quota atomically under a server test grant", async () => {
     const save = input();
     const results = await Promise.all([repo.create(owner, save), repo.create(owner, save)]);
     expect(results[0]).toEqual(results[1]);
+    const reordered = { ...save, snapshot: { ...save.snapshot, answers: { reference: "", outcome: "" } } };
+    expect(await repo.create(owner, reordered)).toEqual(results[0]);
+    const changedAnswers = { ...save.snapshot.answers, outcome: "The synthetic demo is working." };
+    await expect(repo.create(owner, { ...save, snapshot: { ...save.snapshot, answers: changedAnswers, prepared: prepareSession(save.snapshot.intake, changedAnswers) } })).rejects.toMatchObject({ code: "OPERATION_CONFLICT" });
     expect((await db.collection("users").doc(owner.uid).get()).data()?.savedSessionCount).toBe(1);
     await expect(repo.create(owner, { ...save, title: "changed" })).rejects.toMatchObject({ code: "OPERATION_CONFLICT" });
     const competing = await Promise.allSettled([repo.create(owner, input()), repo.create(owner, input())]);
     expect(competing.filter(result => result.status === "fulfilled")).toHaveLength(1);
     const rejected = competing.find(result => result.status === "rejected") as PromiseRejectedResult;
     expect(rejected.reason.code).toBe("QUOTA_EXCEEDED");
-    expect((await repo.list(owner, {})).quota.used).toBe(2);
+    expect((await repo.list(owner, {})).quota).toEqual({ used: 2, limit: 2 });
   }, 30000);
   it("isolates Admin ownership, rejects conflicting revisions, paginates and preserves downgrade read/delete", async () => {
     await bootstrapProfile(db, other);
@@ -134,6 +147,14 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebas
     const second = await repo.list(owner, { cursor: first.nextCursor!, limit: 1 });
     expect(second.sessions[0].id).not.toBe(first.sessions[0].id);
     await expect(repo.list(other, { cursor: first.nextCursor!, limit: 1 })).rejects.toMatchObject({ code: "INVALID_REQUEST" });
+    await expect(repo.list(owner, { cursor: "0".repeat(64), limit: 1 })).rejects.toMatchObject({ code: "INVALID_REQUEST" });
+    const cursorRef = db.collection("users").doc(owner.uid).collection("sessionCursors").doc(hash(first.nextCursor!));
+    const cursorData = (await cursorRef.get()).data()!;
+    await cursorRef.update({ expiresAtMs: Date.now() - 1 });
+    await expect(repo.list(owner, { cursor: first.nextCursor!, limit: 1 })).rejects.toMatchObject({ code: "INVALID_REQUEST" });
+    await cursorRef.update({ expiresAtMs: "malformed" });
+    await expect(repo.list(owner, { cursor: first.nextCursor!, limit: 1 })).rejects.toMatchObject({ code: "INVALID_REQUEST" });
+    await cursorRef.set(cursorData);
     const id = first.sessions[0].id;
     await expect(repo.get(other, id)).rejects.toMatchObject({ code: "NOT_FOUND" });
     await expect(repo.delete(other, id, { expectedRevision: 1, operationId: randomUUID() })).rejects.toMatchObject({ code: "NOT_FOUND" });
@@ -147,9 +168,13 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebas
     const committedInput = committed.session.title === update.title ? update : otherUpdate;
     // Lost-response replay must be checked before the now-stale expectedRevision.
     expect(await repo.update(owner, id, committedInput)).toEqual(committed);
+    expect(await repo.update(owner, id, { ...committedInput, snapshot: { ...committedInput.snapshot, answers: { reference: "", outcome: "" } } })).toEqual(committed);
+    const changedAnswers = { outcome: "Changed real wording in an answer.", reference: "" };
+    await expect(repo.update(owner, id, { ...committedInput, snapshot: { ...committedInput.snapshot, answers: changedAnswers, prepared: prepareSession(committedInput.snapshot.intake, changedAnswers) } })).rejects.toMatchObject({ code: "OPERATION_CONFLICT" });
     await db.collection("billingAccounts").doc(owner.uid).set({ fixturePro: false });
     await expect(repo.create(owner, input())).rejects.toMatchObject({ code: "PRO_REQUIRED" });
     await expect(repo.update(owner, id, committedInput)).rejects.toMatchObject({ code: "PRO_REQUIRED" });
+    expect((await repo.list(owner, {})).quota).toEqual({ used: 2, limit: 2 });
     const current = await repo.get(owner, id);
     expect(current.session.revision).toBe(2);
     const storedRef = db.collection("users").doc(owner.uid).collection("sessions").doc(id);
@@ -171,7 +196,60 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("actual Firebas
     await auth.updateUser(owner.uid, { disabled: false });
     // Provider revocation uses whole-second timestamps; move past the original issued second.
     await new Promise(resolve => setTimeout(resolve, 1100));
-    await auth.revokeRefreshTokens(owner.uid);
+    const logout = await handleApi("session", request("/api/auth/session", "DELETE", { scope: "all" }));
+    expect(logout.status).toBe(200);
+    expect(await logout.json()).toEqual({ signedOut: true, scope: "all" });
     await expect(authenticate(auth, request("/api/account"))).rejects.toMatchObject({ code: "SESSION_EXPIRED" });
+  }, 30000);
+  it("keeps an unverified cookie restricted after provider verification until refreshed exchange", async () => {
+    await auth.updateUser(other.uid, { emailVerified: false });
+    const first = await handleApi("session", request("/api/auth/session", "POST", { idToken: await tokenFor(other) }, ""));
+    expect(first.status).toBe(200);
+    expect((await first.json()).account.verification).toBe("required");
+    const unverifiedCookie = first.headers.get("set-cookie")!.match(/ownpath_session=([^;]+)/)![1];
+    await auth.updateUser(other.uid, { emailVerified: true });
+    const stale = await handleApi("checkout", request("/api/billing/checkout", "POST", { planId: "pro", operationId: randomUUID() }, unverifiedCookie));
+    expect(stale.status).toBe(403);
+    expect((await stale.json()).error.code).toBe("EMAIL_VERIFICATION_REQUIRED");
+    const status = await handleApi("status", request("/api/billing/status", "GET", undefined, unverifiedCookie));
+    expect((await status.json()).entitlement.capabilities.canReadSaved).toBe(false);
+    const refreshed = await handleApi("session", request("/api/auth/session", "POST", { idToken: await tokenFor(other) }, unverifiedCookie));
+    expect(refreshed.status).toBe(200);
+    expect((await refreshed.json()).account.verification).toBe("verified");
+    const verifiedCookie = refreshed.headers.get("set-cookie")!.match(/ownpath_session=([^;]+)/)![1];
+    expect((await authenticate(auth, request("/api/account", "GET", undefined, verifiedCookie))).emailVerified).toBe(true);
+  }, 30000);
+  it("enforces dedupe expiry, rejects corrupt operational metadata and serializes update/delete", async () => {
+    const uid = `backend-acceptance-${randomUUID()}`;
+    await auth.createUser({ uid, email: `${uid}@example.test`, password, emailVerified: true });
+    uids.push(uid);
+    const identity = { uid, email: `${uid}@example.test`, emailVerified: true, authTime: Math.floor(Date.now() / 1000) };
+    await bootstrapProfile(db, identity);
+    let now = Date.now();
+    const fixture = new SavedSessionRepository(db, async () => ({ limit: 2 }), () => now, async () => ({ limit: 2 }));
+    const save = input();
+    const first = await fixture.create(identity, save);
+    now += 24 * 60 * 60 * 1000 + 1;
+    const afterExpiry = await fixture.create(identity, save);
+    expect(afterExpiry.session.id).not.toBe(first.session.id);
+    expect((await fixture.list(identity, {})).quota).toEqual({ used: 2, limit: 2 });
+    const opRef = db.collection("users").doc(uid).collection("sessionOperations").doc(hash(`create:${save.operationId}`));
+    const originalOp = (await opRef.get()).data()!;
+    for (const patch of [{ expiresAtMs: "corrupt" }, { payloadHash: "corrupt" }]) {
+      await opRef.set({ ...originalOp, ...patch });
+      await expect(fixture.create(identity, save)).rejects.toMatchObject({ code: "SERVICE_UNAVAILABLE" });
+    }
+    await opRef.set(originalOp);
+    const result = await Promise.allSettled([
+      fixture.update(identity, first.session.id, { ...save, operationId: randomUUID(), title: "Concurrent edit", expectedRevision: 1 }),
+      fixture.delete(identity, first.session.id, { operationId: randomUUID(), expectedRevision: 1 }),
+    ]);
+    expect(result.filter(item => item.status === "fulfilled")).toHaveLength(1);
+    const rejected = result.find(item => item.status === "rejected") as PromiseRejectedResult;
+    expect(["NOT_FOUND", "REVISION_CONFLICT"]).toContain(rejected.reason.code);
+    const remaining = await fixture.list(identity, {});
+    expect(remaining.quota.used).toBe(remaining.sessions.length);
+    const invalidQuota = new SavedSessionRepository(db, async () => ({ limit: 2 }), Date.now, async () => ({ limit: 0 }));
+    await expect(invalidQuota.list(identity, {})).rejects.toMatchObject({ code: "SERVICE_UNAVAILABLE" });
   }, 30000);
 });

@@ -42,20 +42,40 @@ export async function accountsRequest<T>(path: string, method: "GET" | "POST" | 
     throw new AccountAuthError("UNAVAILABLE", "session");
   }
 }
+let csrfBootstrap: Promise<string> | null = null;
+function csrfBinding(): Promise<string> {
+  if (csrfBootstrap) return csrfBootstrap;
+  const bootstrap = (async () => {
+    const response = await fetch(API_PATHS.csrf, { credentials: "same-origin", cache: "no-store" });
+    return (await responseJson<CsrfResponse>(response)).csrfToken;
+  })();
+  const pending = bootstrap.finally(() => { if (csrfBootstrap === pending) csrfBootstrap = null; });
+  csrfBootstrap = pending;
+  return pending;
+}
 async function requestAccounts<T>(path: string, method: "GET" | "POST" | "PATCH" | "DELETE", body?: unknown): Promise<T> {
   const allowed = Object.values(API_PATHS).filter(value => value !== API_PATHS.stripeWebhook);
   const base = path.split("?")[0];
   if (path.includes("#") || path.includes("\\") || (!allowed.some(value => base === value) && !/^\/api\/sessions\/[a-f0-9-]{36}$/i.test(base)) || (path.includes("?") && (method !== "GET" || base !== API_PATHS.sessions))) throw new AccountAuthError("REQUEST_FAILED", "session");
-  let csrfToken: string | undefined;
-  if (method !== "GET") {
-    const csrf = await responseJson<CsrfResponse>(await fetch(API_PATHS.csrf, { credentials: "same-origin", cache: "no-store" }));
-    csrfToken = csrf.csrfToken;
+  // Serialize once: even a caller mutating its object during a rejected request cannot change the retry.
+  const serialized = method === "GET" ? undefined : JSON.stringify(body);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const csrfToken = method === "GET" ? undefined : await csrfBinding();
+    // Network failures and ambiguous responses are NEVER automatically retried.
+    const response = await fetch(path, {
+      method, credentials: "same-origin", cache: "no-store",
+      headers: method === "GET" ? undefined : { "Content-Type": "application/json", "X-CSRF-Token": csrfToken! },
+      body: serialized,
+    });
+    try { return await responseJson<T>(response); }
+    catch (error) {
+      // Server rejects CSRF before business side effects. A competing tab can have replaced the
+      // cookie after bootstrap. Recover once with a fresh binding; retain the exact operation/body.
+      if (method !== "GET" && attempt === 0 && response.status === 403 && error instanceof AccountAuthError && error.apiError?.code === "CSRF_INVALID") continue;
+      throw error;
+    }
   }
-  return responseJson<T>(await fetch(path, {
-    method, credentials: "same-origin", cache: "no-store",
-    headers: method === "GET" ? undefined : { "Content-Type": "application/json", "X-CSRF-Token": csrfToken! },
-    body: method === "GET" ? undefined : JSON.stringify(body),
-  }));
+  throw new AccountAuthError("REQUEST_FAILED", "session");
 }
 export type AccountsAuthAdapter = {
   register(credentials: AuthCredentials): Promise<{ session: SessionExchangeResponse; verificationEmail: "sent" | "pending" }>;

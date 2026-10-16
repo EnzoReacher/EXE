@@ -107,4 +107,80 @@ describe("official Firebase client adapter", () => {
     await expect(adapter.login(credentials)).rejects.toMatchObject({ code: "UNAVAILABLE", phase: "session" });
     expect(mocks.signOut).toHaveBeenCalledTimes(1);
   });
+  it("singleflights simultaneous first-use CSRF bootstrap with a simulated shared cookie jar", async () => {
+    let cookie = "";
+    let csrfCalls = 0;
+    const releases: (() => void)[] = [];
+    mocks.fetch.mockImplementation(async (path: string, init?: RequestInit) => {
+      if (path === "/api/auth/csrf") {
+        const token = `binding-${++csrfCalls}`;
+        await new Promise<void>(resolve => releases.push(resolve));
+        cookie = token;
+        return Response.json({ csrfToken: token });
+      }
+      const token = (init?.headers as Record<string, string>)["X-CSRF-Token"];
+      return token === cookie ? Response.json({ okay: true }) : Response.json({ error: { code: "CSRF_INVALID" } }, { status: 403 });
+    });
+    const one = accountsRequest("/api/billing/checkout", "POST", { planId: "pro", operationId: "same-logical-key" });
+    const two = accountsRequest("/api/billing/portal", "POST", { operationId: "other-logical-key" });
+    await vi.waitFor(() => expect(releases.length).toBeGreaterThan(0));
+    // Release all pending bootstrap responses together to model interleaved Set-Cookie application.
+    releases.forEach(release => release());
+    await expect(Promise.all([one, two])).resolves.toEqual([{ okay: true }, { okay: true }]);
+    expect(csrfCalls).toBe(1);
+  });
+  it("recovers a definitive cross-tab CSRF rejection exactly once with the identical serialized operation", async () => {
+    const bodies: unknown[] = [];
+    let cookie = "first-binding";
+    let csrfCalls = 0;
+    let mutations = 0;
+    mocks.fetch.mockImplementation(async (path: string, init?: RequestInit) => {
+      if (path === "/api/auth/csrf") {
+        csrfCalls++;
+        return Response.json({ csrfToken: cookie });
+      }
+      bodies.push(init?.body);
+      mutations++;
+      if (mutations === 1) cookie = "other-tab-cookie-overwrite";
+      const token = (init?.headers as Record<string, string>)["X-CSRF-Token"];
+      return token === cookie ? Response.json({ okay: true }) : Response.json({ error: { code: "CSRF_INVALID" } }, { status: 403 });
+    });
+    const input = { planId: "pro", operationId: "stable-uuid-key" };
+    await expect(accountsRequest("/api/billing/checkout", "POST", input)).resolves.toEqual({ okay: true });
+    expect(csrfCalls).toBe(2);
+    expect(bodies).toEqual([JSON.stringify(input), JSON.stringify(input)]);
+  });
+  it("never loops on CSRF errors or retries network/ambiguous provider successes", async () => {
+    let mutations = 0;
+    mocks.fetch.mockImplementation(async (path: string) => {
+      if (path === "/api/auth/csrf") return Response.json({ csrfToken: "binding" });
+      mutations++;
+      return Response.json({ error: { code: "CSRF_INVALID" } }, { status: 403 });
+    });
+    await expect(accountsRequest("/api/billing/checkout", "POST", {})).rejects.toMatchObject({ apiError: { code: "CSRF_INVALID" } });
+    expect(mutations).toBe(2);
+    mutations = 0;
+    mocks.fetch.mockImplementation(async (path: string) => {
+      if (path === "/api/auth/csrf") return Response.json({ csrfToken: "binding" });
+      mutations++;
+      throw new TypeError("lost response after potential provider effect");
+    });
+    await expect(accountsRequest("/api/billing/checkout", "POST", {})).rejects.toMatchObject({ code: "UNAVAILABLE" });
+    expect(mutations).toBe(1);
+    mutations = 0;
+    mocks.fetch.mockImplementation(async (path: string) => {
+      if (path === "/api/auth/csrf") return Response.json({ csrfToken: "binding" });
+      mutations++;
+      return new Response("not-json", { status: 200 });
+    });
+    await expect(accountsRequest("/api/billing/checkout", "POST", {})).rejects.toMatchObject({ code: "UNAVAILABLE" });
+    expect(mutations).toBe(1);
+  });
+  it("contains SDK credential-cleanup failures without leaking provider exception messages", async () => {
+    const adapter = await createAccountsAuthAdapter(options, "http://127.0.0.1:9099");
+    mocks.signOut.mockRejectedValueOnce({ code: "auth/network-request-failed", message: "private SDK details" });
+    const error = await adapter.login(credentials).catch(error => error);
+    expect(error).toMatchObject({ code: "UNAVAILABLE", phase: "session" });
+    expect(error.message).not.toContain("private SDK");
+  });
 });

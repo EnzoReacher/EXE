@@ -18,6 +18,7 @@ const request = (method: string, body?: unknown, patch: Record<string, string> =
 });
 beforeEach(() => {
   vi.clearAllMocks();
+  fake.db.collection.mockReset();
   vi.stubEnv("OWNPATH_ACCOUNTS_MODE", "emulator"); vi.stubEnv("OWNPATH_FIREBASE_PROJECT_ID", "demo-ownpath-accounts");
   vi.stubEnv("OWNPATH_APP_ORIGIN", origin); vi.stubEnv("OWNPATH_SESSION_DAYS", "5");
   vi.stubEnv("FIREBASE_AUTH_EMULATOR_HOST", "127.0.0.1:9099"); vi.stubEnv("FIRESTORE_EMULATOR_HOST", "127.0.0.1:8080");
@@ -56,6 +57,12 @@ describe("API error/security and recovery behavior", () => {
     expect(response.headers.get("set-cookie")).toContain("HttpOnly; SameSite=Strict");
     expect(fake.auth.verifyIdToken).toHaveBeenCalledWith("private-id-token", true);
     expect(fake.auth.getUser).toHaveBeenCalledWith("synthetic");
+    // A later exchange repairs the same identity/profile; it never needs account creation again.
+    fake.db.runTransaction.mockResolvedValueOnce(undefined);
+    fake.db.collection.mockReturnValue({ doc: () => ({ get: async () => ({ data: () => ({ displayName: "Recovered", createdAt: "2026-10-16T00:00:00.000Z", updatedAt: "2026-10-16T00:00:00.000Z" }) }) }) });
+    const repaired = await handleApi("session", request("POST", { idToken: "private-id-token" }));
+    expect(repaired.status).toBe(200);
+    expect((await repaired.json()).account).toMatchObject({ setup: "ready", profile: { displayName: "Recovered" }, identity: { uid: "synthetic" } });
   });
   it("requires recent auth before cookie issuance and all-device revocation", async () => {
     fake.auth.verifyIdToken.mockResolvedValueOnce({ uid: "synthetic", auth_time: 0 });

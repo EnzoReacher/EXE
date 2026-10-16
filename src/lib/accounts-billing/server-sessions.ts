@@ -11,7 +11,14 @@ import { hash } from "./server-security";
 
 /** Must read/check entitlement in this SAME transaction. Never a browser-supplied decision. */
 export type WriteAuthorization = (transaction: Transaction, identity: ServerIdentity) => Promise<{ limit: number }>;
+/** Server-owned policy, independent of current Pro authorization so downgraded owners retain history. */
+export type ReadQuotaPolicy = (identity: ServerIdentity) => Promise<{ limit: number }>;
 const retentionMs = 24 * 60 * 60 * 1000;
+function canonicalJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value && typeof value === "object") return `{${Object.entries(value).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([key, item]) => `${JSON.stringify(key)}:${canonicalJson(item)}`).join(",")}}`;
+  return JSON.stringify(value) ?? "null";
+}
 function validDate(value: unknown): value is string { return typeof value === "string" && Number.isFinite(Date.parse(value)) && new Date(value).toISOString() === value; }
 function summary(data: DocumentData | undefined, identity: ServerIdentity, id: string): SavedSessionSummary {
   if (!data || data.ownerUid !== identity.uid) return failure("NOT_FOUND");
@@ -24,12 +31,14 @@ function count(data: DocumentData | undefined): number {
   return value;
 }
 function matchingOperation(data: DocumentData | undefined, payloadHash: string, now: number): boolean {
-  if (!data || typeof data.expiresAtMs !== "number" || data.expiresAtMs <= now) return false;
+  if (!data) return false;
+  if (!Number.isSafeInteger(data.expiresAtMs) || data.expiresAtMs < 0 || typeof data.payloadHash !== "string" || !/^[a-f0-9]{64}$/.test(data.payloadHash)) return failure("SERVICE_UNAVAILABLE", true);
+  if (data.expiresAtMs <= now) return false;
   if (data.payloadHash !== payloadHash) failure("OPERATION_CONFLICT");
   return true;
 }
 export class SavedSessionRepository {
-  constructor(private readonly db: Firestore, private readonly authorizeWrite: WriteAuthorization, private readonly now: () => number = Date.now) {}
+  constructor(private readonly db: Firestore, private readonly authorizeWrite: WriteAuthorization, private readonly now: () => number = Date.now, private readonly readQuota: ReadQuotaPolicy = async () => ({ limit: 50 })) {}
   private user(identity: ServerIdentity) {
     requireVerified(identity);
     if (!identity.uid || identity.uid.includes("/") || identity.uid.length > 128) return failure("UNAUTHENTICATED");
@@ -44,7 +53,7 @@ export class SavedSessionRepository {
   private async write(identity: ServerIdentity, input: SaveSessionRequest | UpdateSessionRequest, id?: string): Promise<SavedSessionResponse> {
     const user = this.user(identity);
     const snapshot = parseSnapshot(input.snapshot);
-    const payloadHash = hash(JSON.stringify({ ...input, snapshot }));
+    const payloadHash = hash(canonicalJson({ ...input, snapshot }));
     const opRef = user.collection("sessionOperations").doc(hash(`${id ? `update:${id}` : "create"}:${input.operationId}`));
     const proposedId = id ?? randomUUID();
     const sessionRef = user.collection("sessions").doc(proposedId);
@@ -91,7 +100,7 @@ export class SavedSessionRepository {
     input = parseDeleteSession(input);
     const ref = user.collection("sessions").doc(id);
     const opRef = user.collection("sessionOperations").doc(hash(`delete:${id}:${input.operationId}`));
-    const payloadHash = hash(JSON.stringify(input));
+    const payloadHash = hash(canonicalJson(input));
     return this.db.runTransaction(async transaction => {
       const now = this.now();
       const op = await transaction.get(opRef);
@@ -116,10 +125,11 @@ export class SavedSessionRepository {
       if (!/^[a-f0-9]{64}$/.test(input.cursor)) return failure("INVALID_REQUEST");
       const cursor = await user.collection("sessionCursors").doc(hash(input.cursor)).get();
       const value = cursor.data();
-      if (!value || value.expiresAtMs <= this.now() || typeof value.id !== "string" || typeof value.updatedAt !== "string") return failure("INVALID_REQUEST");
+      if (!value || !Number.isSafeInteger(value.expiresAtMs) || value.expiresAtMs <= this.now() || typeof value.id !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.id) || !validDate(value.updatedAt)) return failure("INVALID_REQUEST");
       query = query.startAfter(value.updatedAt, value.id);
     }
-    const [docs, profile] = await Promise.all([query.limit(limit + 1).get(), user.get()]);
+    const [docs, profile, quota] = await Promise.all([query.limit(limit + 1).get(), user.get(), this.readQuota(identity)]);
+    if (!quota || !Number.isSafeInteger(quota.limit) || quota.limit < 1 || quota.limit > 50) return failure("SERVICE_UNAVAILABLE", true);
     const sessions = docs.docs.slice(0, limit).map(doc => summary(doc.data(), identity, doc.id));
     let nextCursor: string | null = null;
     if (docs.size > limit) {
@@ -128,6 +138,6 @@ export class SavedSessionRepository {
       const expiresAtMs = this.now() + 1800000;
       await user.collection("sessionCursors").doc(hash(nextCursor)).create({ id: last.id, updatedAt: last.updatedAt, expiresAtMs, expiresAt: new Date(expiresAtMs) });
     }
-    return { sessions, nextCursor, quota: { used: count(profile.data()), limit: 50 } };
+    return { sessions, nextCursor, quota: { used: count(profile.data()), limit: quota.limit } };
   }
 }
