@@ -1,5 +1,11 @@
 # OwnPath handoff
 
+## Accounts stage active handoff — 16 October 2026
+
+Frozen contract `4269e82` and backend checkpoint `15d8c6a` provide the FE1/FE2 interfaces/task cards. Account implementation has actual Auth/Firestore6-case acceptance and compiled guest7-case/30-step +119 retired-probe regression; separate QA requires3 correctness fixes before runtime acceptance. Root-only CI extension adds actual Java21 Firebase and compiled Translator/retired-route jobs, preserving the existing quality/browser guards. Billing lifecycle remains unavailable until separately implemented/reviewed; current storage Pro grant tests are explicitly server fixtures, not payment proof.
+
+Use isolated `feat/ownpath-accounts-billing`, [draft PR #3](https://github.com/EnzoReacher/EXE/pull/3) against backend; dependency PR #2/base unchanged. Root tooling/config and independently reviewed fixes are published separately at `c32fc0a`, with exact-head push/PR Quality SUCCESS. Actual Firebase emulator rules acceptance passed two identities/Admin read-write/24 direct denies and verified cleanup; baseline486/53 and tooling29/5 pass. These are not cloud or Stripe sandbox acceptance. Source/runtime evidence, frozen frontend handoff and remaining gates belong in [AB_EVIDENCE](AB_EVIDENCE.md) and current STATUS; [AB_TASKS](AB_TASKS.md) names owners. Original local work is preserved, frontend files reserved, no merge/deploy/live mode. Earlier stop checkpoints below describe completed historical scopes and do not cancel this newly authorized AB stage.
+
 ## New-stage executor — accounts and test subscriptions
 
 Owner requested Firebase-backed accounts, revamped registration/login and subscription payments; selected test payments first. New branch `feat/ownpath-accounts-billing` starts separately at backend `7adbd6b`. Read [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md) and execute [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md): backend and one scoped integration writer first; FE1 auth and FE2 billing in disjoint worktrees after frozen contracts. This handoff is planned work, not runtime implementation. Preserve DBG-01–04, old data/migrations, frontend ownership and PR #2. No live charges, external project credentials, automatic account/data migration, merge or deployment is claimed.

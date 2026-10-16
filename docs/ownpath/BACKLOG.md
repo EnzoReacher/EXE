@@ -2,12 +2,12 @@
 
 ## Owner-authorized accounts/database/subscription stage — 16 October 2026
 
-Scope and test-payments choice: [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md). Execute through [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md) on new isolated stage branch based on `7adbd6b`; preserve backend PR #2 and completed DBG-01–04. All items below remain unimplemented at this planning checkpoint.
+Scope and test-payments choice: [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md). Execute through [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md) on new isolated stage branch based on `7adbd6b`; preserve backend PR #2 and completed DBG-01–04. Execution is active in draft PR #3: scoped integration tooling/config and separate QA complete at `c32fc0a`; actual emulator rules checks passed. Backend/runtime/frontend/external gates remain separately tracked in [AB_EVIDENCE](AB_EVIDENCE.md), not completed by tooling alone.
 
-- [ ] AB-00: scope/ownership/contract freeze, scoped integration permissions, retired-API checker allows new declared APIs without reviving old ones.
-- [ ] AB-01: Firebase Auth/Firestore emulator setup, server sessions, idempotent account bootstrap and ownership rules.
+- [x] AB-00: scope/ownership/contract freeze at `4269e82`, scoped integration permissions, retired-API checker allows declared APIs (including reviewed CSRF bootstrap) without reviving old ones. Full V2 permission-runtime verification remains separately blocked.
+- [ ] AB-01: implementation at `15d8c6a`, six real backend emulator cases +24 client-rule denials pass; three independent QA correctness findings being fixed before acceptance.
 - [ ] AB-02: FE1 revamped registration/login/verification/reset/recovery and account entry.
-- [ ] AB-03: validated account/profile and opt-in versioned session history with server Pro/quota enforcement.
+- [ ] AB-03: transactional account/history/restore repository implemented; quota/idempotency QA corrections and real billing authority still pending. Pro persistence tests use a labeled server fixture.
 - [ ] AB-04: test-only provider adapter, checkout/portal, signed durable webhooks and canonical subscription reconciliation.
 - [ ] AB-05: FE2 Free/Pro pricing, hosted payment/return/cancel/management UI and saved-session controls.
 - [ ] AB-06: reviewed combined candidate, core regression + new emulator/auth/billing/browser/sandbox acceptance, separate QA and exact-head CI.

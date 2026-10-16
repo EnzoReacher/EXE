@@ -93,6 +93,7 @@ All state-changing browser routes require verified server identity where applica
 
 | Endpoint | Purpose |
 |---|---|
+| `GET /api/auth/csrf` | Reviewed AB-00 extension: no-store HttpOnly-cookie-bound CSRF bootstrap token before browser mutations; no identity/password exchange |
 | `POST /api/auth/session` | Recent Firebase ID token exchange, idempotent profile bootstrap, bounded HttpOnly cookie; unverified identity gets only limited account access |
 | `DELETE /api/auth/session` | CSRF-protected logout and cookie clearing; define current-device versus explicit all-session revocation |
 | `GET /api/account` | Trusted identity, profile/setup/verification status and server plan summary |

@@ -10,9 +10,13 @@ This session is the sole integration writer. Exact allowed files: `package.json`
 
 Checks: focused guard/factory/harness regressions, frozen install, full retained tests, lint/types/build, compiled Translator/119 retired probes, actual owned Auth/Firestore emulator run if Java/CLI are available. Missing Java/service is BLOCKED, never substituted by a mock. Read-only separate QA reviews source and exact logs. Rollback: revert scoped commits; no existing services reset.
 
+Explicit AB-06-I extension for the same sole integration writer: `.github/workflows/ownpath-accounts.yml` and `scripts/ci-ownpath-browser.mjs` only. Run actual demo Firebase acceptance on a disposable Java21 runner and existing compiled Translator acceptance plus retired probes for this stage; no secrets, external sandbox claim, global CI removal, or browser-privacy guard weakening.
+
 ## AB-00-B / AB-01-B / AB-03-B / AB-04-B — backend writer
 
 Exclusive implementation: `src/lib/accounts-billing/**`, new declared `src/app/api/{auth/session,account,billing/plans,billing/status,billing/checkout,billing/portal,webhooks/stripe,sessions}/**` plus `src/app/api/sessions/[id]/**`. Contracts first, with `docs/ownpath/ACCOUNTS_BILLING_CONTRACTS.md`; backend does not edit root configuration/frontend/core types. Meaningful authorization, CSRF, recent-auth, bootstrap retry, concurrency, entitlement expiry and provider-boundary tests. Emulator acceptance and actual Stripe sandbox execution reported separately. Live mode rejected.
+
+Contract-review extension: explicitly declare `GET /api/auth/csrf` and `src/app/api/auth/csrf/**` for the HttpOnly-cookie-bound CSRF bootstrap before unauthenticated credential exchange. It returns only a no-store token, checks fetch origin/site, and grants no identity. This is an added CSRF prerequisite, not a password endpoint or retired-route alias. FE1/FE2 may use scoped `src/components/accounts-auth/**` / `src/components/accounts-billing/**` respectively. Shared account layout remains integration-reserved pending an explicit composition task; FE1 owns its entry page, FE2 its billing child.
 
 ## AB-02 / AB-05 — frontend handoffs
 

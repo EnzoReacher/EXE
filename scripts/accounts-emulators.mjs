@@ -38,18 +38,20 @@ export async function runEmulators() {
   if (java.status !== 0) throw new Error("BLOCKED_JAVA_REQUIRED: Firestore emulator needs Java 21+");
   const owned = createOwnedDirectory();
   const ports = [];
-  while (ports.length < 5) { const port = await freePort(); if (!ports.includes(port)) ports.push(port); }
-  const env = Object.fromEntries(["PATH", "HOME", "JAVA_HOME", "SYSTEMROOT"].filter((key) => process.env[key]).map((key) => [key, process.env[key]]));
-  Object.assign(env, { GCLOUD_PROJECT: "demo-ownpath-accounts", OWNPATH_FIREBASE_PROJECT_ID: "demo-ownpath-accounts", OWNPATH_ACCOUNTS_MODE: "emulator", OWNPATH_APP_ORIGIN: "http://127.0.0.1:3000", FIREBASE_AUTH_EMULATOR_HOST: `127.0.0.1:${ports[0]}`, FIRESTORE_EMULATOR_HOST: `127.0.0.1:${ports[1]}`, FIREBASE_CLI_DISABLE_MOTD: "1", CI: "true" });
-  assertDemoEnvironment(env);
-  const config = JSON.parse(readFileSync(path.join(root, "firebase.json"), "utf8"));
-  for (const [index, name] of ["auth", "firestore", "hub", "logging"].entries()) config.emulators[name].port = ports[index];
-  config.emulators.firestore.websocketPort = ports[4];
-  config.firestore.rules = path.join(root, "firestore.rules");
-  config.firestore.indexes = path.join(root, "firestore.indexes.json");
-  const filename = path.join(owned, "firebase.json");
-  writeFileSync(filename, JSON.stringify(config));
   try {
+    while (ports.length < 5) { const port = await freePort(); if (!ports.includes(port)) ports.push(port); }
+    // Unique project also isolates Firebase CLI's hub discovery metadata.
+    const projectId = `demo-ownpath-accounts-${path.basename(owned).slice(-6).toLowerCase()}`;
+    const env = Object.fromEntries(["PATH", "HOME", "JAVA_HOME", "SYSTEMROOT"].filter((key) => process.env[key]).map((key) => [key, process.env[key]]));
+    Object.assign(env, { GCLOUD_PROJECT: projectId, OWNPATH_FIREBASE_PROJECT_ID: projectId, OWNPATH_ACCOUNTS_MODE: "emulator", OWNPATH_APP_ORIGIN: "http://127.0.0.1:3000", FIREBASE_AUTH_EMULATOR_HOST: `127.0.0.1:${ports[0]}`, FIRESTORE_EMULATOR_HOST: `127.0.0.1:${ports[1]}`, FIREBASE_CLI_DISABLE_MOTD: "1", CI: "true" });
+    assertDemoEnvironment(env);
+    const config = JSON.parse(readFileSync(path.join(root, "firebase.json"), "utf8"));
+    for (const [index, name] of ["auth", "firestore", "hub", "logging"].entries()) Object.assign(config.emulators[name], { host: "127.0.0.1", port: ports[index] });
+    config.emulators.firestore.websocketPort = ports[4];
+    config.firestore.rules = path.join(root, "firestore.rules");
+    config.firestore.indexes = path.join(root, "firestore.indexes.json");
+    const filename = path.join(owned, "firebase.json");
+    writeFileSync(filename, JSON.stringify(config));
     const code = await new Promise((resolve, reject) => {
       const child = spawn(path.join(root, "node_modules/.bin/firebase"), ["emulators:exec", "--project", env.GCLOUD_PROJECT, "--config", filename, "--only", "auth,firestore", `node ${path.join(root, "scripts/accounts-emulator-check.mjs")}`], { cwd: owned, env, stdio: "inherit" });
       const stop = () => child.kill("SIGTERM");
@@ -65,7 +67,7 @@ export async function runEmulators() {
       const probe = createServer();
       await new Promise((resolve, reject) => { probe.once("error", reject); probe.listen(port, "127.0.0.1", () => probe.close(resolve)); });
     }
-    console.log("Owned emulator cleanup: data directory removed; all five ports rebound successfully.");
+    console.log(`Owned emulator cleanup: data directory removed; all ${ports.length} ports rebound successfully.`);
   }
 }
 

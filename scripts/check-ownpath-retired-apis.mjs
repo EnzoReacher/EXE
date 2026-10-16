@@ -12,7 +12,7 @@ export const retiredApis = [
   "/api/credential-versions/evidence/[id]", "/api/credential-versions/[id]/export",
 ];
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
-export const declaredApis = ["/api/auth/session", "/api/account", "/api/billing/plans", "/api/billing/status", "/api/billing/checkout", "/api/billing/portal", "/api/webhooks/stripe", "/api/sessions", "/api/sessions/[id]"];
+export const declaredApis = ["/api/auth/csrf", "/api/auth/session", "/api/account", "/api/billing/plans", "/api/billing/status", "/api/billing/checkout", "/api/billing/portal", "/api/webhooks/stripe", "/api/sessions", "/api/sessions/[id]"];
 export function validateOrigin(value) {
   const url = new URL(value);
   if (url.protocol !== "http:" || !["127.0.0.1", "[::1]"].includes(url.hostname) || !url.port || url.username || url.password || url.search || url.hash || url.pathname !== "/") throw new Error("An explicit disposable numeric loopback origin and port are required.");

@@ -22,7 +22,7 @@ describe("retired API acceptance", () => {
       for (const status of [200, 307, 401, 403, 500]) await expect(checkRetiredApis(root, "http://127.0.0.1:1234", async () => new Response(null, { status }))).rejects.toThrow(String(status));
       writeFileSync(manifest, JSON.stringify({ "/api/intake/cv/route": "route.js" })); request.mockClear();
       await expect(checkRetiredApis(root, "http://127.0.0.1:1234", request)).rejects.toThrow(/Compiled build/); expect(request).not.toHaveBeenCalled();
-      for (const name of ["/api/auth/session/route", "/api/sessions/[id]/route", "/api/webhooks/stripe/route"]) {
+      for (const name of ["/api/auth/csrf/route", "/api/auth/session/route", "/api/sessions/[id]/route", "/api/webhooks/stripe/route"]) {
         writeFileSync(manifest, JSON.stringify({ [name]: "route.js" }));
         expect(await checkRetiredApis(root, "http://127.0.0.1:1234", request)).toBe(119);
       }
