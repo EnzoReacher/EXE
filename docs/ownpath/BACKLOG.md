@@ -2,6 +2,8 @@
 
 ## Owner-authorized accounts/database/subscription stage — 16 October 2026
 
+W6 independent local check: two-browser `logout("all")` revocation acceptance7browser/15steps +21backend/24direct denials, default542/63files(21explicit emulator skips), owned cleanup/lint/types/build/diff PASS. Test-only single scoped `e2e/accounts-auth.spec.ts` extension and coordinator evidence; production/frontend/DTO unchanged. FE1/FE2 UI delivery and shared shell remain blocked; external payment/cloud/scheduler gates unchanged. Exact-head publication/CI status maintained on PR#3 after inspection.
+
 Owner-directed next-order continuation: [AB_NEXT_STEPS](AB_NEXT_STEPS.md) and updated [FLOWS](FLOWS.md) map current dependencies. W5-I tests the official browser Auth adapter independently while human UI deliveries and external configuration remain blocked; diagrams do not close those gates.
 
 W5 local execution now passes6browser cases/12steps (3transport+3officialSDK), actual21backend+24denials and542default tests/63files(21emulator skips). SDK policy acceptance is safe unavailability, not enforcement; no schema root cause inferred. CLI action-link output redacted; unknown policy failure mapping repaired/reviewed at61d8568. Guest/source/CI completion: AB_EVIDENCE/PR#3. AB-02/05 human UI and combined cutover remain open.
