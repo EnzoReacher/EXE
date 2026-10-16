@@ -12,6 +12,7 @@ export const retiredApis = [
   "/api/credential-versions/evidence/[id]", "/api/credential-versions/[id]/export",
 ];
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
+export const declaredApis = ["/api/auth/csrf", "/api/auth/session", "/api/account", "/api/billing/plans", "/api/billing/status", "/api/billing/checkout", "/api/billing/portal", "/api/webhooks/stripe", "/api/sessions", "/api/sessions/[id]"];
 export function validateOrigin(value) {
   const url = new URL(value);
   if (url.protocol !== "http:" || !["127.0.0.1", "[::1]"].includes(url.hostname) || !url.port || url.username || url.password || url.search || url.hash || url.pathname !== "/") throw new Error("An explicit disposable numeric loopback origin and port are required.");
@@ -19,9 +20,14 @@ export function validateOrigin(value) {
 }
 export async function checkRetiredApis(root, origin, request = fetch) {
   const base = validateOrigin(origin);
-  // Fail before making requests if source/build still registers any API handler.
+  // Exact allowlist: unknown routes/catchalls could intercept retired paths.
   const manifest = JSON.parse(readFileSync(path.join(root, ".next/server/app-paths-manifest.json"), "utf8"));
-  if (Object.keys(manifest).some((name) => name.startsWith("/api/"))) throw new Error("Compiled build still contains an API handler; rebuild the cleanup candidate.");
+  if (Object.keys(manifest).some((name) => {
+    if (!name.endsWith("/route")) return false;
+    const normalized = name.replace(/\/\([^/]+\)/g, "").replace(/\/route$/, "");
+    // A dynamic first segment can capture 'api', even outside the API tree.
+    return normalized.startsWith("/[") || ((normalized === "/api" || normalized.startsWith("/api/")) && !declaredApis.includes(normalized));
+  })) throw new Error("Compiled build contains an undeclared or retired API handler; rebuild the candidate.");
   for (const route of retiredApis) if (existsSync(path.join(root, "src/app", route.slice(1), "route.ts"))) throw new Error("Retired API source is still present.");
   let checked = 0;
   for (const route of retiredApis) {

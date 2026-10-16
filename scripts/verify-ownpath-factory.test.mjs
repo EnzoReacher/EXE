@@ -9,13 +9,13 @@ function fixture() {
   const runtime = Object.fromEntries(Object.entries(agents).map(([name, profile]) => [name, {
     name, mode: profile.mode,
     permission: [{ permission: "*", pattern: "*", action: "allow" }, ...Object.entries(profile.permission).flatMap(([permission, value]) => typeof value === "string" ? [{ permission, pattern: "*", action: value }] : Object.entries(value).map(([pattern, action]) => ({ permission, pattern, action }))), { permission: "external_directory", pattern: "/fixture/data/opencode/tool-output/*", action: "allow" }],
-    tools: { read: true, glob: true, question: true, bash: ["ownpath-lead", "ownpath-engineer"].includes(name), edit: ["ownpath-lead", "ownpath-engineer"].includes(name), write: ["ownpath-lead", "ownpath-engineer"].includes(name), task: name === "ownpath-lead", todowrite: name === "ownpath-lead" },
+    tools: { read: true, glob: true, question: true, bash: ["ownpath-lead", "ownpath-engineer", "ownpath-integration"].includes(name), edit: ["ownpath-lead", "ownpath-engineer", "ownpath-integration"].includes(name), write: ["ownpath-lead", "ownpath-engineer", "ownpath-integration"].includes(name), task: name === "ownpath-lead", todowrite: name === "ownpath-lead" },
   }]));
   return { config: { agent: agents, command: commands }, runtime };
 }
 describe("Factory loaded-policy acceptance", () => {
-  it("accepts role policies with the runtime managed-output exception", () => { const f = fixture(); expect(verifyResolvedFactory(f.config, f.runtime)).toEqual({ agents: 4, commands: 4 }); });
-  it("accepts stricter global defaults before the complete custom policy", () => { const f=fixture(); for (const runtime of Object.values(f.runtime)) runtime.permission.unshift({permission:"*",pattern:"*",action:"deny"}, {permission:"read",pattern:"*",action:"ask"}); expect(verifyResolvedFactory(f.config,f.runtime)).toEqual({agents:4,commands:4}); });
+  it("accepts role policies with the runtime managed-output exception", () => { const f = fixture(); expect(verifyResolvedFactory(f.config, f.runtime)).toEqual({ agents: 5, commands: 4 }); });
+  it("accepts stricter global defaults before the complete custom policy", () => { const f=fixture(); for (const runtime of Object.values(f.runtime)) runtime.permission.unshift({permission:"*",pattern:"*",action:"deny"}, {permission:"read",pattern:"*",action:"ask"}); expect(verifyResolvedFactory(f.config,f.runtime)).toEqual({agents:5,commands:4}); });
   it("rejects injected broad writer or private-file permissions without printing values", () => {
     for (const mutate of [(f) => { f.config.agent['ownpath-engineer'].permission.edit['*'] = 'allow'; }, (f) => { f.config.agent['ownpath-auditor'].permission.read['.env*'] = 'allow'; }]) {
       const f = fixture(); mutate(f); expect(() => verifyResolvedFactory(f.config, f.runtime)).toThrow(/^FACTORY_PROFILE_MISMATCH$/);

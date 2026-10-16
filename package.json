@@ -9,6 +9,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:accounts:emulators": "node scripts/accounts-emulators.mjs",
+    "test:accounts:browser": "node scripts/accounts-emulators.mjs --browser",
     "test:translator:browser": "playwright test --config=e2e/translator.config.mts",
     "test:e2e:local": "node scripts/e2e-local.mjs",
     "test:proof-preview": "node scripts/proof-preview-browser.mjs",
@@ -27,13 +29,18 @@
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "docx": "9.8.1",
+    "firebase": "^13.0.0",
+    "firebase-admin": "^14.5.0",
     "mammoth": "^1.13.0",
     "next": "16.3.7",
     "pdf-parse": "^2.4.5",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "stripe": "^23.0.0"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
     "@playwright/test": "1.61.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.7",
@@ -43,6 +50,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^9",
     "eslint-config-next": "16.3.7",
+    "firebase-tools": "^15.34.0",
     "jsdom": "^30.1.1",
     "typescript": "^5",
     "vitest": "^5.0.2"

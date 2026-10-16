@@ -5,6 +5,7 @@ import { spawn, execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
+import { checkRetiredApis } from "./check-ownpath-retired-apis.mjs";
 
 // This process owns only a disposable CI app/server. Work previews and the
 // owner's running application/DB are never started or changed by this command.
@@ -64,6 +65,8 @@ try {
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   if (!ready) throw new Error("COMPILED_TRANSLATOR_START_FAILED");
+  phase = "compiled retired API absence";
+  console.log(`OwnPath compiled retired API acceptance: ${await checkRetiredApis(app, origin)} probes PASS.`);
   phase = "compiled Translator browser journeys";
   await run(process.execPath, [path.join(root, "node_modules/@playwright/test/cli.js"), "test", "--config", "e2e/translator.config.mts"], root,
     { ...env, NODE_ENV: "test", TMPDIR: tmpdir(), OWNPATH_TEST_URL: origin, OWNPATH_BROWSER_TEMP: temporary }, "inherit");

@@ -1,5 +1,26 @@
 # Execution backlog and estimated roadmap
 
+## Owner-authorized accounts/database/subscription stage — 16 October 2026
+
+W6 independent local check: two-browser `logout("all")` revocation acceptance7browser/15steps +21backend/24direct denials, default542/63files(21explicit emulator skips), owned cleanup/lint/types/build/diff PASS. Test-only single scoped `e2e/accounts-auth.spec.ts` extension and coordinator evidence; production/frontend/DTO unchanged. FE1/FE2 UI delivery and shared shell remain blocked; external payment/cloud/scheduler gates unchanged. Exact-head publication/CI status maintained on PR#3 after inspection.
+
+Owner-directed next-order continuation: [AB_NEXT_STEPS](AB_NEXT_STEPS.md) and updated [FLOWS](FLOWS.md) map current dependencies. W5-I tests the official browser Auth adapter independently while human UI deliveries and external configuration remain blocked; diagrams do not close those gates.
+
+W5 local execution now passes6browser cases/12steps (3transport+3officialSDK), actual21backend+24denials and542default tests/63files(21emulator skips). SDK policy acceptance is safe unavailability, not enforcement; no schema root cause inferred. CLI action-link output redacted; unknown policy failure mapping repaired/reviewed at61d8568. Guest/source/CI completion: AB_EVIDENCE/PR#3. AB-02/05 human UI and combined cutover remain open.
+
+Continuationfd0644b: [ledger](AB_EXECUTION_LEDGER.md) tracks dependencies/owners. Completed reviewed password-policy safe errors and distinct owned Firebase/browser API transport acceptance. Fresh539tests/63files(21emulator skips), actual21backend+24denials, transport3/6, guest7/30+119, install/lint/types/build/diff PASS. Both human frontend packets and external packet prepared; no deliveries/acknowledgment or external execution. AB-02, UI/restore/shell/legacy, actual-provider/cloud/recovery gates remain open.
+
+Scope and test-payments choice: [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md). Execute through [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md) on new isolated stage branch based on `7adbd6b`; preserve backend PR #2 and completed DBG-01–04. Execution is active in draft PR #3: scoped integration tooling/config and separate QA complete at `c32fc0a`; actual emulator rules checks passed. Backend/runtime/frontend/external gates remain separately tracked in [AB_EVIDENCE](AB_EVIDENCE.md), not completed by tooling alone.
+
+- [x] AB-00: scope/ownership/contract freeze at `4269e82`, scoped integration permissions, retired-API checker allows declared APIs (including reviewed CSRF bootstrap) without reviving old ones. Full V2 permission-runtime verification remains separately blocked.
+- [x] AB-01 local/backend slice: `15d8c6a` + reviewed corrections `9a56dc9`; **9 actual Auth/Firestore backend cases +24 direct-client denials**, **519 retained default tests (9 explicitly skipped emulator cases)**, lint/types/build pass. Separate read-only QA closed all3 findings. Cloud/email and FE entry cutover remain separate gates.
+- [ ] AB-02: FE1 revamped registration/login/verification/reset/recovery and account entry.
+- [x] AB-03 local/backend slice: transactional owned history/restore/quota/revisions and reviewed billing authority integrated; actual Firestore with fake-provider payment state proves consistent quota/downgrade access. FE2 restore review/UI and actual external provider acceptance remain separate gates.
+- [x] AB-04 deterministic/backend slice: real Stripe23 adapter, durable checkout/customer/portal, signed receipts/retry/canonical reconciliation implemented; separate QA closed3 findings, default-off activation gate. Actual Stripe sandbox matrix remains BLOCKED (no keys/account/Price/webhook secret);21 actual Firebase cases include12 fake-provider billing cases, not Stripe acceptance.
+- [ ] AB-05: FE2 Free/Pro pricing, hosted payment/return/cancel/management UI and saved-session controls.
+- [ ] AB-06: reviewed combined candidate, core regression + new emulator/auth/billing/browser/sandbox acceptance, separate QA and exact-head CI.
+- [ ] AB-07: reproducible setup, measured evidence, missing configuration/production gates and handoff.
+
 ## Morning continuation — 16 October 2026
 
 Fresh Work audit at `295306b` confirmed published DBG-01/02/03, green exact-head Quality and 450/53 passing tests; reproduced original fixes and scoped ownership. Next debugging-only task: [OPENCODE_DBG04](OPENCODE_DBG04.md), the previously logged action-alternative limitation. No frontend/integration/cleanup work is taken over.

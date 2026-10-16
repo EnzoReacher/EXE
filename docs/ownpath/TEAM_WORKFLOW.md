@@ -1,5 +1,13 @@
 # OwnPath three-person build contract — 15 October 2026
 
+## New accounts/billing-stage ownership override — 16 October 2026
+
+Continuation pickup packets: [FE1](AB_FE1_PACKET.md), [FE2](AB_FE2_PACKET.md); current single-writer dependencies/baselines [AB_EXECUTION_LEDGER](AB_EXECUTION_LEDGER.md). Accounts integration is `feat/ownpath-accounts-billing` → backend PR#3, while backend PR#2 retains its experience-translator base; older integration sections below describe the preceding stage. FE1 account page / FE2 billing child / coordinator shared layout split is explicit. No delivery or acknowledgment inferred.
+
+Execution cards and fixed baseline: [AB_TASKS](AB_TASKS.md). New ownership checker roles: `accounts-backend`, `accounts-integration`, `auth-ui`, `billing-ui`. Evaluate each scoped commit against its pre-task baseline, with both sides of renames and all active files included. Stage-wide combined ownership is a reviewed union of those task scopes, not permission for one owner to edit the other's paths. Backend contracts and frontend handoffs: [ACCOUNTS_BILLING_CONTRACTS](ACCOUNTS_BILLING_CONTRACTS.md).
+
+The owner's new request authorizes auth/database/subscription work. Use the expanded matrix and task-scoped integration writer in [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md) and the three execution instructions in [OPENCODE_ACCOUNTS_BILLING](OPENCODE_ACCOUNTS_BILLING.md). Backend owns new APIs/server contracts; FE1 auth entry/action/account UI; FE2 pricing/billing and reviewed opt-in Translator save UI. Root tooling/Firebase configs/proxy/shared tests have one integration writer. Existing frontend local work must be inspected before edits; this assignment does not claim acknowledgment. The earlier no-new-Auth/API scope is superseded only for declared AB tasks, not via blanket permission expansion.
+
 Owner instruction: start the approved core-only plan, with two other people handling frontend. This is the proposed file assignment for those two developers and the enforced scope of this backend slice. Their names, local work and acceptance of the assignment are not known; no messages were sent on their behalf.
 
 ## Current integration rule

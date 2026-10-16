@@ -38,7 +38,7 @@ export function verifyResolvedFactory(config, resolvedAgents) {
     const trailing = runtime.permission.slice(start + expectedRules.length);
     if (trailing.some((rule) => rule.permission !== "external_directory" || rule.action !== "allow" || typeof rule.pattern !== "string" || !path.isAbsolute(rule.pattern) || !rule.pattern.endsWith("/opencode/tool-output/*") || path.normalize(rule.pattern) !== rule.pattern || /[\*?\[\]{}]/.test(rule.pattern.slice(0, -2)))) fail("FACTORY_TRAILING_OVERRIDE");
     const allowed = new Set(["read", "glob", "question"]);
-    if (["ownpath-lead", "ownpath-engineer"].includes(name)) for (const tool of ["edit", "write", "bash"]) allowed.add(tool);
+    if (["ownpath-lead", "ownpath-engineer", "ownpath-integration"].includes(name)) for (const tool of ["edit", "write", "bash"]) allowed.add(tool);
     if (name === "ownpath-lead") { allowed.add("task"); allowed.add("todowrite"); }
     if (!runtime.tools || Object.entries(runtime.tools).some(([tool, enabled]) => typeof enabled !== "boolean" || (enabled && !allowed.has(tool))) || [...allowed].some((tool) => runtime.tools[tool] !== true)) fail("FACTORY_TOOL_AVAILABILITY_MISMATCH");
   }

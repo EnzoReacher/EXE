@@ -6,6 +6,28 @@ import { describe, expect, it } from "vitest";
 import { checkOwnership, ownsPath } from "./check-ownpath-ownership.mjs";
 
 describe("three-person OwnPath ownership", () => {
+  it("AB scopes separate new backend, integration and both frontend owners", () => {
+    expect(ownsPath("accounts-backend", "src/app/api/auth/session/route.ts")).toBe(true);
+    expect(ownsPath("accounts-backend", "src/app/api/sessions/[id]/route.ts")).toBe(true);
+    for (const filename of ["src/app/api/saved-work/route.ts", "src/lib/supabase/server.ts", "src/app/sign-in/page.tsx", "package.json"]) expect(ownsPath("accounts-backend", filename)).toBe(false);
+    expect(ownsPath("accounts-integration", "firebase.json")).toBe(true);
+    expect(ownsPath("accounts-integration", ".github/workflows/ownpath-accounts.yml")).toBe(true);
+    expect(ownsPath("accounts-integration", "e2e/translator.spec.ts")).toBe(true);
+    for (const filename of ["scripts/accounts-browser-check.mjs", "scripts/accounts-browser-check.test.mjs", "e2e/accounts-api.spec.ts", "e2e/accounts-api.config.mts", "e2e/safe-reporter.ts"]) expect(ownsPath("accounts-integration", filename)).toBe(true);
+    expect(ownsPath("accounts-integration", "e2e/other.spec.ts")).toBe(false);
+    expect(ownsPath("accounts-integration", "e2e/accounts-auth.spec.ts")).toBe(true);
+    expect(ownsPath("auth-ui", "e2e/accounts-auth.spec.ts")).toBe(false);
+    expect(ownsPath("accounts-integration", "e2e/translator.config.mts")).toBe(false);
+    expect(ownsPath("accounts-backend", "e2e/translator.spec.ts")).toBe(false);
+    expect(ownsPath("accounts-integration", ".github/workflows/quality.yml")).toBe(false);
+    for (const filename of ["src/proxy.ts", "src/app/sign-in/page.tsx", "src/lib/accounts-billing/server.ts", ".opencode/agents/ownpath-engineer.md"]) expect(ownsPath("accounts-integration", filename)).toBe(false);
+    expect(ownsPath("auth-ui", "src/app/account/page.tsx")).toBe(true);
+    expect(ownsPath("auth-ui", "src/app/account/layout.tsx")).toBe(false);
+    expect(ownsPath("auth-ui", "src/app/account/billing/page.tsx")).toBe(false);
+    expect(ownsPath("billing-ui", "src/app/account/billing/page.tsx")).toBe(true);
+    expect(ownsPath("billing-ui", "src/app/account/page.tsx")).toBe(false);
+    for (const role of ["accounts-backend", "accounts-integration", "auth-ui", "billing-ui"]) expect(ownsPath(role, "src/lib/experience-translator/types.ts")).toBe(false);
+  });
   it("DBG-03 grants only explicit root page/layout colocated tests to shell", () => {
     for (const filename of ["src/app/page.test.tsx", "src/app/layout.test.tsx"]) {
       expect(ownsPath("shell", filename)).toBe(true);

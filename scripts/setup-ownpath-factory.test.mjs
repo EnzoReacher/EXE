@@ -10,7 +10,7 @@ describe("version-aware OwnPath Factory", () => {
     for (const v of ["3.0.0", "unknown", "1", "2.0.0\nprivate configuration"]) expect(() => detectMajor(v)).toThrow();
   });
   it.each([1, 2])("keeps auditors read-only and avoids injected shell expansions on v%s", (major) => {
-    const files = factoryFiles(major); expect(files.size).toBe(8);
+    const files = factoryFiles(major); expect(files.size).toBe(9);
     const auditor = files.get(".opencode/agents/ownpath-auditor.md");
     const front = JSON.parse(auditor.split("---\n")[1]);
     if (major === 1) { expect(front.permission.edit).toBe("deny"); expect(front.permission.bash).toBe("deny"); expect(front.permission.grep).toBe("deny"); }
@@ -29,11 +29,22 @@ describe("version-aware OwnPath Factory", () => {
       expect(readFileSync(path.join(directory, "AGENTS.md"), "utf8")).toBe("Existing instructions");
     } finally { rmSync(directory, { recursive: true }); }
   });
+  it.each([1, 2])("limits integration writer to declared root tooling on v%s", (major) => {
+    const writer = JSON.parse(factoryFiles(major).get(".opencode/agents/ownpath-integration.md").split("---\n")[1]);
+    const grants = major === 1 ? Object.entries(writer.permission.edit).filter(([, effect]) => effect === "allow").map(([resource]) => resource) : writer.permissions.filter((p) => p.action === "edit" && p.effect === "allow").map((p) => p.resource);
+    expect(grants).toContain("firebase.json"); expect(grants).toContain("package.json");
+    expect(grants).toContain("scripts/verify-ownpath-factory.mjs"); expect(grants).toContain("scripts/verify-ownpath-factory.test.mjs");
+    expect(grants).toContain("e2e/accounts-auth.spec.ts");
+    expect(grants).not.toContain("e2e/*"); expect(grants).not.toContain("e2e/accounts-auth*");
+    expect(grants.some((p) => p.startsWith("src/") || p.startsWith(".opencode/"))).toBe(false);
+    if (major === 1) expect(writer.permission.bash["*"]).toBe("ask");
+    else expect(writer.permissions).toContainEqual({ action: "shell", resource: "*", effect: "ask" });
+  });
   it.each([1, 2])("keeps the backend writer out of both frontend owners' files on v%s", (major) => {
     const writer = JSON.parse(factoryFiles(major).get(".opencode/agents/ownpath-engineer.md").split("---\n")[1]);
     const grants = major === 1 ? Object.entries(writer.permission.edit).filter(([, effect]) => effect === "allow").map(([resource]) => resource) : writer.permissions.filter((p) => p.action === "edit" && p.effect === "allow").map((p) => p.resource);
-    expect(grants).toContain("src/app/api/*"); expect(grants).toContain("src/lib/*");
-    expect(grants.filter((p) => p.startsWith("src/app/") && p !== "src/app/api/*")).toEqual([]);
+    expect(grants).toContain("src/app/api/auth/session/*"); expect(grants).toContain("src/lib/accounts-billing/*");
+    expect(grants.filter((p) => p.startsWith("src/app/") && !p.startsWith("src/app/api/"))).toEqual([]);
     expect(grants.some((p) => p.startsWith("src/components/"))).toBe(false);
     if (major === 1) expect(writer.permission.edit["src/lib/experience-translator/types.ts"]).toBe("deny");
     else expect(writer.permissions.filter((p) => p.action === "edit").at(-1)).toEqual({ action: "edit", resource: "src/lib/experience-translator/types.ts", effect: "deny" });

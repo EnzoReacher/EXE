@@ -1,5 +1,9 @@
 # OwnPath — Experience Translator
 
+## Owner-authorized accounts and sandbox billing stage — 16 October 2026
+
+The owner requested revamped login/registration, Firebase-backed accounts/database and Free/Pro subscriptions, and selected test payments first. [ACCOUNTS_BILLING_STAGE](ACCOUNTS_BILLING_STAGE.md) defines the bounded expansion, identities, opt-in saving, billing policy, ownership and acceptance. Earlier no-Auth/no-persistence/no-subscription exclusions below describe the original core-only milestone; they do not block the newly authorized stage. The grounded guest/local Translator remains intact; no external AI model, real charges, live database migration or deployment is implied. New features are planned, not implemented by this scope update.
+
 Current direction: owner-authorized core-only reduction, 2026-10-15. Keep one useful Experience Translator journey; remove unnecessary legacy runtime features after dependency/ownership audit. One to three supporting capabilities is a ceiling, not a feature quota. This supersedes older instructions to preserve every old product route. Formal research/production approval remains pending in [the existing decision record](../M10_PRODUCT_DIRECTION_DECISION.md).
 
 **Turn Your Experience Into Career Value.**
