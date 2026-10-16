@@ -155,9 +155,60 @@ describe.skipIf(process.env.OWNPATH_EMULATOR_ACCEPTANCE !== "1")("billing: actua
     const stored = (await db.collection("billingEvents").doc(payload.id).get()).data()!;
     expect(stored).toMatchObject({ state: "pending", attempts: 1, failureCode: "reconciliation_unavailable" });
     expect(stored).not.toHaveProperty("providerEvent");
-    now += 5000; provider.failCanonical = false;
+    expect(stored.nextAttemptAtMs).toBe(now + 2000);
+    provider.failCanonical = false;
+    expect(await service.retryPending(1)).toEqual({ completed: 0, failed: 0 });
+    now += 2000;
     expect(await service.retryPending()).toEqual({ completed: 1, failed: 0 });
     expect((await service.entitlement(identity)).planId).toBe("pro");
+  }, 30000);
+  it("recovers a committed but unprocessed signed receipt with a fresh worker and keeps duplicates inert", async () => {
+    const customerId = await active();
+    const originalVersion = (await service.entitlement(identity)).version;
+    provider.states.get(customerId)!.subscriptions[0].status = "canceled";
+    const payload = await receive(customerId, undefined, "customer.subscription.deleted");
+    expect((await db.collection("billingEvents").doc(payload.id).get()).data()).toMatchObject({ state: "pending", attempts: 0 });
+    expect((await service.status(identity))).toMatchObject({ reconciliation: "pending", entitlement: { planId: "free" } });
+
+    // The request/worker ends after the durable receipt, without invoking processEvent.
+    const restarted = new BillingService(db, provider, TEST_CATALOG, options(), () => now);
+    expect(await restarted.retryPending(1)).toEqual({ completed: 1, failed: 0 });
+    expect((await restarted.status(identity))).toMatchObject({ reconciliation: "current", subscription: "canceled", entitlement: { planId: "free", version: originalVersion + 1 } });
+    expect((await db.collection("billingEvents").doc(payload.id).get()).data()).toMatchObject({ state: "done", attempts: 1 });
+    await restarted.receiveWebhook(payload.raw, "fake-valid");
+    await restarted.processEvent(payload.id);
+    expect(await restarted.retryPending(1)).toEqual({ completed: 0, failed: 0 });
+    expect((await db.collection("billingAccounts").doc(identity.uid).get()).data()).toMatchObject({ dirty: 1, reconciled: 1, version: originalVersion + 1 });
+    expect(provider.customerCalls).toBe(1);
+    expect(provider.checkoutCalls).toBe(0);
+  }, 30000);
+  it("does not let an abandoned event claim overwrite recovery after its lease expires", async () => {
+    const customerId = await active();
+    const originalVersion = (await service.entitlement(identity)).version;
+    provider.states.get(customerId)!.subscriptions[0].status = "canceled";
+    const payload = await receive(customerId, undefined, "customer.subscription.deleted");
+    let release!: () => void;
+    let entered = false;
+    provider.beforeCanonical = async () => { entered = true; await new Promise<void>(resolve => { release = resolve; }); };
+    const abandoned = service.processEvent(payload.id).catch(error => error);
+    try {
+      await vi.waitFor(() => expect(entered).toBe(true));
+      expect(await service.retryPending(1)).toEqual({ completed: 0, failed: 1 });
+      expect((await db.collection("billingEvents").doc(payload.id).get()).data()).toMatchObject({ state: "pending", attempts: 1 });
+      expect((await service.entitlement(identity)).planId).toBe("free");
+
+      now += 1001; // the claimed event and account leases have expired
+      provider.beforeCanonical = null;
+      expect(await new BillingService(db, provider, TEST_CATALOG, options(), () => now).retryPending(1)).toEqual({ completed: 1, failed: 0 });
+    } finally {
+      provider.beforeCanonical = null;
+      release?.();
+    }
+    expect(await abandoned).toMatchObject({ code: "OPERATION_PENDING" });
+    expect((await db.collection("billingEvents").doc(payload.id).get()).data()).toMatchObject({ state: "done", attempts: 2, lease: null });
+    expect((await service.status(identity))).toMatchObject({ reconciliation: "current", subscription: "canceled", entitlement: { planId: "free", version: originalVersion + 1 } });
+    expect(provider.customerCalls).toBe(1);
+    expect(provider.checkoutCalls).toBe(0);
   }, 30000);
   it("fences a stale canonical response after a successor lease committed cancellation", async () => {
     const customerId = await active();
