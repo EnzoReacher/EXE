@@ -22,7 +22,7 @@ function canonicalize(value: string) {
 }
 
 /**
- * A conservative, local-only extractor for the M2 prototype. It prioritizes
+ * A conservative, local-only job description extractor. It prioritizes
  * explicitly labeled requirement sections and bullet lists. It does not infer
  * requirements from arbitrary prose when no requirement cue is present.
  */

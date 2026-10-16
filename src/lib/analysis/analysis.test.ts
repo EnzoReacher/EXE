@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
 import { matchRequirements } from "./matcher";
-import { extractRequirements } from "./requirements";
 import { validateAnalysisOutput } from "./schema";
 import type { AnalysisProvider } from "./types";
 
@@ -9,28 +8,6 @@ vi.mock("server-only", () => ({}));
 vi.mock("./repository", () => ({ saveAnalysisFindings: persistence.save, failAnalysisRun: persistence.fail }));
 import { analyzeAndValidate } from "./workflow";
 import { processAnalysisRun } from "./workflow";
-
-describe("local requirement extraction", () => {
-  it("extracts a short list from labeled job sections and skips the next section", () => {
-    const jobDescription = [
-      "Data Analyst Intern",
-      "Requirements: SQL, Python, and Excel",
-      "- Clear communication",
-      "Responsibilities:",
-      "- Build weekly dashboards",
-    ].join("\n");
-    expect(extractRequirements(jobDescription)).toEqual(["SQL", "Python", "Excel", "Clear communication"]);
-  });
-
-  it("does not invent requirements from general prose without a clear cue", () => {
-    expect(extractRequirements("Join our friendly team and help us grow. We offer mentorship and flexible hours.")).toEqual([]);
-  });
-
-  it("does not mistake responsibilities above a requirements heading for requirements", () => {
-    const description = "Responsibilities:\n- Build dashboards\nRequirements:\n- SQL";
-    expect(extractRequirements(description)).toEqual(["SQL"]);
-  });
-});
 
 describe("evidence matcher", () => {
   const cvText = "Fictional analyst built a Python dashboard project. SQL coursework only. I am not experienced with Agile delivery. Google Sheets analytics.";

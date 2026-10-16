@@ -1,4 +1,4 @@
-import { extractRequirements } from "@/lib/analysis/requirements";
+import { extractRequirements } from "@/lib/job-description/requirements";
 import type { Answers, Bullet, Fact, FactCode, Intake, PreparedSession, Question, Requirement, Source } from "./types";
 
 export class TranslatorError extends Error {
@@ -24,6 +24,43 @@ const otherActor = /\b(?:teammate|colleague|we|they|our team)\b|cả nhóm|chún
 const authored = /\b(?:built|developed|implemented|created)\b|(?:tự\s+)?(?:làm|xây dựng|phát triển|triển khai|phụ trách)/i;
 const nonAuthoring = /\b(?:review(?:ed|ing)?|test(?:ed|ing|s)?|document(?:ed|ing|ation)?|readme|docs|debugg(?:ed|ing)|used|watched|read|copied|index|backend|server|algorithm)\b|kiểm thử|tài liệu|xem|đọc|sao chép/i;
 
+function hasMixedActor(excerpt: string) {
+  // Inspect only coordinated clause starts. Repeated first-person subjects and
+  // subjectless personal actions remain valid; names are never enumerated.
+  return excerpt.split(/\s+(?:and|và)\s+|,\s*/iu).slice(1).some((clause) =>
+    !/^(?:i|mình|tôi|em|bản thân)\s/iu.test(clause) &&
+    !personal.test(`I ${clause}`) &&
+    /^(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched|làm|xây dựng|phát triển|triển khai|tích hợp|dùng|sử dụng|phụ trách|gọi|xử lý)(?=\s|$)/iu.test(clause));
+}
+
+function hasAlternativeTechnologies(excerpt: string) {
+  // Reuse the supported tool vocabulary and inspect only the connector between
+  // adjacent tool mentions, not "or" inside words or unrelated prose/the JD.
+  const mentions = definitions.filter((definition) => !definition.action).flatMap((definition) =>
+    [...excerpt.matchAll(new RegExp(definition.pattern.source, "gi"))]);
+  mentions.sort((a, b) => a.index - b.index);
+  return mentions.some((mention, index) => {
+    const next = mentions[index + 1];
+    return next && /^\s*,?\s*(?:or|versus|vs|hoặc|hay)(?:\s+là)?\s*$/iu.test(excerpt.slice(mention.index + mention[0].length, next.index));
+  });
+}
+
+function hasAlternativeActions(excerpt: string) {
+  // Only direct alternatives between supported action mentions are ambiguous.
+  // Leave conjunctions and unrelated alternative purposes alone.
+  const mentions = definitions.filter((definition) => definition.action).flatMap((definition) =>
+    [...excerpt.matchAll(new RegExp(definition.pattern.source, "gi"))]);
+  mentions.sort((a, b) => a.index - b.index);
+  return mentions.some((mention, index) => {
+    const next = mentions[index + 1];
+    const connector = next && excerpt.slice(mention.index + mention[0].length, next.index);
+    // Allow the ordinary "responsive UI" noun form and a repeated supported
+    // authoring predicate, but no arbitrary prose between the action mentions.
+    const alternative = new RegExp(`^\\s*(?:ui\\s*)?,?\\s*(?:or|versus|vs|hoặc|hay)(?:\\s+là)?\\s*(?:(?:${authored.source})\\s*)?$`, "iu");
+    return connector !== undefined && alternative.test(connector);
+  });
+}
+
 function text(value: unknown, min: number, max: number, label: string) {
   if (typeof value !== "string" || value.trim().length < min || value.trim().length > max || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(value)) throw new TranslatorError(`${label}: enter ${min}–${max} characters. Describe specific work you actually did.`);
   return value.trim();
@@ -38,7 +75,7 @@ export function validateIntake(input: unknown): Intake {
 }
 
 export function extractFrontendRequirements(jd: string): Requirement[] {
-  // Filter negated lines before legacy splitting loses their negative scope.
+  // Filter negated lines before requirement splitting loses their negative scope.
   const safeLines = jd.split(/\n/).filter((line) => !instruction.test(line) && !limiting.test(line.replace(/[’‘]/g, "'")));
   const safeText = safeLines.join("\n");
   // Existing extraction is reused; a narrow fallback supports the golden short JD.
@@ -60,8 +97,9 @@ export function extractPersonalFacts(sources: Source[]): Fact[] {
       const excerpt = match[0].trim();
       const start = (match.index ?? 0) + match[0].indexOf(excerpt);
       const normalized = excerpt.replace(/[’‘]/g, "'");
-      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by)\b|trong khi|nhưng/i.test(normalized)) continue;
-      if (/\band\s+(?!i\b)(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created)\b/iu.test(normalized)) continue;
+      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than|as opposed to)\b|trong khi|nhưng/i.test(normalized)) continue;
+      // Reject ambiguous subject changes for supported personal-action verbs, not names.
+      if (hasMixedActor(normalized) || hasAlternativeTechnologies(normalized) || hasAlternativeActions(normalized)) continue;
       if (!source.personalContext && /\bteam\b|nhóm/i.test(excerpt) && !/\bi (?:built|developed|implemented|created)\b|(?:mình|tôi|em) (?:tự|phụ trách)/i.test(excerpt)) continue;
       const bare = normalized.replace(/\b(?:and|using|with)\b|và|bằng|[,/]/gi, " ").trim();
       const recognizedList = /^(?:(?:product listing|danh sách sản phẩm|tìm kiếm|search|responsive(?: ui)?|react(?:\.js|js)?|javascript|js|typescript|html|css|rest api|git)\s*)+$/i.test(bare);
@@ -154,7 +192,9 @@ export function validateBulletOutput(output: unknown, session: PreparedSession):
   const bullets = (parsed as Record<string, unknown>).bullets;
   const expected = composeBullets(session);
   if (!Array.isArray(bullets) || bullets.length !== expected.length) throw new TranslatorError();
-  return bullets.map((bullet, index) => {
+  // Indexed access visits sparse slots too; Array.map would skip their validation.
+  for (let index = 0; index < bullets.length; index++) {
+    const bullet = bullets[index];
     if (!bullet || typeof bullet !== "object" || Array.isArray(bullet)) throw new TranslatorError();
     const b = bullet as Record<string, unknown>; const e = expected[index];
     if (Object.keys(b).sort().join() !== "factIds,id,requirementIds,text" || b.id !== e.id || b.text !== e.text || JSON.stringify(b.factIds) !== JSON.stringify(e.factIds) || JSON.stringify(b.requirementIds) !== JSON.stringify(e.requirementIds)) throw new TranslatorError();
@@ -164,6 +204,6 @@ export function validateBulletOutput(output: unknown, session: PreparedSession):
       const source = f && session.sources.find((s) => s.id === f.sourceId);
       if (!f?.confirmed || !source || f.evidenceKind !== "user_statement" || source.text.slice(f.start, f.end) !== f.excerpt || !extractPersonalFacts([source]).some((candidate) => candidate.id === f.id && candidate.code === f.code && candidate.label === f.label && candidate.start === f.start && candidate.end === f.end)) throw new TranslatorError();
     }
-    return e;
-  });
+  }
+  return expected;
 }

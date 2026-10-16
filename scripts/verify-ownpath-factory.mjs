@@ -78,7 +78,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     console.log(`Factory config self-check: PASS (${result.agents} agents, ${result.commands} commands; OpenCode ${result.version}; ${result.isolated ? "isolated fixture" : "current project"}).`);
     console.log("Discovery, ordered policies and tool availability only. Resource matching, permission prompts, delegation, models and owner acceptance are not exercised. No config/debug values emitted.");
   } catch (error) {
-    const code = error instanceof Error && /^FACTORY_[A-Z_]+$/.test(error.message) ? error.message : "FACTORY_CHECK_FAILED";
+    const code = error instanceof Error && /^FACTORY_[A-Z0-9_]+$/.test(error.message) ? error.message : "FACTORY_CHECK_FAILED";
     console.error(`Factory config self-check: ${code}. No private configuration or CLI error content emitted.`); process.exitCode = 1;
   }
 }

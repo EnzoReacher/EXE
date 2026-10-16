@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { extractCvText } from "../src/lib/intake/parser";
-import { extractRequirements } from "../src/lib/analysis/requirements";
+import { extractRequirements } from "../src/lib/job-description/requirements";
 import { matchRequirements } from "../src/lib/analysis/matcher";
 import { validateAnalysisOutput } from "../src/lib/analysis/schema";
 

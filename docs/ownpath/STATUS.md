@@ -1,4 +1,180 @@
-# OwnPath implementation status — 2026-10-12
+# OwnPath implementation status — 2026-10-15
+
+## DBG-04 completed — 16 October 2026
+
+**Final verified source:** `87e1f116b9a7df6b704af60a7e22d411422ee6e0`; fixed actual task baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9` after safe non-divergent fast-forward from `295306b`. Eight local `.opencode` profiles and original M17 worktree preserved; all profile checksums match. Baseline exact-head Quality PR38843614164/push38843610324 SUCCESS.
+
+**DBG-04 PASS within bounded scope.** One `ownpath-engineer` added an excerpt-level recognized-action alternative guard, preserving genuine conjunctions, single actions, affirmative tool lists, unrelated purposes and independent sentences with exact provenance. Only engine and colocated grounding tests changed. Actual read-only auditor and separate read-only QA executed; no factory/provider/config change or broader isolation claim.
+
+Initial RED18 failed/5 passed; repeated-predicate RED4 failed; separate QA found a comma-punctuation bypass, which the same writer reproduced RED4 failed/32 passed before the one-line correction. Skips are recorded separately. Final focused **123/2**, full retained **486/53**, lint/types/build/diff PASS. Fresh post-fix compiled browser **7 cases/30 steps**, **119** retired-API probes and landing/Translator smoke PASS. Owned settings-free loopback server/temp cleaned in `finally`; port33359 rebind PASS. Matching cached Chromium; no CI spoofing or service reuse. Final separate QA PASS, no remaining scoped blocker; QA reviewed supplied execution logs and independently analyzed source, but ran no shell/tests/Git/CI.
+
+Clean detached final-source ownership **PASS2 paths** against the unchanged baseline; final source+docs check recorded on PR #2. Active-tree ownership remains separately **FAIL** only eight preserved profiles; policy/baseline unchanged. [DBG_04_EVIDENCE](DBG_04_EVIDENCE.md) records task card, actual failed attempts, commands, counts and grammar limits. Source commits `73ed2e9` then `87e1f11`; evidence/checklist/handoff follow-up is docs-only. Existing draft PR #2 retains integration base; full publication SHA and exact-head CI results are recorded in its current evidence section.
+
+DBG-01–03 were not reopened. Frontend/integration/Auth/package/config/CI cleanup, broader V2 verification, manual/device/research and release stay open with assigned owners. Stop after DBG-04; no merge, deployment or database operation.
+
+## DBG-01 / DBG-02 / DBG-03 debugging batch
+
+**Verified source:** `55d29cc8cbba3fccbd7091755cbbc43ebef007d0`, branch `feat/ownpath-backend`, existing draft PR #2 against integration. Fixed task baseline: `c3d8ae9795c19506a33cc0d33c292878aa484bf4` after safe fast-forward of the existing backend worktree from `7d7d401`. Eight local untracked Factory profiles and original M17 worktree are preserved. Baseline exact-head Quality runs `38712669937` / `38712664302` passed.
+
+**DBG-01/02/03 PASS in bounded reviewed scope.** One `ownpath-engineer` writer corrected supported Vietnamese actor boundaries, personal technology alternatives and explicit root shell page/layout test ownership. Frontend, frozen types/interfaces/IDs/labels, adapter/review, Auth/packages/config/workflows/migrations were untouched. Task cards, exact commands, RED evidence and acceptance are in [DBG_01_03_EVIDENCE](DBG_01_03_EVIDENCE.md).
+
+| Check | Actual outcome |
+|---|---|
+| Original RED | DBG-01:5 failed; DBG-02:5 failed/1 passed; DBG-03:1 failed/1 passed; name-filtered skipped cases recorded separately |
+| Post-QA focused regressions | PASS91 tests/3 files; original facts-before-confirmation and bullets-after-confirmation, genuine personal coordination, tool lists/JD relevance, exact offsets and role denials |
+| Final full retained suite | PASS450 tests/53 files:424 baseline +24 grounding +2 ownership cases; no previous assertions removed |
+| Lint/typecheck/production build/diff | PASS; sanitized build, no source/config workarounds |
+| Actual compiled browser | PASS7 cases/30 named steps at320/375/768/1440 plus keyboard, injected clipboard rejection and long content; existing no-store/traffic/sentinel/socket/error/overflow/TXT guards intact |
+| Compiled APIs + smoke | PASS119 HTTP probes across17 patterns; source/build inventory absent; landing/Translator HTTP200 and CTA |
+| Owned cleanup | PASS in finally; server port33757 subsequently rebound successfully; matching cached Chromium, no service/provider settings or CI spoofing |
+| Separate audit and QA | Actual read-only `ownpath-auditor` acceptance audit and `ownpath-qa` complete-diff/evidence review. QA PASS on all three after one fixture correction; no independent shell/test rerun by QA |
+| Committed-source ownership | Clean detached source55d29cc against unchanged baseline:PASS4 paths; owned worktree removed normally in finally |
+| Active-tree ownership | FAIL precisely8 preserved local `.opencode` profiles; checksums match, guard not weakened |
+
+QA rejected a misleading positive fixture that asserted both actions for `listing or search`. The same writer replaced it with unrelated `for sorting or filtering`; focused and full suites reran afterward. Runtime hashes matched the compiled checkpoints, so no new browser execution is claimed after the test-only correction. Action-alternative grounding remains a separately recorded domain-owner limitation outside DBG-01/02/03.
+
+The writer invocation stalled across parent interruption; only that owned child execution was interrupted and the same writer resumed synchronously to finish the fixture correction. No service restart, factory installation/configuration change or second source writer was introduced. The earlier source checkpoints remain historical.
+
+**Published:** normal non-force push after fresh fetch showed2 ahead/0 behind; source55d29cc and docs checkpoint **`b041ae413667cff07a268e954bedd4399d6025ab`** are on existing draft PR #2, whose description was updated. Exact-head Quality [PR38723535938](https://github.com/EnzoReacher/EXE/actions/runs/38723535938) and [push38723530453](https://github.com/EnzoReacher/EXE/actions/runs/38723530453) both completed SUCCESS at b041ae4. Clean detached committed-source+docs ownership PASS8 paths against the fixed baseline; active checkout still FAIL only8 local profiles. This publication/CI follow-up is docs-only; later exact-head checks are recorded on PR #2 and do not imply another browser execution.
+
+Frontend integration, later Auth/package/config/CI cleanup, broader V2 verification, manual/device/research and release remain open for their owners. This batch does not authorize merge/deployment of API retirement alone.
+
+## Current owner-local CF-06-BE / CF-07-BE candidate
+
+**Verified source:** `7965c2945f8e4acfa6034c9b869f98b65de1423f` on `feat/ownpath-backend`; subsequent evidence/handoff changes are docs-only. Existing [draft PR #2](https://github.com/EnzoReacher/EXE/pull/2) still targets `feat/ownpath-experience-translator`. Backend checks and separate controlled-fixture QA completed. Full product reduction remains blocked by matching frontend retirement; do not merge/deploy staged API retirement alone.
+
+### Baseline and scope
+
+Inspected status/logs/worktrees/diffs, fetched origin and fast-forwarded clean, non-divergent backend from `3223484` to fixed task baseline `bdc77d0dd01d685f93e410d6a95c86fecf669702` (four incoming commits). Original `/home/enzoreacher/EXE` at M17 remains preserved; backend worktree `/home/enzoreacher/EXE-ownpath-backend`. Baseline Quality [PR](https://github.com/EnzoReacher/EXE/actions/runs/38705343799) and [push](https://github.com/EnzoReacher/EXE/actions/runs/38705336526) were observed successful. Only backend and integration OwnPath branches and PRs #1/#2 were published at refresh; frontend local-only work remains unknown.
+
+One Core Engineer writer changed only `src/lib/experience-translator/engine.ts`, `adapter.ts`, new `hardening.test.ts`; Lead changed the existing verifier and its test plus canonical docs. No frontend pages/components/styles/UI tests/browser specs, frozen types, public signatures/IDs/labels, root config/packages/lock/workflows/proxy/Auth/migrations changed. The installed Next testing and CLI type-generation guides were consulted. Existing frozen dependency installation was reused: manifest/lock did not change during fast-forward or this task.
+
+### Concrete corrections and review
+
+- Reject whole excerpts containing `instead of`, `rather than`, `as opposed to` instead of turning excluded technologies into personally-used facts.
+- Extend the bounded mixed-subject guard to supported action verbs and conjunction/comma separators (including no-space commas), avoiding name blacklists. Genuine repeated first-person clauses and technology lists retain positive coverage and exact source offsets.
+- Validate every numeric adapter-array slot so wholly/partly sparse arrays cannot bypass bullet/source validation. Return trusted recomposed bullets.
+- Settle timeout rejection before abort dispatch so a signal-aware adapter's abort rejection cannot replace timeout-specific guidance. Retry/abort limits and immediate non-timeout failure behavior remain intact.
+- Preserve the explicit `FACTORY_V2_RUNTIME_NOT_VERIFIED` diagnostic by allowing digits in fixed diagnostic codes; no false PASS or raw CLI/config diagnostic output.
+
+Separate read-only `reviewer` audit found the initial four core defects. Actual `ownpath-auditor` inspected ownership and the retained frontend/print integration gate. Actual `ownpath-engineer` was the sole runtime writer. Actual separate `ownpath-qa` reviewed the diff/evidence, identified two additional comma/exclusion examples, and re-reviewed their corrections: no remaining blocking defect identified in the inspected correction; fixture closure only. QA did not independently run shell/tests. Optional stronger positive fact-set assertions remain a non-blocking coverage improvement. This is bounded heuristic grounding, not arbitrary-language verification.
+
+### Actual checks and failed attempts
+
+| Executed check | Outcome / exact boundary |
+|---|---|
+| Verifier CLI RED → GREEN | Initial 10 PASS/1 FAIL (V2 code hidden); corrected 11/11 PASS; actual verifier exits1 with explicit V2-not-verified code |
+| Core initial RED → GREEN | Engineer's 14-case suite:9 FAIL/5 PASS before fixes; existing+new core suite then57 PASS/2 files |
+| QA follow-up RED → GREEN | Three new exclusion/comma reproductions FAIL before fix; final core suite63 PASS/2 files (43 existing+20 hardening) |
+| Focused Factory/ownership/retired-API/print tests | 25 PASS/5 files, including3 retained print security cases |
+| `pnpm lint` | PASS at final source |
+| `pnpm typecheck` | Initial FAIL: ignored `.next/types/validator.ts` still referenced17 deleted API handlers after fast-forward. Installed-guide `pnpm exec next typegen` regenerated types; final typecheck PASS. No source/config workaround |
+| `pnpm test` | Final424 PASS/53 files =403 baseline+20 core+1 verifier. No test retirement in this run. Intermediate418/53 run preceded QA follow-up and is superseded |
+| Sanitized `pnpm build` | PASS at final source; no `/api/**` in compiled inventory. Legacy frontend/Auth/print/proxy intentionally remain |
+| First compiled-browser launch | FAIL before browser bodies: Python random temp suffix violated existing alphanumeric owned-temp guard (`OWNED_TRANSLATOR_TEMP_REQUIRED`). Changed only temporary runner name; existing config/spec/guard preserved; owned server/temp cleaned |
+| Final `pnpm test:translator:browser` | PASS at `7965c29`:7 executed Chromium cases/30 named steps, all four widths320/375/768/1440, keyboard/focus, injected clipboard rejection, long sources/edits, approval/edit/regeneration, accepted TXT, clear/reload and traffic/privacy guards. Cached matching Chromium; no browser download or CI spoofing |
+| Final compiled API/smoke | `node scripts/check-ownpath-retired-apis.mjs http://127.0.0.1:53337`:119 PASS/17 patterns ×7 methods; source/build handlers absent. Landing+Translator HTTP200 and landing CTA PASS |
+| Owned server/temp cleanup | PASS in finally (including failed launch); service/provider env absent, no loaded `.env` files (only example), process env allowlisted. Existing services/Supabase/owner servers untouched. Browser/download/results/log scope removed |
+| `git diff --check` | PASS |
+| Active-tree ownership guard | FAIL for precisely8 preserved untracked local `.opencode` activation files. No source-scope violation observed; guard not weakened and profiles not deleted/ignored/committed |
+| Committed-source ownership | Clean disposable detached worktree, same fixed baseline; initial source `5203720` PASS5 paths. Final documentation/source candidate checked separately before publication; exact result recorded in PR evidence |
+
+Final source/build/browser/API checks supersede the intermediate candidate `5203720` (418 tests and its browser/API pass). The full retained suite contains mocked legacy component/library tests; this does not establish working retired legacy API flows. No unrelated disposable Supabase or legacy real-stack acceptance was rerun.
+
+### F-00-RUNTIME: actual activation with explicit limits
+
+Actual installed OpenCode `v2.0.7`. Setup dry run found no differing profiles; `--write` created four agents/four commands, preserving existing settings. Eight activation files remain untracked. `opencode debug agents` inspection confirmed each OwnPath role's mode/system and exact ordered terminal V2 policy block matched the generated profile; backend has no frontend edit grant and explicitly denies shared types; auditors/QA retain default-deny/read-only policies. Explicit-location `/api/command` discovery returned the four OwnPath command names; the public command listing did not expose template/binding/tool details. An initial unlocated API query did not identify the project commands; no discovery pass was inferred from it.
+
+Actual auditor/engineer/QA child tasks ran through this existing configured session/provider; no new model/provider/global settings selected or installed. The full verifier still exits `FACTORY_V2_RUNTIME_NOT_VERIFIED`: command binding/tool-catalog parity, comprehensive resource matching, prompts and universal isolation are not established by role discovery or these tasks. No broad runtime-verifier rewrite or permission bypass was made. F-00 activation/inspection is recorded; full V2 verification remains BLOCKED, not PASS. Historical Work-container OpenCode absence below does not describe this owner-local environment.
+
+### Integration and next work
+
+FE1-CF04B remains unobserved as published/reviewed. Caller paths include assessment form, analysis status/review links/next-steps workspace, opportunities workspace, saved-work list, credential workspace/export controls and review feedback. Direct repository/Auth consumers and WorkspaceHeader navigation also remain. The retained print route still requires owner-checked accepted snapshot, no-store, escaping/CSP; preserve its dependencies until the frontend owner retires it. All frontend source remains untouched.
+
+Next: owner/frontend supplies reviewed page/navigation retirement; then one designated integration writer combines BE-CF04A+FE1-CF04B and audits transitive consumers before library/Auth/package/proxy/config/legacy-CI cleanup. Full reduced-product CF-07/09, physical mobile keyboard, actual200% zoom/screen reader/clipboard denial, owner walkthrough and participant/research/release decisions remain pending. No external team messages, merge, deployment, database mutation or fabricated approval occurred.
+
+Rollback: revert runtime commits in reverse order `7965c29`, `5203720`, `df6874a` on a feature branch if needed; preserve other work and local activation settings. Source `7965c29` was published to existing draft PR #2 after a fresh fetch confirmed remote backend still matched the fixed baseline (three local commits ahead, zero remote-only commits); no force. Exact-head CI completion is recorded on the PR to avoid confusing docs-only follow-ups with newly tested runtime.
+
+## Previous Work CF-04A backend candidate — three-person build
+
+Owner authorized execution of the approved plan and specified two other frontend developers. This session cloned `feat/ownpath-backend` into an isolated Work checkout from `3223484b78c05784112de48810ecc72c2c2a2860`. Clean initial git status and recent log inspected. GitHub PR #2 remained open/draft against integration `d1ec1a0`; exact-head PR Quality run `38682665717` was freshly observed successful. Only backend/integration OwnPath branches were published at this refresh; frontend local work is unknown. The owner's original machine/worktrees were not available and were not modified.
+
+### Implementation and integration boundary
+
+- Removed all 17 inventoried legacy `src/app/api/**/route.ts` handlers and six API test files. Three print-route cases from the mixed export suite were relocated to `src/lib/cv-export/print-route.test.ts` because the frontend-owned print route remains active.
+- Preserved every frontend page/component/style, existing domain implementation, shared types/adapter, Auth/proxy, root package/lock/config/CI and applied migration. No database operation or new app/API/provider was introduced.
+- Added `check-ownpath-ownership` preflight, covering committed/staged/unstaged/untracked paths and both sides of renames against an explicit baseline. Backend, shell and Translator roots are disjoint; root/shared tooling and types are reserved.
+- Added `check-ownpath-retired-apis`: verifies source/build handler absence and probes 17 fictional route patterns over seven HTTP methods on a disposable numeric loopback server. Redirects, successful legacy responses, authorization-only responses and 500s fail.
+- Updated version-aware factory templates to a backend-only engineer and explicit shared-type edit deny. Added policy regressions for both template versions; real resource matching is not established by these tests.
+- [TEAM_WORKFLOW](TEAM_WORKFLOW.md) supplies file ownership, FE1/FE2/backend/integration task cards, frozen contract, branch procedure and combined integration gate. No teammate messages sent or acknowledgment invented.
+
+**Staged backend candidate only:** old frontend source still calls retired APIs. Do not merge/deploy API removal alone. Frontend owners must supply matching page/navigation removal before combined acceptance and later library/Auth/package/config cleanup. CF-04 overall and CF-05–09 remain pending.
+
+### Fresh verification
+
+| Check | Actual result |
+|---|---|
+| Frozen install | PASS; Node 24.19.0 / pnpm 11.25.0; manifest/lock unchanged |
+| Unchanged baseline full suite | PASS: 429 tests / 55 files |
+| Focused ownership/retirement/factory tests | PASS: 21 tests / 4 files |
+| Final retained suite | PASS: 403 tests / 52 files: baseline minus 35 retired cases, plus six guard/template cases and three relocated print cases |
+| `pnpm lint`, `pnpm typecheck` | PASS |
+| `pnpm build` | PASS: no `/api/**` route in compiled route inventory; legacy pages/Auth/print/proxy remain intentionally |
+| Backend ownership guard against full starting SHA | PASS; no frontend/shared-config/type edit |
+| Owned compiled HTTP checks, no service/provider env | PASS: landing and Translator HTTP 200, landing Translator CTA; 17 patterns × seven methods = 119 absence checks, all 404/405; server stopped in finally |
+| `git diff --check` | PASS |
+| OpenCode setup/runtime | BLOCKED: executable absent; setup exits without generating profiles |
+| Fresh compiled Chromium journey | BLOCKED: browser installation failed with invalid/truncated download archives; no cached/system Chromium available. No bypass of the CI-only harness |
+| Legacy real-stack/browser suite | NOT RUN: API retirement intentionally invalidates old browser flows; workflows untouched until coordinated integration cleanup |
+| Separate review / actual devices / screen reader / zoom / real clipboard denial | NOT RUN; self-review only |
+
+Intermediate checks are not final evidence: a check before all deletions were reflected still included legacy APIs and passed 435 tests; a partial-retirement attempt then failed two suites importing removed handlers (400 assertions passed). Completed/staged all 23 removals, preserved the mixed print-route coverage, and reran the final retained suite successfully. No assertion was removed merely to conceal a retained runtime failure.
+
+Published to existing draft PR #2 without changing its integration base. Shareable tooling commit: `74b11d2330696490dc1433d6a1e0c0e07c40e3ae`. Verified API retirement source: `b515ff1d75781b6033ceaf81ced744d2cecf8da5`, tree `74b3fc30493b323192339baf8ef6ec2b574aea88`; published tree was compared with the local candidate index before ref update. Fresh [Quality PR run 38699141055](https://github.com/EnzoReacher/EXE/actions/runs/38699141055) completed successfully for that exact source SHA. Backend worktree was clean and synchronized after publication; no integration/main merge or deployment. A later docs-only checkpoint records these results and does not imply another browser execution. These two implementation commits separate shareable ownership/factory tooling from API retirement for coordinated integration.
+
+## Current core-only continuation: CF-00–03
+
+**Completed first cleanup slice: isolate shared requirement extraction.** Core-only pruning is authorized by the owner; actual route/API/package removal remains CF-04–05, pending the coordinated frontend patch boundary in [BACKLOG](BACKLOG.md). The historical prototype results below remain dated evidence.
+
+### Refreshed baseline and preservation
+
+- Started in clean `/home/enzoreacher/EXE` on `codex/exe-m17-survey-readiness`, HEAD `ae2527633733fc5081a96ecb2c16e09081a8c878`, no modified/untracked files. One existing worktree; no existing local backend or frontend team branches. Original checkout preserved.
+- `git fetch origin`, remote branch listing and GitHub PR/run inspection confirmed integration still at `d1ec1a076155b76a503693ff9fe411b933b62f8c`. Only published `feat/ownpath-*` branch is integration; teammates' local-only work is unknown. PR [#1](https://github.com/EnzoReacher/EXE/pull/1) remains open/draft with base `codex/exe-m17-survey-readiness`; no retarget/merge.
+- Latest historical integration [Quality PR run](https://github.com/EnzoReacher/EXE/actions/runs/38676238316) and [push run](https://github.com/EnzoReacher/EXE/actions/runs/38676230646) succeeded at `d1ec1a0`. These precede this extraction.
+- Created `feat/ownpath-backend` from refreshed integration in `/home/enzoreacher/EXE-ownpath-backend` and moved this OpenCode session there. Personal PR base is integration. No other worktree/branch was edited.
+- Local Node `v24.19.0`, pnpm `11.25.0`, OpenCode `v2.0.7`. `pnpm install --frozen-lockfile` passed without package/lock changes; installed versions match the handoff (Next 16.3.7, React 19.2.8, TypeScript 5.9.3, Vitest 5.0.2, Playwright 1.61.1). Read project instructions/source/docs, proxy/header config and all three CI workflows; installed Next project-structure/header guides consulted. No Factory configuration installation/change, delegation or independent review performed.
+
+### Implemented scope and contract
+
+- Moved `src/lib/analysis/requirements.ts` to `src/lib/job-description/requirements.ts`, retaining the algorithm unchanged. Updated core engine, legacy analysis provider/workflow and demo-fixture imports to that single implementation.
+- Moved the existing three extractor tests into `job-description/requirements.test.ts` so future analysis deletion preserves them. No assertions removed; no compatibility duplicate left behind.
+- Updated PRD/README/architecture/backlog/handoff for the 15 October decision, keep/cut/dependency inventory, CF checkbox tracker and concrete frontend coordination list. Current type/adapter/error/state/memory contract recorded in ARCHITECTURE.
+- Frontend-owned source, props/types/adapters/accessible labels untouched. No routes/APIs/packages retired in CF-03; build still lists legacy routes and the Auth proxy. No migration/data changes. This is a prerequisite cleanup, not completion of the smaller runtime.
+
+### Fresh checks on the extraction candidate
+
+Verified source commit: `f3ed7ad` (`refactor(ownpath): isolate shared job requirement extraction`). Subsequent first-slice commits update documentation only.
+
+Published `feat/ownpath-backend` and opened [draft PR #2](https://github.com/EnzoReacher/EXE/pull/2) targeting `feat/ownpath-experience-translator`. At documentation checkpoint `1b8f16f`, fresh [push Quality](https://github.com/EnzoReacher/EXE/actions/runs/38682622868) and [PR Quality](https://github.com/EnzoReacher/EXE/actions/runs/38682627649) were observed in progress; no CI pass inferred. The current acceptance workflow only triggers on integration pushes, so the compiled evidence above is actual local execution, not a new browser CI claim. Check the PR for subsequent CI completion/current HEAD.
+
+| Command / check actually run | Result |
+|---|---|
+| `pnpm install --frozen-lockfile` | PASS; lockfile unchanged |
+| Before extraction: `pnpm exec vitest run src/lib/analysis/analysis.test.ts src/lib/experience-translator/engine.test.ts src/app/experience-translator/translator.test.tsx` | PASS: 66 tests / 3 files |
+| After extraction: same targeted tests plus `src/lib/job-description/requirements.test.ts` | PASS: 66 tests / 4 files |
+| First full-suite attempt | FAIL: stale `analysis/requirements` import in `scripts/demo-fixture.test.mjs`, 428 tests passed / one suite failed to import; build not reached. Updated that import, keeping its assertion |
+| Final `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` | PASS: 429 tests / 55 files; production compilation completed. Extra file is the relocated extractor test group; total test count unchanged |
+| `pnpm test:translator:browser` against this `pnpm build`, cached Chromium | PASS: seven executed cases / 30 named steps, 320/375/768/1440 widths, keyboard, injected clipboard rejection, long content, exact TXT/approval/edit/regeneration/clear/reload/traffic guards. Owned loopback compiled server on port 53431, no Auth/provider settings, stopped in `finally`; no Supabase/browser install or CI-only harness bypass |
+| `git diff --check` | PASS |
+| `pnpm cp2:validate` | PASS structure only: 9 rows, 0 owner-reviewed, 9 pending; no research outcome established |
+
+No fresh disposable Supabase/legacy real-stack acceptance was run; runtime consumers remain, but this slice only relocates the pure shared helper and tests. No actual device, screen-reader, 200% zoom, real clipboard permission denial, owner walkthrough or participant study result is supplied. Browser rejection is injected. CF-07 reduced-product route-removal acceptance remains pending. Source publication/checkpoint is recorded in the first-slice draft PR; later docs-only changes do not imply a new browser execution.
+
+### Next bounded work
+
+CF-04: audit/retire obsolete API handlers and exclusive tests in feature-sized batches, preserving libraries still imported by legacy frontend pages. Owner coordinates the explicit obsolete route/navigation patch in BACKLOG with frontend owners before page/component removal. Then remove unused runtime libraries/packages/proxy/config and obsolete CI/harnesses together; retain core quality/browser/security gates. Final reduced suite, compiled acceptance and retired route/API absence checks follow that candidate. Physical/manual/research/owner decisions remain open.
+
+## Historical prototype status — 12 October 2026
 
 The synthetic Translator vertical slice and **OP-11 automated acceptance are complete**. This is an engineering review candidate, not a production release, completed user study, external AI-provider integration or course approval.
 

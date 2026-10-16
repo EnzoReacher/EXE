@@ -41,4 +41,15 @@ describe("Factory loaded-policy acceptance", () => {
     const f=fixture(); f.config.command['ownpath-audit'].agent='ownpath-engineer'; expect(() => verifyResolvedFactory(f.config,f.runtime)).toThrow('FACTORY_COMMAND_BINDING_MISMATCH');
     const g=fixture(); g.config.agent['ownpath-extra']={mode:'primary'}; expect(() => verifyResolvedFactory(g.config,g.runtime)).toThrow('FACTORY_AGENT_SET_MISMATCH');
   });
+  it("reports the explicit V2 verification limit without treating it as an unknown failure", () => {
+    const directory = mkdtempSync(path.join(tmpdir(), "ownpath-cli-v2-"));
+    try {
+      writeFileSync(path.join(directory, "opencode"), `#!${process.execPath}\nconsole.log("opencode v2.0.7");\n`, { mode: 0o700 });
+      const result = spawnSync(process.execPath, [path.resolve("scripts/verify-ownpath-factory.mjs"), "--isolated"], { encoding: "utf8", env: { PATH: directory, TMPDIR: directory }, timeout: 5000 });
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("FACTORY_V2_RUNTIME_NOT_VERIFIED");
+      expect(result.stdout).not.toContain("PASS");
+      expect(readdirSync(directory)).toEqual(["opencode"]);
+    } finally { rmSync(directory, { recursive: true, force: true }); }
+  });
 });

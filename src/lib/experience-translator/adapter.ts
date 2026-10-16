@@ -23,7 +23,7 @@ export async function generateBullets(session: PreparedSession, adapter = determ
     try {
       const output = await Promise.race([
         adapter.generate(freeze(structuredClone(trusted)), controller.signal),
-        new Promise<never>((_, reject) => { timer = setTimeout(() => { controller.abort(); reject(new TranslatorError("Generation timed out. Your inputs and edits are kept; try again.")); }, Math.min(10000, Math.max(1, options.timeoutMs))); }),
+        new Promise<never>((_, reject) => { timer = setTimeout(() => { reject(new TranslatorError("Generation timed out. Your inputs and edits are kept; try again.")); controller.abort(); }, Math.min(10000, Math.max(1, options.timeoutMs))); }),
       ]);
       return validateBulletOutput(output, trusted);
     } catch (error) {

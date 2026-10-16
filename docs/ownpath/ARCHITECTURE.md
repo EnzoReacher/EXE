@@ -1,19 +1,29 @@
 # Architecture and ADR-001
 
-Status: proposed persistence architecture; implemented browser-only synthetic boundary. Existing Next.js 16.3.7 / React 19.2.8 / TypeScript 5.9.3 / pnpm 11.25.0 / Vitest 5.0.2 / Playwright 1.61.1 verified from installed packages on 2026-10-12. Supabase JS 2.117.2 and SSR 0.12.7. Actual PostgreSQL server version not inspected.
+Status, 2026-10-15: browser-only deterministic core retained; legacy runtime reduction authorized and staged in [BACKLOG](BACKLOG.md). The persistence/provider diagram below is conditional historical design, not required implementation. Frozen installation reconfirmed Next.js 16.3.7 / React 19.2.8 / TypeScript 5.9.3 / pnpm 11.25.0 / Vitest 5.0.2 / Playwright 1.61.1, Supabase JS 2.117.2 and SSR 0.12.7. Actual PostgreSQL server version not inspected.
 
 ## Reuse decision
 
 | Module | Decision | Constraint |
 |---|---|---|
-| `analysis/requirements.ts` | Reuse behind a Frontend allowlist and instruction-line filter | Heuristic, English-focused, arbitrary requirement bullets otherwise pass through |
-| `analysis/matcher.ts` / `schema.ts` | Preserve old assessment only | Lexical overlap is not semantic grounding; instruction text can overlap skills |
-| `next-steps/generator.ts` | Reuse principles, not composer | It arranges exact CV excerpts, no rewritten English bullets |
-| `credential-versions/` | Reuse review/acceptance invalidation concepts | Student confirmation must never imply expert-reviewed proof |
-| Existing `cv-export` | Defer integration | Requires accepted immutable credential-backed versions and Auth |
-| Auth / API / RLS / Storage | Preserve, no prototype import | Private existing flows remain protected |
+| `job-description/requirements.ts` | Extracted unchanged from `analysis/requirements.ts`; one shared implementation | Core keeps Frontend allowlist, negation and instruction-line filters; extractor alone is not a claim guard |
+| `analysis/matcher.ts` / `schema.ts` | Retire with old assessment consumers | Lexical overlap is not semantic grounding |
+| `next-steps/`, `credential-versions/`, `cv-export/` | Retire with their routes/APIs | Core already owns its review invalidation and accepted-only local TXT |
+| Auth / Supabase runtime | Retire after all consumers, including shared shell, are removed | Until then preserve authorization; applied migrations/data remain untouched |
 
 Eight migrations through `20261008_m15_atomic_next_steps.sql` are retained unchanged. `cv_draft_claims` enforces `claim_text = source_excerpt`; M15 checks source findings transactionally. New translated text cannot satisfy that invariant. Do not weaken it or force Translator into it.
+
+## Frontend contract freeze — CF-02
+
+No props, exported types, adapter signatures, IDs, accessible labels or frontend-owned files change in CF-03. `src/lib/experience-translator/types.ts` remains the authoritative shape:
+
+- `Intake { project, jd }`; four optional `Answers` keys: contribution, technology, outcome, reference. `prepareSession` returns intake, exact sources, initially unconfirmed facts, requirements and planned questions. `confirmFacts` returns a new session and rejects unavailable/duplicate IDs.
+- Facts retain `id/code/label/sourceId/excerpt/start/end/confirmed/evidenceKind: "user_statement"`; requirements retain `id/code/label/excerpt` and never supply experience claims. `Bullet { id, text, factIds, requirementIds }`; `ReviewedBullet` adds current text, edited/accepted/rejected and optional detached state.
+- `TranslatorAdapter.generate(session, AbortSignal): Promise<unknown>`; `generateBullets` validates against a trusted snapshot. Default timeout 3000ms, capped at 10000ms; default one timeout retry, at most two attempts. Invalid output/non-timeout failures fail immediately with controlled `TranslatorError`; inputs/edits remain available.
+- UI states remain intake → interview/fact confirmation → bullets → review. Sufficient input skips questions, not fact confirmation. Answer change/skip invalidates fact review; restarting intake clears candidates. Successful regeneration preserves user edits and resets approval; detached edits lose source IDs. Editing/rejecting resets acceptance. Only accepted current non-rejected wording enters copy/TXT.
+- Clear discards session state and invalidates in-flight generation. Reload/close discards React memory; no browser persistence, input-bearing URL, API, provider or database save is introduced.
+
+This records observed interfaces for frontend owners, not their acknowledgment. See BACKLOG for the concrete pending shell/route patch boundary. Existing private APIs still require authorization until retired.
 
 Decision: pure browser types, bounded extraction, controlled English templates, semantic validation by recomposition from confirmed personal facts, user review. Avoid migrations before a persistence ADR and approval. New authenticated persistence may use one session JSON document and versions rather than seven tables; final schema must be reviewed after OP-05. No schema is approved here.
 

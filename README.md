@@ -6,7 +6,22 @@ Current feature branch: `feat/ownpath-experience-translator`, based on audited c
 
 Start with [current OwnPath status and handoff](docs/ownpath/STATUS.md), [PRD/scope](docs/ownpath/PRD.md), [ADR/contracts](docs/ownpath/ARCHITECTURE.md), [workflow diagrams](docs/ownpath/FLOWS.md), [backlog/roadmap](docs/ownpath/BACKLOG.md), [research instruments](docs/ownpath/RESEARCH_PLAN.md), [tests](docs/ownpath/TEST_STRATEGY.md), and [OpenCode Factory runbook](docs/ai-factory/AI_FACTORY_RUNBOOK.md). Actual owner research/production approval remains in the existing decision record. `EXE` is the repository name; EXE101 is the course.
 
-The earlier milestones below remain historical/reusable modules. The Translator is the primary demo path. No main merge, deployment, migration, paid provider or production data processing is authorized by this branch.
+## Core-only continuation — 15 October 2026
+
+The owner has authorized removal of unnecessary legacy product features. Keep guided intake/fact confirmation, grounded drafting and accepted-only review/output as one Experience Translator journey. The implementation branch is `feat/ownpath-backend`, based on integration `feat/ownpath-experience-translator` at `d1ec1a0`. [BACKLOG](docs/ownpath/BACKLOG.md) tracks actual removals and frontend coordination; [STATUS](docs/ownpath/STATUS.md) distinguishes fresh checks from historical acceptance.
+
+The first safe slice extracts the shared requirement helper into `src/lib/job-description/`, without changing frontend contracts. Legacy routes/Auth/dependencies are still present pending coordinated removal. For the retained workflow:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm dev --hostname 127.0.0.1
+```
+
+Open `http://127.0.0.1:3000/experience-translator`; no environment file, Supabase or sign-in is needed for this fictional-data path. Inputs and edits stay in tab memory; copy/TXT is deliberate. The deterministic vocabulary remains narrow.
+
+## Historical application setup and milestones
+
+The sections below describe the earlier application and its still-present legacy runtime, not the target scope or instructions to restart those features. No main merge, deployment, destructive migration, paid provider or production data processing is authorized by this branch.
 
 Owner sign-in follow-up: [M15 auth handoff fix and local retest commands](docs/M15_AUTH_HANDOFF_FIX.md) on `codex/exe-m15-auth-handoff-fix`.
 

@@ -1,5 +1,108 @@
 # Execution backlog and estimated roadmap
 
+## Morning continuation — 16 October 2026
+
+Fresh Work audit at `295306b` confirmed published DBG-01/02/03, green exact-head Quality and 450/53 passing tests; reproduced original fixes and scoped ownership. Next debugging-only task: [OPENCODE_DBG04](OPENCODE_DBG04.md), the previously logged action-alternative limitation. No frontend/integration/cleanup work is taken over.
+
+- [x] DBG-04: ambiguous recognized action alternatives no longer propose both actions or generate their conjunction within the tested bounded grammar. Genuine conjunctions, independent sentences and exact provenance preserved. Fixed baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9`; final source `87e1f116b9a7df6b704af60a7e22d411422ee6e0`. Actual RED/GREEN, QA punctuation finding/correction, **123 focused / 486 full tests (53 files)**, lint/types/build, **7 browser cases/30 steps**, **119 API probes**, smoke and separate read-only QA PASS. See [DBG_04_EVIDENCE](DBG_04_EVIDENCE.md); publication/docs-only SHA and exact-head CI are recorded on draft PR #2. Committed source ownership PASS; active ownership FAIL only eight preserved local profiles. No broader language guarantee or automatic next task.
+
+## Current owner priority — debugging only
+
+Audit at `7d7d401` reproduced two grounding defects outside the passing 424-test suite and one shell-test ownership gap. Owner approved debugging first, leaving remaining work to others. Execution uses fixed baseline `c3d8ae9795c19506a33cc0d33c292878aa484bf4`; [DBG_01_03_EVIDENCE](DBG_01_03_EVIDENCE.md) records task cards, actual RED/GREEN attempts and acceptance.
+
+- [x] DBG-01: Vietnamese mixed-actor text no longer offers the reproduced other-person search work as the student's fact or bullet; bounded positive/provenance controls pass.
+- [x] DBG-02: reproduced personal technology alternatives are rejected instead of becoming cumulative tool claims; JD relevance and affirmative tool controls pass.
+- [x] DBG-03: shell owns explicit root `page.test.tsx` / `layout.test.tsx`; other ownership denials remain enforced.
+
+Verified source: `55d29cc8cbba3fccbd7091755cbbc43ebef007d0`. RED for all three, post-QA focused **91/3**, final retained **450/53**, lint/types/build/diff PASS; unchanged runtime compiled browser **7 cases/30 steps**, API **119**, landing/Translator smoke PASS. Separate read-only QA found no remaining scoped blocker after the same writer corrected a misleading positive fixture. Clean committed-source ownership PASS4 paths; active ownership FAIL only the8 preserved profiles. Publication/exact-head CI are recorded in STATUS and PR #2; later docs-only changes do not imply another browser execution.
+
+Source+evidence checkpoint `b041ae413667cff07a268e954bedd4399d6025ab` published normally to draft PR #2; exact-head Quality PR38723535938/push38723530453 SUCCESS, clean source+docs ownership PASS8 paths. Current documentation-only follow-up leaves runtime/tests unchanged; subsequent exact-head checks are retained on the PR.
+
+Backend writer scope: engine/grounding tests, ownership guard/tests and canonical evidence docs only. Red/green regression, positive controls, full retained checks, compiled acceptance and actual separate QA complete this batch. Frontend/integration/Auth/package/CI cleanup, broader V2 verification and release remain outside it.
+
+Historical follow-up outside DBG-01/02/03: action alternatives such as `listing or search` were a known grounding limitation. The separately authorized DBG-04 above now closes its bounded direct-connector/repeated-predicate fixtures, including optional comma punctuation. This does not establish arbitrary-language grounding.
+
+## Owner-local continuation — CF-06-BE / CF-07-BE
+
+Fixed task baseline: `bdc77d0dd01d685f93e410d6a95c86fecf669702` after clean, non-divergent fast-forward from `3223484`. Original M17 worktree preserved. Backend/integration are the only published OwnPath branches at refresh; PR #2 remains draft against integration. Baseline Quality runs `38705343799` / `38705336526` passed. This baseline must not move to conceal scope changes.
+
+| Task | Owner / permitted files | Failure example / expected behavior | Checks / rollback | State |
+|---|---|---|---|---|
+| F-00-RUNTIME | Lead; existing setup/verifier/tests, local generated profiles only | V2 verifier hid its explicit limitation behind `FACTORY_CHECK_FAILED` because its diagnostic allowlist omitted digits. Must report `FACTORY_V2_RUNTIME_NOT_VERIFIED`, never PASS | CLI regression reproduced red then 11 verifier tests passed; actual v2.0.7 prints explicit limitation. Revert scoped verifier commit; preserve local activation files | Diagnostic fix done; runtime inspection recorded in STATUS, full V2 verification remains blocked |
+| CF-06-BE | One backend engineer; engine/adapter and colocated regression tests only | Exclusion phrases incorrectly offered excluded technology; another actor's conjunction/comma clause became personal work; sparse adapter arrays skipped validation; abort rejection hid timeout message | Initial RED 9/14 failed; QA follow-up RED 3 cases failed. Final 63 focused tests passed; separate QA closed reproduced findings. Source `7965c29`; revert source commits in reverse order | [x] Controlled-fixture hardening and review complete |
+| CF-07-BE | Lead verification; canonical evidence docs only | Current source must pass full retained checks, compiled Translator and 119 API-absence probes on an owned settings-free server | At `7965c29`: lint/types, 424 tests/53 files, build, diff; seven compiled browser cases/30 steps and 119 API probes PASS, cleanup complete. Final committed-source ownership checked separately; local activation exception below | [x] Backend checks complete; full reduced-product CF-07 still blocked by frontend integration |
+| CF-09-BE | Lead; STATUS/HANDOVER/BACKLOG/runbook and existing draft PR #2 | Publish exact scoped source, review evidence and current CI without force; preserve local profiles | Source `df6874a` → `5203720` → `7965c29` published after refresh confirmed remote baseline unchanged; docs-only follow-up and exact-head CI evidence recorded on PR #2 | [x] Backend source publication/handoff; CI completion reported on draft PR, final reduced-product CF-09 remains open |
+
+Frontend pages/components/styles/UI tests/browser specs, frozen types, packages/lock, root config/workflows/proxy/Auth/migrations are outside this run. INT-CF04C/05 remains blocked on reviewed FE1-CF04B page/caller retirement and a separately designated integration writer. No teammate message, merge or deployment is authorized by these task cards.
+
+Twenty new core cases plus one verifier case explain 403 → 424 tests and 52 → 53 files; none removed in this run. Core source changes are conservative and may reject genuine mixed/exclusion-bearing excerpts rather than guess. The canonical data shape, wording templates and UI contracts remain unchanged. Separate read-only QA found two additional examples, which the same sole engineer reproduced/fixed before final verification. See STATUS for failed setup attempts and exact results.
+
+Eight matching project-local Factory profiles were created and preserved untracked by authorized runtime activation. The active-tree ownership guard reports FAIL for precisely those eight paths; it is not relabeled PASS. Committed-source ownership is checked in a clean disposable detached worktree against the same full baseline, without deleting/ignoring profiles or changing the guard. No `.opencode/**` files enter source commits.
+
+## Active three-person execution — CF-04A
+
+Next owner-directed implementation runs in OpenCode. [OPENCODE_NEXT_BUILD](OPENCODE_NEXT_BUILD.md) is the execution instruction for F-00-RUNTIME, CF-06-BE concrete-defect hardening, pending compiled acceptance and separate review. Preparation does not complete those tasks. Latest handoff checkpoint `459c17a` Quality PR run `38699400376` was freshly observed successful; frontend branches remained unpublished at this refresh.
+
+Owner approved starting the plan on 15 October with two separate frontend developers. [TEAM_WORKFLOW](TEAM_WORKFLOW.md) assigns disjoint backend/shell/Translator roots, preserves the types contract and defines the combined integration gate. Their local state/acknowledgment is still unknown.
+
+- [x] Refresh published backend PR/head and reproduce baseline: 429 tests / 55 files.
+- [x] Prepare ownership preflight, backend-only factory templates and ready task cards for both frontend developers. Templates are tested; actual OpenCode activation remains unavailable here.
+- [x] CF-04A implementation: retire 17 API handlers and six API test files; relocate three retained print-route cases. All frontend source and existing domain libraries remain untouched.
+- [x] Backend candidate verification: 403 tests / 52 files, lint/types/build, ownership check, 119 compiled API absence checks, landing/Translator HTTP smoke.
+- [x] Separate reviewer acceptance for owner-local candidate `7965c29`; read-only source review, execution evidence supplied by Lead. Earlier Work execution had self-review only.
+- [x] Fresh owner-local compiled Chromium journey at `7965c29`: seven cases/30 steps passed using cached browser. Earlier Work download failure remains historical.
+- [ ] FE1-CF04B legacy pages/navigation removal and FE2 retained-UI review by frontend owners.
+- [ ] Combined integration followed by CF-04C/05 consumer/Auth/package/config retirement.
+
+CF-04 as a whole and CF-05–09 remain open. Do not merge/deploy API retirement alone: preserved legacy pages still call the retired endpoints. Tooling/docs can land separately from API retirement so frontend branches can share the guard without losing their old APIs early.
+
+## Core-only execution tracker — 15 October 2026
+
+This owner-authorized reduction supersedes older preserve-all-modules instructions and the historical ten-day estimate below. One writer: backend owner/OpenCode on `feat/ownpath-backend`. Integration/PR base: `feat/ownpath-experience-translator`; never reset an existing personal branch. The first slice isolates the shared extractor; product removal remains pending.
+
+| Task | Owner / file scope | Dependencies / done criteria | Actual evidence / rollback |
+|---|---|---|---|
+| [x] CF-00 baseline | Backend; read-only Git/remote/package/CI audit | Preserve worktrees; refresh branch/PR/CI; record exact starting SHA | STATUS current audit; original M17 checkout untouched, new isolated backend worktree from `d1ec1a0` |
+| [x] CF-01 scope/inventory | Backend; README, PRD, BACKLOG, STATUS | Record keep/cut/dependencies and owner decision | Inventory below; revert this bounded docs commit |
+| [x] CF-02 contract and ownership record | Backend; ARCHITECTURE/HANDOVER/BACKLOG only | Record observed shapes/errors/state/clear semantics and actual file collisions | Core types/props/labels unchanged; frontend local work/acknowledgment still unknown; revert docs |
+| [x] CF-03 shared extraction | Backend; `src/lib/job-description/*`, analysis imports/tests, core engine import | One implementation independent of analysis; preserve existing extractor assertions and core behavior | Before: 66 tests/3 files; after: 66/4 targeted PASS. Full candidate checks recorded in STATUS; revert extraction commit |
+| [ ] CF-04 legacy removal | Backend APIs/domain; frontend owners pages/shell | CF-03; coordinate exact route patch, audit transitive imports; removed endpoints unavailable | Pending; retire in bounded feature batches with targeted tests; revert each batch |
+| [ ] CF-05 dependencies/config/CI | Backend, one coordinated writer for shared config | CF-04; no remaining consumers before package/lock removal; retain quality/browser/security gates | Pending; retire only legacy-specific harnesses after runtime removal; revert each tooling batch |
+| [ ] CF-06 core hardening | Backend domain; UI fixes only with frontend coordination | Inspect failure paths, fix concrete defects and verify meaningful regressions | Pending; no unrelated feature expansion; revert isolated fix |
+| [ ] CF-07 final core acceptance | Backend tooling/QA | CF-04–06; lint/types/full retained tests/build + actual compiled browser and retired-route/API checks | Pending for reduced application; current extraction checks are not completion of pruning |
+| [ ] CF-08 manual checks | Owner/frontend/QA; MANUAL_ACCEPTANCE | Actual device/zoom/reader/clipboard/owner execution with source/environment | Pending; no fabricated manual result; preserve observations |
+| [ ] CF-09 handoff/publication | Backend docs/demo/personal draft PR | Verified candidate, exact evidence and remaining work; target integration | First-slice handoff/publication recorded in STATUS; final reduced-product handoff pending; revert own docs/commits |
+
+### Keep/cut/dependency inventory
+
+Inventory describes source observed at `d1ec1a0`, not completed deletion. No applied migration or stored data is removed.
+
+| Decision | Pages / APIs | Modules / packages / follow-through |
+|---|---|---|
+| Keep core | `/experience-translator`, minimal `/` and app shell | `src/lib/experience-translator/**`, `src/lib/job-description/requirements*`, `src/lib/http/security-headers*`; core UI/domain/browser tests; Next/React/TS stack |
+| Cut intake/assessment | `/assessment`, `/analysis/[id]`, `/api/intake/cv`, `/api/intake/cv/[id]`, `/api/intake/jobs`, `/api/intake/jobs/[id]`, `/api/analysis`, `/api/analysis/[id]` | `intake/`, remaining `analysis/`; `mammoth`, `pdf-parse` only after consumers removed; extractor now independent |
+| Cut roadmaps | `/analysis/[id]/next-steps`, `/api/analysis/[id]/next-steps` | `next-steps/`; associated analysis interactions and workspace tests |
+| Cut opportunities | `/opportunities`, `/api/opportunities`, `/api/opportunities/[id]` | `opportunities/`, curated sources and related tests; no scraper needs adding |
+| Cut persistent workspace | `/saved-work`, `/api/saved-work` | `saved-work/`; shared WorkspaceHeader navigation/Auth must be coordinated |
+| Cut share/expert/proof/version | `/review/[token]`, `/expert/credential-reviews`, `/credential-versions`, `/credential-versions/[id]/print`; `/api/review/[token]`, `/api/analysis/[id]/review-shares`, `/api/expert/credential-reviews`, `/api/credential-versions`, `/api/credential-versions/documents`, `/api/credential-versions/evidence/[id]`, `/api/credential-versions/[id]/export` | `review-links/`, `credential-versions/`, `cv-export/`; remove `docx` after export consumers; preserve accepted-only core clipboard/TXT |
+| Cut Auth when consumers gone | `/sign-in`, `/sign-up`, `/auth/callback`, shared `src/app/auth/` | `supabase/`, `src/proxy.ts`, `@supabase/ssr`, `@supabase/supabase-js`; currently imported by legacy pages/APIs and `components/workspace-header.tsx` |
+| Simplify config/tooling | `next.config.ts` legacy header rules; obsolete navigation | Keep global security and Translator no-store/noindex headers; retain lint/types/tests/build, compiled translator harness/security tests. Review `local-acceptance.yml`, `ci-local-acceptance`, legacy browser/policy/preview/workspace scripts and package commands after consumers retire; current checks still apply to present runtime |
+| Preserve evidence/history | `supabase/migrations/**`, historical docs/research and CP2 records | Do not rewrite applied history or delete live data. Keep useful research tooling outside app runtime; old results remain dated evidence, not new acceptance |
+
+### Concrete frontend coordination boundary
+
+No frontend-owned file is edited by this slice. No teammate branch is published at audit; there is no observed remote file collision, and local-only changes are unknown. The following is a patch request for the owner to coordinate, not an external message or claimed agreement:
+
+1. Frontend 1 (`feat/ownpath-ui-shell`) owns `src/app/page.tsx`, `layout.tsx`, `globals.css`, `src/components/**` and shell tests. Remove the landing `/sign-in` link (currently page line 32), reconcile legacy career-readiness/assessment report copy, and remove `WorkspaceHeader`/`evidence-labels` only after legacy consumers retire. Its nav currently points to `/assessment`, `/saved-work`, `/credential-versions`, `/opportunities`, `/expert/credential-reviews`; these are all obsolete. Keep the Translator CTA and minimal accessible shell.
+2. Frontend 2 (`feat/ownpath-translator-ui`) owns `src/app/experience-translator/**` and scoped tests/styles. No file movement, label, prop or adapter change required for CF-03. Preserve exact accessibility test labels and the frozen contract in ARCHITECTURE.
+3. Legacy page directories above have no confirmed teammate owner. Agree one writer and integration point for their deletion, plus shared `next.config.ts`/package/CI changes. Backend may remove dead API handlers/tests independently, but library/Auth/package deletion must wait until all page/component consumers are reconciled. Do not merge or overwrite a teammate's unknown local work.
+
+### First-slice verification
+
+Move the existing extractor, without algorithm changes or a compatibility duplicate, into `job-description/requirements.ts`; update engine/provider/workflow imports. Relocate the existing three extraction tests out of the legacy analysis suite so they survive its later removal. Before/after 66 targeted tests passed. No tests or product routes retired in this slice; full-suite file count increases by one solely because those three assertions now have an independent core test file. See STATUS for candidate commands and publication. Next bounded implementation task is CF-04 API retirement after auditing handler imports and retaining libraries still needed by pages.
+
+## Historical prototype backlog
+
 One writer per worktree. Read-only reviewers may run concurrently. Every issue records actual evidence in STATUS; formal production gate remains pending. Estimate units are focused engineer days, not elapsed commitments.
 
 | Issue / scope | Files | Dependency | Owner | Definition of Done / checks | Evidence | Estimate | Gate / rollback |
