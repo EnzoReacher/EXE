@@ -17,6 +17,8 @@ const debuggingJd = "Frontend Developer Intern\nRequirements:\n- React\n- TypeSc
 describe("DBG-04 action alternatives", () => {
   const alternatives = [
     "I built product listing or search using React.",
+    "I built product listing, or search using React.",
+    "Mình làm danh sách sản phẩm, hoặc tìm kiếm bằng React.",
     "I built either product listing or search using React.",
     "I built product listing versus search using React.",
     "I built product listing vs search using React.",
@@ -53,6 +55,8 @@ describe("DBG-04 action alternatives", () => {
 
   it.each([
     ["I built product listing and search using React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
+    ["I built product listing, and search using React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
+    ["Mình làm danh sách sản phẩm, và tìm kiếm bằng React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
     ["Mình làm danh sách sản phẩm và tìm kiếm bằng React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
     ["I built product listing and implemented search using React.", ["react", "listing", "search"], "Implemented product listing and search using React."],
     ["Mình làm danh sách sản phẩm và triển khai tìm kiếm bằng React.", ["react", "listing", "search"], "Implemented product listing and search using React."],

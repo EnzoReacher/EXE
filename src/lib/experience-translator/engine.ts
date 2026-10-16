@@ -56,7 +56,7 @@ function hasAlternativeActions(excerpt: string) {
     const connector = next && excerpt.slice(mention.index + mention[0].length, next.index);
     // Allow the ordinary "responsive UI" noun form and a repeated supported
     // authoring predicate, but no arbitrary prose between the action mentions.
-    const alternative = new RegExp(`^\\s*(?:ui\\s+)?(?:or|versus|vs|hoặc|hay)(?:\\s+là)?\\s*(?:(?:${authored.source})\\s*)?$`, "iu");
+    const alternative = new RegExp(`^\\s*(?:ui\\s*)?,?\\s*(?:or|versus|vs|hoặc|hay)(?:\\s+là)?\\s*(?:(?:${authored.source})\\s*)?$`, "iu");
     return connector !== undefined && alternative.test(connector);
   });
 }
