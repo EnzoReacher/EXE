@@ -4,7 +4,7 @@
 
 ## Worktree and ownership
 
-Inspect your actual local work, branches and worktrees. Reuse a suitable existing branch; otherwise create `feat/ownpath-auth-ui` in a separate worktree from the verified stage checkpoint. Record full baseline SHA; do not reset/stash other work or cherry-pick blindly. No FE branch was observed remotely at preparation; that does not establish your private status.
+Inspect your actual local work, branches and worktrees. Reuse your dedicated personal branch; if none exists, choose `team/<your-github-handle>` only after confirming ownership and the lead-approved base per [branch ownership](BRANCH_OWNERSHIP.md). Work in your own separate worktree. Record full baseline SHA; do not reset/stash other work or cherry-pick blindly. No FE branch was observed remotely at preparation; that does not establish your private status.
 
 Exclusive source: `src/app/sign-in/**`, `sign-up/**`, `auth/**`, `forgot-password/**`, `reset-password/**`, `verify-email/**`, **`src/app/account/page.tsx`**, `src/components/accounts-auth/**` with colocated tests/styles. Shared `account/layout.tsx`, navigation, `src/proxy.ts`, global styles, root dependencies/config, backend/API and pricing/billing/Translator are reserved. Ask for a scoped integration patch when one is needed. Do not remove Supabase data/migrations or map users by email.
 

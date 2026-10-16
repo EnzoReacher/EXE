@@ -2,6 +2,8 @@
 
 Baseline **86bc9e24f76d3cec19d8aa0b1df7823d36c22c0e**, 16 October 2026. Follow dependencies rather than treating every unchecked backlog item as immediately executable. [FLOWS](FLOWS.md) visualizes the same sequence. Historical plans remain requirements; [AB_EVIDENCE](AB_EVIDENCE.md) holds measured current results.
 
+Team branch policy and the verified GitHub historical-branch archive are in [BRANCH_OWNERSHIP](BRANCH_OWNERSHIP.md). The lead alone merges into `main`; the three draft OwnPath PRs keep their dependency bases until predecessors are integrated. Proposed FE1/FE2 personal branch names remain unconfirmed.
+
 | Order | Work | Current owner / prerequisite | Completion evidence |
 |---|---|---|---|
 | 1 | Preserve checkpoint and freeze ownership/contracts | Coordinator; clean stage86bc9e2, safe fetch, no observed FE branch | Ledger + actual state; original checkout/local profiles preserved |

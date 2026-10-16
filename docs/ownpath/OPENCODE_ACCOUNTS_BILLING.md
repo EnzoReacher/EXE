@@ -23,7 +23,7 @@ Continue OwnPath with Firebase Authentication, Firestore and Free/Pro sandbox su
 
 ## Frontend 1 instruction — auth and account entry
 
-Use a separate branch/worktree (`feat/ownpath-auth-ui` by default) after the stage contracts commit is available. Inspect and preserve your actual local work first; do not reset an existing UI branch. Read the stage contract and exact frozen DTO/client Auth adapter.
+Use your dedicated personal branch and separate worktree after the stage contracts commit is available; confirm identity/base against [branch ownership](BRANCH_OWNERSHIP.md). Inspect and preserve your actual local work first; do not reset an existing UI branch. Read the stage contract and exact frozen DTO/client Auth adapter.
 
 Own replacement of `src/app/sign-in/**`, `sign-up/**`, shared `auth/**` account entry/action-code UI, new forgot/reset/verify/account entry routes and their scoped styles/tests. Own shell/nav reconciliation through one coordinated shell task. Do not edit backend libraries/APIs, pricing/billing UI, core Translator, packages/lock/root config, Firebase rules or the other developer's styles.
 
@@ -33,7 +33,7 @@ Test duplicate submission, weak/mismatched password, invalid email/credentials, 
 
 ## Frontend 2 instruction — pricing, payments and opt-in session history
 
-Use a separate branch/worktree (`feat/ownpath-billing-ui` by default), preserving your existing Translator work. Read the frozen catalog/status/checkout/portal/session contracts and stage test-only policy.
+Use your dedicated personal branch and separate worktree, preserving your existing Translator work; confirm identity/base against [branch ownership](BRANCH_OWNERSHIP.md). Read the frozen catalog/status/checkout/portal/session contracts and stage test-only policy.
 
 Own new `src/app/pricing/**`, checkout order/return/cancel UI, billing-management UI under the agreed account subdirectory, and existing `src/app/experience-translator/**` only for explicit save/history/restore integration after the restore contract is reviewed. Coordinate account parent/layout with FE1; prefer distinct files and a frozen shared composition point. Do not edit shared auth entry, backend APIs/libraries, global styles, core domain/types, root tooling or another owner's files.
 

@@ -4,7 +4,7 @@
 
 ## Worktree and ownership
 
-Inspect status/branches/worktrees before creating/reusing `feat/ownpath-billing-ui` in a separate worktree. Record full baseline. Exclusive: `src/app/pricing/**`, `src/app/checkout/**`, `src/app/account/billing/**`, `src/components/accounts-billing/**`, colocated tests/styles. `src/app/experience-translator/**` is yours **only for reviewed explicit save/history/restore connection**. No FE1 auth/account entry, shared `account/layout.tsx`, global styles/nav/proxy, backend/API/root tooling or core type edits. Existing accessibility labels and domain behavior are retained.
+Inspect status/branches/worktrees, then reuse your dedicated personal branch; if absent, choose `team/<your-github-handle>` only after confirming ownership and the lead-approved base per [branch ownership](BRANCH_OWNERSHIP.md). Use your own separate worktree. Record full baseline. Exclusive: `src/app/pricing/**`, `src/app/checkout/**`, `src/app/account/billing/**`, `src/components/accounts-billing/**`, colocated tests/styles. `src/app/experience-translator/**` is yours **only for reviewed explicit save/history/restore connection**. No FE1 auth/account entry, shared `account/layout.tsx`, global styles/nav/proxy, backend/API/root tooling or core type edits. Existing accessibility labels and domain behavior are retained.
 
 ## Imports and billing behavior
 

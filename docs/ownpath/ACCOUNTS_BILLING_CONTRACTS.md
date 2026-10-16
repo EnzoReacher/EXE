@@ -72,7 +72,7 @@ Self-contained continuation packets: [FE1](AB_FE1_PACKET.md), [FE2](AB_FE2_PACKE
 
 ### FE1 — AB-02 auth/account
 
-- Separate `feat/ownpath-auth-ui` worktree after contract commit; inspect/preserve current progress.
+- Dedicated personal branch and separate worktree after contract commit; inspect/preserve current progress and confirm identity/base per [branch ownership](BRANCH_OWNERSHIP.md).
 - Allowed: `src/app/sign-in/**`, `src/app/sign-up/**`, `src/app/auth/**`, new `src/app/forgot-password/**`, `src/app/reset-password/**`, `src/app/verify-email/**`, `src/app/account/page.tsx`, auth-only components/tests/styles in `src/components/accounts-auth/**`. `/auth/action` handles Firebase action links. Account layout/shared shell is coordinator-owned until an explicit single-writer card assigns it; do not edit FE2 `/account/billing/**`.
 - Consume account/session/error DTOs and the official client adapter above. Implement CSRF acquisition/exchange, identity-created/profile-pending recovery, resend/send-failure, neutral reset/login errors, invalid/expired/used actions, throttling, reauth/verification refresh, logout scope and expiry. Safe next only; guest Translator remains accessible.
 - Tests: duplicate submissions, policy/mismatch, disabled/revoked sessions, bootstrap retry, mail retry, refresh before verified access, keyboard/focus/mobile, SDK cleanup, safe redirects, no password persistence. UI mocks are not server authorization evidence.
@@ -80,7 +80,7 @@ Self-contained continuation packets: [FE1](AB_FE1_PACKET.md), [FE2](AB_FE2_PACKE
 
 ### FE2 — AB-05 pricing/billing, AB-03 opt-in history
 
-- Separate `feat/ownpath-billing-ui` worktree; preserve existing Translator work.
+- Dedicated personal branch and separate worktree; preserve existing Translator work and confirm identity/base per [branch ownership](BRANCH_OWNERSHIP.md).
 - Allowed: `src/app/pricing/**`, `src/app/checkout/**`, `src/app/account/billing/**`, scoped `src/components/accounts-billing/**`; `src/app/experience-translator/**` only for explicit save/history/restore after renewed-review gate review. No shared account parent/layout edits.
 - Consume catalog/status/checkout/portal/session DTOs and validators. Display sandbox amount/currency/month, unavailable state, current trusted capabilities, pending return polling with bounded retries, cancel/retry, active subscription management. Use stable operation IDs; on uncertain checkout retry same key, never infer payment from URL.
 - Save requires explicit storage disclosure and affirmative Save; never mount/reload autosave. History uses opaque pagination; conflict preserves local unsaved edits and offers reload/manual retry, not overwrite. Owner read/delete after downgrade. Implement restore exactly as above; submit review evidence before enabling connection.
