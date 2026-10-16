@@ -1,5 +1,12 @@
 # Execution backlog and estimated roadmap
 
+## Cross-project AI Factory foundation — 16 October 2026
+
+- [x] Add a project-neutral OpenCode profile generator, six reusable commands, project-pack templates and a bounded role catalog. Exact files and ownership are in [TEAM_WORKFLOW](TEAM_WORKFLOW.md); architecture and setup are in [PROJECT_FACTORY](../ai-factory/PROJECT_FACTORY.md).
+- [x] Verify V1/V2 generated policy shape, owner-reviewed writes, read-only role boundaries, command safety, conflict preflight, repeat installation and symlink containment with `node scripts/setup-ai-factory.check.mjs`.
+- [ ] Run the project-local profiles on the owner's actual OpenCode v2.0.7, inspect loaded permissions and execute a synthetic delegation/reviewer workflow. The current coding environment has no `opencode` executable; templates are not runtime acceptance.
+- [ ] Reuse the project pack on one second, unrelated project and refine only from observed friction. Broad cross-domain readiness is not yet established.
+
 ## Morning continuation — 16 October 2026
 
 Fresh Work audit at `295306b` confirmed published DBG-01/02/03, green exact-head Quality and 450/53 passing tests; reproduced original fixes and scoped ownership. Next debugging-only task: [OPENCODE_DBG04](OPENCODE_DBG04.md), the previously logged action-alternative limitation. No frontend/integration/cleanup work is taken over.

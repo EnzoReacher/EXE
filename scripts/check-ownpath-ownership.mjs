@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const shared = new Set(["src/lib/experience-translator/types.ts"]);
-const backendScripts = /^scripts\/(?:check-ownpath-ownership|check-ownpath-retired-apis|setup-ownpath-factory|verify-ownpath-factory)(?:\.test)?\.mjs$/;
+const backendScripts = /^scripts\/(?:check-ownpath-ownership|check-ownpath-retired-apis|setup-ownpath-factory|verify-ownpath-factory|setup-ai-factory)(?:\.(?:test|check))?\.mjs$/;
 const legacyPages = /^src\/app\/(?:assessment|analysis|opportunities|saved-work|review|expert|credential-versions)\//;
 
 export function ownsPath(role, filename) {

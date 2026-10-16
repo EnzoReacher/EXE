@@ -24,6 +24,11 @@ describe("three-person OwnPath ownership", () => {
     }
     expect(ownsPath("translator", "src/app/experience-translator/translator.css")).toBe(true);
     expect(ownsPath("shell", "src/app/experience-translator/translator.css")).toBe(false);
+    for (const name of ["scripts/setup-ai-factory.mjs", "scripts/setup-ai-factory.test.mjs", "scripts/setup-ai-factory.check.mjs"]) {
+      expect(ownsPath("backend", name)).toBe(true);
+      expect(ownsPath("shell", name)).toBe(false);
+      expect(ownsPath("translator", name)).toBe(false);
+    }
     for (const role of ["backend", "shell", "translator"]) for (const name of ["package.json", "next.config.ts", "src/proxy.ts", "src/lib/experience-translator/types.ts", ".github/workflows/quality.yml", "src/lib/../app/page.tsx"]) expect(ownsPath(role, name)).toBe(false);
   });
   it("detects committed, staged, unstaged, untracked and renamed protected paths", () => {

@@ -1,5 +1,9 @@
 # OwnPath OpenCode Factory
 
+## Cross-project factory foundation — 16 October 2026
+
+A separate project-neutral profile generator is provided in `scripts/setup-ai-factory.mjs`, with its workflow and project-pack instructions in [PROJECT_FACTORY.md](PROJECT_FACTORY.md). It adds a lead/orchestrator, auditor, planner, builder, QA, security and research roles plus reusable slash commands and project templates. It does not replace the OwnPath-specific profiles below. V1/V2 generation and safe-install behavior pass `node scripts/setup-ai-factory.check.mjs`; no profiles were activated here, and this result does not establish OpenCode V2 runtime permissions or model delegation.
+
 ## Owner-local runtime checkpoint — 15 October 2026
 
 Actual OpenCode `v2.0.7` setup dry run and activation succeeded in the existing backend worktree without differing profiles. Four agent modes/system prompts/ordered terminal policy blocks matched the generated V2 definitions in `debug agents`; explicit-location command discovery returned four OwnPath names (not full binding/template/tool detail). Actual read-only OwnPath Auditor, single Core Engineer and separate read-only QA tasks ran through the existing coding session/provider. Local generated profiles remain untracked and outside source commits. No owner global/model/provider settings were changed.

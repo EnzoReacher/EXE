@@ -1,5 +1,11 @@
 # OwnPath implementation status — 2026-10-15
 
+## Cross-project AI Factory foundation — 16 October 2026
+
+Implemented on isolated branch `feat/ownpath-ai-factory`, based on `7adbd6b77085318be43d55bff382d74b499e6350`. Added a project-neutral OpenCode generator with a lead/orchestrator, auditor, planner, builder, QA, security and optional research profiles; six reusable commands; and project-pack templates. The existing OwnPath-specific installer and eight owner-local activation profiles were not changed. Explicit scope and ownership are in [TEAM_WORKFLOW](TEAM_WORKFLOW.md); design and usage are in [PROJECT_FACTORY](../ai-factory/PROJECT_FACTORY.md).
+
+`node scripts/setup-ai-factory.check.mjs`: PASS for V1/V2 template generation, role permission shape, non-shell command templates, safe install preflight, repeat install, conflict refusal and symlink containment. `node --check` on the new JavaScript and `git diff --check`: PASS. The Vitest wrapper was added but the checkout has no `node_modules`, so the repository Vitest suite was not run. OpenCode is not installed in this execution environment; no activation, loaded-policy inspection, real delegation or model execution is claimed. Existing `FACTORY_V2_RUNTIME_NOT_VERIFIED` remains open. Cloud/product deployment is outside this task.
+
 ## DBG-04 completed — 16 October 2026
 
 **Final verified source:** `87e1f116b9a7df6b704af60a7e22d411422ee6e0`; fixed actual task baseline `c628f2fa9f7d2db70300e56f8eb354982a3fc7c9` after safe non-divergent fast-forward from `295306b`. Eight local `.opencode` profiles and original M17 worktree preserved; all profile checksums match. Baseline exact-head Quality PR38843614164/push38843610324 SUCCESS.

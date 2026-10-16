@@ -1,5 +1,9 @@
 # OwnPath three-person build contract — 15 October 2026
 
+## Explicit AI Factory foundation task — 16 October 2026
+
+Owner approved a reusable, project-neutral OpenCode factory extension. The sole writer uses branch `feat/ownpath-ai-factory`, baseline `7adbd6b77085318be43d55bff382d74b499e6350`, in a separate worktree. Allowed paths are `scripts/setup-ai-factory.mjs`, its `.test.mjs` and `.check.mjs`, `scripts/check-ownpath-ownership.mjs` and its test, `docs/ai-factory/**`, and this task's canonical status/backlog/handoff records. All frontend paths, root package/config, existing `.opencode/**` activation profiles and owner-global settings remain outside this task. This is a configuration generator and project-pack foundation; actual OpenCode V2 runtime permission matching/delegation remains a separately verified gate.
+
 Owner instruction: start the approved core-only plan, with two other people handling frontend. This is the proposed file assignment for those two developers and the enforced scope of this backend slice. Their names, local work and acceptance of the assignment are not known; no messages were sent on their behalf.
 
 ## Current integration rule
