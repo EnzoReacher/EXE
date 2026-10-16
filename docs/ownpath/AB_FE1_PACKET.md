@@ -22,6 +22,8 @@ Exclusive source: `src/app/sign-in/**`, `sign-up/**`, `auth/**`, `forgot-passwor
 
 ## Required tests and review return
 
+W5 integration note: policy lookup failures without a recognized SDK code now return safe `UNAVAILABLE`, not `INVALID_CREDENTIALS` (reviewed repair). The installed emulator/SDK policy path is being tested as **unavailable**, not as configured password enforcement. Do not silently replace an unavailable policy with invented local requirements or claim cloud password-policy parity. Official adapter signup/action/reset execution is separate from delivered UI and real email. Use the current W5 evidence before asserting browser coverage.
+
 Cover signup/duplicate submits/password-policy+confirmation, identity-created/profile/mail pending separately, neutral credentials/reset responses, verification refresh, resend failure, action-code mismatch/expiry/reuse, throttling, reauth/current+all logout, session expiry/revocation, safe-next bypasses, keyboard/focus/labels/mobile/long errors, and no password persistence. Use synthetic identities and fixture responses; label mocked UI tests separately from actual Firebase evidence. Do not weaken guest browser privacy guards.
 
 Commands available now: `pnpm install --frozen-lockfile`, `pnpm exec vitest run <your-scoped-test-paths>`, `pnpm lint`, `pnpm typecheck`, `pnpm build`, `git diff --check`, `node scripts/check-ownpath-ownership.mjs auth-ui <full-starting-SHA>`. Serialize build/type generation within your worktree. Root CI/emulator/browser commands are coordinator-owned. Include command/time/source/count/skips/log and review limits; never count a skipped service test as pass.
