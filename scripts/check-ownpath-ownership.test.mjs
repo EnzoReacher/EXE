@@ -12,6 +12,9 @@ describe("three-person OwnPath ownership", () => {
     for (const filename of ["src/app/api/saved-work/route.ts", "src/lib/supabase/server.ts", "src/app/sign-in/page.tsx", "package.json"]) expect(ownsPath("accounts-backend", filename)).toBe(false);
     expect(ownsPath("accounts-integration", "firebase.json")).toBe(true);
     expect(ownsPath("accounts-integration", ".github/workflows/ownpath-accounts.yml")).toBe(true);
+    expect(ownsPath("accounts-integration", "e2e/translator.spec.ts")).toBe(true);
+    expect(ownsPath("accounts-integration", "e2e/translator.config.mts")).toBe(false);
+    expect(ownsPath("accounts-backend", "e2e/translator.spec.ts")).toBe(false);
     expect(ownsPath("accounts-integration", ".github/workflows/quality.yml")).toBe(false);
     for (const filename of ["src/proxy.ts", "src/app/sign-in/page.tsx", "src/lib/accounts-billing/server.ts", ".opencode/agents/ownpath-engineer.md"]) expect(ownsPath("accounts-integration", filename)).toBe(false);
     expect(ownsPath("auth-ui", "src/app/account/page.tsx")).toBe(true);

@@ -19,7 +19,7 @@ const roles = {
   "ownpath-qa": { mode: "subagent", description: "Independent read-only QA and security reviewer", body: "Review current diff, test evidence and TC01–TC15. Look for unsupported semantic claims, negation, team ownership, injection, provenance, stale approvals, loss of edits, external input transfer, privacy/RLS and regression. Do not edit files or run shell. Request exact test output from Lead when missing. Return severity-ranked findings and verification limits; green unit tests do not close browser, research or release gates.", edits: [], delegates: [] },
 };
 // AB-06-I is an explicit extension, not a grant over all workflows/harnesses.
-roles["ownpath-integration"].edits.push(".github/workflows/ownpath-accounts.yml", "scripts/ci-ownpath-browser.mjs");
+roles["ownpath-integration"].edits.push(".github/workflows/ownpath-accounts.yml", "scripts/ci-ownpath-browser.mjs", "e2e/translator.spec.ts");
 roles["ownpath-engineer"].edits.push("src/app/api/auth/csrf/*");
 const commands = {
   "ownpath-audit": "Delegate a read-only repo audit to ownpath-auditor. Inspect current branch/SHA, dirty/untracked work, remote main/branches and latest CI where accessible. Read current evidence/reuse contracts. Compare observed state with docs/ownpath/STATUS.md; do not redo completed work. Target: $ARGUMENTS",

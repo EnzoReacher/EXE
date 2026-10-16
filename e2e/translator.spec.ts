@@ -69,6 +69,7 @@ for (const width of [320, 375, 768, 1440]) {
       await fits(); await page.getByRole("button", { name: "Create CV bullets" }).click();
     });
     await test.step(`GENERATED_EDIT_REGENERATE_${width}`, async () => {
+      await expect(page.getByRole("heading", { name: "Check every suggested bullet" })).toBeFocused();
       await expect(page.getByLabel("English CV wording 1")).toHaveValue("Implemented product listing and search using React and JavaScript.");
       await expect(page.getByRole("button", { name: "Review accepted bullets" })).toBeDisabled();
       const approve = page.getByRole("checkbox", { name: "I confirm bullet 1 accurately describes my work" });

@@ -43,6 +43,11 @@ export async function runEmulators() {
     // Unique project also isolates Firebase CLI's hub discovery metadata.
     const projectId = `demo-ownpath-accounts-${path.basename(owned).slice(-6).toLowerCase()}`;
     const env = Object.fromEntries(["PATH", "HOME", "JAVA_HOME", "SYSTEMROOT"].filter((key) => process.env[key]).map((key) => [key, process.env[key]]));
+    // Configstore/ADC discovery must not see the owner's Firebase/Google login.
+    const emulatorCache = process.env.HOME ? path.join(process.env.HOME, ".cache", "firebase", "emulators") : path.join(owned, "emulator-cache");
+    Object.assign(env, { HOME: path.join(owned, "home"), XDG_CONFIG_HOME: path.join(owned, "config"), TMPDIR: path.join(owned, "tmp"), FIREBASE_EMULATORS_PATH: emulatorCache });
+    mkdirSync(env.HOME, { recursive: true, mode: 0o700 });
+    mkdirSync(env.TMPDIR, { recursive: true, mode: 0o700 });
     Object.assign(env, { GCLOUD_PROJECT: projectId, OWNPATH_FIREBASE_PROJECT_ID: projectId, OWNPATH_ACCOUNTS_MODE: "emulator", OWNPATH_APP_ORIGIN: "http://127.0.0.1:3000", FIREBASE_AUTH_EMULATOR_HOST: `127.0.0.1:${ports[0]}`, FIRESTORE_EMULATOR_HOST: `127.0.0.1:${ports[1]}`, FIREBASE_CLI_DISABLE_MOTD: "1", CI: "true" });
     assertDemoEnvironment(env);
     const config = JSON.parse(readFileSync(path.join(root, "firebase.json"), "utf8"));
