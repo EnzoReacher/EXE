@@ -1,0 +1,2 @@
+import { defineConfig } from "@playwright/test";
+export default defineConfig({ testDir: ".", testMatch: ["scan-rewrite.spec.ts", "workbench-visual.spec.ts"], workers: 1, retries: 0, timeout: 45000, reporter: "list", outputDir: "../.factory/evidence/OWNPATH-VISUAL-20261020/browser-results", use: { baseURL: "http://127.0.0.1:4386", browserName: "chromium", headless: true, trace: "off", video: "off", screenshot: "off", serviceWorkers: "block" } });

@@ -1,0 +1,12 @@
+export type FactCode = "react" | "javascript" | "typescript" | "html_css" | "rest_api" | "git" | "listing" | "search" | "error_handling" | "responsive" | "task_create" | "task_edit" | "task_delete" | "task_filter_status" | "task_filter_priority";
+export type Source = { id: string; text: string; label: string; personalContext: boolean };
+export type Fact = { id: string; code: FactCode; label: string; sourceId: string; excerpt: string; start: number; end: number; confirmed: boolean; evidenceKind: "user_statement" };
+export type Requirement = { id: string; code: FactCode; label: string; excerpt: string };
+export type QuestionId = "contribution" | "technology" | "outcome" | "reference";
+export type Question = { id: QuestionId; text: string; hint: string };
+export type Answers = Partial<Record<QuestionId, string>>;
+export type Intake = { project: string; jd: string };
+export type PreparedSession = { intake: Intake; sources: Source[]; facts: Fact[]; requirements: Requirement[]; questions: Question[] };
+export type Bullet = { id: string; text: string; factIds: string[]; requirementIds: string[] };
+export type ReviewedBullet = Bullet & { currentText: string; edited: boolean; accepted: boolean; rejected: boolean; detached?: boolean };
+export type TranslatorAdapter = { name: string; generate(session: PreparedSession, signal: AbortSignal): Promise<unknown> };

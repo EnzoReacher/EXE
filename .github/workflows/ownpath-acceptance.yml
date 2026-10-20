@@ -1,0 +1,46 @@
+name: OwnPath synthetic acceptance
+
+on:
+  push:
+    branches: [feat/ownpath-experience-translator]
+    paths:
+      - 'src/**'
+      - 'e2e/**'
+      - 'scripts/**'
+      - 'supabase/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'next.config.ts'
+      - '.github/workflows/ownpath-acceptance.yml'
+      - '.github/workflows/local-acceptance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ownpath-acceptance-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  translator-browser:
+    name: Compiled Translator desktop and mobile widths
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: node scripts/ci-ownpath-browser.mjs
+  backend-regression:
+    name: Disposable Auth, RLS and legacy browser regression
+    uses: ./.github/workflows/local-acceptance.yml

@@ -1,0 +1,11 @@
+import WorkspaceHeader from "@/components/workspace-header";
+import { requireCurrentUser } from "@/lib/intake/repository";
+import CredentialWorkspace from "@/app/credential-versions/workspace";
+export const metadata = { title: "Assigned credential reviews | OwnPath", robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
+export default async function Page() {
+  let allowed = false;
+  let owner: string | undefined;
+  try { const { supabase, user } = await requireCurrentUser(); const result = await supabase.rpc("m11a_expert_queue"); allowed = !result.error && Array.isArray(result.data); owner = user.id; } catch { /* Neutral boundary, no identity or configuration details. */ }
+  return <main id="main-content" tabIndex={-1} className="analysis-page"><WorkspaceHeader active="/expert/credential-reviews" /><div className="analysis-wrap"><h1>Assigned credential reviews</h1>{allowed ? <CredentialWorkspace key={owner} owner={owner} expert /> : <p role="status">This private review workspace is unavailable.</p>}</div></main>;
+}
