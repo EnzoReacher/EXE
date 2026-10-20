@@ -17,7 +17,14 @@ describe("retired API acceptance", () => {
       writeFileSync(manifest, JSON.stringify({ "/experience-translator/page": "page.js" }));
       const request = vi.fn(async () => new Response(null, { status: 404 }));
       expect(await checkRetiredApis(root, "http://127.0.0.1:1234", request)).toBe(119);
+      writeFileSync(manifest, JSON.stringify({ "/api/cv-review/scan/route": "scan.js", "/api/cv-review/rewrite/route": "rewrite.js", "/api/cv-review/saved/route": "saved.js" }));
+      expect(await checkRetiredApis(root, "http://127.0.0.1:1234", request)).toBe(119);
       expect(new Set(request.mock.calls.map(([, options]) => options.method)).size).toBe(7);
+      writeFileSync(manifest, JSON.stringify({ "/api/experience-translator/prepare/route": "prepare.js", "/api/experience-translator/generate/route": "generate.js" }));
+      expect(await checkRetiredApis(root, "http://127.0.0.1:1234", request)).toBe(119);
+      writeFileSync(manifest, JSON.stringify({ "/api/experience-translator/debug/route": "debug.js" }));
+      await expect(checkRetiredApis(root, "http://127.0.0.1:1234", request)).rejects.toThrow(/Compiled build/);
+      writeFileSync(manifest, "{}");
       expect(request.mock.calls.every(([, options]) => options.redirect === "manual")).toBe(true);
       for (const status of [200, 307, 401, 403, 500]) await expect(checkRetiredApis(root, "http://127.0.0.1:1234", async () => new Response(null, { status }))).rejects.toThrow(String(status));
       writeFileSync(manifest, JSON.stringify({ "/api/intake/cv/route": "route.js" })); request.mockClear();

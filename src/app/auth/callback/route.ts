@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAuthRedirectUrl } from "@/lib/supabase/auth-redirect";
+import { authReturnPath, getAuthRedirectUrl } from "@/lib/supabase/auth-redirect";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -15,23 +15,32 @@ function callbackResponse(requestUrl: string, path: string) {
 }
 
 export async function GET(request: Request) {
-  const success = callbackResponse(request.url, "/assessment");
+  const params = new URL(request.url).searchParams;
+  const requested = params.getAll("next");
+  const next = requested.length === 1 ? authReturnPath(requested[0], true) : "/app";
+  const success = callbackResponse(request.url, next);
   const failure = callbackResponse(request.url, "/sign-in?status=confirmation-failed");
   if (!success || !failure) {
     return new Response("Authentication callback is not configured.", {
       status: 503,
-      headers: { "Cache-Control": "no-store", "Content-Type": "text/plain; charset=utf-8" },
+      headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "Content-Type": "text/plain; charset=utf-8" },
     });
   }
 
-  const code = new URL(request.url).searchParams.get("code");
-  if (!code) return failure;
+  const code = params.get("code");
+  if (!code || code.length > 4096 || params.getAll("code").length !== 1 || params.has("error")) return failure;
 
   try {
-    const supabase = await createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient(success);
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    return error ? failure : success;
+    if (!error) {
+      const verified = await supabase.auth.getUser();
+      if (!verified.error && verified.data.user) return success;
+    }
+    success.cookies.getAll().forEach((cookie) => failure.cookies.set(cookie));
+    return failure;
   } catch {
+    success.cookies.getAll().forEach((cookie) => failure.cookies.set(cookie));
     return failure;
   }
 }

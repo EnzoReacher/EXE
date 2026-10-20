@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { unstable_noStore as noStore } from "next/cache";
 import { getPublicReview } from "@/lib/review-links/repository";
 import ReviewFeedbackForm from "./review-feedback-form";
 import { evidenceLabels } from "@/components/evidence-labels";
@@ -12,7 +11,6 @@ function Unavailable() {
 }
 
 export default async function PrivateReviewPage({ params }: { params: Promise<{ token: string }> }) {
-  noStore();
   const { token } = await params;
   const review = await getPublicReview(token);
   if (!review) return <Unavailable />;

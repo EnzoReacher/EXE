@@ -1,101 +1,14 @@
 import Link from "next/link";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "OwnPath | Turn Your Experience Into Career Value",
-  description: "Turn one student project into truthful English CV bullets for a Frontend Intern role.",
-};
-
-const findings = [
-  { title: "Your contribution", status: "User statement", tone: "supported", detail: "Product listing and search using React and JavaScript." },
-  { title: "API integration", status: "User statement", tone: "supported", detail: "REST API data and request error handling." },
-  { title: "Git and responsive UI", status: "Not mentioned", tone: "missing", detail: "These are JD requirements, not claims we can add to your experience." },
-];
-
-const steps = [
-  { number: "01", title: "Describe one project", detail: "Add your actual work and one Frontend Intern JD. No CV required." },
-  { number: "02", title: "Clarify your contribution", detail: "Answer a few selected questions and confirm the source facts." },
-  { number: "03", title: "Review your English bullets", detail: "Check sources, edit, accept individual bullets and copy your wording." },
-];
-
-export default function Home() {
-  return (
-    <main className="landing-page" id="main-content" tabIndex={-1}>
-      <header className="landing-header">
-        <Link className="brand landing-brand" href="/" aria-label="OwnPath career readiness home">
-          <span className="brand-mark" aria-hidden="true">O</span>
-          <span className="brand-copy"><strong>OwnPath</strong><span>Experience Translator</span></span>
-        </Link>
-        <nav className="landing-nav" aria-label="Main navigation">
-          <Link href="#how-it-works">How it works</Link>
-          <Link href="#example-report">Fictional example</Link>
-          <Link href="/sign-in">Sign in</Link>
-          <Link className="button button-primary" href="/experience-translator">Try the prototype</Link>
-        </nav>
-      </header>
-
-      <section className="landing-hero" aria-labelledby="landing-title">
-        <div className="landing-hero-copy">
-          <p className="eyebrow">OWNPATH EXPERIENCE TRANSLATOR</p>
-          <h1 id="landing-title">Turn Your Experience Into Career Value.</h1>
-          <p className="landing-intro">
-            You have the experience. OwnPath helps you show its value. Describe one project, clarify what you did, and review English CV bullets for a Frontend Intern role.
-          </p>
-          <div className="landing-actions">
-            <Link className="button button-primary" href="/experience-translator">Translate a project</Link>
-            <Link className="button button-secondary" href="#example-report">View fictional example</Link>
-          </div>
-          <p className="landing-caveat">Fictional-data prototype using local templates. It does not score your hiring chances, verify qualifications, or guarantee a job.</p>
-        </div>
-
-        <aside className="landing-preview" aria-labelledby="preview-title">
-          <div className="landing-preview-heading">
-            <div><p className="report-label">FICTIONAL EXAMPLE</p><h2 id="preview-title">Frontend Developer Intern</h2></div>
-            <span className="report-status">Example only</span>
-          </div>
-          <p className="landing-preview-caption">One team project. Only the student’s own contribution becomes a bullet.</p>
-          <ul className="landing-finding-list">
-            {findings.map((finding) => (
-              <li className="landing-finding" key={finding.title}>
-                <span className={`finding-indicator ${finding.tone}`} aria-hidden="true" />
-                <div><strong>{finding.title}</strong><p>{finding.detail}</p></div>
-                <span className={`finding-status ${finding.tone}`}>{finding.status}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="landing-preview-footnote">This example contains fictional project and job information. All statements remain unverified.</p>
-        </aside>
-      </section>
-
-      <section className="landing-process" id="how-it-works" aria-labelledby="process-title">
-        <div className="landing-section-heading">
-          <p className="eyebrow">THREE STEPS</p>
-          <h2 id="process-title">Start with one job application.</h2>
-        </div>
-        <ol className="landing-steps">
-          {steps.map((step) => (
-            <li className="landing-step" key={step.number}>
-              <span className="landing-step-number" aria-hidden="true">{step.number}</span>
-              <h3>{step.title}</h3>
-              <p>{step.detail}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="landing-example" id="example-report" aria-labelledby="example-title">
-        <div>
-          <p className="eyebrow">KEEP CONTROL OF YOUR CV</p>
-          <h2 id="example-title">Check every suggestion before you use it.</h2>
-          <p>Each generated bullet shows its source facts. Review every line and approve it yourself before copying. A JD requirement alone never supplies an experience claim.</p>
-        </div>
-        <Link className="button button-primary" href="/experience-translator">Try Experience Translator</Link>
-      </section>
-
-      <footer className="landing-footer">
-        <span>OwnPath · Experience Translator</span>
-        <span>Prototype status: use fictional data until privacy and retention review is complete.</span>
-      </footer>
-    </main>
-  );
+import { getCurrentUser } from "@/lib/supabase/server";
+import { PublicHeader, PublicFooter } from "@/components/ownpath/public-shell";
+import styles from "@/components/ownpath/ownpath.module.css";
+export const metadata = { title: "OwnPath | Scan & Rewrite your CV", description: "Compare your CV with a job description, understand what matters, then rewrite it your way." };
+export default async function Home() {
+  const user = await getCurrentUser(); const destination = user ? "/app" : "/sign-up"; const cta = user ? "Go to workspace" : "Get started";
+  return <main className={styles.publicPage} data-ownpath-public id="main-content" tabIndex={-1}><PublicHeader landing />
+    <section className={styles.hero}><div className={styles.heroCopy}><p className={styles.eyebrow}>YOUR EXPERIENCE. YOUR NEXT STEP.</p><h1>Understand the fit.<br /><em>Rewrite your CV.</em></h1><p className={styles.intro}>Compare your CV with a target job. Understand the findings, tell us what to improve, and get a complete CV in your words.</p><div className={styles.actions}><Link className={styles.primary} href={destination}>{cta} ↗</Link><Link className={styles.textLink} href="#example">See a fictional example ↓</Link></div><p className={styles.small}>Scan first · Rewrite when you choose · Edit and export</p></div>
+    <aside className={styles.example} id="example"><div className={styles.exampleTop}><span className={styles.eyebrow}>SAME EXPERIENCE. CLEARER WORDING.</span><span className={styles.pill}>Fictional example</span></div><h2>Everyday work deserves clear words.</h2><div className={styles.source}><span className={styles.label}>BEFORE · EXPERIENCE PROVIDED</span><p>“At Riverside Shop, I helped customers choose products and kept the stock list up to date.”</p></div><p className={styles.job}>Target role: Sales assistant</p><div className={styles.result}><span className={styles.label}>AFTER · PROPOSED WORDING</span><p>“Helped customers select products and maintained an up-to-date stock list at Riverside Shop.”</p></div><p className={styles.provenance}>No invented sales figures, responsibilities or qualifications. You review the wording before it becomes part of your CV.</p><div className={styles.approval}>Your experience → Proposed changes → Your decision</div></aside></section>
+    <section className={styles.workflow} id="how-it-works"><div className={styles.sectionTitle}><p className={styles.eyebrow}>THREE SIMPLE STEPS</p><h2>From your CV to your next application.</h2></div><ol className={styles.steps}>{[["01", "Scan your CV", "Paste your CV and target job description. See what is demonstrated and what needs clearer evidence."], ["02", "Tell us what to improve", "Give a simple rewriting request. Choose English or Vietnamese."], ["03", "Make it yours", "Read your complete CV, edit freely, copy, export or optionally save."]].map(([n,t,c]) => <li key={n}><span className={styles.stepNumber}>{n}</span><h3>{t}</h3><p>{c}</p></li>)}</ol></section>
+    <section className={styles.faq} id="faq"><div><p className={styles.eyebrow}>GOOD TO KNOW</p><h2>Your experience stays yours.</h2><p>For every industry and career stage.</p></div><div>{[["What do I need?", "Paste your CV and a target job description as text. File uploads are not part of this release."], ["When does AI run?", "Only when you choose Scan or Rewrite after agreeing to share. Scan explains; it does not rewrite. Review draft accuracy before using it."], ["Do I need to approve every sentence?", "No. You receive the complete CV, with a full-text editor. Saving is optional."], ["Does a missing skill mean I lack it?", "No. Not found means it is not demonstrated in the supplied CV. JD requirements must not become invented qualifications."]].map(([q,a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div></section>
+    <section className={styles.closing}><p className={styles.eyebrow}>BUILD ON WHAT YOU’VE DONE</p><h2>Your next CV starts here.</h2><Link className={styles.primary} href={destination}>{cta} ↗</Link></section><PublicFooter /></main>;
 }

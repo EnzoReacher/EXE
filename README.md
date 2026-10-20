@@ -1,8 +1,49 @@
-# OwnPath — Experience Translator
+# OwnPath — Scan, understand and rewrite your CV
 
-**Turn Your Experience Into Career Value.** You have the experience. OwnPath helps you show its value.
+**CV + target job description → Scan → Explain → Prompt → Rewrite → complete editable CV.**
+Review grounded findings, write your own rewrite instructions, then edit, copy,
+download TXT or open Print / Save as PDF. Saving and reopening named CV versions
+is optional. Account manages an optional display name, verified email, password
+access and local-browser sign-out; it does not supply applicant facts to the CV.
 
-Current feature branch: `feat/ownpath-experience-translator`, based on audited cumulative M17 `ae2527633733fc5081a96ecb2c16e09081a8c878`. Open `/experience-translator` for the fictional-data prototype: project + Frontend Intern JD → selected questions → confirmed personal facts → English bullets with sources → edit/accept/copy or local TXT. No CV is required. It uses controlled local templates, not external AI, and keeps input in tab memory. It is not a production release or completed CP2 research.
+Release candidate branch: [`feat/ownpath-demo-rc`](https://github.com/EnzoReacher/EXE/tree/feat/ownpath-demo-rc).
+Start at `/`; authenticated workspace: `/app`. Old Translator and `/cv-review`
+routes redirect to the protected workspace. The questionnaire is retired.
+
+## Current setup and acceptance
+
+- [CV workspace setup and fictional browser fixture](docs/ownpath/CV_WORKSPACE_SETUP.md)
+- [Account profile and security evidence](docs/ownpath/ACCOUNT_PROFILE_EVIDENCE.md)
+- [Reliability repairs, migration contracts and local database checks](docs/ownpath/RELIABILITY_REPAIR_EVIDENCE.md)
+- [Interaction polish and current verification](docs/ownpath/INTERACTION_POLISH_EVIDENCE.md)
+- [Publication scope and verification record](docs/ownpath/PUBLICATION.md)
+
+Install with `pnpm install --frozen-lockfile`. Configure public Supabase settings
+from the sanitized `.env.example`, preserving any existing private `.env.local`,
+then follow the setup guide. AI stays disabled unless explicitly configured and
+consented to; the inherited provider gate permits numeric-loopback local use only.
+
+**Live OpenAI acceptance: NOT RUN.** Current valid local evidence is **913 tests,
+24 compiled-browser journeys, lint (no errors), typecheck and production build**.
+Browser journeys use fictional Auth/REST and controlled AI responses. Lint retains
+one existing `AuthPanel` hook-dependency warning; its tested session-effect
+dependencies were not changed blindly. Hosted Auth/mail/provider acceptance,
+Safari/Firefox and real-device acceptance remain outstanding.
+
+**These migrations are NOT hosted-applied:**
+
+- `supabase/migrations/20261020_legacy_draft_revision.sql`
+- `supabase/migrations/20261020_review_rpc_submission_limit.sql`
+
+They require separately authorized owner review/application and schema-cache
+refresh as needed. The earlier CV profile/version schema migration is included;
+the setup guide records the owner's prior application of it. Publishing this
+candidate does not apply migrations, merge to `main` or deploy the application.
+
+## Historical product and project records
+
+The sections below preserve earlier project context. They do not supersede the
+current CV-workspace setup above or authorize retired guest workflows.
 
 Start with [current OwnPath status and handoff](docs/ownpath/STATUS.md), [PRD/scope](docs/ownpath/PRD.md), [ADR/contracts](docs/ownpath/ARCHITECTURE.md), [workflow diagrams](docs/ownpath/FLOWS.md), [backlog/roadmap](docs/ownpath/BACKLOG.md), [research instruments](docs/ownpath/RESEARCH_PLAN.md), [tests](docs/ownpath/TEST_STRATEGY.md), and [OpenCode Factory runbook](docs/ai-factory/AI_FACTORY_RUNBOOK.md). Actual owner research/production approval remains in the existing decision record. `EXE` is the repository name; EXE101 is the course.
 

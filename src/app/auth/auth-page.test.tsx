@@ -15,7 +15,7 @@ describe("session-aware account and workspace pages", () => {
       getCurrentUser.mockResolvedValue({ id: "synthetic-owner" });
       redirect.mockImplementation(() => { throw new Error("REDIRECT_WORKSPACE"); });
       await expect(AuthPage({ mode, notice: "Confirmation failed" })).rejects.toThrow("REDIRECT_WORKSPACE");
-      expect(redirect).toHaveBeenCalledExactlyOnceWith("/assessment");
+      expect(redirect).toHaveBeenCalledExactlyOnceWith("/app");
     });
 
     it(`keeps ${mode} available to an anonymous visitor`, async () => {

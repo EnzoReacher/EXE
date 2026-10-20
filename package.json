@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:translator:browser": "playwright test --config=e2e/translator.config.mts",
+    "test:ownpath:browser": "playwright test --config=e2e/ownpath.config.mts",
+    "test:ownpath:rls": "node scripts/ownpath-cv-rls.mjs",
     "test:e2e:local": "node scripts/e2e-local.mjs",
     "test:proof-preview": "node scripts/proof-preview-browser.mjs",
     "test:workspace-ui": "node scripts/workspace-ui-browser.mjs",

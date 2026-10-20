@@ -13,6 +13,9 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "web/**",
+    // Generated private snapshots/check outputs are not application source.
+    ".factory/backups/**",
+    ".factory/evidence/**",
   ]),
 ]);
 

@@ -16,6 +16,11 @@ const definitions: { code: FactCode; label: string; pattern: RegExp; action?: bo
   { code: "search", label: "Implemented search", pattern: /\bsearch\b|tìm kiếm/i, action: true },
   { code: "error_handling", label: "Implemented error handling", pattern: /\berror\s+handling\b|handl(?:e|ed|ing)\s+(?:request\s+)?errors?|xử lý lỗi/i, action: true },
   { code: "responsive", label: "Implemented responsive UI", pattern: /\bresponsive\b/i, action: true },
+  { code: "task_create", label: "Implemented task creation", pattern: /\btask creation\b|\bcreat(?:e|ed|ing) tasks?\b|tạo công việc/iu, action: true },
+  { code: "task_edit", label: "Implemented task editing", pattern: /\btask editing\b|\bedit(?:ed|ing)? tasks?\b|chỉnh sửa công việc/iu, action: true },
+  { code: "task_delete", label: "Implemented task deletion", pattern: /\btask deletion\b|\bdelet(?:e|ed|ing) tasks?\b|xóa công việc/iu, action: true },
+  { code: "task_filter_status", label: "Implemented task filtering by status", pattern: /\b(?:task filtering|filter(?:ing)? tasks?) by (?:priority and )?status\b|lọc công việc theo (?:độ ưu tiên và )?trạng thái/iu, action: true },
+  { code: "task_filter_priority", label: "Implemented task filtering by priority", pattern: /\b(?:task filtering|filter(?:ing)? tasks?) by (?:status and )?priority\b|lọc công việc theo (?:trạng thái và )?độ ưu tiên/iu, action: true },
 ];
 const personal = /^(?:i|mình|tôi|em|bản thân)\s+(?:(?:đã|tự|directly|personally)\s+)*(?:built|developed|implemented|created|integrated|used|wrote|handled|designed|called|consumed|fetched|làm|xây dựng|phát triển|triển khai|tích hợp|dùng|sử dụng|phụ trách|gọi|xử lý)/i;
 const limiting = /\b(?:not|no|never|without|cannot|can't|didn't|haven't|hasn't|don't|only watched|learn(?:ed|ing)?|stud(?:y|ied)|want|will|would|plan(?:ned)?|tutorial)\b|không|chưa|muốn|dự định|sẽ|chỉ xem|học theo|đang học/i;
@@ -30,7 +35,22 @@ function hasMixedActor(excerpt: string) {
   return excerpt.split(/\s+(?:and|và)\s+|,\s*/iu).slice(1).some((clause) =>
     !/^(?:i|mình|tôi|em|bản thân)\s/iu.test(clause) &&
     !personal.test(`I ${clause}`) &&
-    /^(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched|làm|xây dựng|phát triển|triển khai|tích hợp|dùng|sử dụng|phụ trách|gọi|xử lý)(?=\s|$)/iu.test(clause));
+    /^(?:[\p{L}\p{N}]+\s+){1,4}(?:built|developed|implemented|used|created|integrated|wrote|handled|designed|called|consumed|fetched|làm|xây dựng|phát triển|triển khai|tích hợp|dùng|sử dụng|phụ trách|gọi|xử lý|(?:creat(?:e|ed|ing)|edit(?:ed|ing)?|delet(?:e|ed|ing)|filter(?:ed|ing)?)(?=\s+tasks?\b)|(?:tạo|chỉnh sửa|xóa|lọc)(?=\s+công việc))(?=\s|$)/iu.test(clause));
+}
+
+function hasAmbiguousTaskCoordination(excerpt: string) {
+  // Task clauses inherit personal authorship only through a closed prefix:
+  // a bare task phrase/predicate, optionally a first-person subject and known
+  // personal modifiers/authoring verb. Reject arbitrary text before a task
+  // mention rather than enumerating other actors' possible predicates.
+  const personalPrefix = new RegExp(`^(?:(?:i|mình|tôi|em|bản thân)(?:\\s+|$))?(?:(?:đã|tự|directly|personally)(?:\\s+|$))*(?:(?:${authored.source}|completed|finished|handled))?$`, "iu");
+  return excerpt.split(/,\s*(?:(?:and|và)\s+)?|\s+(?:and|và)\s+/iu).slice(1).some((clause) => {
+    const starts = definitions.filter((d) => d.code.startsWith("task_")).flatMap((d) => {
+      const match = clause.match(d.pattern);
+      return match ? [match.index!] : [];
+    });
+    return starts.length > 0 && !personalPrefix.test(clause.slice(0, Math.min(...starts)).trim());
+  });
 }
 
 function hasAlternativeTechnologies(excerpt: string) {
@@ -97,9 +117,20 @@ export function extractPersonalFacts(sources: Source[]): Fact[] {
       const excerpt = match[0].trim();
       const start = (match.index ?? 0) + match[0].indexOf(excerpt);
       const normalized = excerpt.replace(/[’‘]/g, "'");
-      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than|as opposed to)\b|trong khi|nhưng/i.test(normalized)) continue;
+      // "by status/priority" is a filter parameter, not a change of author.
+      // Keep all other "by" clauses subject to the existing attribution guard.
+      const attributionText = normalized.replace(/\b(task filtering|filter(?:ing)? tasks?) by (?=(?:status|priority)\b)/gi, "$1 ");
+      if (!excerpt || limiting.test(normalized) || instruction.test(normalized) || otherActor.test(normalized) || /\b(?:while|whereas|but|by|instead of|rather than|as opposed to)\b|trong khi|nhưng/i.test(attributionText)) continue;
+      // Task alternatives (including filter parameters) are not affirmative
+      // conjunctions. Deliberately conservative within a task-action sentence;
+      // do not broaden this to generic sorting/filtering in old listing prose.
+      if (definitions.some((d) => d.code.startsWith("task_") && d.pattern.test(normalized)) && /\b(?:or|versus|vs)\b|(?:^|\s)(?:hoặc|hay)(?:\s|$)/iu.test(normalized)) continue;
+      // Do not borrow an earlier authoring verb across exclusions or temporal
+      // clauses in task prose. Ask for separate affirmative sentences instead;
+      // this bounded guard intentionally rejects even personal temporal clauses.
+      if (definitions.some((d) => d.code.startsWith("task_") && d.pattern.test(normalized)) && /\b(?:exclud(?:e|ed|ing)|except|apart from|other than|after|before|when|once|until|since)\b|ngoại trừ|sau khi|trước khi|khi mà/iu.test(normalized)) continue;
       // Reject ambiguous subject changes for supported personal-action verbs, not names.
-      if (hasMixedActor(normalized) || hasAlternativeTechnologies(normalized) || hasAlternativeActions(normalized)) continue;
+      if (hasMixedActor(normalized) || hasAmbiguousTaskCoordination(normalized) || hasAlternativeTechnologies(normalized) || hasAlternativeActions(normalized)) continue;
       if (!source.personalContext && /\bteam\b|nhóm/i.test(excerpt) && !/\bi (?:built|developed|implemented|created)\b|(?:mình|tôi|em) (?:tự|phụ trách)/i.test(excerpt)) continue;
       const bare = normalized.replace(/\b(?:and|using|with)\b|và|bằng|[,/]/gi, " ").trim();
       const recognizedList = /^(?:(?:product listing|danh sách sản phẩm|tìm kiếm|search|responsive(?: ui)?|react(?:\.js|js)?|javascript|js|typescript|html|css|rest api|git)\s*)+$/i.test(bare);
@@ -171,6 +202,29 @@ export function composeBullets(session: PreparedSession): Bullet[] {
   if (uiFacts.length && techFacts.length) {
     const features = uiFacts.map((f) => f.code === "listing" ? "product listing" : "search").join(" and ");
     add("ui", `Implemented ${features} using ${techFacts.map((f) => f.label).join(" and ")}.`, [...uiFacts, ...techFacts]);
+  }
+  const taskAction = facts.find((f) => f.code.startsWith("task_"));
+  const taskFacts = taskAction ? facts.filter((f) => f.code.startsWith("task_") && f.sourceId === taskAction.sourceId && f.excerpt === taskAction.excerpt) : [];
+  const attachedTaskTech = unique(relatedTech(taskAction));
+  // Task-only fallback: a closed personal tool list in the immediately next
+  // raw sentence of the project. Never join retained facts across dropped prose,
+  // paragraphs, sources or feature/project qualifiers. Unsupported list tools
+  // may delimit the sentence but are not emitted or promoted to facts.
+  const toolName = "(?:React(?:\\.js|js)?|TypeScript|JavaScript|HTML|CSS|Vite|localStorage|Git|REST API)";
+  const closedToolList = new RegExp(`^I used ${toolName}(?:(?:,\\s*(?:and\\s+)?|\\s+and\\s+)${toolName})*$`, "i");
+  const project = session.sources.find((source) => source.id === "project");
+  const adjacentTaskTech = !attachedTaskTech.length && taskAction?.sourceId === "project" && project ? facts.filter((f) =>
+    ["react", "javascript", "typescript", "html_css"].includes(f.code) && f.sourceId === "project" &&
+    /^\.[ \t]*(?:\r?\n[ \t]*)?$/.test(project.text.slice(taskAction.end, f.start)) &&
+    closedToolList.test(f.excerpt) &&
+    (f.end === project.text.length || /^\.(?:\s|$)/.test(project.text.slice(f.end)))
+  ) : [];
+  const taskTech = attachedTaskTech.length ? attachedTaskTech : unique(adjacentTaskTech);
+  if (taskFacts.length && taskTech.length) {
+    const actions = taskFacts.map((f) => f.label.replace("Implemented ", ""));
+    const features = actions.length === 1 ? actions[0] : `${actions.slice(0, -1).join(", ")} and ${actions.at(-1)}`;
+    const tools = taskTech.map((f) => f.label).join(" and ");
+    add("tasks", attachedTaskTech.length ? `Implemented ${features} using ${tools}.` : `Implemented ${features}. Used ${tools}.`, [...taskFacts, ...taskTech]);
   }
   // API use has to describe an actual integration, not just a named tool.
   const api = facts.find((f) => f.code === "rest_api" && !/\b(?:tests?|documentation|docs|readme)\b|tài liệu/i.test(f.excerpt) && /^(?:i|mình|tôi|em)\s+(?:(?:đã|tự|personally)\s+)*(?:integrated|fetched|called|consumed|tích hợp|gọi|lấy dữ liệu)|\band (?:integrated|fetched|called|consumed)\b|và (?:gọi|tích hợp)/i.test(f.excerpt));

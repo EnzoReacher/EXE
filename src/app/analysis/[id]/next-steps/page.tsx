@@ -32,7 +32,7 @@ export default async function NextStepsPage({ params }: { params: Promise<{ id: 
       <p className="eyebrow">YOUR NEXT STEPS</p>
       <h1>{analysis.roleTitle}</h1>
       <p className="analysis-subtitle">{analysis.companyName ? `${analysis.companyName} · ` : ""}{analysis.cvFilename}</p>
-      <NextStepsWorkspace analysisId={id} initialDetails={nextSteps} />
+      <NextStepsWorkspace analysisId={id} initialDetails={nextSteps} owner={analysis.run.ownerId} />
     </div>
   </main>;
 }

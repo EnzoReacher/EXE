@@ -94,4 +94,21 @@ describe("Supabase session refresh proxy", () => {
 
     expect(response.status).toBe(200);
   });
+
+  for (const path of ["/sign-in", "/sign-up", "/forgot-password", "/reset-password", "/account", "/auth/callback"]) {
+    it(`never caches ${path}, including without configuration`, async () => {
+      vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", ""); vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "");
+      const response = await updateSupabaseSession(new NextRequest("http://127.0.0.1:3000" + path));
+      expect(response.headers.get("Cache-Control")).toContain("no-store");
+      expect(response.headers.get("Referrer-Policy")).toBe("no-referrer");
+      expect(response.headers.get("X-Robots-Tag")).toBe("noindex, nofollow");
+    });
+  }
+  it("never copies arbitrary Host or forwarded authority into redirects", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "synthetic-publishable-key");
+    createServerClientMock.mockReturnValue({ auth: { getClaims: async () => ({ data: null, error: null }) } });
+    const response = await updateSupabaseSession(new NextRequest("https://ownpath.example/assessment", { headers: { host: "evil.example", "x-forwarded-host": "evil.example" } }));
+    expect(response.headers.get("Location")).toBe("https://ownpath.example/sign-in");
+  });
 });

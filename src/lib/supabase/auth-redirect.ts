@@ -60,3 +60,19 @@ export function getAuthCallbackUrl(
 ): string | null {
   return getAuthRedirectUrl(browserOrigin, "/auth/callback", options);
 }
+
+// Exact paths only: no nested queries, decoding, fragments or redirect chains.
+// The callback separately allows reset after provider code exchange.
+export function authReturnPath(value: unknown, recovery = false): string {
+  if (typeof value === "string" && (["/app", "/app/profile", "/app/tailor", "/app/cvs", "/app/account"].includes(value) || /^\/app\/cvs\/[0-9a-f-]{36}$/u.test(value))) return value;
+  if (recovery && value === "/reset-password") return value;
+  return "/app";
+}
+
+export function accountCallbackUrl(browserOrigin: string, next: string, options: AuthRedirectOptions = {}) {
+  const base = getAuthCallbackUrl(browserOrigin, options);
+  if (!base) return null;
+  const url = new URL(base);
+  url.searchParams.set("next", authReturnPath(next, true));
+  return url.toString();
+}

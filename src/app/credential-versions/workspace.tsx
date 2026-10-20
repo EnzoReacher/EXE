@@ -6,6 +6,7 @@ import { APPROVAL_NOTICE } from "@/lib/credential-versions/types";
 import ExportControls from "./export-controls";
 import WorkspaceSummary from "./workspace-summary";
 import { claimNextStep, filterHistory, STATE_LABELS as labels, type HistoryFilter } from "@/lib/credential-versions/workflow";
+import { usePrivateScope } from "@/components/use-private-scope";
 
 const ownerApi = "/api/credential-versions";
 const expertApi = "/api/expert/credential-reviews";
@@ -31,7 +32,13 @@ async function json(response: Response) {
   }
   return response.json();
 }
-export default function CredentialWorkspace({ expert = false }: { expert?: boolean }) {
+async function scopedJson(response: Response, scope: { current: { epoch: number; alive: boolean; blocked: boolean } }) {
+  const epoch = scope.current.epoch;
+  const result = await json(response);
+  if (!scope.current.alive || scope.current.blocked || scope.current.epoch !== epoch) throw new Error("Private session changed.");
+  return result;
+}
+export default function CredentialWorkspace({ expert = false, owner }: { expert?: boolean; owner?: string }) {
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [queue, setQueue] = useState<ExpertDetail[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,12 +64,14 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
   const [historyFilter, setHistoryFilter] = useState<HistoryFilter>("all");
   const working = useRef(false);
   const reviewTrigger = useRef<HTMLElement | null>(null);
+  const scope = usePrivateScope(() => { setWorkspace(null); setQueue([]); setVersion(null); setDetail(null); setConfirmation(null); setNote(""); setLoading(false); setBusy(false); setMessage(""); setError("Your session ended. Sign in again and reload this private workspace."); }, owner);
+  const read = useCallback((response: Response) => scopedJson(response, scope), [scope]);
 
   const load = useCallback(async () => {
     try {
-      const data = await json(await fetch(expert ? expertApi : ownerApi, { cache: "no-store" }));
+      const data = await read(await fetch(expert ? expertApi : ownerApi, { cache: "no-store" }));
       if (expert) {
-        if (!Array.isArray(data)) throw new Error("The private review queue could not be loaded. Retry.");
+        if (!Array.isArray(data) || !data.every(item => item && typeof item.id === "string" && typeof item.skill === "string" && typeof item.wording === "string")) throw new Error("The private review queue could not be loaded. Retry.");
         setQueue(data);
       } else {
         if (!data || !["cvs", "portfolios", "credentials", "experts", "claims", "versions"].every((key) => Array.isArray(data[key])) || !data.versions.every((item: { changes?: unknown }) => item && Array.isArray(item.changes))) throw new Error("The private workspace could not be loaded. Retry.");
@@ -76,7 +85,7 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
       setWorkspace(null); setQueue([]); setVersion(null); setDetail(null); setConfirmation(null);
       throw error;
     }
-  }, [expert]);
+  }, [expert, read]);
   useEffect(() => {
     const timer = setTimeout(() => { void load().catch((e) => setError(safeError(e))).finally(() => setLoading(false)); }, 0);
     return () => clearTimeout(timer);
@@ -86,11 +95,13 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
   useEffect(() => { if (error) notice.current?.focus(); }, [error]);
 
   async function perform(operation: () => Promise<void>, success: string, refresh = true) {
-    if (working.current) return false;
+    if (working.current || scope.current.blocked) return false;
+    const epoch = scope.current.epoch; const current = () => scope.current.alive && !scope.current.blocked && epoch === scope.current.epoch;
     working.current = true; setBusy(true); setError(""); setMessage("");
     let completed = false;
-    try { await operation(); completed = true; if (refresh) await load(); setMessage(success); return true; }
+    try { await operation(); if (!current()) return false; completed = true; if (refresh) await load(); if (!current()) return false; setMessage(success); return true; }
     catch (e) {
+      if (!current()) return false;
       const failure = safeError(e);
       // A delete_pending response confirms withdrawal already persisted. The
       // cached history and candidate panel can no longer be treated as current.
@@ -99,10 +110,10 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
       }
       setError(completed && refresh ? "The action was saved, but the refreshed workspace could not be loaded. Retry loading to check its status before repeating an action." : failure); return false;
     }
-    finally { working.current = false; setBusy(false); }
+    finally { working.current = false; if (current()) setBusy(false); }
   }
   async function action(input: Record<string, unknown>) {
-    const result = await json(await fetch(expert ? expertApi : ownerApi, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) }));
+    const result = await read(await fetch(expert ? expertApi : ownerApi, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) }));
     if (result.ok !== true) throw new Error("The action was not confirmed. Refresh before trying again.");
   }
   async function upload(event: FormEvent<HTMLFormElement>, kind: string) {
@@ -111,7 +122,7 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
     const data = new FormData(target);
     data.set("kind", kind);
     await perform(async () => {
-      const response = await json(await fetch(kind === "cv" ? "/api/intake/cv" : `${ownerApi}/documents`, { method: "POST", body: data }));
+      const response = await read(await fetch(kind === "cv" ? "/api/intake/cv" : `${ownerApi}/documents`, { method: "POST", body: data }));
       if (kind === "cv" ? !response.cv?.id || response.cv.processingStatus !== "ready" : !response.id) throw new Error("Upload is not ready. Review or retry it in the assessment workspace.");
       target.reset();
     }, "Private document saved. Uploading evidence does not approve a skill.");
@@ -142,7 +153,7 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
     reviewTrigger.current = trigger;
     void perform(async () => {
       setVersion(null); setConfirmation(null);
-      const data = await json(await fetch(ownerApi + "?version=" + item.id, { cache: "no-store" }));
+      const data = await read(await fetch(ownerApi + "?version=" + item.id, { cache: "no-store" }));
       if (!data || data.id !== item.id || !["before", "content", "state"].every((key) => typeof data[key] === "string")) throw new Error("The private detail could not be loaded. Refresh and try again.");
       setVersion({ id: data.id, before: data.before, content: data.content, state: data.state, number: item.number, sourceName: item.sourceName ?? "Source CV unavailable" });
     }, "Version snapshot loaded.", false);
@@ -151,7 +162,7 @@ export default function CredentialWorkspace({ expert = false }: { expert?: boole
     reviewTrigger.current = trigger;
     void perform(async () => {
       setDetail(null); setFieldError(""); setNote(""); setDecision("needs_information"); setProofReviewed(false);
-      const data = await json(await fetch(expertApi + "?claim=" + id, { cache: "no-store" }));
+      const data = await read(await fetch(expertApi + "?claim=" + id, { cache: "no-store" }));
       if (!data || data.id !== id || !["skill", "wording", "context"].every((key) => typeof data[key] === "string") || typeof data.hasPortfolio !== "boolean") throw new Error("The private detail could not be loaded. Refresh and try again.");
       setDetail(data);
     }, "Assigned claim loaded.", false);

@@ -1,0 +1,4 @@
+import { SavedCVs } from "@/components/ownpath/saved-cvs";
+import { getCurrentUser } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+export default async function Page(){ if (!await getCurrentUser()) redirect("/sign-in?next=/app/cvs"); return <SavedCVs />; }

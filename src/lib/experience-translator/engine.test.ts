@@ -1,14 +1,113 @@
 import { describe, expect, it } from "vitest";
 import { composeBullets, confirmFacts, prepareSession, validateBulletOutput, validateIntake } from "./engine";
 import { generateBullets } from "./adapter";
-import { goldenAnswers, goldenIntake } from "./fixtures";
-import { acceptedText, editBullet, mergeCandidates } from "./review";
+import { demoScenarios, goldenAnswers, goldenIntake, studyTrackIntake, literalStudyTrackIntake, literalStudyTrackWording } from "./fixtures";
+import { acceptedText, editBullet, invalidateReview, mergeCandidates } from "./review";
 import type { PreparedSession } from "./types";
 
 const confirmed = (s: PreparedSession) => confirmFacts(s, s.facts.map((f) => f.id));
 const golden = () => confirmed(prepareSession(goldenIntake, goldenAnswers));
 
+describe("owner literal two-sentence StudyTrack", () => {
+  it("composes separate implementation and tool-use statements with all seven exact source facts", async () => {
+    const s = confirmed(prepareSession(literalStudyTrackIntake));
+    expect(s.facts).toHaveLength(7);
+    const bullets = composeBullets(s);
+    expect(bullets).toEqual([{ id: "tasks", text: literalStudyTrackWording, factIds: s.facts.map((f) => f.id), requirementIds: ["jd-react", "jd-typescript"] }]);
+    expect(await generateBullets(s)).toEqual(bullets);
+    expect(validateBulletOutput({ bullets }, s)).toEqual(bullets);
+    expect(new Set(s.facts.map((f) => f.excerpt)).size).toBe(2);
+    for (const f of s.facts) expect(literalStudyTrackIntake.project.slice(f.start, f.end)).toBe(f.excerpt);
+    expect(() => validateBulletOutput({ bullets: [{ ...bullets[0], text: literalStudyTrackWording.replace(". Used", " using") }] }, s)).toThrow();
+  });
+  it("requires selected actions and tools and respects every deselection", () => {
+    const s = prepareSession(literalStudyTrackIntake);
+    expect(composeBullets(s)).toEqual([]);
+    for (const task of [true, false]) expect(composeBullets(confirmFacts(s, s.facts.filter((f) => f.code.startsWith("task_") === task).map((f) => f.id)))).toEqual([]);
+    for (const omitted of s.facts) {
+      const selected = confirmFacts(s, s.facts.filter((f) => f.id !== omitted.id).map((f) => f.id));
+      const bullets = composeBullets(selected);
+      expect(bullets).toHaveLength(1);
+      expect(bullets[0].factIds).not.toContain(omitted.id);
+      expect(bullets[0].text).not.toContain(omitted.label.replace("Implemented ", ""));
+      expect(validateBulletOutput({ bullets }, selected)).toEqual(bullets);
+    }
+  });
+});
+
+describe("StudyTrack synthetic task-action regression", () => {
+  it("requires confirmation, an action and attached selected tools with JD overlap", () => {
+    const raw = prepareSession(studyTrackIntake);
+    expect(composeBullets(raw)).toEqual([]);
+    for (const keep of [(code: string) => !code.startsWith("task_"), (code: string) => code.startsWith("task_")]) {
+      expect(composeBullets(confirmFacts(raw, raw.facts.filter((f) => keep(f.code)).map((f) => f.id)))).toEqual([]);
+    }
+    expect(composeBullets(confirmed(prepareSession({ ...studyTrackIntake, jd: "Frontend Developer Intern\nRequirements:\n- Angular and Figma" })))).toEqual([]);
+  });
+  it.each(["task_create", "task_edit", "task_delete", "task_filter_status", "task_filter_priority", "react", "typescript"])("omits deselected %s from wording and provenance", (code) => {
+    const raw = prepareSession(studyTrackIntake);
+    const omitted = raw.facts.find((f) => f.code === code)!;
+    const s = confirmFacts(raw, raw.facts.filter((f) => f.code !== code).map((f) => f.id));
+    const bullets = composeBullets(s);
+    expect(bullets).toHaveLength(1);
+    expect(bullets[0].text).not.toContain(omitted.label.replace("Implemented ", ""));
+    expect(bullets[0].factIds).not.toContain(omitted.id);
+    expect(validateBulletOutput({ bullets }, s)).toEqual(bullets);
+  });
+  it("creation alone never implies editing, deletion or filters", () => {
+    const s = confirmed(prepareSession({ ...studyTrackIntake, project: "I implemented task creation using React and TypeScript." }));
+    expect(composeBullets(s).map((b) => b.text)).toEqual(["Implemented task creation using React and TypeScript."]);
+  });
+  it("attaches contribution/technology answers but not tools from another project sentence", () => {
+    const intake = { ...studyTrackIntake, project: "StudyTrack is a fictional coursework task manager." };
+    const s = confirmed(prepareSession(intake, { contribution: "I implemented task creation and task editing.", technology: "React and TypeScript" }));
+    const bullets = composeBullets(s);
+    expect(bullets[0].text).toBe("Implemented task creation and task editing using React and TypeScript.");
+    expect(validateBulletOutput({ bullets }, s)).toEqual(bullets);
+    const unrelated = confirmed(prepareSession({ ...intake, project: "I implemented task creation. I used React and TypeScript for another fictional project." }));
+    expect(composeBullets(unrelated)).toEqual([]);
+  });
+  it("does not combine task actions from separate excerpts", () => {
+    const s = confirmed(prepareSession({ ...studyTrackIntake, project: "I implemented task creation using React. I implemented task deletion using TypeScript." }));
+    expect(composeBullets(s).map((b) => b.text)).toEqual(["Implemented task creation using React."]);
+  });
+  it("composes one exact grounded task bullet with selected action/tool IDs and JD links", async () => {
+    const s = confirmed(prepareSession(studyTrackIntake));
+    expect(s.facts.map((f) => f.code)).toEqual(["react", "typescript", "task_create", "task_edit", "task_delete", "task_filter_status", "task_filter_priority"]);
+    const bullets = composeBullets(s);
+    expect(bullets).toEqual([{
+      id: "tasks",
+      text: "Implemented task creation, task editing, task deletion, task filtering by status and task filtering by priority using React and TypeScript.",
+      factIds: ["task_create", "task_edit", "task_delete", "task_filter_status", "task_filter_priority", "react", "typescript"].map((code) => s.facts.find((f) => f.code === code)!.id),
+      requirementIds: ["jd-react", "jd-typescript"],
+    }]);
+    expect(validateBulletOutput({ bullets }, s)).toEqual(bullets);
+    expect(await generateBullets(s)).toEqual(bullets);
+    for (const f of s.facts) {
+      expect(f.start).toBeGreaterThan(0);
+      expect(s.sources.find((source) => source.id === f.sourceId)!.text.slice(f.start, f.end)).toBe(f.excerpt);
+    }
+  });
+});
+
 describe("OwnPath grounded translation", () => {
+  it("synthetic task/React-only/unsupported scenarios match actual local vocabulary", () => {
+    expect(composeBullets(confirmed(prepareSession(demoScenarios.taskManager))).map((b) => b.text).join(" ")).toContain("React");
+    const react = composeBullets(confirmed(prepareSession(demoScenarios.reactOnly))).map((b) => b.text).join(" ");
+    expect(react).toContain("React"); expect(react).not.toMatch(/REST|test|\d/);
+    expect(composeBullets(confirmed(prepareSession(demoScenarios.unsupported)))).toEqual([]);
+  });
+  it("reused candidate IDs cannot attach changed-source edits to fresh evidence", () => {
+    const generated = composeBullets(golden());
+    const previous = mergeCandidates(generated, []); previous[0] = editBullet(previous[0], "Retain my own accurate wording."); previous[0].accepted = true;
+    const stale = invalidateReview(previous); const next = mergeCandidates(generated, stale);
+    const kept = next.find((b) => b.currentText === "Retain my own accurate wording.")!;
+    expect(kept.detached).toBe(true); expect(kept.factIds).toEqual([]); expect(kept.requirementIds).toEqual([]); expect(acceptedText(next)).toBe("");
+    expect(new Set(next.map((b) => b.id)).size).toBe(next.length);
+    const again = invalidateReview(next);
+    expect(new Set(again.map((b) => b.id)).size).toBe(again.length);
+    expect(again.every((b) => b.factIds.length === 0 && !b.accepted)).toBe(true);
+  });
   it("TC01 skips interview when sufficient personal work and completed output are known", () => {
     const s = prepareSession({ ...goldenIntake, project: "I built product listing and search using React and JavaScript. I integrated a REST API and implemented error handling. I completed a working demo." });
     expect(s.questions).toEqual([]); expect(composeBullets(confirmed(s))).toHaveLength(2);

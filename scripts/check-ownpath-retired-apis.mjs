@@ -19,9 +19,10 @@ export function validateOrigin(value) {
 }
 export async function checkRetiredApis(root, origin, request = fetch) {
   const base = validateOrigin(origin);
-  // Fail before making requests if source/build still registers any API handler.
+  // Explicit current-candidate allowlist. Unknown and restored legacy APIs fail closed.
   const manifest = JSON.parse(readFileSync(path.join(root, ".next/server/app-paths-manifest.json"), "utf8"));
-  if (Object.keys(manifest).some((name) => name.startsWith("/api/"))) throw new Error("Compiled build still contains an API handler; rebuild the cleanup candidate.");
+  const allowed = new Set(["/api/experience-translator/prepare/route", "/api/experience-translator/generate/route", ...["scan", "rewrite", "saved", "organize", "review"].map(operation => `/api/cv-review/${operation}/route`)]);
+  if (Object.keys(manifest).some((name) => name.startsWith("/api/") && !allowed.has(name))) throw new Error("Compiled build still contains an API handler; rebuild the cleanup candidate.");
   for (const route of retiredApis) if (existsSync(path.join(root, "src/app", route.slice(1), "route.ts"))) throw new Error("Retired API source is still present.");
   let checked = 0;
   for (const route of retiredApis) {

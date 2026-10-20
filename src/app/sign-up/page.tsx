@@ -3,7 +3,7 @@ import AuthPage from "../auth/auth-page";
 
 export const metadata: Metadata = {
   title: "Create an account | OwnPath",
-  description: "Create a private OwnPath career workspace.",
+  description: "Create an OwnPath account. No account is required to use the Translator.",
 };
 
 export default function SignUpPage() {

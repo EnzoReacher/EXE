@@ -2,8 +2,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ noStore: vi.fn(), getPublicReview: vi.fn() }));
-vi.mock("next/cache", () => ({ unstable_noStore: mocks.noStore }));
+const mocks = vi.hoisted(() => ({ getPublicReview: vi.fn() }));
 vi.mock("@/lib/review-links/repository", () => ({ getPublicReview: mocks.getPublicReview }));
 import PrivateReviewPage, { dynamic, metadata } from "./page";
 
@@ -13,7 +12,6 @@ describe("private reviewer page boundaries", () => {
   it("keeps unavailable links private, uncacheable and focusable without workspace navigation", async () => {
     mocks.getPublicReview.mockResolvedValue(null);
     render(await PrivateReviewPage({ params: Promise.resolve({ token: "private-test-token" }) }));
-    expect(mocks.noStore).toHaveBeenCalledTimes(1);
     expect(dynamic).toBe("force-dynamic");
     expect(metadata.robots).toEqual({ index: false, follow: false });
     const main = screen.getByRole("main");
@@ -31,7 +29,6 @@ describe("private reviewer page boundaries", () => {
     const main = screen.getByRole("main");
     expect(main.id).toBe("main-content");
     expect(main.tabIndex).toBe(-1);
-    expect(mocks.noStore).toHaveBeenCalledTimes(1);
     expect(screen.getByRole("heading", { name: "Selected evidence report" })).toBeTruthy();
     expect(screen.getByText("Missing")).toBeTruthy();
     for (const privateText of ["private-owner@example.test", "PRIVATE RAW CV", "PRIVATE RAW JD", "private-test-token"]) expect(main.textContent).not.toContain(privateText);

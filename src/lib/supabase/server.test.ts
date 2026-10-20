@@ -4,7 +4,8 @@ const { createServerClient, cookies, getUser } = vi.hoisted(() => ({ createServe
 vi.mock("@supabase/ssr", () => ({ createServerClient }));
 vi.mock("next/headers", () => ({ cookies }));
 
-import { getCurrentUser } from "./server";
+import { getCurrentUser, createSupabaseServerClient } from "./server";
+import { NextResponse } from "next/server";
 
 afterEach(() => { vi.resetAllMocks(); vi.unstubAllEnvs(); });
 
@@ -42,5 +43,17 @@ describe("server identity from the cookie session", () => {
     expect(await getCurrentUser()).toBeNull();
     expect(cookies).toHaveBeenCalledOnce();
     expect(createServerClient).not.toHaveBeenCalled();
+  });
+  it("attaches every rotated/deleted PKCE cookie directly to the callback response", async () => {
+    setup();
+    const response = NextResponse.redirect("http://127.0.0.1:3000/account");
+    await createSupabaseServerClient(response);
+    const options = createServerClient.mock.calls[0][2];
+    options.cookies.setAll([
+      { name: "fictional-session", value: "fictional-cookie", options: { path: "/", sameSite: "lax" } },
+      { name: "fictional-verifier", value: "", options: { path: "/", maxAge: 0 } },
+    ]);
+    expect(response.cookies.get("fictional-session")?.value).toBe("fictional-cookie");
+    expect(response.cookies.get("fictional-verifier")?.maxAge).toBe(0);
   });
 });

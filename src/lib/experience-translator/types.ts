@@ -1,4 +1,4 @@
-export type FactCode = "react" | "javascript" | "typescript" | "html_css" | "rest_api" | "git" | "listing" | "search" | "error_handling" | "responsive";
+export type FactCode = "react" | "javascript" | "typescript" | "html_css" | "rest_api" | "git" | "listing" | "search" | "error_handling" | "responsive" | "task_create" | "task_edit" | "task_delete" | "task_filter_status" | "task_filter_priority";
 export type Source = { id: string; text: string; label: string; personalContext: boolean };
 export type Fact = { id: string; code: FactCode; label: string; sourceId: string; excerpt: string; start: number; end: number; confirmed: boolean; evidenceKind: "user_statement" };
 export type Requirement = { id: string; code: FactCode; label: string; excerpt: string };

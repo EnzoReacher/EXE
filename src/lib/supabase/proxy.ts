@@ -2,13 +2,23 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { PRIVATE_NO_STORE_HEADERS } from "@/lib/http/security-headers";
 
-const privatePages = ["/assessment", "/saved-work", "/analysis", "/credential-versions", "/expert", "/opportunities"];
+const privatePages = ["/app", "/assessment", "/saved-work", "/analysis", "/credential-versions", "/expert", "/opportunities"];
 
 export async function updateSupabaseSession(request: NextRequest) {
   let response = NextResponse.next({ request });
+  const path = request.nextUrl.pathname;
+  const isAccountPage = ["/sign-in", "/sign-up", "/forgot-password", "/reset-password", "/account"].includes(path) || path.startsWith("/auth/");
+  const accountHeaders = () => {
+    if (isAccountPage || path === "/app" || path.startsWith("/app/")) {
+      PRIVATE_NO_STORE_HEADERS.forEach(({ key, value }) => response.headers.set(key, value));
+      response.headers.set("Referrer-Policy", "no-referrer");
+      response.headers.set("X-Robots-Tag", "noindex, nofollow");
+    }
+    return response;
+  };
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) return response;
+  if (!url || !key) return accountHeaders();
 
   const supabase = createServerClient(url, key, {
     cookies: {
@@ -31,7 +41,6 @@ export async function updateSupabaseSession(request: NextRequest) {
     // A transient Auth outage must not turn this session-refresh layer into an authorization grant.
   }
 
-  const path = request.nextUrl.pathname;
   // Print is an authenticated Route Handler with its own 401/404 response
   // contract, rather than a workspace page. Do not replace it with a redirect.
   const isPrintEndpoint = /^\/credential-versions\/[^/]+\/print\/?$/.test(path);
@@ -39,8 +48,10 @@ export async function updateSupabaseSession(request: NextRequest) {
     const target = new URL("/sign-in", request.url);
     // NextURL normalizes loopback hosts to localhost. Preserve the browser's
     // actual request host so redirects do not cross Auth cookie scopes.
-    const requestHost = request.headers.get("host");
-    if (requestHost) target.host = requestHost;
+    // Next normalizes numeric loopback to localhost. Restore only that narrow
+    // equivalent, with the same port; never accept arbitrary forwarded hosts.
+    const rawHost = request.headers.get("host");
+    if (target.hostname === "localhost" && rawHost === `127.0.0.1${target.port ? ":" + target.port : ""}`) target.hostname = "127.0.0.1";
     const redirect = NextResponse.redirect(target);
     // Retain rotations/deletions from the refresh layer when redirecting.
     response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
@@ -51,9 +62,5 @@ export async function updateSupabaseSession(request: NextRequest) {
     return redirect;
   }
 
-  if (path === "/sign-in" || path === "/sign-up") {
-    PRIVATE_NO_STORE_HEADERS.forEach(({ key, value }) => response.headers.set(key, value));
-  }
-
-  return response;
+  return accountHeaders();
 }

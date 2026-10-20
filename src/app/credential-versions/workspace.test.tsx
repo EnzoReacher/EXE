@@ -11,6 +11,9 @@ const claim = (state: string, extra: Partial<Claim> = {}): Claim => ({ id, sourc
 const version = (state: string, extra: Partial<Version> = {}): Version => ({ id, sourceCvId: id, sourceName: "fictional-cv.pdf", number: 1, state, createdAt: "2026-10-04", acceptedAt: null, changes: ["Fictional SQL"], ...extra });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 describe("owner credential forms", () => {
+  it("rejects malformed expert queue entries without crashing or rendering actionable controls",async()=>{
+    vi.stubGlobal("fetch",vi.fn().mockResolvedValue(response([null])));render(<CredentialWorkspace expert/>);expect((await screen.findByRole("alert")).textContent).toContain("queue could not be loaded");expect(screen.queryByRole("button",{name:/Review .*skill/})).toBeNull();
+  });
   it("reports malformed workspace data safely and recovers on retry", async () => {
     const user = userEvent.setup();
     const fetchMock = vi.fn().mockResolvedValueOnce(response({ ok: true })).mockResolvedValueOnce(response(blank));

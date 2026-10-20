@@ -69,6 +69,14 @@ describe("evidence matcher", () => {
 });
 
 describe("analysis output validation and provider recovery", () => {
+  it.each(["missing", "invented", "mutated input", "invalid"])("independent validation rejects %s custom-provider requirements", async mode => {
+    const input = { jobDescription: "Requirements:\n- SQL\n- Python", cvText: "Synthetic SQL coursework and Python projects." };
+    const provider: AnalysisProvider = { name: "synthetic-custom-provider", version: "test", analyze: async supplied => {
+      if (mode === "mutated input") supplied.jobDescription = "Requirements:\n- Invented skill";
+      return mode === "invalid" ? { findings: null } : { findings: matchRequirements(mode === "missing" ? ["SQL"] : ["Invented skill", "Python"], supplied.cvText) };
+    } };
+    await expect(analyzeAndValidate(input, provider)).rejects.toThrow("could not be validated");
+  });
   it("rejects malformed provider output and mismatched requirements", () => {
     expect(() => validateAnalysisOutput({ findings: "not a list" }, ["SQL"], "SQL")).toThrow("could not be validated");
     expect(() => validateAnalysisOutput({ findings: [] }, ["SQL"], "SQL")).toThrow("could not be validated");

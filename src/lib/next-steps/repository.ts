@@ -104,21 +104,23 @@ export async function updateRoadmapProgress(analysisId: string, itemId: string, 
   return roadmapFromRow(data as RoadmapRow);
 }
 
-export async function updateDraftContent(analysisId: string, draftId: string, content: string) {
+export async function updateDraftContent(analysisId: string, draftId: string, content: string, expectedRevision: number) {
   await completedAnalysis(analysisId);
   const trimmed = content.trim();
   if (trimmed.length < 20 || trimmed.length > 12000) throw new IntakeError("invalid_draft", "Keep the draft between 20 and 12,000 characters.");
-  const { supabase } = await requireCurrentUser();
-  const { data, error } = await supabase.from("cv_drafts").update({ content: trimmed, accepted_at: null, updated_at: new Date().toISOString() }).eq("id", draftId).eq("analysis_run_id", analysisId).select("id,version,content,accepted_at,created_at,updated_at").single();
-  if (error || !data) throw new IntakeError("draft_not_found", "That CV draft is unavailable or does not belong to you.", 404);
-  return draftFromRow(data as DraftRow, []);
+  return writeDraft(analysisId, draftId, trimmed, expectedRevision, false);
 }
 
-export async function acceptDraft(analysisId: string, draftId: string) {
+export async function acceptDraft(analysisId: string, draftId: string, content: string, expectedRevision: number) {
   await completedAnalysis(analysisId);
+  return writeDraft(analysisId, draftId, content, expectedRevision, true);
+}
+
+async function writeDraft(analysisId: string, draftId: string, content: string, expectedRevision: number, accept: boolean) {
+  if (!Number.isInteger(expectedRevision) || expectedRevision < 1 || expectedRevision >= 2147483647) throw new IntakeError("invalid_revision", "Reload this draft to obtain a valid revision.", 400);
   const { supabase } = await requireCurrentUser();
-  const acceptedAt = new Date().toISOString();
-  const { data, error } = await supabase.from("cv_drafts").update({ accepted_at: acceptedAt, updated_at: acceptedAt }).eq("id", draftId).eq("analysis_run_id", analysisId).select("id,version,content,accepted_at,created_at,updated_at").single();
-  if (error || !data) throw new IntakeError("draft_not_found", "That CV draft is unavailable or does not belong to you.", 404);
+  const { data, error } = await supabase.rpc("ownpath_update_legacy_draft", { p_analysis: analysisId, p_draft: draftId, p_expected_revision: expectedRevision, p_content: content, p_accept: accept });
+  if (error?.code === "PT409" || error?.code === "40001") throw new IntakeError("draft_conflict", "This draft changed or is unavailable. Your edits are kept. Reload explicitly to resolve the conflict.", 409);
+  if (error || !data || data.id !== draftId || data.version !== expectedRevision + 1 || data.content !== content || (accept ? !data.accepted_at : data.accepted_at !== null)) throw new IntakeError("draft_save_failed", "The draft update was not confirmed. Keep your edits and reload before retrying.", 500);
   return draftFromRow(data as DraftRow, []);
 }

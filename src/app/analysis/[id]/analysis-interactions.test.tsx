@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import NextStepsWorkspace from "./next-steps/next-steps-workspace";
@@ -14,6 +14,14 @@ const details: NextStepsDetails = {
 };
 
 describe("draft review safeguards", () => {
+  it("sends expected revision, preserves conflict edits and never auto-retries or accepts stale content", async () => {
+    const fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: "private conflict detail" }), { status: 409 })); vi.stubGlobal("fetch",fetch);
+    render(<NextStepsWorkspace analysisId="analysis" initialDetails={details} />);fireEvent.change(screen.getByRole("textbox",{name:"CV draft"}),{target:{value:"My conflicting local draft"}});fireEvent.click(screen.getByRole("button",{name:"Save edits"}));await screen.findByRole("button",{name:"Reload saved draft"});
+    expect(JSON.parse(fetch.mock.calls[0][1].body).expectedRevision).toBe(1);expect((screen.getByRole("textbox") as HTMLTextAreaElement).value).toBe("My conflicting local draft");expect(document.body.textContent).not.toContain("private conflict detail");fireEvent.click(screen.getByRole("button",{name:"Save edits"}));expect(fetch).toHaveBeenCalledOnce();expect((screen.getByRole("button",{name:"Accept after review"}) as HTMLButtonElement).disabled).toBe(true);
+  });
+  it("ignores a late draft acknowledgement after session end",async()=>{
+    let finish!:(value:Response)=>void;vi.stubGlobal("fetch",vi.fn().mockReturnValue(new Promise<Response>(r=>{finish=r;})));render(<NextStepsWorkspace analysisId="analysis" initialDetails={details}/>);fireEvent.click(screen.getByRole("button",{name:"Save edits"}));act(()=>window.dispatchEvent(new Event("ownpath:session-ended")));await act(async()=>finish(response({draft:{...details.draft,version:2}})));expect(screen.queryByRole("textbox")).toBeNull();expect(screen.queryByText(/Your edited draft is saved/)).toBeNull();
+  });
   it("retries failed creation without presenting a ready workspace", async () => {
     const user = userEvent.setup();
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(response({ error: "Creation failed" }, false)).mockResolvedValueOnce(response({ details })));
@@ -42,8 +50,8 @@ describe("draft review safeguards", () => {
     const user = userEvent.setup();
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(response({ error: "Save failed" }, false))
-      .mockResolvedValueOnce(response({ draft: { ...details.draft, content: "Edited" } }))
-      .mockResolvedValueOnce(response({ draft: { ...details.draft, content: "Edited", acceptedAt: "2026-01-02" } }));
+      .mockResolvedValueOnce(response({ draft: { ...details.draft, version: 2, content: "Edited" } }))
+      .mockResolvedValueOnce(response({ draft: { ...details.draft, version: 3, content: "Edited", acceptedAt: "2026-01-02" } }));
     vi.stubGlobal("fetch", fetchMock);
     render(<NextStepsWorkspace analysisId="analysis" initialDetails={details} />);
     const editor = screen.getByRole("textbox", { name: "CV draft" });
@@ -92,7 +100,7 @@ describe("review link recovery", () => {
     const user = userEvent.setup();
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: vi.fn().mockRejectedValue(new Error("denied")) } });
     const share = { id: "share", state: "active", createdAt: "2026-01-01", expiresAt: "2026-02-01", expiryHours: 168, includesAcceptedDraft: false, feedback: [] };
-    const fetchMock = vi.fn().mockResolvedValueOnce(response({ shares: [] })).mockResolvedValueOnce(response({ token: "token", share })).mockResolvedValueOnce(response({}));
+    const fetchMock = vi.fn().mockResolvedValueOnce(response({ shares: [] })).mockResolvedValueOnce(response({ token: "a".repeat(43), share })).mockResolvedValueOnce(response({ revoked: true, shareId: share.id }));
     vi.stubGlobal("fetch", fetchMock);
     render(<ReviewLinks analysisId="analysis" />);
     await screen.findByText(/No review links yet/);

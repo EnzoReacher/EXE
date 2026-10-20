@@ -3,11 +3,11 @@ import AuthPage from "../auth/auth-page";
 
 export const metadata: Metadata = {
   title: "Sign in | OwnPath",
-  description: "Sign in to your private OwnPath career workspace.",
+  description: "Sign in to your OwnPath account. The Translator remains account-free.",
 };
 
 type SignInPageProps = {
-  searchParams: Promise<{ status?: string | string[] }>;
+  searchParams: Promise<{ status?: string | string[]; next?: string }>;
 };
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
@@ -17,5 +17,5 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
     ? "We could not confirm that email link. Request a fresh confirmation email and try again."
     : undefined;
 
-  return <AuthPage mode="signIn" notice={notice} />;
+  return <AuthPage mode="signIn" notice={notice} next={params.next} />;
 }

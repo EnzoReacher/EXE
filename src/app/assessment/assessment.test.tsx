@@ -22,7 +22,7 @@ describe("Assessment interactions", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(json({ cvs: [{ id: "sample-cv", originalFilename: "sample.pdf", processingStatus: "ready" }] })).mockResolvedValueOnce(json({ jobs: [] })).mockResolvedValueOnce(json({ deleted: true })));
     render(<AssessmentForm />);
     await userEvent.click(await screen.findByRole("button", { name: "Delete CV sample.pdf" }));
-    await screen.findByText("Your CV, extracted text, and saved evidence reports were deleted. Target jobs were kept.");
+    await screen.findByText("Your CV and its dependent reports, drafts, reviews, claims and credential CV versions were deleted. Target jobs and separate proof files were kept.");
     expect(screen.queryByRole("button", { name: "Delete CV sample.pdf" })).toBeNull();
     expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Add your CV" }));
   });
@@ -64,7 +64,8 @@ describe("Assessment interactions", () => {
     await userEvent.type(role, "another unsaved edit");
     expect(role.value).toBe("  Sample analyst  ");
     resolveJob(json({ error: "Sample job save failed" }, 500));
-    await screen.findByText(/Sample job save failed.*Your uploaded CV is kept/);
+    await screen.findByText(/could not confirm.*Your uploaded CV is kept/);
+    expect(screen.queryByText(/Sample job save failed/)).toBeNull();
     for (const field of [file, role, company, description]) expect(field.disabled).toBe(false);
     expect(file.files?.length).toBe(0);
     expect(role.value).toBe("  Sample analyst  ");
@@ -114,7 +115,8 @@ describe("Assessment interactions", () => {
     await userEvent.type(screen.getByLabelText("Target role (required)"), "Sample analyst");
     await userEvent.type(screen.getByLabelText("Job description (required)"), "Sample responsibilities and requirements for testing.");
     await userEvent.click(screen.getByRole("button", { name: "Save CV and target job" }));
-    await screen.findByText("Sample upload failed");
+    await screen.findByText(/We could not confirm that request/);
+    expect(screen.queryByText("Sample upload failed")).toBeNull();
     expect((screen.getByLabelText("Target role (required)") as HTMLInputElement).value).toBe("Sample analyst");
     expect((screen.getByLabelText("CV file (required)") as HTMLInputElement).files?.[0].name).toBe("sample.pdf");
     await userEvent.click(screen.getByRole("button", { name: "Reload workspace" }));

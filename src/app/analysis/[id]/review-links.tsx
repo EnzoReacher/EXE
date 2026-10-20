@@ -2,11 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { OwnerReviewShare, ReviewExpiry } from "@/lib/review-links/types";
+import { readPrivateResponse } from "@/lib/http/read-private-response";
+import { usePrivateScope } from "@/components/use-private-scope";
 
 const formatDate = (value: string) => new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 const expiryLabel = (hours: number) => hours === 24 ? "24 hours" : hours === 168 ? "7 days" : "30 days";
 
-export default function ReviewLinks({ analysisId }: { analysisId: string }) {
+export default function ReviewLinks({ analysisId, owner }: { analysisId: string; owner?: string }) {
+  return <ReviewLinksContent key={`${owner}:${analysisId}`} analysisId={analysisId} owner={owner} />;
+}
+function ReviewLinksContent({ analysisId, owner }: { analysisId: string; owner?: string }) {
   const [shares, setShares] = useState<OwnerReviewShare[] | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [expiry, setExpiry] = useState<ReviewExpiry>("7d");
@@ -16,55 +21,72 @@ export default function ReviewLinks({ analysisId }: { analysisId: string }) {
   const [createdId, setCreatedId] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const urlInput = useRef<HTMLInputElement>(null);
+  const locked = useRef(false);
+  const scope = usePrivateScope(() => { setShares(null); setUrl(""); setCreatedId(""); setBusy(null); setLoadError(true); locked.current = false; }, owner);
+  const message = "We could not confirm your private review link request. Your selections are kept. Reload the list before retrying.";
+  const current = (epoch: number) => scope.current.alive && !scope.current.blocked && scope.current.epoch === epoch;
+  function validShare(value: unknown): value is OwnerReviewShare {
+    if (!value || typeof value !== "object") return false;
+    const s = value as OwnerReviewShare;
+    return typeof s.id === "string" && !!s.id && ["active", "expired", "revoked"].includes(s.state) && Number.isFinite(Date.parse(s.createdAt)) && Number.isFinite(Date.parse(s.expiresAt)) && [24, 168, 720].includes(s.expiryHours) && typeof s.includesAcceptedDraft === "boolean" && Array.isArray(s.feedback) && s.feedback.every(f => f && typeof f.id === "string" && typeof f.feedback === "string" && (f.reviewerName === null || typeof f.reviewerName === "string") && (f.reviewerRole === null || typeof f.reviewerRole === "string") && Number.isFinite(Date.parse(f.createdAt)));
+  }
 
   async function readResponse(response: Response) {
-    const body = await response.json();
-    if (!response.ok) throw new Error(body.error || "We could not update your private review links. Try again.");
-    return body;
+    return readPrivateResponse(response, message);
   }
 
   async function load() {
+    if (locked.current || scope.current.blocked) return;
+    locked.current = true; const epoch = scope.current.epoch;
     setBusy("load"); setLoadError(false);
     try {
       const body = await readResponse(await fetch(`/api/analysis/${analysisId}/review-shares`, { cache: "no-store" }));
-      if (!Array.isArray(body.shares)) throw new Error("Invalid link list");
+      if (!Array.isArray(body.shares) || !body.shares.every(validShare)) throw new Error(message);
+      if (!current(epoch)) return;
       setShares(body.shares);
-    } catch { setLoadError(true); }
-    finally { setBusy(null); }
+    } catch { if (current(epoch)) setLoadError(true); }
+    finally { if (current(epoch)) { locked.current = false; setBusy(null); } }
   }
 
   useEffect(() => {
     let current = true;
+    const epoch = scope.current.epoch;
     fetch(`/api/analysis/${analysisId}/review-shares`, { cache: "no-store" })
       .then(readResponse)
-      .then((body) => { if (!Array.isArray(body.shares)) throw new Error("Invalid link list"); if (current) setShares(body.shares); })
-      .catch(() => { if (current) setLoadError(true); });
+      .then((body) => { if (!Array.isArray(body.shares) || !body.shares.every(validShare)) throw new Error(message); if (current && !scope.current.blocked && epoch === scope.current.epoch) setShares(body.shares); })
+      .catch(() => { if (current && !scope.current.blocked && epoch === scope.current.epoch) setLoadError(true); });
     return () => { current = false; };
-  }, [analysisId]);
+  }, [analysisId, scope]);
 
   async function create() {
-    if (busy) return;
+    if (locked.current || scope.current.blocked) return;
+    locked.current = true; const epoch = scope.current.epoch;
     setBusy("create"); setNotice(null);
     try {
       const body = await readResponse(await fetch(`/api/analysis/${analysisId}/review-shares`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ expiry, includeAcceptedDraft: includeDraft }) }));
-      if (!body.token || !body.share?.id) throw new Error("We could not confirm creation. Reload the link list before trying again.");
-      setUrl(`${window.location.origin}/review/${body.token}`); setCreatedId(body.share.id);
-      setShares((current) => current ? [body.share, ...current] : current);
+      if (!current(epoch)) return;
+      if (typeof body.token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(body.token) || !validShare(body.share) || body.share.state !== "active" || body.share.includesAcceptedDraft !== includeDraft) throw new Error(message);
+      const share = body.share;
+      setUrl(`${window.location.origin}/review/${body.token}`); setCreatedId(share.id);
+      setShares((current) => current ? [share, ...current] : current);
       setNotice({ tone: "success", text: "Your private review link is ready. Copy it now: it cannot be recovered after you leave or refresh this page." });
-    } catch (error) { setNotice({ tone: "error", text: error instanceof Error ? error.message : "We could not create your private review link. Try again." }); }
-    finally { setBusy(null); }
+    } catch { if (current(epoch)) setNotice({ tone: "error", text: message }); }
+    finally { if (current(epoch)) { locked.current = false; setBusy(null); } }
   }
 
   async function revoke(shareId: string) {
-    if (busy) return;
+    if (locked.current || scope.current.blocked) return;
+    locked.current = true; const epoch = scope.current.epoch;
     setBusy(shareId); setNotice(null);
     try {
-      await readResponse(await fetch(`/api/analysis/${analysisId}/review-shares`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ shareId }) }));
+      const body = await readResponse(await fetch(`/api/analysis/${analysisId}/review-shares`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ shareId }) }));
+      if (!current(epoch)) return;
+      if (body.revoked !== true || body.shareId !== shareId) throw new Error(message);
       setShares((current) => current?.map((share) => share.id === shareId ? { ...share, state: "revoked" } : share) ?? null);
       if (shareId === createdId) { setUrl(""); setCreatedId(""); }
       setNotice({ tone: "success", text: "This private review link was revoked. It can no longer be used." });
-    } catch (error) { setNotice({ tone: "error", text: error instanceof Error ? error.message : "We could not revoke that private review link. Try again." }); }
-    finally { setBusy(null); }
+    } catch { if (current(epoch)) setNotice({ tone: "error", text: message }); }
+    finally { if (current(epoch)) { locked.current = false; setBusy(null); } }
   }
 
   async function copy() {
