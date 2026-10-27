@@ -1,6 +1,100 @@
 # OwnPath manual acceptance worksheet
 
-## Current `/app` candidate — owner-hosted check (2026-10-20)
+## Tonight: one owner test session (current integration candidate)
+
+Start from this worktree. Keep the three environments separate; never enter a real
+password, CV or bank transfer in a fictional preview. Commands are current package
+scripts; an occupied port is a reason to stop and inspect, not kill another server.
+
+| Environment | Command | Working URL | Account/data and limits |
+|---|---|---|---|
+| Normal app | `npm run dev -- --hostname 127.0.0.1 --port 4317` | http://127.0.0.1:4317 | Owner-configured **real Supabase**. Real test account only here. AI currently disabled; billing OFF. Hosted signup/recovery/schema acceptance still needed. |
+| Scan preview | `npm run preview:local` | http://127.0.0.2:4327 | Fictional account opens automatically. Fixed sales AI only; saves in disposable memory. AI quota/payments are **not** simulated here. |
+| Billing preview | `npm run preview:billing` | http://127.0.0.3:4347/sign-in | Fictional Auth, fixed sales AI, real **disposable local PostgreSQL** quotas/Free/Pro and fake payOS. Nothing is hosted or actually paid. |
+
+Previews build private copies (allow a short build), need installed dependencies
+and Chromium; Billing additionally needs local Docker `supabase_db_EXE`. They never
+copy private env files or replace normal `.next`. Use the external URLs above, not
+internal 4329/4349 app ports. Ctrl+C removes only that launcher's resources; saved
+preview work is lost. You can run both previews together in separate tabs.
+
+### Sample and exact scenario
+
+In either preview, expand **Sample account, CV and exact instructions**. Sign in,
+when asked, with **`fictional@example.test` / `fictional-preview-only`**. Do not
+invent a real account: default fictional signup returns no session, honestly. The
+automated signup-with-session scenario is only a test fixture, not real signup.
+
+Download **synthetic PDF** or **synthetic DOCX** there. Direct links are
+`/__preview/samples/sales-cv.pdf` and `sales-cv.docx` on that preview's origin.
+Both contain the existing fictional Alex Morgan sales CV. Paste this exact JD:
+
+```text
+Required: Help customers select products.
+Required: Maintain accurate stock records.
+Preferred: Negotiate supplier contracts.
+Preferred: Use accounting software.
+```
+
+Exact Rewrite instruction, with **English** selected:
+`Keep it concise. Preserve dates and attribution.`
+
+Only that CV/JD/instruction and the untouched extracted Rewrite base are simulated.
+Arbitrary input, another language or rewriting an already edited base must give a
+clear fixed-scenario error, never pretend an AI analyzed it. Edit **after** Rewrite.
+
+### Ordered checklist (use Billing preview for the complete combined session)
+
+1. **Landing/Auth:** visit `/` then Sign in with the fictional sample. Expect `/app`
+   only after session verification. There is one compact fictional/no-payment notice.
+   Real signup/newest emailed recovery link belong to a separate normal-app session
+   after owner setup; never change Confirm email to make a preview succeed.
+2. **Upload:** download and select PDF (try DOCX on a second pass). Expect extraction
+   success, no automatic Scan. Expand **Review extracted text**; it is editable.
+   Leave the supplied text unchanged for this fixed scenario. Paste the exact JD.
+3. **Scan → Explain:** click **Scan CV** once. See supported/unclear/not-found
+   findings. Open **View source & detail**. Supplier negotiation must remain someone
+   else's work, not Alex's achievement. No automatic Rewrite.
+4. **Prompt → Rewrite:** enter the exact instruction above and click **Rewrite CV**.
+   Expect the complete Classic CV, customer-service/stock-record wording improved,
+   dates and “My manager negotiated supplier contracts, not me.” unchanged.
+5. **Edit/export:** edit the complete CV; Copy text/TXT and Print / Save as PDF must
+   contain the edited text, not model notes. Check legible Unicode, page boundaries,
+   keyboard focus and a narrow phone layout. No export consumes AI quota.
+6. **Optional save:** expand **Save this CV (optional)**, name it and Save CV. Wait
+   for confirmation; reload/reopen from **Saved CVs**, rename/edit/save again and
+   visit **Account**. Unsaved content is not automatically persisted.
+7. **Free limits (Billing only):** Account shows Free 3 Scans/1 Rewrite/month and
+   3 saved versions. Repeat Scan deliberately until the fourth is refused; or use
+   the saved-version limit. Existing CVs/exports remain usable. Billing's PostgreSQL
+   tests cover expiry/last-slot races; Scan preview does not prove AI quotas.
+8. **Purchase while a draft is open:** click **Free / Pro plans ↗**; create one
+   illustrative VND 79,000 order and open hosted checkout separately. **Never make
+   a real transfer.** On the labelled fake provider choose **Simulate verified
+   payment**, return and Check payment. Account shows Pro 30/15/30. The original
+   workspace CV/JD/editor must still be there. Return/cancel query text is not proof.
+9. **Renewal/recovery:** buy another 30 days. Current expiry/usage stay unchanged;
+   Account shows a purchased next period. Optionally choose **Pay without callback**:
+   the local runner recovers it after backoff (usually a minute or more). Refresh
+   Account; do not create a replacement purchase just because verification is slow.
+10. **Reopen/failures:** close/reopen a tab before stopping the launcher: saved CVs
+    and Pro remain. Failed/lost verification or a second click must not duplicate
+    the entitlement. Unsupported AI input must retain your text. If a completed
+    AI result cannot be recovered, a deliberate new-request action is required.
+
+**Record a failure:** environment/URL, step, expected versus actual message, time,
+browser/viewport, and a screenshot using only the synthetic fixture. No passwords,
+tokens, env contents or personal CVs. Keep the draft/tab open if it helps reproduce.
+
+**Postponed, not green from a fake:** current normal-build real signup/recovery/email,
+hosted direct A/B ownership enforcement and new migrations, hosted scheduler/webhook,
+real merchant/price/payment acceptance, refunds and live AI cost/quality. Live sales
+stay disabled. Exact setup gates: [BILLING_SETUP_EVIDENCE.md](BILLING_SETUP_EVIDENCE.md).
+Current engineering identity/results: [COMPLETION_HANDOFF.md](COMPLETION_HANDOFF.md).
+
+---
+
+## Earlier owner-hosted worksheet (2026-10-20; historical)
 
 Branch `feat/ownpath-demo-rc`, HEAD `7adbd6b77085318be43d55bff382d74b499e6350`,
 plus the preserved uncommitted candidate. Current local/mock evidence is in
@@ -13,10 +107,12 @@ describes historical Translator/Factory checks and does not define this workspac
 current byte baseline, finding dispositions, local PostgreSQL/PostgREST results
 and migration/setup boundaries. Legacy intake/analysis/expert Next APIs remain
 retired (404); their direct pages are still reachable. No endpoint was restored.
-Two new migrations are **local-tested, not hosted-applied**:
+Two retained migrations are **conditional legacy repairs, NOT APPLICABLE to the
+inspected hosted schema**:
 `20261020_legacy_draft_revision.sql` and
-`20261020_review_rpc_submission_limit.sql`. Owner review/application and hosted
-acceptance of those DB contracts remain separate gates. Preserve the current
+`20261020_review_rpc_submission_limit.sql`. Owner preflight found their legacy
+tables/RPCs absent. Do not create them or run all SQL. Current product requires
+the already-applied profile/version migration only. Preserve the current
 `/app` Scan/Rewrite and Account acceptance below; the repairs do not replace it.
 
 **Owner-reported setup, not complete acceptance:** existing migration applied;
@@ -36,8 +132,8 @@ record pass/fail and error category without credentials, tokens or clipboard val
    and provider/network failure: recoverable error, no protected redirect. Verify a
    newest password-recovery link in the requesting browser reaches `/reset-password`,
    can update the password only with verified identity, then sign in normally.
-2. **AI disabled:** `/app` opens Scan & Rewrite directly. Paste the fictional CV
-   and required JD. Agree and click Scan: configuration error, inputs retained,
+2. **AI disabled:** `/app` opens Scan & Rewrite directly. Upload a synthetic PDF/DOCX
+   and paste the required JD. Click Scan: configuration error, inputs retained,
    no fabricated findings. No profile/approval prerequisite. Run the controlled
    browser fixture for the complete new journey without paid calls.
 3. **Earlier saved work:** Saved CVs → earlier version and expandable earlier
@@ -82,7 +178,7 @@ publishable key, **never service-role credentials**, against synthetic records:
 Local SQL/RLS and server-owner-predicate tests passed; hosted equivalents above
 remain **NOT RUN**, separately from owner-reported registration and table existence.
 
-### Compact synthetic CV and optional JD
+### Earlier compact synthetic text and required JD
 
 ```text
 Nguyễn Minh (fictional)
@@ -97,11 +193,12 @@ Skills
 Excel
 ```
 
-Optional JD (synthetic): `Accounts assistant: reconcile invoices and receipts;
+JD (synthetic): `Accounts assistant: reconcile invoices and receipts;
 maintain accurate monthly ledgers. Supplier negotiation certification preferred.`
 
 Additional synthetic Sales, Education, Operations, Technology and Entry-level/
-ambiguous-date fixtures: `src/lib/cv-review/examples.ts`. No JD is required.
+ambiguous-date fixtures: `src/lib/cv-review/examples.ts`. Current Scan requires a JD;
+these older texts are not the fixed preview scenario used in tonight's checklist.
 
 ---
 

@@ -1,5 +1,9 @@
 # OwnPath complete release-candidate publication
 
+Historical publication scope below is retained. The current authorized delivery is
+a normal push to `feat/ownpath-demo-rc`, not a new PR or main merge. See
+[the final demo handoff](DEMO_HANDOFF.md) for the active release and evidence limits.
+
 Owner-authorized publication of `feat/ownpath-demo-rc` to
 `EnzoReacher/EXE`, with a pull request targeting `main`. This record describes the
 candidate being published; the PR and GitHub commit/check pages are authoritative
@@ -57,15 +61,16 @@ Safari/Firefox or real-device acceptance follows from these local checks.
 
 ## Migration status
 
-These migrations are included and **NOT hosted-applied**:
+Correction after owner hosted preflight: these retained migrations are
+**conditional legacy repairs, NOT APPLICABLE to the inspected hosted schema**:
 
 - `supabase/migrations/20261020_legacy_draft_revision.sql`
 - `supabase/migrations/20261020_review_rpc_submission_limit.sql`
 
-Local disposable-database checks do not establish hosted application. Separate
-authorization is required to review/apply them to the intended project and refresh
-its PostgREST schema cache if necessary. Direct authenticated legacy draft UPDATE
-remains revoked by the revision migration; callers must use its atomic RPC.
+`cv_drafts`, `analysis_runs`, `review_shares`, `expert_reviews` and relevant RPCs
+were absent. Do not create these tables or apply all historical SQL. Local repair
+evidence concerns databases containing that subsystem only, not a current hosted
+release gate. Keep migration history intact.
 
 `20261019_ownpath_cv_profiles_versions.sql` is also included. The existing setup
 record reports the owner's prior application of that schema; it was not applied

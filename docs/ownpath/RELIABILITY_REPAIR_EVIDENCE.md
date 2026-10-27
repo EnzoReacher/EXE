@@ -195,12 +195,17 @@ HEAD and full status. The completed UI and Account work is part of that baseline
 
 ### Owner setup / remaining gates
 
-The two **new** migration files above are additive; no applied history was edited.
-An owner must separately review/apply them to the intended hosted project and
-reload the PostgREST schema cache if their deployment does not do so automatically.
+**Hosted-status correction:** owner preflight found `public.cv_drafts`,
+`public.analysis_runs`, `public.review_shares`, `public.expert_reviews` and relevant
+legacy RPCs absent. The two repair files are **NOT APPLICABLE** there, not pending
+current-product migrations. Do not create legacy tables or run the whole SQL
+directory. History is retained. Only databases containing that legacy subsystem
+need separately authorized repair review/application and schema-cache refresh.
+Current product requires `20261019_ownpath_cv_profiles_versions.sql`, already applied
+hosted with basic owner save/reopen observed (not full hosted ownership acceptance).
 The draft RPC is incompatible with old direct table updates; keep those retired
 and use the expected-revision RPC contract for any separately approved restoration.
-Do not restore deleted Next endpoints as migration setup. Hosted migration state,
+Do not restore deleted Next endpoints as migration setup. Full hosted ownership,
 actual provider/Auth hooks/policies, additional browsers and real devices remain
 unverified. No paid calls, hosted mutations, commits, pushes or deployment occurred.
 

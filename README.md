@@ -1,6 +1,10 @@
 # OwnPath — Scan, understand and rewrite your CV
 
 **CV + target job description → Scan → Explain → Prompt → Rewrite → complete editable CV.**
+Upload a text-based PDF/DOCX up to 5 MiB, then paste a target JD. Extracted CV text
+is editable in an optional disclosure; there is no blank initial CV editor or
+permanent consent panel. Extraction does not use AI or save originals. No OCR or
+encrypted files; explicit manual correction is available after an extraction error.
 Review grounded findings, write your own rewrite instructions, then edit, copy,
 download TXT or open Print / Save as PDF. Saving and reopening named CV versions
 is optional. Account manages an optional display name, verified email, password
@@ -11,6 +15,18 @@ Start at `/`; authenticated workspace: `/app`. Old Translator and `/cv-review`
 routes redirect to the protected workspace. The questionnaire is retired.
 
 ## Current setup and acceptance
+
+See [the final demo handoff](docs/ownpath/DEMO_HANDOFF.md) for the active build,
+startup, current acceptance evidence and hosted limitations. Rewrite now returns
+a complete structured CV with direct section editing; line assignment is an
+optional fallback for legacy saved CVs. The notes below retain earlier evidence.
+
+**Keyless local walkthrough:** `pnpm preview:local`, then open
+**http://127.0.0.2:4327**. The persistent label identifies simulated AI and fictional
+data. Samples, matching JD and the supported rewrite instruction are provided there.
+Real PDF/DOCX extraction, editable Classic output, exports and isolated saving work
+without OpenAI or hosted mutations. It uses a disposable build, never the normal
+`.next` or the owner's 4317 server. See [preview instructions and limits](docs/ownpath/CV_WORKSPACE_SETUP.md#keyless-isolated-local-preview).
 
 - [CV workspace setup and fictional browser fixture](docs/ownpath/CV_WORKSPACE_SETUP.md)
 - [Account profile and security evidence](docs/ownpath/ACCOUNT_PROFILE_EVIDENCE.md)
@@ -23,22 +39,31 @@ from the sanitized `.env.example`, preserving any existing private `.env.local`,
 then follow the setup guide. AI stays disabled unless explicitly configured and
 consented to; the inherited provider gate permits numeric-loopback local use only.
 
-**Live OpenAI acceptance: NOT RUN.** Current valid local evidence is **913 tests,
+**Live OpenAI acceptance: NOT RUN.** Published baseline evidence was **913 tests,
 24 compiled-browser journeys, lint (no errors), typecheck and production build**.
-Browser journeys use fictional Auth/REST and controlled AI responses. Lint retains
-one existing `AuthPanel` hook-dependency warning; its tested session-effect
-dependencies were not changed blindly. Hosted Auth/mail/provider acceptance,
-Safari/Firefox and real-device acceptance remain outstanding.
+Browser journeys use fictional Auth/REST and controlled AI responses. The follow-up
+narrowly fixes the `AuthPanel` warning by closing over the identity string rather
+than its enclosing user object; lint is now clean. Hosted Auth/mail/provider acceptance,
+Safari/Firefox and real-device acceptance remain outstanding. Follow-up local
+verification is recorded in [the completion handoff](docs/ownpath/COMPLETION_HANDOFF.md).
+Current AI also requires the owner-applied `20261021_ownpath_ai_reservations.sql`
+migration; missing durable quota infrastructure fails closed. It has **not** been
+applied hosted. This is not approval for paid use or hosted AI enablement.
 
-**These migrations are NOT hosted-applied:**
+**Conditional legacy repairs — NOT APPLICABLE to the inspected hosted schema:**
 
 - `supabase/migrations/20261020_legacy_draft_revision.sql`
 - `supabase/migrations/20261020_review_rpc_submission_limit.sql`
 
-They require separately authorized owner review/application and schema-cache
-refresh as needed. The earlier CV profile/version schema migration is included;
-the setup guide records the owner's prior application of it. Publishing this
-candidate does not apply migrations, merge to `main` or deploy the application.
+Owner preflight found `cv_drafts`, `analysis_runs`, `review_shares`, `expert_reviews`
+and relevant legacy RPCs absent. Do not create that subsystem or run all SQL files.
+Only databases already containing it need separately authorized legacy repair review.
+The required current-product `20261019_ownpath_cv_profiles_versions.sql` was applied
+hosted; basic owner save/reopen was observed, not full hosted ownership acceptance.
+
+Historical follow-up: [Classic/landing completion and verification](docs/ownpath/COMPLETION_HANDOFF.md)
+and [preview preparation](docs/ownpath/PREVIEW_DEPLOYMENT.md). PR #4 was merged.
+Current branch release/push authorization and evidence are recorded in the final handoff.
 
 ## Historical product and project records
 
