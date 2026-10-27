@@ -3,7 +3,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-libra
 import { afterEach, expect, it, vi } from "vitest";
 import { useState, type ComponentProps } from "react";
 import ScanRewriteView from "./scan-rewrite";
-import { forgetOperationIdentities } from "@/lib/scan-rewrite/request-identity";
+import { forgetOperationIdentities, setUncertainAttempt } from "@/lib/scan-rewrite/request-identity";
 function ScanRewrite(props: ComponentProps<typeof ScanRewriteView>) {
   const [view, setView] = useState<"scan" | "rewrite" | "hidden">("scan");
   return <><button onClick={() => setView("scan")}>Test Scan view</button><button onClick={() => setView("rewrite")}>Test Rewrite view</button><button onClick={() => setView("hidden")}>Test elsewhere</button><ScanRewriteView {...props} view={view} /></>;
@@ -35,6 +35,11 @@ async function confirmRecovery() {
   fireEvent.click(screen.getByRole("button", { name: "Prepare a new request" }));
   await screen.findByText(/New request prepared/);
 }
+it("keeps normal recovery controls out of the healthy workspace", async () => {
+  mockFetch(vi.fn().mockResolvedValue(json({}))); render(<ScanRewrite />); await fill();
+  expect(screen.queryByRole('button', { name: 'Review an unresolved request' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Review and continue' })).toBeNull();
+});
 it("keeps recovery unchecked and cancel-first; Cancel and Escape preserve pause, inputs, attachment and identity", async () => {
   const send = await pausedScan(); const storage = { ...sessionStorage };
   await openRecovery(); expect(document.activeElement?.textContent).toBe("Cancel");
@@ -100,8 +105,8 @@ it("ignores an older delayed Scan after recovery and dismisses review on session
   expect(Object.keys(sessionStorage)).toHaveLength(0); expect(send).toHaveBeenCalledTimes(3);
 });
 it("renders a reachable known-unresolved recovery when all prior in-memory identity is absent", async () => {
-  const send = vi.fn().mockResolvedValue(json(scan)); mockFetch(send, true); render(<ScanRewrite />); await fill();
-  fireEvent.click(screen.getByRole("button", { name: "Review an unresolved request" }));
+  const send = vi.fn().mockResolvedValue(json(scan)); mockFetch(send, true); setUncertainAttempt(true); render(<ScanRewrite />); await fill();
+  fireEvent.click(screen.getByRole("button", { name: "Review and continue" }));
   await screen.findByRole("dialog", { name: "Review and continue" });
   expect((screen.getByRole("button", { name: "Prepare a new request" }) as HTMLButtonElement).disabled).toBe(true);
   await act(async () => fireEvent.click(screen.getByRole("button", { name: "Cancel" })));

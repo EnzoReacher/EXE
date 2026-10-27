@@ -75,12 +75,14 @@ for (const width of [1440, 390, 320]) test(`${width}px explicit uncertainty reco
   await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.locator("#scan-error")).toHaveText("Previous requests need reconciliation before another send.");
   expect(ids).toHaveLength(2); expect(ids[1]).not.toBe(ids[0]); await expect(review).not.toBeVisible();
 });
-for (const width of [1440, 390]) test(`${width}px known unresolved recovery is rendered without a remembered pause or request`, async ({ page }, info) => {
+for (const width of [1440, 390]) test(`${width}px recovery is hidden until a known uncertainty is restored`, async ({ page }, info) => {
   let sends = 0;
   await page.route("**/api/cv-review/scan", route => { sends++; return route.fulfill({ json: scan }); });
   await page.setViewportSize({ width, height: 850 }); await page.goto("/app/scan");
   await page.getByText("Try an example", { exact: true }).click(); await page.getByRole("button", { name: "Sales", exact: true }).click();
-  const entry = page.getByRole("button", { name: "Review an unresolved request", exact: true });
+  await expect(page.getByRole("button", { name: "Review an unresolved request", exact: true })).toHaveCount(0);
+  await page.evaluate(() => { sessionStorage.setItem('ownpath-ai-uncertainty', 'true'); window.dispatchEvent(new Event('ownpath:uncertainty-changed')); });
+  const entry = page.getByRole("button", { name: "Review and continue", exact: true });
   await expect(entry).toBeVisible(); await page.screenshot({ path: info.outputPath(`${width}-reachable-recovery.png`), fullPage: true });
   await entry.click(); const dialog = page.getByRole("dialog", { name: "Review and continue", exact: true });
   await expect(dialog.getByRole("button", { name: "Prepare a new request", exact: true })).toBeDisabled();

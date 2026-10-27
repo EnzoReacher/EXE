@@ -41,7 +41,7 @@ for(const width of [1440,390,320])test(`${width}px final complete CV journey, ow
  await page.getByRole('button',{name:'Scan CV',exact:true}).click();await expect(page.getByText('Scan in progress. No changes are applied until a valid response arrives.')).toBeVisible();await page.getByRole('button',{name:'Scanning…',exact:true}).dispatchEvent('click');
  await expect(page.getByRole('heading',{name:'Your scan',exact:true})).toBeVisible();expect(scans).toBe(1);await expect(page.getByRole('dialog')).toHaveCount(0);
  // The fallback help action is not an uncertainty flag or a server query.
- await expect(page.getByRole('button',{name:'Review an unresolved request',exact:true})).toBeVisible();expect(await page.evaluate(()=>sessionStorage.getItem('ownpath-ai-uncertainty'))).toBeNull();
+ await expect(page.getByRole('button',{name:'Review an unresolved request',exact:true})).toHaveCount(0);expect(await page.evaluate(()=>sessionStorage.getItem('ownpath-ai-uncertainty'))).toBeNull();
  await page.getByRole('link',{name:'Rewrite this CV',exact:true}).first().click();await page.getByLabel('How should we improve it?').fill('Use concise, direct wording. Preserve every fact, date, number and manager attribution.');
  await page.getByRole('button',{name:'Rewrite CV',exact:true}).click();await expect(page.getByRole('heading',{name:'Rewriting your CV…',exact:true})).toBeVisible();await page.getByRole('button',{name:'Rewriting…',exact:true}).dispatchEvent('click');
  await expect(page.getByRole('heading',{name:'Your rewritten CV is ready',exact:true})).toBeVisible();expect([scans,rewrites]).toEqual([1,1]);

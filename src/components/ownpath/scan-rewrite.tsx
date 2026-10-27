@@ -19,7 +19,7 @@ import { operationIdentity, prepareReviewedRequest, applyPreparedRequest, uncert
 import WorkspaceActivity from "./workspace-activity";
 import { ContextualUsage } from "./usage-panel";
 import { usePlanSummary } from "./use-plan-summary";
-import ScanFindings, { ScanCounts } from "./scan-findings";
+import ScanFindings from "./scan-findings";
 const subscribe = () => () => {};
 
 export default function ScanRewrite({ initial, savedId, savedRevision, showOverview = false, onWorkChange, view = initial ? "rewrite" : "scan" }: { initial?: Snapshot; savedId?: string; savedRevision?: number; showOverview?: boolean; onWorkChange?: (hasWork: boolean) => void; view?: "scan" | "rewrite" | "hidden" } = {}) {
@@ -55,6 +55,7 @@ export default function ScanRewrite({ initial, savedId, savedRevision, showOverv
   useEffect(() => { if (!usageVersion) return; const timer = setTimeout(refreshUsage, 0); return () => clearTimeout(timer); }, [usageVersion, refreshUsage]);
   const [resultPanel, setResultPanel] = useState<"edit" | "save" | null>(null);
   const [rewriteState, setRewriteState] = useState<"idle" | "pending" | "succeeded" | "failed">(initial?.document ? "succeeded" : "idle");
+  const [resultNeedsAttention, setResultNeedsAttention] = useState(false);
   const generatedText = useRef(initial?.document || "");
   const sourcesPanel = useRef<HTMLDetailsElement>(null);
   const location = useRef({ view, epoch: 0 });
@@ -70,7 +71,7 @@ export default function ScanRewrite({ initial, savedId, savedRevision, showOverv
     for (const event of ["focusin", "pointerdown", "keydown", "wheel", "visibilitychange"]) window.document.addEventListener(event, moved, true);
     return () => { for (const event of ["focusin", "pointerdown", "keydown", "wheel", "visibilitychange"]) window.document.removeEventListener(event, moved, true); };
   }, []);
-  function revealResult() { const element = documentHeading.current; element?.focus({ preventScroll: true }); element?.scrollIntoView({ block: "start", behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" }); }
+  function revealResult() { setResultNeedsAttention(false); const element = documentHeading.current; element?.focus({ preventScroll: true }); element?.scrollIntoView({ block: "start", behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" }); }
   const saveState = useRef({ id: savedId || "", revision: savedRevision || 0, locked: false, pending: "", controller: null as AbortController | null });
   const templateId = getTemplate(initial?.templateId).id;
   const snapshot = useMemo(() => scan && documentSource.cv === cv && documentSource.jd === jd ? { schemaVersion: 2 as const, templateId, ...(structuredCV ? { structuredCV } : structure ? { structure } : {}), cv, jd, scan, instructions, language, document, changes, notes, title } : null, [templateId, structuredCV, structure, scan, documentSource, cv, jd, instructions, language, document, changes, notes, title]);
@@ -176,7 +177,7 @@ export default function ScanRewrite({ initial, savedId, savedRevision, showOverv
         const result = data?.format === "structured-cv-v1" ? parseStructuredResponse(data) : parseRewrite(data, base);
         const text = "cv" in result ? result.document : completeCV(base, result);
         if (text.length > 24000) throw new Error("The draft is too long. Your previous work is kept.");
-        setDocumentSource({ cv, jd }); setDocument(text); setStructuredCV("cv" in result ? result.cv : undefined); setStructure(undefined); setCorrecting(false); generatedText.current = text; setChanges(result.changes); setNotes(result.notes); setRewriteState("succeeded");
+        setDocumentSource({ cv, jd }); setDocument(text); setStructuredCV("cv" in result ? result.cv : undefined); setStructure(undefined); setCorrecting(false); generatedText.current = text; setChanges(result.changes); setNotes(result.notes); setRewriteState("succeeded"); setResultNeedsAttention(location.current.view !== "rewrite");
       }
       setUsageVersion(n => n + 1);
       if(identity.current)forgetOperation(identity.current.key);identity.current=null;setRecover(false);
@@ -212,29 +213,28 @@ export default function ScanRewrite({ initial, savedId, savedRevision, showOverv
       <section className={`op-input-card ${cv.trim() ? "is-filled" : ""}`}><header><span className="op-icon-tile"><WorkbenchIcon /></span><h2 id="cv-input-heading">Your CV</h2></header><CVUpload cv={cv} invalid={invalidField === "scan-cv" || invalidField === "cv-input-entry"} onProcessingChange={processingChanged} onExtract={text => sourceChanged(text, "cv")} /></section>
       <section className={`op-input-card ${jd.trim() ? "is-filled" : ""}`}><header><span className="op-icon-tile"><WorkbenchIcon name="scan" /></span><label htmlFor="scan-jd">Target job</label></header><textarea disabled={!hydrated} id="scan-jd" aria-invalid={invalidField === "scan-jd" || undefined} aria-describedby={`jd-limit${invalidField === "scan-jd" ? " scan-error" : ""}`} className="op-source" value={jd} onChange={e => sourceChanged(e.target.value, "jd")} placeholder="Paste the job description…" /><footer id="jd-limit"><span>{jd.length.toLocaleString()} / 18,000 characters</span></footer></section>
     </div></details>
-    <div className="op-scan-action"><button className="op-primary op-scan-button" disabled={!!scanBlockedBy} data-blocked-by={scanBlockedBy || undefined} aria-describedby={scanBlockedReason ? "scan-readiness" : undefined} aria-busy={busy === "scan" || checking} onClick={() => void run("scan")}><PendingLabel pending={busy === "scan" || checking} reserve="Scanning…">{busy === "scan" ? "Scanning…" : "Scan CV"}</PendingLabel><WorkbenchIcon name="arrow" /></button><div className="op-scan-disclosure"><small>{sharing.external ? "Your CV and job description are sent to AI." : "No external model is contacted."}</small><details className="op-sharing"><summary>Privacy details</summary><ul>{sharing.external ? <><li>{sharing.purpose === "unverified" ? "Recipient is verified before sending." : `Processed by ${sharing.provider}.`}</li><li>Contact filtering is limited. Review personal details before sending.</li></> : <li>Fixed fictional preview; no external AI processing.</li>}</ul></details></div></div>
+    <div className="op-scan-action"><button className={`${scan ? "" : "op-primary "}op-scan-button`} disabled={!!scanBlockedBy} data-blocked-by={scanBlockedBy || undefined} aria-describedby={scanBlockedReason ? "scan-readiness" : undefined} aria-busy={busy === "scan" || checking} onClick={() => void run("scan")}><PendingLabel pending={busy === "scan" || checking} reserve="Scanning…">{busy === "scan" ? "Scanning…" : "Scan CV"}</PendingLabel><WorkbenchIcon name="arrow" /></button><div className="op-scan-disclosure"><small>{sharing.external ? "Your CV and job description are sent to AI." : "No external model is contacted."}</small><details className="op-sharing"><summary>Privacy details</summary><ul>{sharing.external ? <><li>{sharing.purpose === "unverified" ? "Recipient is verified before sending." : `Processed by ${sharing.provider}.`}</li><li>Contact filtering is limited. Review personal details before sending.</li></> : <li>Fixed fictional preview; no external AI processing.</li>}</ul></details></div></div>
     {scanBlockedReason && <p id="scan-readiness" role="status">{scanBlockedReason}</p>}
     {busy === "scan" && <div className="op-waiting" role="status"><span>Scan in progress. No changes are applied until a valid response arrives.</span><button type="button" onClick={stopWaiting}>Stop waiting</button></div>}
     <ContextualUsage operation="scan" />
     </div>
     {error && <p id="scan-error" role="alert" className="op-error">{error === "OpenAI is not configured." ? "AI is not configured. The site owner needs to check the connection; your text is kept." : error}</p>}{message && <p ref={preparedMessage} tabIndex={-1} role="status">{message}</p>}
     {needsSignIn && <p><a href="/sign-in" target="_blank" rel="noreferrer">Sign in again in a new tab</a>. Keep this tab open to preserve your draft, then return and choose Scan or Rewrite when ready.</p>}
-    <div className="op-uncertainty">{uncertain && <p id="scan-error" className="op-message" role="alert">{uncertainReason || "AI requests are paused because the result could not be verified. Processing may have incurred charges; your work is kept."}</p>}<button type="button" disabled={!!busy || checking || extracting} onClick={() => void reviewUncertainty(!uncertain)}>{uncertain ? "Review and continue" : "Review an unresolved request"}</button></div>
+    {uncertain && <div className="op-uncertainty"><p id="scan-error" className="op-message" role="alert">{uncertainReason || "AI requests are paused because the result could not be verified. Processing may have incurred charges; your work is kept."}</p><button type="button" disabled={!!busy || checking || extracting} onClick={() => void reviewUncertainty()}>Review and continue</button></div>}
     {recover&&!uncertain&&<button type="button" onClick={async()=>{if(await confirmation.confirm({title:'Prepare a new AI request?',description:'The previous result cannot be recovered. A new request may use another allowance and incur charges. Your current draft is kept.',action:'Prepare new request'})){if(identity.current)forgetOperation(identity.current.key);identity.current=null;setRecover(false);setError('');setMessage('Ready for a deliberate new request. Click Scan or Rewrite when ready.');}}}>Prepare a new request</button>}
-    {showOverview && view === "scan" && !scan && !document && <WorkspaceActivity />}
+    {showOverview && view === "scan" && !scan && !document && <details className="op-recent-disclosure"><summary>Recent saved CVs</summary><WorkspaceActivity /></details>}
     {scan && <section hidden={view !== "scan"} className="op-analysis op-reveal" aria-labelledby="scan-heading">
       <div className="op-section-heading"><h2 id="scan-heading" ref={heading} tabIndex={-1}>Your scan</h2><Link className="op-primary op-rewrite-link" href="/app/rewrite">Rewrite this CV <WorkbenchIcon name="arrow" /></Link></div>
-      <ScanCounts scan={scan} /><div className="op-findings"><ScanFindings scan={scan} prefix="scan" /></div>
-      <Link className="op-rewrite-link" href="/app/rewrite">Rewrite this CV <WorkbenchIcon name="arrow" /></Link>
+      <div className="op-findings"><ScanFindings scan={scan} prefix="scan" /></div>
     </section>}
     <div hidden={view !== "rewrite"} className="op-rewrite-workspace">
-      <div className="op-page-heading"><div><p className="op-eyebrow">WRITE YOUR NEXT DRAFT</p><h1>Rewrite CV</h1><p>Your direction, a complete CV, and no new claims.</p></div><Link href="/app/scan">Back to Scan CV</Link></div>
+      <div className="op-page-heading"><div><h1>Rewrite CV</h1><p>Shape your next draft without adding new claims.</p></div><Link href="/app/scan">Back to Scan CV</Link></div>
       {!scan && <section className="op-rewrite-empty"><h2>Start with a Scan</h2><p>Rewrite needs your CV, target job and a valid Scan in this open session. Nothing runs automatically.</p><Link className="op-rewrite-link" href="/app/scan">Go to Scan CV →</Link><p>Or reopen an explicitly saved CV from <Link href="/app/cvs">Saved CVs</Link>.</p></section>}
       <div className="op-writing-grid">
         <section hidden={!scan} id="rewrite-composer" className="op-composer" aria-labelledby="composer-heading">
-          <h2 id="composer-heading">Rewrite your CV</h2><p>Use the findings to guide your next draft.</p>
+          <details className="op-composer-options" open={!document || rewriteState === "pending"}><summary id="composer-heading">Rewrite instructions</summary>
           <div className="op-composer-fields">
-            <label htmlFor="rewrite-request">How should we improve it?</label><textarea id="rewrite-request" rows={4} value={instructions} onChange={e => { cancel(); setInstructions(e.target.value); }} placeholder="Keep it concise. Emphasize my customer-service experience without adding claims." />
+            <label htmlFor="rewrite-request">How should we improve it?</label><textarea id="rewrite-request" rows={3} value={instructions} onChange={e => { cancel(); setInstructions(e.target.value); }} placeholder="Make the wording clearer and emphasize my relevant experience. Keep every claim accurate." />
             <div className="op-instruction-chips" aria-label="Instruction starters">{[["Make it concise", "Keep it concise without removing important information."], ["Clearer wording", "Use clear, direct language and preserve my responsibilities."], ["Keep my voice", "Keep my natural voice and avoid inflated claims."]].map(([label, text]) => <button type="button" key={label} onClick={() => { cancel(); setInstructions(value => value ? `${value}\n${text}` : text); window.document.getElementById("rewrite-request")?.focus({ preventScroll: true }); }}>{label}<span aria-hidden="true">+</span></button>)}</div>
             <label className="op-language">Language<select value={language} onChange={e => { cancel(); setLanguage(e.target.value as "English" | "Vietnamese"); }}><option>English</option><option>Vietnamese</option></select></label>
           </div>
@@ -244,16 +244,17 @@ export default function ScanRewrite({ initial, savedId, savedRevision, showOverv
           <ContextualUsage operation="rewrite" />
           <details className="op-writing-context"><summary>Source CV & JD</summary><h3>CV</h3><pre>{cv}</pre><h3>Target job</h3><pre>{jd}</pre><Link href="/app/scan">Edit sources in Scan CV</Link></details>
           {scan && <details className="op-writing-context"><summary>Scan findings & evidence ({scan.findings.length})</summary><ScanFindings scan={scan} prefix="rewrite" /></details>}
+          </details>
         </section>
       <div hidden={!scan && !document} className="op-writing-result" data-request-state={rewriteState}>
         {rewriteState === "pending" && <section className="op-result-pending" role="status"><h2>Rewriting your CV…</h2><p>Your complete CV will appear here when the request succeeds.</p><button onClick={stopWaiting}>Stop waiting</button></section>}
          {rewriteState === "failed" && !uncertain && <p role="status" className="op-message">Rewrite did not complete. Your instructions and any previous result are kept. Review the message above.</p>}
         {!document && rewriteState !== "pending" && <section className="op-result-placeholder"><h2>Your complete CV will appear here</h2><p>Add your writing direction, then choose Rewrite CV. Editing, saving and exporting never call AI.</p></section>}
-    {document && <section className="op-result" aria-labelledby="draft-heading"><div className="op-section-heading"><div><h2 id="draft-heading" ref={documentHeading} tabIndex={-1}>{rewriteState === "succeeded" ? "Your rewritten CV is ready" : "Previous CV result"}</h2></div><span className="op-draft-state"><span aria-hidden="true">●</span>{saved && JSON.stringify(snapshot) === saved ? "Saved draft" : "Unsaved draft"}</span></div><button className="op-view-result" onClick={revealResult}>View result</button><p>Review the facts, refine the wording, then make your next move.</p>{(documentSource.cv !== cv || documentSource.jd !== jd) && <p role="status" className="op-message">Previous draft retained. Scan and rewrite the new inputs before saving it.</p>}
+    {document && <section className="op-result" aria-labelledby="draft-heading"><div className="op-section-heading"><div><h2 id="draft-heading" ref={documentHeading} tabIndex={-1}>{rewriteState === "succeeded" ? "Your rewritten CV is ready" : "Previous CV result"}</h2></div><span className="op-draft-state" role="status"><span aria-hidden="true">●</span>{saved && JSON.stringify(snapshot) === saved ? "Saved draft" : "Unsaved draft"}</span>{resultNeedsAttention && <button className="op-view-result" onClick={revealResult}>View result</button>}</div>{(documentSource.cv !== cv || documentSource.jd !== jd) && <p role="status" className="op-message">Previous draft retained. Scan and rewrite the new inputs before saving it.</p>}
       <div className="op-result-controls">
         <div className="op-result-action-row">
           <button type="button" id="cv-edit-toggle" aria-expanded={resultPanel === "edit"} aria-controls="cv-edit-panel" onClick={() => setResultPanel(value => value === "edit" ? null : "edit")}><WorkbenchIcon name="edit" />Edit complete CV</button>
-          <button type="button" id="cv-save-toggle" aria-expanded={resultPanel === "save"} aria-controls="cv-save-panel" onClick={() => setResultPanel(value => value === "save" ? null : "save")}>Save this CV (optional)</button>
+          <button type="button" id="cv-save-toggle" className={resultPanel !== "save" && serializedSnapshot !== saved ? "op-primary" : undefined} aria-expanded={resultPanel === "save"} aria-controls="cv-save-panel" onClick={() => setResultPanel(value => value === "save" ? null : "save")}>Save this CV (optional)</button>
         </div>
         <div className="op-result-panel" hidden={!resultPanel}>
           <div className="op-editor-panel" id="cv-edit-panel" role="region" aria-labelledby="cv-edit-toggle" hidden={resultPanel !== "edit"}>{structuredCV ? <StructuredCVEditor cv={structuredCV} onChange={value => { cancel(); setStructuredCV(value); setDocument(structuredText(value)); }} /> : <><label htmlFor="complete-cv">Complete CV text</label>{structure && <p>Changing raw text clears the structure assignments. Use Correct structure without AI again after editing; the saved version stays unchanged until you explicitly save.</p>}<textarea id="complete-cv" className="op-document-editor" value={document} onChange={e => { cancel(); setDocument(e.target.value); setStructure(undefined); setCorrecting(false); }} /><small>Your edits update the preview and exports. No AI request.</small></>}</div>

@@ -65,7 +65,7 @@ it("real recent metadata opens separately, and a Pro banner never claims a Free 
 });
 it("Saved CV empty state has one intake CTA; shell keeps verified greeting and real navigation", async () => {
   vi.stubGlobal("fetch", vi.fn(url => String(url).includes("billing") ? response(summary()) : response({ versions: [], profiles: [] })));
-  render(<WorkspaceShell owner="synthetic" displayName="Alex"><SavedCVs /></WorkspaceShell>); await screen.findByText("No saved CVs yet. Saving is optional.");
+  render(<WorkspaceShell owner="synthetic" displayName="Alex"><SavedCVs /></WorkspaceShell>); await screen.findByRole("heading", { name: "No saved CVs yet" });
   expect(screen.getByRole("link", { name: "Rewrite CV" })).toBeTruthy(); expect(screen.getByRole("link", { name: "Saved CVs" })).toBeTruthy();
   expect(screen.queryByRole("link", { name: /New CV/ })).toBeNull(); expect(screen.queryByRole("navigation", { name: "Workspace shortcuts" })).toBeNull(); expect(screen.getByRole("button", { name: /Account menu for Alex/ })).toBeTruthy();
   expect(screen.queryByRole("link", { name: /View Pro plans/ })).toBeNull(); expect(screen.getAllByRole("link", { name: "Scan CV" })).toHaveLength(2);for(const label of ['Overview','My experience profile','Tailor my CV','My CVs','Account and security'])expect(screen.queryByRole('link',{name:label})).toBeNull();

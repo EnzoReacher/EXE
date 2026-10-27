@@ -651,3 +651,79 @@
   .op-brand-row,.op-sidebar-bottom { flex-shrink:0; }
   .op-sidebar > nav { min-height:0; overflow-y:auto; }
 }
+
+/* Calm task surfaces. These selectors never change the CV/print typography. */
+.op-workspace { --op-teal:#17604e; --op-muted:#50645c; }
+.op-workspace .op-primary:hover { background:#124c3e; border-color:#124c3e; }
+.op-content { padding-top:32px; }
+.op-page-heading > div { min-width:0; }
+.op-content .op-page-heading h1 { font-family:inherit; font-size:32px; font-weight:650; letter-spacing:-.035em; line-height:1.2; margin-bottom:8px; }
+.op-page-heading > div > p { font-size:15px; margin:0; }
+.op-workspace .op-section-heading h2,.op-empty h2 { font-family:inherit; font-size:23px; font-weight:600; letter-spacing:-.025em; }
+.op-scan-workspace .op-input-grid { align-items:start; gap:20px; }
+.op-scan-workspace .op-input-card { box-shadow:none; border-radius:12px; min-height:330px; }
+.op-scan-workspace .op-input-card > header { padding:20px 20px 12px; }
+.op-input-card header :is(h2,label) { font-size:16px; margin:0; }
+.op-scan-workspace .op-cv-upload { padding-inline:20px; }
+.op-scan-workspace .op-upload-entry { min-height:185px; padding:16px; }
+.op-scan-workspace .op-upload-symbol { width:36px; height:36px; margin-bottom:10px; background:transparent; }
+.op-scan-workspace .op-upload-entry > strong { font-size:15px; overflow-wrap:anywhere; }
+.op-scan-workspace .op-source { flex:none; min-height:220px; height:220px; }
+.op-workspace .op-recent-disclosure { margin-top:28px; border-top:1px solid var(--op-border); font-size:13px; }
+.op-recent-disclosure > summary { color:var(--op-muted); }
+.op-analysis .op-coverage { font-size:15px; margin:20px 0 12px; }
+.op-analysis .op-scan-counts { margin-bottom:24px; }
+.op-finding { box-shadow:none; padding:18px 20px 4px; }
+.op-finding-meta { font-size:12px; }
+.op-next-step strong { font-size:12px; }
+.op-finding-group { margin-top:24px; }
+.op-separated-workspace .op-writing-grid { grid-template-columns:minmax(0,1fr); gap:24px; }
+.op-separated-workspace .op-writing-grid > .op-composer { padding:4px 20px; border:1px solid var(--op-border); background:#f2f5ef; border-radius:10px; }
+.op-workspace .op-composer-options { margin:0; }
+.op-composer-options > summary { padding-block:12px; font-size:15px; }
+.op-composer-options > .op-composer-fields { display:grid; grid-template-columns:minmax(0,1fr) 180px; column-gap:20px; align-items:start; }
+.op-composer-fields > label:first-child { grid-column:1; margin-top:8px; }
+.op-composer-fields > textarea { grid-column:1; grid-row:2; min-height:100px; }
+.op-composer-fields > .op-language { grid-column:2; grid-row:1 / 3; margin-top:8px; }
+.op-composer-fields > .op-instruction-chips { grid-column:1 / -1; margin-block:12px; }
+.op-composer-options > .op-composer-note { margin:8px 0; min-height:0; font-size:13px; }
+.op-composer-options > .op-primary { margin-top:4px; }
+.op-writing-context { margin-top:8px!important; padding-top:4px; }
+.op-writing-result .op-section-heading { align-items:center; }
+.op-writing-result .op-section-heading h2 { font-size:23px; }
+.op-draft-state { padding:4px 10px; border-radius:20px; background:#edf3ec; color:#375747; }
+.op-workspace .op-view-result { margin:0 0 0 auto; padding:4px 8px; background:transparent; border-color:transparent; font-weight:500; text-decoration:underline; }
+.op-result-controls { margin-top:16px; }
+.op-result-action-row { display:flex; flex-wrap:wrap; }
+.op-workspace .op-result-action-row > button { min-height:44px; }
+.op-result-panel { margin-top:12px; }
+.op-workspace .op-save-controls > button { background:var(--op-teal); border-color:var(--op-teal); color:white; }
+.op-workspace .op-export-toolbar { padding:12px 0; gap:12px; }
+.op-export-toolbar > span { font-size:12px; }
+.op-workspace .op-export-toolbar .op-txt-button { border-color:#cbd8d0; background:white; color:#254b3e; }
+.op-saved-card { padding:20px; box-shadow:none; }
+.op-workspace .op-saved-date { color:var(--op-muted)!important; font-size:13px!important; }
+.op-saved-actions > a { min-height:44px; display:inline-flex; align-items:center; font-size:13px; }
+.op-saved-edit-note { margin:0 0 12px; font-size:13px; }
+.op-back-link { display:inline-flex; align-items:center; min-height:44px; margin-bottom:8px; text-decoration:underline; text-underline-offset:3px; }
+.op-library-status:empty { display:none; }
+@media screen {
+  .op-workspace .op-document-surface .op-cv-paper { min-height:560px; }
+}
+@media(max-width:760px) {
+  .op-content { padding:24px 16px 40px; }
+  .op-content .op-page-heading h1 { font-size:28px; }
+  .op-page-heading { flex-wrap:wrap; align-items:flex-start; gap:12px; }
+  .op-scan-workspace .op-input-card { min-height:0; }
+  .op-composer-options > .op-composer-fields { grid-template-columns:minmax(0,1fr); }
+  .op-composer-fields > .op-language { grid-column:1; grid-row:auto; }
+  .op-composer-fields > .op-instruction-chips { grid-row:3; }
+  .op-workspace .op-composer-options > .op-primary { width:100%; }
+  .op-writing-result .op-section-heading h2 { font-size:21px; }
+  .op-saved-detail .op-page-heading > button { width:100%; }
+  .op-saved-actions { width:100%; justify-content:space-between; }
+  .op-workspace .op-export-toolbar .op-actions { display:grid; grid-template-columns:1fr 1fr; width:100%; gap:8px; }
+  .op-export-toolbar .op-actions > button:last-child { grid-column:1 / -1; }
+  .op-workspace .op-export-toolbar button { min-width:0; padding-inline:10px; }
+  .op-workspace .op-document-surface .op-cv-paper { min-height:0; padding:28px 20px; }
+}
