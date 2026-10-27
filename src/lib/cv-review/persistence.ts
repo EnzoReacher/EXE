@@ -1,5 +1,6 @@
 import { finalDocument, isCurrent, parseDraft, record, str } from "./domain";
 import { parseSnapshot } from "@/lib/scan-rewrite/saved";
+import { documentText } from "@/lib/cv-templates";
 export const TABLES = { profile: "ownpath_experience_profiles", version: "ownpath_cv_versions" } as const;
 export function savedKind(value: unknown): keyof typeof TABLES { if (value !== "profile" && value !== "version") throw new Error("Choose a profile or version."); return value; }
 export function savedId(value: unknown) { const id = str(value, 36); if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(id)) throw new Error("Invalid saved record ID."); return id; }
@@ -7,7 +8,7 @@ export function validateSave(value: unknown) {
   const body = record(value); const kind = savedKind(body.kind); const id = savedId(body.id);
   if (record(body.payload).schemaVersion === 2) {
     if (kind !== "version") throw new Error("Save this CV as a version.");
-    const snapshot = parseSnapshot(body.payload); const payload = { ...snapshot, finalDocument: snapshot.document };
+    const snapshot = parseSnapshot(body.payload); const payload = { ...snapshot, finalDocument: snapshot.structure ? documentText(snapshot.document, snapshot.templateId, snapshot.structure) : snapshot.document };
     if (new TextEncoder().encode(JSON.stringify(payload)).length > 300000) throw new Error("This snapshot is too large.");
     return { id, kind, name: snapshot.title.trim(), payload };
   }

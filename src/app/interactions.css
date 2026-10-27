@@ -17,6 +17,12 @@
 .op-confirm-dialog h2 { margin: 0 0 12px; font-size: 21px; line-height: 1.35; }
 .op-confirm-dialog p { line-height: 1.6; margin: 0 0 22px; }
 .op-confirm-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.op-confirm-acknowledgement { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 22px; line-height: 1.5; cursor: pointer; }
+.op-confirm-acknowledgement input { flex: 0 0 auto; width: 18px; height: 18px; margin: 3px 0 0; accent-color: #087b73; }
+.op-confirm-dialog button:disabled { opacity: .5; cursor: not-allowed; }
+.op-uncertainty { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-block: 16px; }
+.op-uncertainty .op-message { flex: 1 1 240px; margin: 0; }
+.op-uncertainty > button { min-height: 44px; }
 .op-confirm-dialog button { font: inherit; min-height: 44px; padding: 10px 16px; border: 1px solid #bdcec3; border-radius: 7px; background: #fff; color: #254b3e; cursor: pointer; }
 .op-confirm-dialog .op-confirm-primary { background: #087b73; color: white; border-color: #087b73; }
 .op-confirm-dialog button:hover { background: #eef4ee; }

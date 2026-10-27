@@ -8,5 +8,5 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   resolve: { alias: { "@": path.resolve(root, "src") } },
-  test: { environment: "node", include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.mjs"] },
+  test: { environment: "node", include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.mjs"], exclude: ["scripts/cv-layout.test.mjs"] }, // Geometry suite uses node:test.
 });

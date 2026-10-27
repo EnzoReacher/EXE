@@ -2,13 +2,79 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { PublicHeader, PublicFooter } from "@/components/ownpath/public-shell";
 import styles from "@/components/ownpath/ownpath.module.css";
-export const metadata = { title: "OwnPath | Scan & Rewrite your CV", description: "Compare your CV with a job description, understand what matters, then rewrite it your way." };
+import { PaperHero } from "@/components/ownpath/paper-hero";
+export const metadata = { title: "OwnPath | One profile, tailored CVs", description: "One truthful experience profile. CV versions tailored to different jobs, with every change under your control." };
+
 export default async function Home() {
-  const user = await getCurrentUser(); const destination = user ? "/app" : "/sign-up"; const cta = user ? "Go to workspace" : "Get started";
-  return <main className={styles.publicPage} data-ownpath-public id="main-content" tabIndex={-1}><PublicHeader landing />
-    <section className={styles.hero}><div className={styles.heroCopy}><p className={styles.eyebrow}>YOUR EXPERIENCE. YOUR NEXT STEP.</p><h1>Understand the fit.<br /><em>Rewrite your CV.</em></h1><p className={styles.intro}>Compare your CV with a target job. Understand the findings, tell us what to improve, and get a complete CV in your words.</p><div className={styles.actions}><Link className={styles.primary} href={destination}>{cta} ↗</Link><Link className={styles.textLink} href="#example">See a fictional example ↓</Link></div><p className={styles.small}>Scan first · Rewrite when you choose · Edit and export</p></div>
-    <aside className={styles.example} id="example"><div className={styles.exampleTop}><span className={styles.eyebrow}>SAME EXPERIENCE. CLEARER WORDING.</span><span className={styles.pill}>Fictional example</span></div><h2>Everyday work deserves clear words.</h2><div className={styles.source}><span className={styles.label}>BEFORE · EXPERIENCE PROVIDED</span><p>“At Riverside Shop, I helped customers choose products and kept the stock list up to date.”</p></div><p className={styles.job}>Target role: Sales assistant</p><div className={styles.result}><span className={styles.label}>AFTER · PROPOSED WORDING</span><p>“Helped customers select products and maintained an up-to-date stock list at Riverside Shop.”</p></div><p className={styles.provenance}>No invented sales figures, responsibilities or qualifications. You review the wording before it becomes part of your CV.</p><div className={styles.approval}>Your experience → Proposed changes → Your decision</div></aside></section>
-    <section className={styles.workflow} id="how-it-works"><div className={styles.sectionTitle}><p className={styles.eyebrow}>THREE SIMPLE STEPS</p><h2>From your CV to your next application.</h2></div><ol className={styles.steps}>{[["01", "Scan your CV", "Paste your CV and target job description. See what is demonstrated and what needs clearer evidence."], ["02", "Tell us what to improve", "Give a simple rewriting request. Choose English or Vietnamese."], ["03", "Make it yours", "Read your complete CV, edit freely, copy, export or optionally save."]].map(([n,t,c]) => <li key={n}><span className={styles.stepNumber}>{n}</span><h3>{t}</h3><p>{c}</p></li>)}</ol></section>
-    <section className={styles.faq} id="faq"><div><p className={styles.eyebrow}>GOOD TO KNOW</p><h2>Your experience stays yours.</h2><p>For every industry and career stage.</p></div><div>{[["What do I need?", "Paste your CV and a target job description as text. File uploads are not part of this release."], ["When does AI run?", "Only when you choose Scan or Rewrite after agreeing to share. Scan explains; it does not rewrite. Review draft accuracy before using it."], ["Do I need to approve every sentence?", "No. You receive the complete CV, with a full-text editor. Saving is optional."], ["Does a missing skill mean I lack it?", "No. Not found means it is not demonstrated in the supplied CV. JD requirements must not become invented qualifications."]].map(([q,a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div></section>
-    <section className={styles.closing}><p className={styles.eyebrow}>BUILD ON WHAT YOU’VE DONE</p><h2>Your next CV starts here.</h2><Link className={styles.primary} href={destination}>{cta} ↗</Link></section><PublicFooter /></main>;
+  const user = await getCurrentUser();
+  const destination = user ? "/app" : "/sign-up";
+  const cta = user ? "Go to workspace" : "Get started";
+
+  return <main className={styles.publicPage} data-ownpath-public id="main-content" tabIndex={-1}>
+    <PublicHeader landing />
+    <section className={styles.hero}>
+      <div className={styles.heroCopy}>
+        <h1>Your experience.<br /><em>Your next CV.</em></h1>
+        <p className={styles.intro}>One truthful experience profile → CV versions tailored to different jobs.</p>
+        <div className={styles.actions}>
+          <Link className={styles.primary} href={destination}>{cta} ↗</Link>
+          <Link className={styles.textLink} href="#example">See an example</Link>
+        </div>
+      </div>
+      <PaperHero />
+    </section>
+    <div className={styles.landingSections}>
+      <section className={styles.productExample} id="example" aria-labelledby="example-title" aria-describedby="example-caption">
+        <div className={styles.exampleHeading}>
+          <h2 id="example-title">See the difference.</h2>
+          <p className={styles.exampleCaption} id="example-caption">Fictional example · Not a live AI result</p>
+        </div>
+        <div className={styles.exampleGrid}>
+          <article className={styles.examplePanel} aria-labelledby="example-scan-title">
+            <h3 id="example-scan-title">Scan</h3>
+            <dl>
+              <div><dt>CV excerpt</dt><dd>Helped customers choose products.</dd></div>
+              <div><dt>Target job</dt><dd>Help customers select products and maintain stock records.</dd></div>
+              <div className={styles.exampleOutcome}><dt>Finding</dt><dd>Customer support is shown. Stock-record experience is not shown in this excerpt.</dd></div>
+            </dl>
+          </article>
+          <article className={styles.examplePanel} aria-labelledby="example-rewrite-title">
+            <h3 id="example-rewrite-title">Rewrite</h3>
+            <dl>
+              <div className={styles.exampleInstruction}><dt>Instruction</dt><dd>Make this clearer without adding experience.</dd></div>
+              <div className={styles.exampleOutcome}><dt>Result</dt><dd>Assisted customers with product selection.</dd></div>
+            </dl>
+          </article>
+        </div>
+      </section>
+      <section className={styles.workflow} id="how-it-works">
+        <div className={styles.sectionTitle}><h2>Three simple steps</h2></div>
+        <ol className={styles.steps}>
+          {[
+             ["01", "Add your experience", "Sign in, then paste a CV or describe work, study, projects or volunteering."],
+             ["02", "Add a target job", "Reuse your profile. Add a job description, or get a general wording review."],
+             ["03", "Review your CV", "Accept, edit or dismiss changes. Preview, export and save named versions."],
+          ].map(([n, t, c]) => <li key={n}><h3><span className={styles.stepNumber}>{n} —</span> {t}</h3><p>{c}</p></li>)}
+        </ol>
+      </section>
+      <section className={styles.faq} id="faq">
+        <div className={styles.faqInner}>
+          <h2>FAQs</h2>
+          <div className={styles.faqList}>
+            {[
+              ["What do I need?", "Sign in and paste an existing CV or describe your experience. A target job description is optional. Work, study, internships and volunteering are welcome across industries."],
+              ["Does a missing skill mean I lack it?", "No. It means your CV does not clearly show evidence of it."],
+              ["Can I edit and export my CV?", "Yes. Review each proposed change, copy the complete preview, download TXT and save named versions in your account."],
+              ["Is this example AI?", "No. This is a static fictional example. Viewing this public page does not send CV content to AI or save a CV. AI review inside your workspace requires your explicit consent."],
+            ].map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
+          </div>
+        </div>
+      </section>
+      <section className={styles.closing}>
+        <h2>Ready for your next application?</h2>
+        <Link className={styles.primary} href={destination}>{cta} ↗</Link>
+      </section>
+    </div>
+    <PublicFooter landing />
+  </main>;
 }

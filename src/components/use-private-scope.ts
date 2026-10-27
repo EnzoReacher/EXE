@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 /** Ignore private responses after unmount, session end or a different account. */
-export function usePrivateScope(onEnd: () => void, owner?: string) {
+export function usePrivateScope(onEnd: () => void, owner?: string, verifiedSession = 0) {
   const scope = useRef({ alive: true, epoch: 0, blocked: false });
   const reset = useRef(onEnd);
   useEffect(() => { reset.current = onEnd; });
@@ -20,6 +20,8 @@ export function usePrivateScope(onEnd: () => void, owner?: string) {
       unsubscribe = () => data.subscription.unsubscribe();
     } catch { /* Server protection remains authoritative; configuration errors are recoverable in the caller. */ }
     return () => { state.alive = false; ++state.epoch; unsubscribe?.(); window.removeEventListener("ownpath:session-ended", end); };
-  }, [owner]);
+  // A verified same-account transition may reopen the scope without remounting
+  // the component tree that holds the private, unsaved draft.
+  }, [owner, verifiedSession]);
   return scope;
 }

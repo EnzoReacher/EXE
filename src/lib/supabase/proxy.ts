@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { PRIVATE_NO_STORE_HEADERS } from "@/lib/http/security-headers";
+import { authReturnPath } from "./auth-redirect";
 
 const privatePages = ["/app", "/assessment", "/saved-work", "/analysis", "/credential-versions", "/expert", "/opportunities"];
 
@@ -46,6 +47,7 @@ export async function updateSupabaseSession(request: NextRequest) {
   const isPrintEndpoint = /^\/credential-versions\/[^/]+\/print\/?$/.test(path);
   if (!authenticated && !isPrintEndpoint && privatePages.some((prefix) => path === prefix || path.startsWith(prefix + "/"))) {
     const target = new URL("/sign-in", request.url);
+    if (path === "/app" || path.startsWith("/app/")) target.searchParams.set("next", authReturnPath(path));
     // NextURL normalizes loopback hosts to localhost. Preserve the browser's
     // actual request host so redirects do not cross Auth cookie scopes.
     // Next normalizes numeric loopback to localhost. Restore only that narrow

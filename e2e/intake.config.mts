@@ -1,0 +1,2 @@
+import { defineConfig } from "@playwright/test";
+export default defineConfig({ testDir: ".", testMatch: ["intake.spec.ts", "scan-rewrite.spec.ts", "account-profile.spec.ts", "auth-password.spec.ts", "interaction.spec.ts"], workers: 1, retries: 0, timeout: 45000, reporter: "list", outputDir: "../.factory/evidence/OWNPATH-INTAKE-20261021/browser-results", use: { baseURL: "http://127.0.0.1:4386", browserName: "chromium", headless: true, trace: "off", video: "off", screenshot: "off", serviceWorkers: "block", permissions: ["clipboard-read", "clipboard-write"] } });

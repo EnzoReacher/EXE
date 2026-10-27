@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "preview:local": "node scripts/ownpath-local-preview.mjs",
+    "preview:billing": "node scripts/ownpath-billing-demo.mjs",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

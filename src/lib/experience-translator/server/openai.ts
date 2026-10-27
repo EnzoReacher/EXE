@@ -45,11 +45,12 @@ export function parseEnvelope(value: unknown): unknown {
   if (parts.length !== 1) fail();
   try { return JSON.parse(parts[0]); } catch { fail(); }
 }
-/** Sole retry owner: native fetch, at most two attempts per structured call.
+/** Sole retry owner: native fetch, at most two attempts for legacy callers.
+ * OwnPath Scan/Rewrite explicitly select one attempt per durable reservation.
  * The workflow signal imposes the shared 45s deadline over all its calls. */
-export function createProvider(config: Configuration, request: typeof fetch = fetch): Provider {
+export function createProvider(config: Configuration, request: typeof fetch = fetch, maxAttempts: 1 | 2 = 2): Provider {
   return async (name, instructions, payload, schema, signal) => {
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       signal.throwIfAborted();
       let response: Response;
       try {
@@ -58,7 +59,7 @@ export function createProvider(config: Configuration, request: typeof fetch = fe
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.key}` },
           body: JSON.stringify({ model: config.model, store: false, background: false, stream: false, max_output_tokens: 6000, input: [{ role: "developer", content: instructions }, { role: "user", content: JSON.stringify(payload) }], text: { format: { type: "json_schema", name, schema, strict: true } } }),
         });
-      } catch { if (!signal.aborted && attempt === 0) continue; throw new LiveError("provider", signal.aborted ? "The request was cancelled or timed out. Your inputs are kept." : "OpenAI is unavailable. Your inputs are kept.", 502); }
+      } catch { if (!signal.aborted && attempt + 1 < maxAttempts) continue; throw new LiveError("provider", signal.aborted ? "The request was cancelled or timed out. Your inputs are kept." : "OpenAI is unavailable. Your inputs are kept.", 502); }
       if (!response.ok) {
         // Inspect only the bounded error code to distinguish exhausted quota;
         // never surface or log provider messages, bodies, headers or request data.
@@ -67,7 +68,7 @@ export function createProvider(config: Configuration, request: typeof fetch = fe
         if (signal.aborted) throw new LiveError("provider", "The request was cancelled or timed out. Your inputs are kept.", 502);
         const retry = response.status === 429 || response.status >= 500;
         const delay = Number(response.headers.get("retry-after") ?? "0");
-        if (!quota && retry && attempt === 0 && Number.isFinite(delay) && delay >= 0 && delay <= 2) {
+        if (!quota && retry && attempt + 1 < maxAttempts && Number.isFinite(delay) && delay >= 0 && delay <= 2) {
           await new Promise<void>((resolve, reject) => { const timer = setTimeout(done, delay * 1000); function done() { signal.removeEventListener("abort", abort); resolve(); } function abort() { clearTimeout(timer); reject(new LiveError("cancelled", "The request was cancelled. Your inputs are kept.")); } signal.addEventListener("abort", abort, { once: true }); if (signal.aborted) abort(); });
           continue;
         }

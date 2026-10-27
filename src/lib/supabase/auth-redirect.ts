@@ -64,7 +64,7 @@ export function getAuthCallbackUrl(
 // Exact paths only: no nested queries, decoding, fragments or redirect chains.
 // The callback separately allows reset after provider code exchange.
 export function authReturnPath(value: unknown, recovery = false): string {
-  if (typeof value === "string" && (["/app", "/app/profile", "/app/tailor", "/app/cvs", "/app/account"].includes(value) || /^\/app\/cvs\/[0-9a-f-]{36}$/u.test(value))) return value;
+  if (typeof value === "string" && (["/app", "/app/profile", "/app/tailor", "/app/cvs", "/app/account"].includes(value) || /^\/app\/cvs\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(value))) return value;
   if (recovery && value === "/reset-password") return value;
   return "/app";
 }

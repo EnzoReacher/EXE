@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { finalDocument, parseDraft, type Draft } from "@/lib/cv-review/domain";
 import { parseSnapshot, type Snapshot } from "@/lib/scan-rewrite/saved";
 import ScanRewrite from "./scan-rewrite";
+import { useWorkspaceSession } from "./workspace-session";
 import CVDocument from "./cv-document";
 import WorkbenchIcon from "./workbench-icon";
 import { LinkFeedback, PendingLabel, Spinner } from "./interaction-controls";
 import { useConfirmation } from "./confirmation-dialog";
 import { usePrivateScope } from "@/components/use-private-scope";
+import { VersionEditor } from "./workspace-pages";
 type Row = { id: string; name: string; payload: unknown; revision: number; created_at?: string; updated_at?: string };
 function openLabel(payload: unknown) { return payload && typeof payload === "object" && "schemaVersion" in payload && payload.schemaVersion === 2 ? "Open & rename" : "Open CV"; }
 function SavedMetadata({ row }: { row: Row }) {
@@ -50,12 +52,12 @@ export function SavedCVs() {
     finally { locked.current = false; if (scope.current.alive) { setBusy(false); setRemoving(""); } }
   }
   return <>{confirmation.dialog}
-    <div className="op-page-heading"><div><p className="op-eyebrow">YOUR APPLICATION LIBRARY</p><h1 ref={heading} tabIndex={-1}>Saved CVs</h1><p>Your experience, ready for the next opportunity.</p></div><Link className="op-button" href="/app"><WorkbenchIcon name="scan" />New CV<LinkFeedback /></Link></div>
+    <div className="op-page-heading"><div><p className="op-eyebrow">YOUR APPLICATION LIBRARY</p><h1 ref={heading} tabIndex={-1}>Saved CVs</h1><p>Your experience, ready for the next opportunity.</p></div>{!!data?.versions.length && <Link className="op-button op-primary" href="/app/scan"><WorkbenchIcon name="scan" />Scan CV<LinkFeedback /></Link>}</div>
     {error && <div role="alert" className="op-error">{error}<div className="op-actions"><button onClick={() => { if (scope.current.blocked) { window.location.reload(); return; } setError(""); setAttempt(n => n + 1); }}>{scope.current.blocked ? "Reload" : "Retry"}</button></div></div>}
-    <p role="status" className="op-inline-status">{message}</p>
+    <p role="status" className="op-inline-status op-library-status">{message}</p>
     {!data && !error && <div role="status" className="op-loading"><Spinner />Loading saved CVs…</div>}
     {data && <>
-      {!data.versions.length && <div className="op-empty"><span className="op-icon-tile"><WorkbenchIcon /></span><h2>Your next chapter starts here.</h2><p>No saved CVs yet. Saving is optional.</p><Link className="op-button op-primary" href="/app">Scan & Rewrite<WorkbenchIcon name="arrow" /></Link></div>}
+      {!data.versions.length && <div className="op-empty"><span className="op-icon-tile"><WorkbenchIcon /></span><h2>Your next chapter starts here.</h2><p>No saved CVs yet. Saving is optional.</p><Link className="op-button op-primary" href="/app/scan">Scan CV<WorkbenchIcon name="arrow" /></Link></div>}
       <div className="op-saved-list" ref={list}>{data.versions.map(row => <article className="op-saved-card" key={row.id} data-cv-id={row.id}>
         <span className="op-icon-tile"><WorkbenchIcon /></span>
         <div className="op-saved-copy"><h2><Link href={`/app/cvs/${row.id}`}>{row.name} →<LinkFeedback /></Link></h2><SavedMetadata row={row} /></div>
@@ -67,6 +69,7 @@ export function SavedCVs() {
   </>;
 }
 export function SavedCV({ id }: { id: string }) {
+  const openInWorkspace = useWorkspaceSession();
   const [row, setRow] = useState<Row | null>(null); const [error, setError] = useState(""); const [attempt, setAttempt] = useState(0);
   useEffect(() => { let active = true; read(`/api/cv-review/saved?id=${encodeURIComponent(id)}`).then(data => { if (!data.version) throw new Error("This CV could not be opened."); if (active) setRow(data.version); }).catch(e => { if (active) setError(e.message); }); return () => { active = false; }; }, [id, attempt]);
   if (error) return <><h1>Saved CV</h1><p role="alert" className="op-error">{error}</p><button onClick={() => { setError(""); setAttempt(n => n + 1); }}>Retry</button></>;
@@ -77,7 +80,7 @@ export function SavedCV({ id }: { id: string }) {
     if ("schemaVersion" in payload) snapshot = parseSnapshot(payload);
     else { const legacy = parseDraft(payload); if (!legacy.profile || !legacy.review) throw new Error(); legacyText = finalDocument(legacy.profile, legacy.review, legacy.decisions); }
   } catch { /* Show a recoverable format error without changing the record. */ }
-  if (snapshot) return <ScanRewrite initial={snapshot} savedId={row.id} savedRevision={row.revision} />;
-  if (legacyText !== null) return <><h1>{row.name}</h1><p>Earlier saved CV. Copy its text into Scan & Rewrite to create a new draft.</p><CVDocument text={legacyText} /><Link className="op-button" href="/app">Scan & Rewrite</Link></>;
+   if (snapshot) return <section><h1>{row.name}</h1><CVDocument text={snapshot.document} templateId={snapshot.templateId} structure={snapshot.structure} structuredCV={snapshot.structuredCV} /><Link className="op-button" href="/app/scan">Back to Scan CV</Link>{openInWorkspace ? <><p>Open this saved version to edit or rename it. Your current workspace is replaced only after confirmation.</p><button className="op-primary" onClick={() => void openInWorkspace({ initial: snapshot, savedId: row.id, savedRevision: row.revision })}>Open saved CV editor</button></> : <ScanRewrite initial={snapshot} savedId={row.id} savedRevision={row.revision} />}</section>;
+  if (legacyText !== null) return <VersionEditor key={row.id} id={row.id} />;
   return <><h1>Saved CV</h1><p role="alert">This saved format could not be read. Your record has not been changed.</p><Link href="/app/cvs">Back to saved CVs</Link></>;
 }

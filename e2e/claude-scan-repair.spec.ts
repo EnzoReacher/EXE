@@ -1,0 +1,99 @@
+import { test, expect } from "@playwright/test";
+import { createServerClient } from "@supabase/ssr";
+const cv = "Jamie Reed\nExperience\nHelped customers.\nEducation\nDiploma 2023";
+const jd = "Customer service required.";
+const scan = { coverage: "Selected fictional requirement only.", findings: [{ title: "Customer service", requirement: jd, excerpt: "Helped customers.", explanation: "A direct example is supplied.", nextStep: "Clarify your work.", group: "supported", priority: "important", expectation: "required" }] };
+const summary = { plan: { plan: "Free", period_key: "fictional", starts_at: "2026-10-01T00:00:00Z", ends_at: "2026-11-01T00:00:00Z", scans: 3, rewrites: 1, saves: 3, scan_used: 0, rewrite_used: 0, saved_count: 0, next_start: null, next_end: null }, orders: [], enabled: false, mode: "OFF", price: null, version: "fictional", support: null, reason: "Offline only" };
+test.beforeEach(async ({ page, context, baseURL, request }) => {
+  await request.post("http://127.0.0.1:4399/__fixture/reset");
+  await page.route("**/*", route => [baseURL, "http://127.0.0.1:4399"].includes(new URL(route.request().url()).origin) ? route.continue() : route.abort());
+  await page.route("**/api/billing/summary", route => route.fulfill({ json: summary }));
+  await page.route("**/api/cv-review/saved", route => route.fulfill({ json: { versions: [], profiles: [] } }));
+  await page.route("**/api/cv-review/disclosure", route => route.fulfill({ json: { provider: "Anthropic (Claude)", purpose: "synthetic-haiku-consent", external: true } }));
+  await page.route("**/api/cv-review/extract?*", route => route.fulfill({ json: { text: cv } }));
+  const auth = createServerClient("http://127.0.0.1:4399", "fictional-visual-key", { cookies: { getAll: () => [], setAll: async cookies => context.addCookies(cookies.map(({ name, value }) => ({ name, value, url: baseURL! }))) } });
+  expect((await auth.auth.signInWithPassword({ email: "fictional@example.test", password: "Synthetic only" })).error).toBeNull();
+});
+for (const width of [1440, 390, 320]) test(`${width}px compact Scan privacy and single-click processing`, async ({ page }, info) => {
+  let sends = 0; await page.route("**/api/cv-review/scan", route => { sends++; return route.fulfill({ json: scan }); });
+  await page.setViewportSize({ width, height: 900 }); await page.goto("/app/scan");
+  const action = page.locator(".op-scan-action"); await expect(action.getByText("Your CV and job description are sent to AI.", { exact: true })).toBeVisible();
+  const privacy = action.locator("details"); await expect(privacy).not.toHaveAttribute("open"); await expect(page.locator(".op-scan-workspace .op-contextual-usage")).not.toContainText("scans remaining");
+  await page.screenshot({ path: info.outputPath(`${width}-compact-action.png`), fullPage: true });
+  await action.getByText("Privacy details", { exact: true }).click(); await expect(privacy.locator("li")).toHaveText(["Processed by Anthropic (Claude).", "Contact filtering is limited. Review personal details before sending."]); await expect(action).not.toContainText("Rewrite");
+  await page.locator('input[type="file"]').setInputFiles({ name: "synthetic.pdf", mimeType: "application/pdf", buffer: Buffer.from("Synthetic extraction fixture") }); await page.getByLabel("Target job").fill(jd);
+  expect(sends).toBe(0);
+  await page.getByRole("button", { name: "Scan CV", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Your scan", exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  expect(sends).toBe(1); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+test("uncertain failure retains inputs, stops repeat sends and keeps Usage accessible", async ({ page }) => {
+  let sends = 0; await page.route("**/api/cv-review/scan", route => { sends++; return route.fulfill({ status: 502, json: { error: { code: "reconciliation_required", message: "PRIVATE_INTERNAL_ERROR" } } }); });
+  await page.goto("/app/scan"); await page.locator('input[type="file"]').setInputFiles({ name: "synthetic.pdf", mimeType: "application/pdf", buffer: Buffer.from("Synthetic fixture") }); await page.getByLabel("Target job").fill(jd); await page.getByRole("button", { name: "Scan CV", exact: true }).click();
+  await expect(page.locator("#scan-error")).toContainText("may have incurred charges"); await expect(page.locator("#scan-error")).not.toContainText("PRIVATE_INTERNAL"); await expect(page.getByRole("button", { name: "Scan CV", exact: true })).toBeDisabled(); await expect(page.getByLabel("Target job")).toHaveValue(jd); await expect(page.getByLabel("Your CV", { exact: true })).toHaveValue(cv); expect(sends).toBe(1);
+  await page.getByRole("button", { name: "View usage", exact: true }).click(); await expect(page.getByRole("dialog", { name: "Settings", exact: true }).getByRole("heading", { name: "Usage", exact: true })).toBeVisible(); await page.keyboard.press("Escape"); await expect(page.getByRole("button", { name: "Scan CV", exact: true })).toBeDisabled(); expect(sends).toBe(1);
+});
+for (const failure of ['malformed', 'truncated', 'http', 'acknowledgement']) test(`Single-click Rewrite, duplicate guard and edited-draft preservation after ${failure}`, async ({ page }) => {
+  let scans=0, rewrites=0;
+  await page.route('**/api/cv-review/scan',route=>{scans++;return route.fulfill({json:scan});});
+  let release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;});
+  await page.route('**/api/cv-review/rewrite',async route=>{rewrites++;await gate;await route.fulfill({json:{replacements:[],changes:[],notes:[]}});});
+  await page.goto('/app/scan');await page.locator('input[type=file]').setInputFiles({name:'synthetic.pdf',mimeType:'application/pdf',buffer:Buffer.from('Synthetic fixture')});await page.getByLabel('Target job').fill(jd);
+  await page.getByRole('button',{name:'Scan CV',exact:true}).click();await expect(page.getByRole('heading',{name:'Your scan',exact:true})).toBeVisible();expect([scans,rewrites]).toEqual([1,0]);
+  await page.getByRole('link',{name:'Rewrite this CV',exact:true}).first().click();await page.getByLabel('How should we improve it?').fill('Preserve all facts.');
+  await expect(page.locator('.op-composer .op-sharing')).toContainText('current draft and rewrite instructions');expect(rewrites).toBe(0);
+  await page.getByRole('button',{name:'Rewrite CV',exact:true}).click();await expect.poll(()=>rewrites).toBe(1);await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.getByRole('button',{name:'Rewriting…',exact:true}).dispatchEvent('click');expect(rewrites).toBe(1);release();await expect(page.getByRole('heading',{name:'Your rewritten CV is ready',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Edit complete CV',exact:true}).click();const edited=cv+'\nManual edit retained';await page.getByLabel('Complete CV text').fill(edited);
+  await page.unroute('**/api/cv-review/rewrite');
+  await page.route('**/api/cv-review/rewrite',route=>{
+    rewrites++;const body=route.request().postDataJSON();expect(body.base).toBe(edited);expect(body.scan).toEqual(scan);
+    return route.fulfill(failure==='malformed'?{json:{replacements:[],changes:[],notes:[null]}}:failure==='truncated'?{status:200,contentType:'application/json',body:'{"replacements":['}:failure==='acknowledgement'?{status:503,json:{error:{code:'usage_acknowledgement',message:'Usage acknowledgement could not be confirmed.'}}}:{status:502,json:{error:{code:'reconciliation_required',message:'Provider request failed.'}}});
+  });
+  await page.getByRole('button',{name:'Rewrite again',exact:true}).click();await page.getByRole('dialog',{name:'Replace your edited CV?'}).getByRole('button',{name:'Rewrite edited CV',exact:true}).click();await expect(page.locator('#scan-error')).toContainText('result could not be verified');await expect(page.getByLabel('Complete CV text')).toHaveValue(edited);await expect(page.getByLabel('Formatted CV')).toContainText('Manual edit retained');await expect(page.getByRole('button',{name:'Rewrite again',exact:true})).toBeDisabled();expect([scans,rewrites]).toEqual([1,2]);
+});
+for (const width of [1440, 390, 320]) test(`${width}px explicit uncertainty recovery requires acknowledgement and never sends automatically`, async ({ page }, info) => {
+  const ids: string[] = [];
+  await page.route("**/api/cv-review/scan", route => {
+    ids.push(route.request().postDataJSON().requestId);
+    return route.fulfill({ status: ids.length === 1 ? 502 : 429, json: { error: { code: "reconciliation_required", message: ids.length === 1 ? "PRIVATE" : "Previous requests need reconciliation before another send." } } });
+  });
+  await page.setViewportSize({ width, height: 800 }); await page.goto("/app/scan");
+  await page.locator('input[type="file"]').setInputFiles({ name: "synthetic.pdf", mimeType: "application/pdf", buffer: Buffer.from("Synthetic fixture") }); await page.getByLabel("Target job").fill(jd);
+  await page.getByRole("button", { name: "Scan CV", exact: true }).click();
+  const review = page.getByRole("button", { name: "Review and continue", exact: true }); await review.click();
+  const dialog = page.getByRole("dialog", { name: "Review and continue", exact: true }); const prepare = dialog.getByRole("button", { name: "Prepare a new request", exact: true }); const check = dialog.getByRole("checkbox");
+  await expect(dialog.getByRole("button", { name: "Cancel", exact: true })).toBeFocused(); await expect(check).not.toBeChecked(); await expect(prepare).toBeDisabled();
+  await page.keyboard.press("Tab"); await expect(check).toBeFocused();
+  await page.keyboard.press("Shift+Tab"); await expect(dialog.getByRole("button", { name: "Cancel", exact: true })).toBeFocused();
+  await page.keyboard.press("Escape"); await expect(review).toBeFocused(); await expect(page.getByRole("button", { name: "Scan CV", exact: true })).toBeDisabled(); expect(ids).toHaveLength(1);
+  await review.click(); await check.check(); await expect(prepare).toBeEnabled(); await page.screenshot({ path: info.outputPath(`${width}-recovery.png`) });
+  await prepare.click(); await expect(page.getByText(/New request prepared/)).toBeFocused(); expect(ids).toHaveLength(1);
+  await expect(page.getByLabel("Target job")).toHaveValue(jd); await expect(page.getByLabel("Your CV", { exact: true })).toHaveValue(cv);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.locator("#scan-error")).toHaveText("Previous requests need reconciliation before another send.");
+  expect(ids).toHaveLength(2); expect(ids[1]).not.toBe(ids[0]); await expect(review).not.toBeVisible();
+});
+for (const width of [1440, 390]) test(`${width}px known unresolved recovery is rendered without a remembered pause or request`, async ({ page }, info) => {
+  let sends = 0;
+  await page.route("**/api/cv-review/scan", route => { sends++; return route.fulfill({ json: scan }); });
+  await page.setViewportSize({ width, height: 850 }); await page.goto("/app/scan");
+  await page.getByText("Try an example", { exact: true }).click(); await page.getByRole("button", { name: "Sales", exact: true }).click();
+  const entry = page.getByRole("button", { name: "Review an unresolved request", exact: true });
+  await expect(entry).toBeVisible(); await page.screenshot({ path: info.outputPath(`${width}-reachable-recovery.png`), fullPage: true });
+  await entry.click(); const dialog = page.getByRole("dialog", { name: "Review and continue", exact: true });
+  await expect(dialog.getByRole("button", { name: "Prepare a new request", exact: true })).toBeDisabled();
+  await page.screenshot({ path: info.outputPath(`${width}-known-unresolved-dialog.png`) });
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Review and continue", exact: true })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Scan CV", exact: true })).toBeDisabled();
+  // A deliberate controlled remount verifies marker restoration, not an owner recovery shortcut.
+  await page.reload(); await expect(page.getByRole("button", { name: "Review and continue", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Scan CV", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Review and continue", exact: true }).click();
+  await dialog.getByRole("checkbox").check(); await dialog.getByRole("button", { name: "Prepare a new request", exact: true }).click();
+  await expect(page.getByText(/New request prepared/)).toBeVisible(); expect(sends).toBe(0);
+  expect(await page.evaluate(() => !!sessionStorage.getItem("ownpath-ai-prepared-request"))).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

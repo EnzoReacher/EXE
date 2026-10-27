@@ -21,8 +21,8 @@ function PasswordVisibilityIcon({ visible }: { visible: boolean }) {
   </svg>;
 }
 
-export default function AuthPanel({ mode, notice, initialUser, resetAllowed = false, accountView, beforeSignOut }: {
-  mode: AccountMode; notice?: string; next?: string; initialUser?: User | null; resetAllowed?: boolean; accountView?: "security"; beforeSignOut?: () => boolean;
+export default function AuthPanel({ mode, notice, next, initialUser, resetAllowed = false, accountView, beforeSignOut, idPrefix = "" }: {
+  mode: AccountMode; notice?: string; next?: string; initialUser?: User | null; resetAllowed?: boolean; accountView?: "security" | "menu"; beforeSignOut?: () => boolean; idPrefix?: string;
 }) {
   const [fields, setFields] = useState<AuthFields>(empty);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -37,6 +37,9 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
   const [user, setUser] = useState<User | null>(initialUser || null);
   const [complete, setComplete] = useState(false);
   const [verificationPending, setVerificationPending] = useState(false);
+  const [confirmationPending, setConfirmationPending] = useState(false);
+  const confirmationHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => { if (confirmationPending) confirmationHeading.current?.focus(); }, [confirmationPending]);
   const client = useRef<Client | null>(null);
   const alive = useRef(false);
   const locked = useRef(false);
@@ -45,6 +48,7 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
   const identityEnded = useRef(false);
   const form = useRef<HTMLFormElement>(null);
 
+  const initialUserId = initialUser?.id;
   useEffect(() => {
     alive.current = true;
     let stopped = false;
@@ -55,12 +59,15 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
     let timer: ReturnType<typeof setTimeout> | undefined;
     let unsubscribe: (() => void) | undefined;
     const unavailable = () => { identityEnded.current = true; ++checkRevision; ++epoch.current; setUser(null); setFields(empty); setReady(true); };
-    if (accountView === "security") window.addEventListener("ownpath:account-unavailable", unavailable);
+    if (accountView === "security" || accountView === "menu") window.addEventListener("ownpath:account-unavailable", unavailable);
     const verify = async (sdk: Client) => {
       const revision = ++checkRevision;
       try {
         const { data, error } = await sdk.auth.getUser();
-        if (alive.current && revision === checkRevision) setUser(error || (initialUser && data.user?.id !== initialUser.id) ? null : data.user);
+        if (alive.current && revision === checkRevision) {
+          setUser(error || (initialUserId && data.user?.id !== initialUserId) ? null : data.user);
+          if (accountView === "menu" && ((!error && (!data.user || data.user.id !== initialUserId)) || error?.status === 401 || error?.name === "AuthSessionMissingError")) window.dispatchEvent(new Event("ownpath:account-unavailable"));
+        }
       } catch {
         if (alive.current && revision === checkRevision) { setUser(null); setError("We could not check your session. Reload to try again."); }
       } finally {
@@ -76,7 +83,7 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
       setConfigured(true);
       const { data } = sdk.auth.onAuthStateChange((event, session) => {
         if (!alive.current) return;
-        if (initialUser && session && session.user.id !== initialUser.id) {
+        if (initialUserId && session && session.user.id !== initialUserId) {
           identityEnded.current = true;
           ++identityRevision.current; ++checkRevision; ++epoch.current; clearTimeout(timer);
           setUser(null); setFields(empty); setReady(true); return;
@@ -106,7 +113,7 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
       clearTimeout(timer); unsubscribe?.(); client.current = null;
       window.removeEventListener("ownpath:account-unavailable", unavailable);
     };
-  }, [initialUser?.id, accountView]);
+  }, [initialUserId, accountView]);
 
   async function verifyAndContinue(sdk: Client) {
     const revision = epoch.current;
@@ -116,7 +123,7 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
       if (verified.error || !verified.data.user) {
         setUser(null); setError("We could not verify your session. Retry verification or sign in again. You have not been redirected."); return;
       }
-      continueAfterAuth();
+      continueAfterAuth(mode === "signUp" ? "/app" : next);
     } catch {
       if (alive.current && revision === epoch.current) setError("We could not verify your session. Retry verification or sign in again. You have not been redirected.");
     }
@@ -174,6 +181,7 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
     try {
       if (action === "verify") { await verifyAndContinue(sdk); return; }
       if (action === "logout") {
+        window.dispatchEvent(new Event("ownpath:explicit-logout"));
         const { error } = await sdk.auth.signOut({ scope: "local" });
         // SDK SIGNED_OUT can increment epoch; successful logout does not navigate.
         if (!alive.current || logoutIdentity !== identityRevision.current) return;
@@ -200,7 +208,8 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
             await verifyAndContinue(sdk);
             return;
           }
-          setError("The authentication provider did not return a signup session. OwnPath expects signup without email confirmation: the site owner must disable Confirm email in the Supabase dashboard. You have not been redirected. If you already have an account, try signing in.");
+          setConfirmationPending(true);
+          setMessage("If this address is eligible, check its inbox and spam folder for a confirmation link. Open the newest link in this browser. You may already have an account; try signing in. No email delivery is confirmed.");
           return;
         }
         setMessage(mode === "forgot"
@@ -238,12 +247,18 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
   const protectedMode = mode === "account" || mode === "reset";
   const canReset = mode !== "reset" || (resetAllowed && !!user);
   const hasPassword = mode === "signIn" || mode === "signUp" || mode === "reset";
-  const showForm = mode !== "account" && canReset && !complete;
+  const showForm = mode !== "account" && canReset && !complete && !confirmationPending;
   const actionLabel = verificationPending ? "Retry verification" : mode === "forgot" ? "Send reset link" : mode === "reset" ? "Update password" : titles[mode];
   const pendingLabel = pendingAction === "verify" ? "Verifying session…" : mode === "forgot" ? "Sending reset link…" : mode === "reset" ? "Updating password…" : mode === "signIn" ? "Signing in…" : "Creating account…";
+  if (mode === "account" && accountView === "menu") return <div className="op-account-signout">
+    {!ready && <p role="status">Checking authentication…</p>}
+    {error && <p role="alert" className="op-error">{error}</p>}
+    {ready && !user && <a data-account-item href="/sign-in" target="_blank" rel="noopener noreferrer">Sign in again ↗</a>}
+    <button data-account-item type="button" disabled={!ready || busy || !user} aria-busy={busy} onClick={() => void submit(undefined, "logout")}><WorkbenchIcon name="account" /><PendingLabel pending={busy} reserve="Signing out…">{busy ? "Signing out…" : "Sign out"}</PendingLabel></button>
+  </div>;
   if (mode === "account" && accountView === "security") return <>
-    {user && <section className="op-profile-card" aria-labelledby="account-security-heading"><header><span className="op-icon-tile"><WorkbenchIcon name="account" /></span><div><h2 id="account-security-heading">Security</h2><p>Keep access to your account secure.</p></div></header><h3>Password</h3><p>Choose a new password using our secure password form.</p><Link className="op-button" href="/reset-password">Change password<WorkbenchIcon name="arrow" /></Link></section>}
-    {(user || error) && <section className="op-profile-card op-signout-card" aria-labelledby="account-signout-heading"><h2 id="account-signout-heading">Sign out</h2><p>Sign out of OwnPath in this browser.</p>{!ready && <p role="status">Checking authentication…</p>}{error && <p className="op-error" role="alert">{error}</p>}{user && <button disabled={!ready || busy} aria-busy={busy} onClick={() => void submit(undefined, "logout")}><PendingLabel pending={busy} reserve="Signing out…">{busy ? "Signing out…" : "Sign out"}</PendingLabel></button>}</section>}
+    {user && <section className="op-profile-card" aria-labelledby={`${idPrefix}account-security-heading`}><header><span className="op-icon-tile"><WorkbenchIcon name="account" /></span><div><h2 id={`${idPrefix}account-security-heading`}>Security</h2><p>Keep access to your account secure.</p></div></header><h3>Password</h3><p>Choose a new password using our secure password form.</p><Link className="op-button" href="/reset-password">Change password<WorkbenchIcon name="arrow" /></Link></section>}
+    {(user || error) && <section className="op-profile-card op-signout-card" aria-labelledby={`${idPrefix}account-signout-heading`}><h2 id={`${idPrefix}account-signout-heading`}>Sign out</h2><p>Sign out of OwnPath in this browser.</p>{!ready && <p role="status">Checking authentication…</p>}{error && <p className="op-error" role="alert">{error}</p>}{user && <button disabled={!ready || busy} aria-busy={busy} onClick={() => void submit(undefined, "logout")}><PendingLabel pending={busy} reserve="Signing out…">{busy ? "Signing out…" : "Sign out"}</PendingLabel></button>}</section>}
   </>;
   return <section className={styles.authCard} aria-labelledby="auth-form-title">
     <h2 id="auth-form-title">{titles[mode]}</h2>
@@ -251,6 +266,7 @@ export default function AuthPanel({ mode, notice, initialUser, resetAllowed = fa
     {!ready && <p role="status">Checking authentication…</p>}
     {error && <div className={styles.error} role="alert">{error}</div>}
     {message && <div className={styles.notice} role="status">{message}</div>}
+    {confirmationPending && <section aria-labelledby="confirmation-heading"><h3 id="confirmation-heading" ref={confirmationHeading} tabIndex={-1}>Check your email</h3><p>Confirm your account before opening the workspace. You have not been signed in or redirected.</p><button type="button" disabled={busy || !ready} onClick={() => void submit(undefined, "resend")}>{busy ? "Sending…" : "Resend confirmation email"}</button><button type="button" disabled={busy} onClick={() => { setConfirmationPending(false); setMessage(""); setError(""); }}>Change email</button></section>}
     {protectedMode && ready && !user && configured && <div className={styles.notice}>Your session is missing or expired. Sign in, or request a fresh reset link.</div>}
     {mode === "reset" && !resetAllowed && <p>We could not verify a signed-in session on the server. Open the newest recovery link in the browser that requested it, or sign in first.</p>}
     {mode === "account" && user && <><p className={styles.accountEmail}>{user.email || "Signed-in account"}</p><button className={styles.primary} disabled={!ready || busy} aria-busy={busy} onClick={() => void submit(undefined, "logout")}><PendingLabel pending={busy} reserve="Signing out…">{busy ? "Signing out…" : "Sign out"}</PendingLabel></button></>}

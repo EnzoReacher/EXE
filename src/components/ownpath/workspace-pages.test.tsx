@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 import Link from "next/link";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { draftProfile, emptyDraft, parseReview, type Draft } from "@/lib/cv-review/domain";
+import { draftProfile, emptyDraft, parseReview, revision, type Draft } from "@/lib/cv-review/domain";
 let initial: Draft;
 const Shared = createContext<{draft: Draft; setDraft: React.Dispatch<React.SetStateAction<Draft>>} | null>(null);
 vi.mock("./workspace-shell",()=>({useDraft:()=>{const shared=useContext(Shared);const [draft,setDraft]=useState(initial);return shared || {draft,setDraft};}}));
@@ -38,6 +38,16 @@ it("does not claim saved on missing schema and preserves final CV",async()=>{
 it("distinguishes failed retrieval from a genuinely empty account",async()=>{
  vi.stubGlobal("fetch",vi.fn().mockResolvedValue({ok:false,json:async()=>({error:"Temporary retrieval failure"})}));render(<WorkspaceHome/>);await screen.findByRole("alert");expect(screen.queryByText("No saved versions yet. Start with your experience profile.")).toBeNull();expect(screen.getByRole("button",{name:"Retry retrieval"})).toBeTruthy();
 });
+it("shows first-user onboarding only after an actual empty saved response",async()=>{
+ initial={...emptyDraft};render(<WorkspaceHome/>);expect(screen.queryByRole("link",{name:"Add your first CV"})).toBeNull();await screen.findByRole("link",{name:"Add your first CV"});expect(screen.getByText("No saved versions yet. Start with your experience profile.")).toBeTruthy();expect(screen.queryByRole("link",{name:"Tailor a CV for a job"})).toBeNull();
+});
+it("keeps the target JD when selecting reusable saved experience",async()=>{
+ const payload={...initial,review:null,decisions:{},step:"profile"};initial={...emptyDraft,jd:"Customer support role"};vi.stubGlobal("fetch",vi.fn().mockResolvedValue({ok:true,json:async()=>({profiles:[{id:"profile-A",name:"My sales experience",payload}],versions:[]})}));
+ render(<TailorEditor/>);await screen.findByRole("option",{name:"My sales experience"});fireEvent.change(screen.getByLabelText("Saved experience profile"),{target:{value:"profile-A"}});expect((screen.getByLabelText("Job description (optional)") as HTMLTextAreaElement).value).toBe("Customer support role");expect(screen.getByRole("button",{name:"Propose improvements"})).toBeTruthy();
+});
+it("shows the actual reviewed profile wording alongside original pasted wording after manual changes",()=>{
+ const blocks=initial.profile!.blocks.map(b=>b.id==="b2"?{...b,text:"Checked original invoices."}:b);const profile={...initial.profile!,blocks,revision:revision(blocks)};const review=parseReview({summary:[],suggestions:[{blockId:"b2",original:"Checked original invoices.",proposed:"Checked original invoices!",reason:"Punctuation",sourceIds:["b2"],kind:"wording",question:""}],mapping:[]},profile,"","English");initial={...initial,profile,review};render(<TailorEditor/>);const details=screen.getByText("Source details").closest("details")!;expect(details.textContent).toContain("Checked original invoices.");expect(details.textContent).toContain("Original pasted wording: Checked invoices.");
+});
 it("keeps oversized source intact for correction",async()=>{
  initial={...emptyDraft,source:"x".repeat(24001)};render(<ProfileEditor/>);fireEvent.click(screen.getByRole("button",{name:"Review text myself"}));await waitFor(()=>expect(screen.getByRole("alert").textContent).toContain("oversized"));expect((screen.getByLabelText("Original CV or experience") as HTMLTextAreaElement).value.length).toBe(24001);
 });
@@ -55,7 +65,7 @@ it("aborts a pending AI response on unmount without updating a newer draft",asyn
 it("warns before losing saved-version edits and clears the warning only after confirmed save",async()=>{
  const payload={...initial,name:"Saved CV"};vi.stubGlobal("confirm",vi.fn().mockReturnValue(false));
  vi.stubGlobal("fetch",vi.fn().mockImplementation((_:string,options:RequestInit)=>Promise.resolve({ok:true,json:async()=>options?.method==="PATCH"?{saved:true,revision:2}:{version:{id:"11111111-1111-4111-8111-111111111111",name:"Saved CV",payload,revision:1}}})));
- render(<><Link href="/app/cvs">Leave editor</Link><VersionEditor id="11111111-1111-4111-8111-111111111111"/></>);await screen.findByLabelText("Version name");fireEvent.change(screen.getByLabelText("Version name"),{target:{value:"Edited CV"}});const before=new Event("beforeunload",{cancelable:true});window.dispatchEvent(before);expect(before.defaultPrevented).toBe(true);expect(fireEvent.click(screen.getByRole("link",{name:"Leave editor"}))).toBe(false);expect(window.confirm).toHaveBeenCalledWith("Leave this CV without saving your edits?");fireEvent.click(screen.getByRole("button",{name:"Save changes"}));await screen.findByText("Changes saved.");const after=new Event("beforeunload",{cancelable:true});window.dispatchEvent(after);expect(after.defaultPrevented).toBe(false);
+  render(<><Link href="/app/cvs">Leave editor</Link><VersionEditor id="11111111-1111-4111-8111-111111111111"/></>);await screen.findByLabelText("Version name");fireEvent.change(screen.getByLabelText("Version name"),{target:{value:"Edited CV"}});const before=new Event("beforeunload",{cancelable:true});window.dispatchEvent(before);expect(before.defaultPrevented).toBe(true);expect(fireEvent.click(screen.getByRole("link",{name:"Leave editor"}))).toBe(false);expect(window.confirm).toHaveBeenCalledWith("Leave this CV without saving your edits?");fireEvent.click(screen.getByRole("button",{name:"Save changes"}));await screen.findByText("Changes saved.");await waitFor(()=>{const after=new Event("beforeunload",{cancelable:true});window.dispatchEvent(after);expect(after.defaultPrevented).toBe(false);});
 });
 
 it("manual profile review needs no consent/provider, preserves content, and clears saved status after edits",async()=>{

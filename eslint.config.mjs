@@ -15,7 +15,8 @@ const eslintConfig = defineConfig([
     "web/**",
     // Generated private snapshots/check outputs are not application source.
     ".factory/backups/**",
-    ".factory/evidence/**",
+     ".factory/evidence/**",
+     ".local-demo/**",
   ]),
 ]);
 
