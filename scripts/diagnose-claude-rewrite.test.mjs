@@ -1,3 +1,5 @@
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { afterEach, expect, it, vi } from 'vitest';
 import { mkdtemp, readFile, stat, rm, chmod } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -6,7 +8,7 @@ import { runOwnerRewriteDiagnostic, syntheticRewritePayload } from './diagnose-c
 import {completeRewriteFixture} from '../src/lib/scan-rewrite/structured-rewrite.fixture';
 const temporary = [];
 afterEach(async () => { vi.restoreAllMocks(); await Promise.all(temporary.splice(0).map(dir => rm(dir, { recursive: true, force: true }))); });
-const directory = async () => { const dir = await mkdtemp('/tmp/opencode/diagnostic-test-'); temporary.push(dir); return dir; };
+const directory = async () => { const dir = await mkdtemp(join(tmpdir(), 'diagnostic-test-')); temporary.push(dir); return dir; };
 const output = { replacements: [{ lineId: 'b4', original: 'Helped customers choose products and kept the stock list up to date.', text: 'Assisted customers with product selection and kept the stock list up to date.' }], changes: ['Clearer wording.'], notes: ['The manager’s supplier negotiation remains attributed to the manager.'] };
 const envelope = (value = completeRewriteFixture(syntheticRewritePayload().base), stop_reason = 'end_turn') => ({ type: 'message', role: 'assistant', stop_reason, content: [{ type: 'text', text: JSON.stringify(value) }], usage: { input_tokens: 1234, output_tokens: 234, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, PRIVATE: 'DO_NOT_LOG' } });
 const run = (request, outputDirectory, args = ['--execute-paid-once']) => runOwnerRewriteDiagnostic({ args, getKey: () => 'SYNTHETIC_API_KEY_NEVER_LOG', request, outputDirectory });
