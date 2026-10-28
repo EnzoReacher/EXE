@@ -32,7 +32,11 @@ export function selectionSchema(catalog: Catalog) {
     shape({ ...common, group: choice("unclear"), excerptSourceId: choice("", ...catalog.cv.map(block => block.id)) }),
     shape({ ...common, group: choice("not_found"), excerptSourceId: choice("") }),
   ];
-  return shape({ coverage: scanStringSchema(scanLimits.coverage), findings: {
+  // Scope is mechanical catalog metadata, not model-authored analysis. A single
+  // enum value enforces the existing length bound at generation time without
+  // unsupported regex/maxLength keywords, truncation or a second paid request.
+  const coverage = `Only selectable source units were reviewed; this is not an exhaustive assessment. ${catalog.omittedCvBlocks} CV blocks and ${catalog.omittedJdLines} JD lines were excluded by source-unit limits. Missing evidence does not establish missing ability.`;
+  return shape({ coverage: { ...scanStringSchema(scanLimits.coverage), enum: [coverage] }, findings: {
     type: "array", items: { anyOf: branches },
     description: `0 to ${scanLimits.findings} source selections. Use [] when none is safe.`,
   } });
