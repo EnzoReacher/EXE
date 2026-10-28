@@ -1,3 +1,4 @@
+import {scanCatalog,selectionSchema} from './scan-selection';
 import {expect,it,vi} from 'vitest';
 vi.mock('server-only',()=>({}));
 import {parseScan,scanSources} from './domain';
@@ -35,4 +36,16 @@ it('retains the exact 700 UTF-16 boundary and never coerces or truncates a rejec
 });
 it.each(['Used Excel for reporting.','Conducted market research.','Managed import/export shipments.'])('still rejects invented evidence: %s',excerpt=>{
   expect(()=>parseScan({coverage:'Selected requirements only.',findings:[{...findings[0],excerpt,excerptSourceId:'cv:b3',group:'supported'}]},{cv,jd},scanSources({cv,jd}))).toThrow(expect.objectContaining({stage:'grounding',rule:'cv_quote'}));
+});
+
+it('constrains provider coverage to bounded catalog metadata even for oversized source units',()=>{
+  const catalog=scanCatalog({cv:'Experience\n'+'x'.repeat(2001),jd:'A required skill.\n'+'y'.repeat(1201)});
+  const schema=selectionSchema(catalog) as {properties:{coverage:{enum:string[]}}};
+  const values=schema.properties.coverage.enum;
+  expect(values).toHaveLength(1);
+  expect(values[0].length).toBeLessThanOrEqual(700);
+  expect(values[0]).toContain('1 CV blocks and 1 JD lines');
+  expect(values[0]).not.toContain('x'.repeat(100));
+  expect(values[0]).not.toContain('y'.repeat(100));
+  expect(()=>parseScan({coverage:values[0],findings:[]},{cv,jd})).not.toThrow();
 });
