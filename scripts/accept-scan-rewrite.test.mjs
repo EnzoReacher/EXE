@@ -1,3 +1,5 @@
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { it, expect, vi } from 'vitest';
 import { mkdtemp, rm, readFile } from 'node:fs/promises';
 vi.mock('server-only',()=>({}));
@@ -7,7 +9,7 @@ import { syntheticRewritePayload } from './diagnose-claude-rewrite-runner';
 const config={provider:'anthropic',key:'PRIVATE_SYNTHETIC',model:'claude-haiku-4-5-20251001',origin:'http://127.0.0.1:4317'};
 const envelope=data=>Response.json({type:'message',role:'assistant',stop_reason:'end_turn',content:[{type:'text',text:JSON.stringify(data)}]});
 it('requires authorization, chains only an accepted Scan, persists dispatch counts and refuses a repeat',async()=>{
- const directory=await mkdtemp('/tmp/opencode/pair-test-');
+ const directory=await mkdtemp(join(tmpdir(), 'pair-test-'));
  try{
   const request=vi.fn().mockResolvedValueOnce(envelope({coverage:'Selected fictional requirement.',findings:[]})).mockResolvedValueOnce(envelope(completeRewriteFixture(syntheticRewritePayload().base)));
   const options={getConfig:()=>config,request,outputDirectory:directory};
@@ -20,7 +22,7 @@ it('requires authorization, chains only an accepted Scan, persists dispatch coun
  }finally{await rm(directory,{recursive:true});}
 });
 it('a failed Scan never dispatches Rewrite or retries',async()=>{
- const directory=await mkdtemp('/tmp/opencode/pair-failure-test-');try{
+ const directory=await mkdtemp(join(tmpdir(), 'pair-failure-test-'));try{
   const request=vi.fn().mockResolvedValue(Response.json({error:{type:'invalid_request_error',message:'Schema is too complex for compilation. PRIVATE'}},{status:400}));
   const result=await runAcceptance({args:['--execute-paid-pair-once'],getConfig:()=>config,request,outputDirectory:directory});
   expect(result.reports).toHaveLength(1);expect(result.reports[0]).toMatchObject({operation:'scan',outcome:'rejected',inferenceRequests:1,providerErrorClass:'schema_complexity'});expect(request).toHaveBeenCalledOnce();expect(JSON.stringify(result)).not.toContain('PRIVATE');
