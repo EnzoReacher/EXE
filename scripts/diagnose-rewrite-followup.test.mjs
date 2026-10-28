@@ -1,3 +1,5 @@
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import {it,expect,vi} from 'vitest';
 import {mkdtemp,writeFile,readFile,rm,symlink} from 'node:fs/promises';
 vi.mock('server-only',()=>({}));
@@ -5,7 +7,7 @@ import {runRewriteFollowup,acceptedRewriteInput} from './diagnose-rewrite-follow
 import {syntheticRewritePayload} from './diagnose-claude-rewrite-runner';
 import {completeRewriteFixture} from '../src/lib/scan-rewrite/structured-rewrite.fixture';
 const config={provider:'anthropic',key:'PRIVATE_SYNTHETIC_KEY',origin:'http://127.0.0.1:4317',model:'claude-haiku-4-5-20251001'};
-async function fixture(){const directory=await mkdtemp('/tmp/opencode/rewrite-followup-test-');const acceptedFile=directory+'/scan.json',p=syntheticRewritePayload();await writeFile(acceptedFile,JSON.stringify({syntheticOnly:true,source:{cv:p.cv,jd:p.jd},acceptedScan:p.scan,reports:[{operation:'scan',outcome:'accepted',inferenceRequests:1,httpStatus:200,stopReason:'end_turn',model:config.model,providerRequestId:'req_synthetic_scan'}]}),{mode:0o600});return{directory,acceptedFile};}
+async function fixture(){const directory=await mkdtemp(join(tmpdir(), 'rewrite-followup-test-'));const acceptedFile=directory+'/scan.json',p=syntheticRewritePayload();await writeFile(acceptedFile,JSON.stringify({syntheticOnly:true,source:{cv:p.cv,jd:p.jd},acceptedScan:p.scan,reports:[{operation:'scan',outcome:'accepted',inferenceRequests:1,httpStatus:200,stopReason:'end_turn',model:config.model,providerRequestId:'req_synthetic_scan'}]}),{mode:0o600});return{directory,acceptedFile};}
 it('requires an explicit flag without loading configuration or calling Scan',async()=>{const getConfig=vi.fn();expect(await runRewriteFollowup({args:[],getConfig})).toMatchObject({outcome:'not_executed'});expect(getConfig).not.toHaveBeenCalled();});
 it('dispatches only one Rewrite with the accepted exact Scan, fingerprints current source and refuses repetition',async()=>{
  const f=await fixture();try{
