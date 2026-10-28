@@ -8,7 +8,7 @@ import { checkedPayload } from "./server";
 const source = { cv: "Fictional Applicant\nExperience\nAssisted customers.\nMy manager negotiated contracts, not me.\nI did not approve payments.\nEducation\nDiploma 2023", jd: "Customer service required.\nExcel required.\nMarket research preferred.\nImport/export preferred." };
 const catalog = scanCatalog(source);
 const finding = { title: "Customer service", requirementSourceId: "jd:r2", excerptSourceId: "cv:b3", explanation: "Customer assistance is demonstrated.", nextStep: "Keep this truthful example.", priority: "important", expectation: "required", group: "supported" };
-const response = { coverage: "Only selectable source units were reviewed.", findings: [finding] };
+const response = { coverage: "Only selectable source units were reviewed; this is not an exhaustive assessment. 0 CV blocks and 0 JD lines were excluded by source-unit limits. Missing evidence does not establish missing ability.", findings: [finding] };
 const parse = (value: unknown) => parseSelection(value, source, catalog);
 
 // Independent interpreter for the schema subset sent to the provider. Bounds
