@@ -48,3 +48,13 @@ next-env.d.ts
 # Local research drafts/exports only; reviewed anonymized evidence remains trackable.
 /research/private/
 /docs/evidence/private/
+
+# Owner-only synthetic Claude diagnostics; never app storage or hosted state.
+/.local-diagnostics/
+
+# Private local production snapshots and fictional verification artifacts.
+/.local-demo/
+
+# Local agent configuration, backups and private acceptance evidence.
+/.factory/
+/.opencode/

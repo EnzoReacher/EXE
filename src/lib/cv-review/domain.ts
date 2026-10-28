@@ -1,3 +1,4 @@
+import { sectionLabel } from "@/lib/cv-templates/structure";
 export type Language = "English" | "Vietnamese";
 export type Block = { id: string; section: string; text: string; sourceText: string };
 export type Profile = { source: string; revision: string; blocks: Block[]; confirmed: boolean };
@@ -24,7 +25,7 @@ export function revision(blocks: Block[]): string { return JSON.stringify(blocks
 export function draftProfile(source: string): Profile {
   str(source); let section = "Experience";
   const blocks = source.split("\n").map((text, index) => {
-    if (/^(summary|profile|contact|experience|employment|work experience|education|skills|certificates?|qualifications|projects|volunteering|học vấn|kinh nghiệm|kỹ năng|giới thiệu)\s*:?$/iu.test(text.trim())) section = text.trim();
+    if (sectionLabel(text)) section = sectionLabel(text)!;
     return { id: `b${index + 1}`, section, text, sourceText: text };
   });
   if (blocks.length > 500) throw new Error("Please use at most 500 lines.");

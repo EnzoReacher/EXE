@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import fs from "node:fs/promises";
+import { editSource, simulatedDisclosure } from "./intake-helpers";
 
 const evidence = ".factory/evidence/OWNPATH-VISUAL-20261020/screenshots";
 const cv = "Nguyễn An\nExperience\nSales assistant, Riverside Shop | 2023–2025\nHelped customers choose products.\nMaintained accurate stock records.\nMy manager negotiated supplier contracts, not me.\nEducation\nBusiness diploma, 2023\nSkills\nVietnamese, English";
@@ -19,6 +20,7 @@ for (const width of [1440, 1024, 390, 320]) test(`workbench states, keyboard and
   await fs.mkdir(evidence, { recursive: true });
   await request.post("http://127.0.0.1:4387/__fixture/reset");
   await context.route("**/*", route => ["http://127.0.0.1:4386", "http://127.0.0.1:4387"].includes(new URL(route.request().url()).origin) ? route.continue() : route.abort());
+  await simulatedDisclosure(page);
   await page.setViewportSize({ width, height: 900 }); await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/sign-in"); await page.getByLabel("Email address").fill("fictional@example.test"); await page.getByLabel("Password", { exact: true }).fill(crypto.randomUUID()); await page.getByRole("button", { name: "Sign in", exact: true }).click(); await expect(page).toHaveURL(/\/app$/);
   const capture = async (name: string, selector?: string) => {
@@ -27,10 +29,10 @@ for (const width of [1440, 1024, 390, 320]) test(`workbench states, keyboard and
     if (selector) await page.locator(selector).first().screenshot({ path: `${evidence}/${width}-${name}.png`, style: ".skip-link:not(:focus) { opacity: 0; }" });
     else { await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({ path: `${evidence}/${width}-${name}.png` }); }
   };
-  await expect(page.getByLabel("Your CV", { exact: true })).toBeEnabled(); await capture("input-empty");
+  await expect(page.getByRole("button", { name: "Select file", exact: true })).toBeEnabled(); await expect(page.locator("#scan-cv")).toHaveCount(0); await capture("input-empty");
   if (width >= 1024) { const box = await page.getByRole("button", { name: "Scan CV", exact: true }).boundingBox(); expect(box!.y + box!.height).toBeLessThan(900); }
-  await page.getByLabel("Your CV", { exact: true }).focus(); await page.keyboard.press("Tab"); await expect(page.getByLabel("Target job description", { exact: true })).toBeFocused();
-  await page.getByLabel("Your CV", { exact: true }).fill(cv); await page.getByLabel("Target job description", { exact: true }).fill(jd); await page.getByRole("checkbox").check(); await capture("input-filled");
+  await page.getByRole("button", { name: "Select file", exact: true }).focus(); await page.keyboard.press("Tab"); await expect(page.getByText("File help", { exact: true })).toBeFocused(); await page.keyboard.press("Tab"); await expect(page.getByLabel("Target job", { exact: true })).toBeFocused();
+  await editSource(page, cv); await page.getByLabel("Target job", { exact: true }).fill(jd); await capture("input-filled");
   await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.getByRole("alert").filter({ hasText: "AI is not configured" })).toBeVisible(); await capture("configuration-error", ".op-scan-tool");
   await page.route("**/api/cv-review/scan", route => route.fulfill({ status: 502, json: { error: "Connection interrupted. Your work is kept; retry." } })); await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.getByRole("alert").filter({ hasText: "Connection interrupted" })).toBeVisible(); await capture("recoverable-error", ".op-scan-action + .op-error");
   await page.unroute("**/api/cv-review/scan"); let finishScan!: () => void; const scanGate = new Promise<void>(resolve => { finishScan = resolve; });
@@ -53,8 +55,8 @@ for (const width of [1440, 1024, 390, 320]) test(`workbench states, keyboard and
   // Supplied legacy metadata is displayed, never inferred from a JD or invented.
   await page.route("**/api/cv-review/saved", async route => { if (route.request().method() !== "GET") return route.continue(); await route.fulfill({ json: { profiles: [], versions: [{ id: "fictional-visual-row", name: "A long but real supplied title for a Vietnamese customer-service application", payload: { role: "Customer service assistant", company: "Fictional Riverside Shop" }, revision: 1, created_at: "2026-10-20T02:30:00Z", updated_at: "2026-10-20T03:40:00Z" }] } }); });
   await page.reload(); await expect(page.getByText("Customer service assistant · Fictional Riverside Shop")).toBeVisible(); await capture("saved-metadata");
-  await page.unroute("**/api/cv-review/saved"); let finishList!: () => void; const listGate = new Promise<void>(resolve => { finishList = resolve; }); await page.route("**/api/cv-review/saved", async route => { await listGate; await route.fulfill({ json: { profiles: [], versions: [] } }); }); await page.reload(); await expect(page.getByText("Loading saved CVs…", { exact: true })).toBeVisible(); await capture("saved-loading"); finishList(); await expect(page.getByText("No saved CVs yet. Saving is optional.")).toBeVisible(); await capture("saved-empty");
+  await page.unroute("**/api/cv-review/saved"); let finishList!: () => void; const listGate = new Promise<void>(resolve => { finishList = resolve; }); await page.route("**/api/cv-review/saved", async route => { await listGate; await route.fulfill({ json: { profiles: [], versions: [] } }); }); await page.reload(); await expect(page.getByText("Loading saved CVs…", { exact: true })).toBeVisible(); await capture("saved-loading"); finishList(); await expect(page.getByRole("heading", { name: "No saved CVs yet" })).toBeVisible(); await capture("saved-empty");
   await page.unroute("**/api/cv-review/saved"); await page.route("**/api/cv-review/saved", route => route.fulfill({ status: 503, json: { error: "Saved work is unavailable. Your draft is kept; retry." } })); await page.reload(); await expect(page.getByRole("alert").filter({ hasText: "Saved work is unavailable" })).toBeVisible(); await capture("saved-error");
   await page.goto("/app/account"); await expect(page.getByRole("button", { name: "Sign out", exact: true })).toBeEnabled(); await capture("account");
-  await page.goto("/app"); const longCV = cv + "\n" + Array.from({ length: 65 }, (_, i) => `Fictional record ${i}: Hỗ trợ khách hàng và duy trì hồ sơ chính xác, không tự nhận công việc của người quản lý.`).join("\n"); const longJD = jd + "\n" + "Detailed fictional job requirements. ".repeat(300); await page.getByLabel("Your CV", { exact: true }).fill(longCV); await page.getByLabel("Target job description", { exact: true }).fill(longJD); await expect(page.getByLabel("Your CV", { exact: true })).toHaveValue(longCV); await capture("long-inputs");
+  await page.goto("/app"); const longCV = cv + "\n" + Array.from({ length: 65 }, (_, i) => `Fictional record ${i}: Hỗ trợ khách hàng và duy trì hồ sơ chính xác, không tự nhận công việc của người quản lý.`).join("\n"); const longJD = jd + "\n" + "Detailed fictional job requirements. ".repeat(300); await editSource(page, longCV); await page.getByLabel("Target job", { exact: true }).fill(longJD); await expect(page.getByLabel("Your CV", { exact: true })).toHaveValue(longCV); await capture("long-inputs");
 });

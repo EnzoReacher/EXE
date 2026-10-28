@@ -1,18 +1,20 @@
 // @vitest-environment jsdom
-import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 const { auth } = vi.hoisted(() => ({ auth: { getUser: vi.fn(), updateUser: vi.fn(), onAuthStateChange: vi.fn(), signOut: vi.fn() } }));
 vi.mock("@/lib/supabase/client", () => ({ createSupabaseBrowserClient: () => ({ auth }) }));
-vi.mock("next/navigation", () => ({ usePathname: () => "/app/account" }));
+vi.mock("next/navigation", () => ({ usePathname: () => "/app/account", useRouter: () => ({ push: vi.fn() }) }));
 import AccountProfile from "./account-profile";
 import { WorkspaceShell } from "./workspace-shell";
+HTMLElement.prototype.showPopover = function () { this.style.display = "block"; };
+HTMLElement.prototype.hidePopover = function () { this.style.display = "none"; };
 const user = { id: "A", email: "synthetic@example.test", user_metadata: { display_name: "Original Name", unrelated: "keep" } };
 function result(name: string, id = "A") { return { data: { user: { ...user, id, user_metadata: { ...user.user_metadata, display_name: name } } }, error: null }; }
 function mount() { return render(<WorkspaceShell owner="A" email={user.email} displayName="Original Name"><AccountProfile initialUser={user} /></WorkspaceShell>); }
 const field = () => screen.getByLabelText(/Display name/) as HTMLInputElement;
 const change = (name: string) => fireEvent.change(field(), { target: { value: name } });
 const submit = () => fireEvent.submit(screen.getByRole("form", { name: "Personal details" }));
-const sidebar = () => document.querySelector(".op-identity")!.textContent;
+const sidebar = () => document.querySelector(".op-account-trigger")!.textContent;
 async function ready() { await screen.findByText("Up to date."); await waitFor(() => expect(screen.queryByText("Checking authentication…")).toBeNull()); }
 function emit(event: string, session: unknown) { act(() => { for (const [callback] of auth.onAuthStateChange.mock.calls) callback(event, session); }); }
 beforeEach(() => { auth.getUser.mockResolvedValue(result("Original Name")); auth.onAuthStateChange.mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }); });
@@ -65,9 +67,14 @@ it("does not let a scheduled token check supersede an in-flight save", async () 
   emit("TOKEN_REFRESHED", { user }); change("Saved once"); submit(); await waitFor(() => expect(auth.updateUser).toHaveBeenCalledOnce());
   await act(async () => finish(result("Saved once"))); await screen.findByText("Changes saved."); expect(screen.getByRole("button", { name: "Cancel" }).hasAttribute("disabled")).toBe(true);
 });
+it("the sidebar logout also preserves an unacknowledged profile edit when confirmation is cancelled", async () => {
+  const confirm = vi.spyOn(window, "confirm").mockReturnValue(false); mount(); await ready(); change("Unsaved profile draft");
+  fireEvent.click(screen.getByRole("button", { name: /Account menu for/ })); const menu = screen.getByRole("dialog", { name: "Account management" }); const signout = within(menu).getByRole("button", { name: "Sign out" }); await waitFor(() => expect(signout.hasAttribute("disabled")).toBe(false)); fireEvent.click(signout);
+  expect(confirm).toHaveBeenCalledWith("Sign out without saving your display name? Your unsaved changes will be lost."); expect(auth.signOut).not.toHaveBeenCalled(); expect(field().value).toBe("Unsaved profile draft"); expect(sidebar()).toContain("Original Name"); confirm.mockRestore();
+});
 it("clears account identity when update returns an expired-session error without an SDK event", async () => {
   auth.updateUser.mockResolvedValue({ data: { user: null }, error: { status: 401, code: "session_not_found" } }); mount(); await ready(); change("Expired draft"); submit();
-  await screen.findByText("Your session is no longer available."); expect(screen.queryByLabelText(/Display name/)).toBeNull(); expect(document.querySelector(".op-identity")).toBeNull();
+  await screen.findByText(/Private content is hidden/); expect(screen.queryByLabelText(/Display name/)).toBeNull(); expect(document.querySelector(".op-identity")).toBeNull();
   emit("USER_UPDATED", { user }); await act(async () => {}); expect(screen.queryByRole("link", { name: /Change password/ })).toBeNull();
 });
 it("ignores late account checks after expiry and unmount and sanitizes unexpected SDK exceptions", async () => {

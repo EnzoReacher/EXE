@@ -22,6 +22,11 @@ describe("native Responses boundary (mock fetch only)", () => {
     expect(() => configuration()).toThrow("OpenAI is not configured.");
     const fetcher = vi.fn(); await expect(createProvider(config, fetcher)("x", "t", {}, {}, AbortSignal.abort())).rejects.toThrow(); expect(fetcher).not.toHaveBeenCalled();
   });
+  it("OwnPath's single-attempt policy never retries ambiguous transport or HTTP failures", async () => {
+    for (const request of [vi.fn().mockRejectedValue(new Error("synthetic disconnect")), vi.fn().mockResolvedValue(new Response("{}", { status: 500 }))]) {
+      await expect(createProvider(config, request, 1)("x", "trusted", {}, {}, new AbortController().signal)).rejects.toThrow(); expect(request).toHaveBeenCalledTimes(1);
+    }
+  });
   it("honors abort deadlines without retry and bounds response reads", async () => {
     const fetcher = vi.fn((_url: unknown, init?: RequestInit) => new Promise<Response>((_resolve, reject) => { init?.signal?.addEventListener("abort", () => reject(new Error("synthetic abort")), { once: true }); }));
     await expect(createProvider(config, fetcher)("x", "t", {}, {}, AbortSignal.timeout(10))).rejects.toThrow(/timed out/); expect(fetcher).toHaveBeenCalledTimes(1);

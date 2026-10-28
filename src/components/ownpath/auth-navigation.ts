@@ -1,4 +1,5 @@
 // A new document sends persisted Auth cookies and avoids stale anonymous RSC data.
-export function continueAfterAuth() {
-  window.location.replace("/app");
+import { authReturnPath } from "@/lib/supabase/auth-redirect";
+export function continueAfterAuth(next: unknown = "/app") {
+  window.location.replace(authReturnPath(next));
 }

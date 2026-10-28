@@ -1,0 +1,18 @@
+.example{min-width:0;scroll-margin-top:24px}
+.caption{width:fit-content;max-width:100%;margin:0 auto;background:#f4ead6;color:#765416;padding:6px 12px;border-radius:20px;font-size:12px;line-height:1.5;font-weight:650;text-align:center}
+.scene{position:relative;height:440px;isolation:isolate;margin-top:8px;overflow:clip}
+.orbit{position:absolute;inset:40px 0 10px;border:1px solid #d6dfd1;border-radius:50%;transform:rotate(-15deg);background:#eaf0e4}
+.paper{position:absolute;top:22px;left:7%;width:81%;min-height:365px;background:white;padding:24px 28px;border:1px solid #dce3d9;box-shadow:9px 14px 0 #dbe5d6,0 18px 35px #183e3912;color:#253e35;font:12px/1.5 Arial,sans-serif;transform:rotate(-3deg);animation:paper-rise 5.2s ease-out both}
+.monogram{width:25px;height:25px;display:grid;place-items:center;background:#e6efe5;color:#1e5e4e;font-size:10px;border-radius:50%;margin:0 auto 6px}
+.paper>strong{display:block;text-align:center;font-size:24px;line-height:1.2;letter-spacing:-.04em}
+.paper p{margin:5px 0}.paper .role{text-align:center;font-size:12px;margin:3px 0}.paper .contact{font-size:11px;text-align:center;color:#5a6e64}
+.paper h3{font-size:10px;letter-spacing:.08em;border-bottom:1px solid #b6c6b9;padding-bottom:4px;margin:18px 0 7px}
+.entry{display:flex;justify-content:space-between;font-size:12px;gap:10px}.entry span{font-size:11px}
+.writing{position:relative}.ink{position:absolute;left:0;top:0;width:100%;height:28px;overflow:visible;pointer-events:none}.correction,.check{fill:none;stroke:#bb6b36;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0;animation:ink-write 5.2s linear both}.check{animation-name:ink-check}
+.pen{transform:translate(296px,105px);animation:pen-write 5.2s linear both}
+@keyframes paper-rise{0%{transform:translateY(35px) rotate(-7deg);opacity:.3}25%{transform:translateY(-5px) rotate(-3deg);opacity:1}45%,85%{transform:translateY(0) rotate(-3deg)}100%{transform:rotate(-3deg)}}
+@keyframes ink-write{0%,30%{stroke-dashoffset:1}62%,100%{stroke-dashoffset:0}}
+@keyframes ink-check{0%,62%{stroke-dashoffset:1}70%,100%{stroke-dashoffset:0}}
+@keyframes pen-write{0%,20%{transform:translate(296px,105px)}30%{transform:translate(8px,12px)}62%{transform:translate(267px,10px)}66%{transform:translate(280px,18px)}70%{transform:translate(296px,0)}85%,100%{transform:translate(296px,105px)}}
+@media(max-width:700px){.scene{height:415px;max-width:440px;margin-inline:auto}.paper{left:3%;width:88%;min-height:355px;padding:20px 18px}.paper h3{margin-top:14px}.pen{display:none}}
+@media(prefers-reduced-motion:reduce){.paper,.correction,.check,.pen{animation:none}.paper{transform:rotate(-3deg)}.correction,.check{stroke-dashoffset:0}}

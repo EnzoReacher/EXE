@@ -47,10 +47,12 @@ export async function POST(request: Request) {
   let input: ReturnType<typeof validateSave>;
   try { input = validateSave(await body(request)); } catch { return Response.json({ error: "This snapshot could not be saved: invalid or oversized content. Your draft is kept." }, { status: 400, headers }); }
   const table = TABLES[input.kind];
+  if(input.kind==='version') {const {error:setup}=await session.db.rpc('ownpath_billing_summary');if(setup)return Response.json({error:'Saved-version limits need billing setup. Your draft is kept; existing CVs and exports remain available.'},{status:503,headers});}
   // Immutable insert, with ID-based retry deduplication. Never upsert an owner's snapshot.
   const row = { id: input.id, owner_id: session.user.id, name: input.name, payload: input.payload };
   const { error } = await session.db.from(table).insert(row);
   if (error) {
+    if(error.code==='P0001')return Response.json({error:'Your saved-version creation limit is reached. Existing CVs remain available; edit or delete a version, or view Plan & billing.'},{status:429,headers});
     if (error.code !== "23505") return unavailable();
     const { data, error: existingError } = await session.db.from(table).select("id,payload,name").eq("id", input.id).eq("owner_id", session.user.id).maybeSingle();
     if (existingError || !data || data.name !== input.name || JSON.stringify(data.payload) !== JSON.stringify(input.payload)) {

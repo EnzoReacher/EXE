@@ -46,7 +46,7 @@ export function AccountNavigation() {
     {state === "verified" ? <Link prefetch={false} href="/app">Go to workspace<LinkFeedback /></Link> : <>
       {state === "checking" && <span className={styles.sessionHint}>Checking account…</span>}
       <Link prefetch={false} href="/sign-in">Sign in<LinkFeedback /></Link>
-      {state === "guest" && <Link prefetch={false} href="/sign-up">Create account<LinkFeedback /></Link>}
+      {state === "guest" && <Link prefetch={false} href="/sign-up">Get started<LinkFeedback /></Link>}
     </>}
   </span>;
 }

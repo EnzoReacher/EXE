@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import fs from "node:fs/promises";
+import { editSource, simulatedDisclosure } from "./intake-helpers";
 const cv = "Nguyễn An\nExperience\nHelped customers.\nEducation\nDiploma 2023";
 const jd = "Customer service required.";
 const scan = { coverage: "Selected requirement; check the rest of the JD.", findings: [{ title: "Customer service", requirement: jd, excerpt: "Helped customers.", explanation: "Your CV describes customer assistance.", nextStep: "Clarify your direct responsibility.", priority: "important", expectation: "required", group: "supported" }] };
@@ -10,10 +11,11 @@ async function login(page: Page) {
   await page.goto("/sign-in"); await page.getByLabel("Email address").fill("fictional@example.test"); await page.getByLabel("Password", { exact: true }).fill("Synthetic fixture only");
   await page.getByRole("button", { name: "Sign in", exact: true }).click(); await expect(page).toHaveURL(/\/app$/);
 }
-async function fill(page: Page) { await page.getByLabel("Your CV", { exact: true }).fill(cv); await page.getByLabel("Target job description").fill(jd); await page.getByRole("checkbox").check(); }
+async function fill(page: Page) { await editSource(page, cv); await page.getByLabel("Target job").fill(jd); }
 test.beforeEach(async ({ page, request, baseURL }) => {
   await request.post("http://127.0.0.1:4387/__fixture/reset");
   await page.route("**/*", route => [baseURL, "http://127.0.0.1:4387"].includes(new URL(route.request().url()).origin) ? route.continue() : route.abort());
+  await simulatedDisclosure(page);
 });
 test("delayed scan acknowledges once, allows stopping, ignores late results and recovers without stealing focus", async ({ page }) => {
   await login(page); await fill(page);
@@ -33,7 +35,7 @@ test("delayed scan acknowledges once, allows stopping, ignores late results and 
 });
 test("rewrite failures preserve the last good draft; late generation cannot overwrite manual edits", async ({ page, context }) => {
   await login(page); const id = crypto.randomUUID(); await context.request.post("/api/cv-review/saved", { headers: { origin: "http://127.0.0.1:4386" }, data: { id, kind: "version", payload: snapshot("Manual draft") } });
-  await page.goto(`/app/cvs/${id}`); await page.getByRole("checkbox").check();
+  await page.goto(`/app/cvs/${id}`);
   await page.route("**/api/cv-review/rewrite", route => route.fulfill({ status: 503, json: { error: "Synthetic provider unavailable. Retry." } }));
   await page.getByRole("button", { name: "Rewrite again" }).click(); await expect(page.getByRole("alert").filter({ hasText: "Synthetic provider unavailable" })).toBeVisible(); await expect(page.getByLabel("Formatted CV")).toContainText("Helped customers.");
   await page.unroute("**/api/cv-review/rewrite"); const delayed = gate(); await page.route("**/api/cv-review/rewrite", async route => { await delayed.promise; await route.fulfill({ json: rewrite }).catch(() => {}); });
@@ -43,12 +45,12 @@ test("rewrite failures preserve the last good draft; late generation cannot over
   await page.getByRole("button", { name: "Rewrite again" }).click(); await expect(page.getByLabel("Formatted CV")).toContainText("Assisted customers."); await expect(page.getByLabel("Formatted CV")).toContainText("Manual edit retained.");
 });
 test("example replacement uses a cancel-first keyboard modal even with only a JD", async ({ page }) => {
-  await login(page); await page.getByLabel("Target job description").fill("My existing JD");
+  await login(page); await page.getByLabel("Target job").fill("My existing JD");
   await page.getByText("Try an example", { exact: true }).click(); const example = page.locator(".op-example-options button").first(); await example.click();
   const dialog = page.getByRole("dialog", { name: "Use a fictional example?" }); await expect(dialog).toBeVisible(); await expect(dialog.getByRole("button", { name: "Cancel" })).toBeFocused();
   await page.keyboard.press("Shift+Tab"); await expect(dialog.getByRole("button", { name: "Replace inputs" })).toBeFocused(); await page.keyboard.press("Tab"); await expect(dialog.getByRole("button", { name: "Cancel" })).toBeFocused();
-  await page.keyboard.press("Escape"); await expect(example).toBeFocused(); await expect(page.getByLabel("Target job description")).toHaveValue("My existing JD");
-  await example.click(); await dialog.getByRole("button", { name: "Replace inputs" }).click(); await expect(dialog).not.toBeVisible(); await expect(page.getByLabel("Your CV", { exact: true })).not.toHaveValue(""); await expect(page.getByLabel("Your CV", { exact: true })).toBeFocused();
+  await page.keyboard.press("Escape"); await expect(example).toBeFocused(); await expect(page.getByLabel("Target job")).toHaveValue("My existing JD");
+  await example.click(); await dialog.getByRole("button", { name: "Replace inputs" }).click(); await expect(dialog).not.toBeVisible(); await expect(page.getByLabel("Your CV", { exact: true })).not.toHaveValue(""); await expect(page.locator("#cv-input-entry")).toBeFocused();
 });
 test("saved rename acknowledges later edits; deletion preserves neighboring rows, focus and failure recovery", async ({ page, context }) => {
   await login(page); const ids = [crypto.randomUUID(), crypto.randomUUID()];
@@ -82,7 +84,7 @@ test("320/390/1440 layouts, keyboard drawer, reduced motion, long inputs and lan
   await page.emulateMedia({ reducedMotion: "reduce" }); await page.setViewportSize({ width: 320, height: 850 }); await page.goto("/");
   await page.getByRole("button", { name: "Open menu" }).focus(); await page.keyboard.press("Enter"); await expect(page.getByRole("button", { name: "Close menu" })).toHaveAttribute("aria-expanded", "true"); await page.keyboard.press("Escape"); await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
   const faq = page.locator("details summary").first(); await faq.focus(); await page.keyboard.press("Enter"); await expect(faq.locator("..")).toHaveAttribute("open", ""); await page.screenshot({ path: `${evidence}/320-landing.png`, fullPage: true });
-  await login(page); await fill(page); await page.getByLabel("Your CV", { exact: true }).fill(cv + "\n" + "Fictional long responsibility.\n".repeat(500)); await page.getByLabel("Target job description").fill(jd + "\n" + "Fictional requirement.\n".repeat(500));
+  await login(page); await fill(page); await page.getByLabel("Your CV", { exact: true }).fill(cv + "\n" + "Fictional long responsibility.\n".repeat(500)); await page.getByLabel("Target job").fill(jd + "\n" + "Fictional requirement.\n".repeat(500));
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 950 }); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await page.screenshot({ path: `${evidence}/${width}-workbench.png`, fullPage: true });
     if (width > 760) continue;
@@ -103,8 +105,8 @@ test("auth pending preserves native password values and prevents duplicate submi
   await expect(page.getByLabel("Password", { exact: true })).toHaveValue("Synthetic fixture only"); delayed.release(); await expect(page).toHaveURL(/\/app$/); expect(calls).toBe(1);
 });
 test("scan network failure retains input, validates on submit and recovers", async ({ page }) => {
-  await login(page); await page.getByRole("checkbox").check(); await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.getByLabel("Your CV", { exact: true })).toBeFocused(); await expect(page.getByLabel("Your CV", { exact: true })).toHaveAttribute("aria-invalid", "true");
-  await fill(page); await page.route("**/api/cv-review/scan", route => route.abort("failed")); await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.locator("#scan-error")).toBeVisible(); await expect(page.getByLabel("Your CV", { exact: true })).toHaveValue(cv); await expect(page.getByLabel("Target job description")).toHaveValue(jd);
+  await login(page); await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.locator("#cv-input-entry")).toBeFocused(); await expect(page.locator("#cv-input-entry")).toHaveAttribute("aria-describedby", /scan-error/);
+  await fill(page); await page.route("**/api/cv-review/scan", route => route.abort("failed")); await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.locator("#scan-error")).toBeVisible(); await expect(page.getByLabel("Your CV", { exact: true })).toHaveValue(cv); await expect(page.getByLabel("Target job")).toHaveValue(jd);
   await page.unroute("**/api/cv-review/scan"); await page.route("**/api/cv-review/scan", route => route.fulfill({ json: scan })); await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.getByRole("heading", { name: "Your scan", exact: true })).toBeVisible();
   await page.evaluate(() => { document.documentElement.style.zoom = "2"; }); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

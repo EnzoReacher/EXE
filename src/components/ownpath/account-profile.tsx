@@ -7,12 +7,17 @@ import { useAccountAcknowledgement } from "./workspace-shell";
 import WorkbenchIcon from "./workbench-icon";
 import AuthPanel from "./auth-panel";
 import { PendingLabel } from "./interaction-controls";
+import { useWorkspaceDiscardGuard, useWorkspaceProfileGuard } from "./workspace-session";
 
 type Identity = { id: string; email?: string; user_metadata?: Record<string, unknown> };
 function missingSession(error: { status?: number; name?: string; code?: string } | null) {
   return error?.status === 401 || error?.name === "AuthSessionMissingError" || error?.code === "session_not_found";
 }
-export default function AccountProfile({ initialUser }: { initialUser: Identity }) {
+export default function AccountProfile({ initialUser, section = "all", onUnsavedChange, onPendingChange, idPrefix = "" }: { initialUser: Identity; section?: "all" | "profile" | "security" | "hidden"; onUnsavedChange?: (value: boolean) => void; onPendingChange?: (value: boolean) => void; idPrefix?: string }) {
+  const id = (value: string) => idPrefix + value;
+  const beforeDiscard = useWorkspaceDiscardGuard();
+  const registerProfileGuard = useWorkspaceProfileGuard();
+  const guardKey = useRef({});
   const initialName = displayName(initialUser.user_metadata);
   const [identity, setIdentity] = useState<Identity | null>(initialUser);
   const [name, setName] = useState(initialName); const [acknowledged, setAcknowledged] = useState(initialName);
@@ -21,6 +26,13 @@ export default function AccountProfile({ initialUser }: { initialUser: Identity 
   const state = useRef({ alive: false, epoch: 0, locked: false, name: initialName, acknowledged: initialName });
   const field = useRef<HTMLInputElement>(null); const acknowledgeName = useAccountAcknowledgement();
   const dirty = name.trim() !== acknowledged; const changed = name !== acknowledged;
+  useEffect(() => { onUnsavedChange?.(dirty || saving); }, [dirty, saving, onUnsavedChange]);
+  useEffect(() => { onPendingChange?.(saving); }, [saving, onPendingChange]);
+  useEffect(() => {
+    registerProfileGuard?.(() => !dirty || window.confirm("Sign out without saving your display name? Your unsaved changes will be lost."), guardKey.current);
+    const key = guardKey.current;
+    return () => registerProfileGuard?.(null, key);
+  }, [dirty, registerProfileGuard]);
   function edit(value: string) { state.current.name = value; setName(value); setError(""); }
   function cancel() { edit(state.current.acknowledged); field.current?.focus(); }
   function invalidate() {
@@ -99,19 +111,19 @@ export default function AccountProfile({ initialUser }: { initialUser: Identity 
     navigation?.addEventListener("navigate", traverse);
     return () => { window.removeEventListener("beforeunload", unload); document.removeEventListener("click", navigate, true); navigation?.removeEventListener("navigate", traverse); };
   }, [dirty]);
-  return <div className="op-profile-page">
+  return <div className={`op-profile-page op-account-section-${section}`}>
     <div className="op-page-heading"><div><p className="op-eyebrow">PROFILE & SECURITY</p><h1>Your account</h1><p>The details that make this workspace yours.</p></div><Link href="/app/cvs" className="op-profile-library"><WorkbenchIcon />Saved CVs<WorkbenchIcon name="arrow" /></Link></div>
     {!identity ? <div className="op-card" role="status"><h2>Your session is no longer available.</h2><p>Sign in again to manage your account.</p><Link className="op-button" href="/sign-in">Sign in</Link></div> : <>
       <section className="op-profile-summary" aria-label="Profile summary"><span className="op-profile-avatar" aria-hidden="true">{accountInitials(acknowledged, identity.email)}</span><div><h2>{acknowledged || "Add a display name"}</h2><p>{identity.email || "No email supplied by your provider"}</p></div><span className="op-profile-summary-note">Your OwnPath account</span></section>
     </>}
-      <div className={`op-profile-grid${identity ? "" : " op-profile-ended"}`}>{identity && <section className="op-profile-card" aria-labelledby="personal-details-heading"><header><span className="op-icon-tile"><WorkbenchIcon name="account" /></span><div><h2 id="personal-details-heading">Personal details</h2><p>A name for your account, not your CV.</p></div></header>
+      <div className={`op-profile-grid${identity ? "" : " op-profile-ended"}`}>{identity && <section className="op-profile-card" aria-labelledby={id("personal-details-heading")}><header><span className="op-icon-tile"><WorkbenchIcon name="account" /></span><div><h2 id={id("personal-details-heading")}>Personal details</h2><p>A name for your account, not your CV.</p></div></header>
         <form onSubmit={event => void save(event)} aria-label="Personal details" aria-busy={saving} noValidate>
-          <label htmlFor="account-display-name">Display name <span className="op-optional">Optional</span></label><input ref={field} id="account-display-name" name="displayName" autoComplete="nickname" maxLength={DISPLAY_NAME_LIMIT} value={name} onChange={event => edit(event.target.value)} aria-describedby={`display-name-help${error ? " account-name-error" : ""}`} aria-invalid={!!error} /><p id="display-name-help" className="op-field-hint">Up to 80 characters. You can leave this blank.</p>
-          <label htmlFor="account-email">Email address <span className="op-optional">Read-only</span></label><input id="account-email" type="email" value={identity.email || ""} readOnly autoComplete="email" /><p className="op-field-hint">Email changes aren’t available here.</p>
-          {error && <p className="op-error" id="account-name-error" role="alert">{error}</p>}
+          <label htmlFor={id("account-display-name")}>Display name <span className="op-optional">Optional</span></label><input ref={field} id={id("account-display-name")} name="displayName" autoComplete="nickname" maxLength={DISPLAY_NAME_LIMIT} value={name} onChange={event => edit(event.target.value)} aria-describedby={`${id("display-name-help")}${error ? ` ${id("account-name-error")}` : ""}`} aria-invalid={!!error} /><p id={id("display-name-help")} className="op-field-hint">Up to 80 characters. You can leave this blank.</p>
+          <label htmlFor={id("account-email")}>Email address <span className="op-optional">Read-only</span></label><input id={id("account-email")} type="email" value={identity.email || ""} readOnly autoComplete="email" /><p className="op-field-hint">Email changes aren’t available here.</p>
+          {error && <p className="op-error" id={id("account-name-error")} role="alert">{error}</p>}
            <div className="op-profile-form-footer"><div className="op-actions"><button className="op-primary" disabled={!ready || saving || !dirty} aria-busy={saving} type="submit"><PendingLabel pending={saving} reserve="Save changes">{saving ? "Saving…" : "Save changes"}</PendingLabel></button><button disabled={!changed || saving} type="button" onClick={cancel}>Cancel</button></div><p className="op-profile-status" role="status">{!ready ? "Checking account…" : saving ? "Saving your display name…" : dirty ? "Unsaved changes." : saved ? "Changes saved." : "Up to date."}</p></div>
         </form>
-      </section>}<div className="op-security-stack"><AuthPanel mode="account" accountView="security" initialUser={{ id: initialUser.id, email: identity?.email }} beforeSignOut={() => !dirty || window.confirm("Sign out without saving your display name? Your unsaved changes will be lost.")} /></div></div>
+      </section>}<div className="op-security-stack"><AuthPanel mode="account" accountView="security" idPrefix={idPrefix} initialUser={{ id: initialUser.id, email: identity?.email }} beforeSignOut={() => beforeDiscard ? beforeDiscard() : !dirty || window.confirm("Sign out without saving your display name? Your unsaved changes will be lost.")} /></div></div>
       {identity && <p className="op-profile-footnote">Your account name doesn’t change names or content in saved CVs.</p>}
   </div>;
 }

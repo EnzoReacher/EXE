@@ -88,7 +88,7 @@ describe("dedicated account controls", () => {
     expect(pass.value === password && confirm.value === password).toBe(true);
     expect(pass.autocomplete).toBe("new-password"); expect(confirm.autocomplete).toBe("new-password");
     auth.signUp.mockResolvedValue({ data: { session: null }, error: null }); submit();
-    await screen.findByRole("alert");
+    await screen.findByRole("heading", { name: "Check your email" });
     expect(auth.signUp).toHaveBeenCalledOnce();
     expect(auth.signUp.mock.calls[0][0].password === password).toBe(true);
   });
@@ -103,7 +103,7 @@ describe("dedicated account controls", () => {
     await user.type(screen.getByLabelText("Email address"), email);
     expect((screen.getByLabelText("Password") as HTMLInputElement).value === password).toBe(true);
     auth.signUp.mockResolvedValue({ data: { session: null }, error: null }); submit();
-    await screen.findByRole("alert");
+    await screen.findByRole("heading", { name: "Check your email" });
     expect(auth.signUp.mock.calls[0][0].password === password).toBe(true);
   });
 
@@ -114,7 +114,7 @@ describe("dedicated account controls", () => {
       setter.call(screen.getByLabelText(label), value);
     }
     auth.signUp.mockResolvedValue({ data: { session: null }, error: null }); submit();
-    await screen.findByRole("alert");
+    await screen.findByRole("heading", { name: "Check your email" });
     expect(auth.signUp).toHaveBeenCalledOnce();
     expect(auth.signUp.mock.calls[0][0].password === password).toBe(true);
   });
@@ -140,8 +140,8 @@ describe("dedicated account controls", () => {
     act(() => { submit(); submit(); });
     expect(auth.signUp).toHaveBeenCalledOnce();
     await act(async () => resolve({ data: { user: { id: "unverified" }, session: null }, error: null }));
-    expect(screen.getByRole("alert").textContent).toContain("did not return a signup session");
-    expect((screen.getByLabelText("Password") as HTMLInputElement).value).toBe("");
+    expect(screen.getByRole("heading", { name: "Check your email" })).toBeTruthy();
+    expect(screen.queryByLabelText("Password")).toBeNull();
     expect(continueAfterAuth).not.toHaveBeenCalled();
   });
   it("keeps inputs and unlocks on rejected signup/network calls without leaking provider details", async () => {
@@ -262,16 +262,17 @@ describe("dedicated account controls", () => {
     expect(screen.queryByText("Signed out on this browser.")).toBeNull();
   });
 
-  it("explains no-session signup configuration without claiming confirmation or creating a session", async () => {
+  it("shows a focused confirmation screen without inventing a verified signup session", async () => {
     auth.signUp.mockResolvedValue({ data: { user: { id: "obfuscated" }, session: null }, error: null });
     render(<AuthPanel mode="signUp" next="//evil.test" />); await ready(); fill(); submit();
-    await screen.findByRole("alert");
-    expect(screen.getByRole("alert").textContent).toContain("disable Confirm email in the Supabase dashboard");
-    expect(screen.queryByRole("heading", { name: "Check your email" })).toBeNull();
-    expect(screen.queryByRole("status")).toBeNull();
+    const heading = await screen.findByRole("heading", { name: "Check your email" });
+    expect(document.activeElement).toBe(heading);
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.getByRole("status").textContent).toContain("No email delivery is confirmed");
+    expect(screen.queryByLabelText("Password")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Change email" }));
     expect((screen.getByLabelText("Email address") as HTMLInputElement).value).toBe(email);
     expect((screen.getByLabelText("Password") as HTMLInputElement).value).toBe("");
-    expect(screen.getByRole("button", { name: "Create your account" }).hasAttribute("disabled")).toBe(false);
     expect(auth.getUser).toHaveBeenCalledOnce();
     expect(continueAfterAuth).not.toHaveBeenCalled();
   });

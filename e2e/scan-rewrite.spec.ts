@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import fs from "node:fs/promises";
+import { editSource, simulatedDisclosure } from "./intake-helpers";
 import { draftProfile, emptyDraft, parseReview } from "../src/lib/cv-review/domain";
 const cv = "Nguyễn An\nExperience\nSales assistant, Riverside Shop | 2023–2025\nHelped customers choose products.\nMy manager negotiated supplier contracts, not me.\nEducation\nBusiness diploma, 2023";
 const jd = "Help customers select products. Supplier negotiation preferred.";
@@ -7,6 +8,7 @@ const scan = { coverage: "Two selected requirements reviewed; check the full JD 
 test.beforeEach(async ({ page, request, baseURL }) => {
   await request.post("http://127.0.0.1:4387/__fixture/reset");
   await page.route("**/*", route => [baseURL, "http://127.0.0.1:4387"].includes(new URL(route.request().url()).origin) ? route.continue() : route.abort());
+  await simulatedDisclosure(page);
 });
 test("core journey has two explicit operations, explanations and a complete editable CV", async ({ page, context }) => {
   let scans = 0; let rewrites = 0;
@@ -14,8 +16,8 @@ test("core journey has two explicit operations, explanations and a complete edit
   await page.route("**/api/cv-review/rewrite", async route => { rewrites++; const b = route.request().postDataJSON(); expect(b.instructions).toContain("concise"); await route.fulfill({ json: { replacements: [{ lineId: "b4", original: "Helped customers choose products.", text: "Assisted customers with product selection." }], changes: ["Clearer customer-service wording."], notes: ["No supplier-negotiation experience or metrics were added."] } }); });
   await page.goto("/sign-in"); await page.getByLabel("Email address").fill("fictional@example.test"); await page.getByLabel("Password", { exact: true }).fill(crypto.randomUUID()); await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/); await expect(page.getByRole("heading", { name: "Make your CV fit the role.", exact: true })).toBeVisible();
-  await page.getByLabel("Your CV", { exact: true }).fill(cv); await page.getByLabel("Target job description", { exact: true }).fill(jd);
-  await page.getByRole("checkbox").check(); expect(scans).toBe(0); expect(rewrites).toBe(0);
+  await editSource(page, cv); await page.getByLabel("Target job", { exact: true }).fill(jd);
+  expect(scans).toBe(0); expect(rewrites).toBe(0);
   await page.getByRole("button", { name: "Scan CV", exact: true }).click(); await expect(page.getByText("Your CV gives a direct example of helping customers.")).toBeVisible();
   expect(scans).toBe(1); expect(rewrites).toBe(0); await expect(page.getByLabel("Formatted CV")).toHaveCount(0);
   await page.getByLabel("How should we improve it?").fill("Keep it concise in English. Do not claim my manager's work."); await page.getByRole("button", { name: "Rewrite CV", exact: true }).click();
@@ -37,7 +39,7 @@ test("core journey has two explicit operations, explanations and a complete edit
 });
 test("missing configuration keeps input and never fabricates findings", async ({ page }) => {
   await page.goto("/sign-in"); await page.getByLabel("Email address").fill("fictional@example.test"); await page.getByLabel("Password", { exact: true }).fill(crypto.randomUUID()); await page.getByRole("button", { name: "Sign in", exact: true }).click(); await expect(page).toHaveURL(/\/app$/);
-  await page.getByLabel("Your CV", { exact: true }).fill(cv); await page.getByLabel("Target job description", { exact: true }).fill(jd); await page.getByRole("checkbox").check(); await page.getByRole("button", { name: "Scan CV", exact: true }).click();
+  await editSource(page, cv); await page.getByLabel("Target job", { exact: true }).fill(jd); await page.getByRole("button", { name: "Scan CV", exact: true }).click();
   await expect(page.getByRole("alert").filter({ hasText: "AI is not configured" })).toBeVisible(); await expect(page.getByLabel("Your CV", { exact: true })).toHaveValue(cv); await expect(page.getByRole("heading", { name: "Your scan", exact: true })).toHaveCount(0);
 });
 test("protected routes, API operations and intentional old-route redirects", async ({ page, request }) => {

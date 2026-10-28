@@ -1,0 +1,2 @@
+import { defineConfig } from "@playwright/test";
+export default defineConfig({ testDir: ".", testMatch: "owner-preview.spec.ts", workers: 1, retries: 0, timeout: 40000, reporter: "list", outputDir: "../.factory/evidence/OWNPATH-PREVIEW-20261021/browser-results", use: { baseURL: "http://127.0.0.2:4327", browserName: "chromium", headless: true, trace: "off", video: "off", screenshot: "off", serviceWorkers: "block", permissions: ["clipboard-read", "clipboard-write"] } });
