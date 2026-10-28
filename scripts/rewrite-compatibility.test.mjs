@@ -1,3 +1,5 @@
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { it, expect, vi } from 'vitest';
 import { mkdtemp, readFile, rm, stat, chmod } from 'node:fs/promises';
 vi.mock('server-only', () => ({}));
@@ -18,7 +20,7 @@ it('redacts configured, encoded and recognizable credentials without discarding 
   expect(redactDiagnosticMessage('a'.repeat(9000), config.key).length).toBeLessThanOrEqual(4096);
 });
 it.each(['accepted', 'rejected', 'uncertain'])('persists a durable single dispatch and refuses repetition after %s', async outcome => {
-  const outputDirectory = await mkdtemp('/tmp/opencode/rewrite-compat-test-');
+  const outputDirectory = await mkdtemp(join(tmpdir(), 'rewrite-compat-test-'));
   try {
     const request = vi.fn(async (_url, options) => {
       const marker = JSON.parse(await readFile(outputDirectory + '/rewrite-compatibility-20261025.json', 'utf8'));
@@ -43,7 +45,7 @@ it.each(['accepted', 'rejected', 'uncertain'])('persists a durable single dispat
   } finally { await rm(outputDirectory, { recursive: true }); }
 });
 it('refuses an unsafe output directory before dispatch', async () => {
-  const outputDirectory = await mkdtemp('/tmp/opencode/rewrite-compat-unsafe-');
+  const outputDirectory = await mkdtemp(join(tmpdir(), 'rewrite-compat-unsafe-'));
   try {
     await chmod(outputDirectory, 0o755); const request = vi.fn();
     await expect(runRewriteCompatibility({ args, getConfig: () => config, request, outputDirectory })).rejects.toThrow('Unsafe');
@@ -51,7 +53,7 @@ it('refuses an unsafe output directory before dispatch', async () => {
   } finally { await rm(outputDirectory, { recursive: true }); }
 });
 it.each(['oversized', 'malformed', 'stalled'])('bounds %s rejection capture without retries', async kind => {
-  const outputDirectory = await mkdtemp('/tmp/opencode/rewrite-compat-bound-');
+  const outputDirectory = await mkdtemp(join(tmpdir(), 'rewrite-compat-bound-'));
   try {
     const cancel = vi.fn();
     const response = kind === 'oversized' ? new Response('x'.repeat(8193), { status: 400 }) : kind === 'malformed' ? new Response('PRIVATE_NON_JSON', { status: 400 }) : new Response(new ReadableStream({ start(controller) { controller.enqueue(new TextEncoder().encode('{"error":')); }, cancel }), { status: 400 });
