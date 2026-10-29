@@ -7,8 +7,8 @@ export const rewriteSchema = structuredRewriteSchema;
 export function rewriteSchemaFor(base: string) {
   const titles = ["", ...new Set(structuredSources(base)
     .filter(source => !source.private)
-    .map(source => source.text.split("\\t")[0].trim())
-    .filter(text => text.length <= 300 && !/^[•*\\-]/u.test(text)))];
+    .map(source => source.text.split("\t")[0].trim())
+    .filter(text => text.length <= 300 && !/^[•*-]/u.test(text)))];
   const schema = structuredClone(rewriteSchema);
   // Constrain generated identity text without exposing private header values.
   // The runtime still checks that the chosen title belongs to this entry's
