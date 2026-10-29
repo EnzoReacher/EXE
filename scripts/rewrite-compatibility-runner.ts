@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { configuration, type Configuration } from "@/lib/scan-rewrite/provider";
 import { createClaudeProvider, type ClaudeUsage } from "@/lib/scan-rewrite/claude";
 import { boundedText } from "@/lib/experience-translator/server/openai";
-import { performRewrite, rewriteSchema } from "@/lib/scan-rewrite/rewrite-workflow";
+import { performRewrite, rewriteSchemaFor } from "@/lib/scan-rewrite/rewrite-workflow";
 import { OutputValidationError } from "@/lib/scan-rewrite/domain";
 import { operationDiagnostics, diagnosticStage, diagnosticField, diagnosticSnapshot } from "@/lib/scan-rewrite/diagnostics";
 import { syntheticRewritePayload } from "./diagnose-claude-rewrite-runner";
@@ -43,7 +43,7 @@ export async function runRewriteCompatibility({ args, getConfig = configuration,
   if (args.length !== 1 || args[0] !== "--execute-compatibility-rewrite-once") return { outcome: "not_executed", code: "explicit_flag_required" };
   const config = getConfig();
   if (config.provider !== "anthropic" || config.model !== "claude-haiku-4-5-20251001" || !config.key || config.key.length > 4096 || /[\r\n]/u.test(config.key)) throw new Error("Pinned configuration required.");
-  if (JSON.stringify(rewriteSchema).includes('"pattern"')) throw new Error("Compatibility schema required.");
+  if (JSON.stringify(rewriteSchemaFor(syntheticRewritePayload().base)).includes('"pattern"')) throw new Error("Compatibility schema required.");
   const payload = syntheticRewritePayload(); // exact fictional CV/JD + locally validated Scan
   const source = await fingerprints();
   await mkdir(outputDirectory, { recursive: true, mode: 0o700 });
@@ -51,7 +51,7 @@ export async function runRewriteCompatibility({ args, getConfig = configuration,
   if (!directory.isDirectory() || directory.isSymbolicLink() || (directory.mode & 0o077)) throw new Error("Unsafe diagnostic directory.");
   const resultFile = path.join(outputDirectory, "rewrite-compatibility-20261025.json");
   const file = await open(resultFile, constants.O_RDWR | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
-  const report: Record<string, unknown> = { operation: "rewrite", step: "A", outcome: "not_dispatched", inferenceRequests: 0, taskDispatchLimit: 3, terminalDispatchLimit: 1, model: config.model, maxOutputTokens: 8000, source, schemaSha256: hash(JSON.stringify(rewriteSchema)), syntheticOnly: true, reservation: "not_used_terminal_diagnostic", billingOutcome: "not_reconciled", resultFile };
+  const report: Record<string, unknown> = { operation: "rewrite", step: "A", outcome: "not_dispatched", inferenceRequests: 0, taskDispatchLimit: 3, terminalDispatchLimit: 1, model: config.model, maxOutputTokens: 8000, source, schemaSha256: hash(JSON.stringify(rewriteSchemaFor(syntheticRewritePayload().base))), syntheticOnly: true, reservation: "not_used_terminal_diagnostic", billingOutcome: "not_reconciled", resultFile };
   let attempts = 0; let usage: ClaudeUsage = {}; let providerErrorMessage: string | undefined;
   let result: Awaited<ReturnType<typeof performRewrite>> | undefined;
   const save = async () => {
@@ -65,7 +65,7 @@ export async function runRewriteCompatibility({ args, getConfig = configuration,
       const oneRequest: typeof fetch = async (url, options) => {
         if (attempts || url !== "https://api.anthropic.com/v1/messages" || options?.method !== "POST" || options.redirect !== "error" || typeof options.body !== "string" || Buffer.byteLength(options.body) > 32000) throw new Error("Diagnostic boundary rejected.");
         const body = JSON.parse(options.body);
-        if (body.model !== config.model || body.max_tokens !== 8000 || body.thinking?.type !== "disabled" || body.stream !== false || body.tools || body.cache_control || JSON.stringify(body.output_config?.format?.schema) !== JSON.stringify(rewriteSchema)) throw new Error("Diagnostic envelope rejected.");
+        if (body.model !== config.model || body.max_tokens !== 8000 || body.thinking?.type !== "disabled" || body.stream !== false || body.tools || body.cache_control || JSON.stringify(body.output_config?.format?.schema) !== JSON.stringify(rewriteSchemaFor(syntheticRewritePayload().base))) throw new Error("Diagnostic envelope rejected.");
         if (JSON.stringify(await fingerprints()) !== JSON.stringify(source)) throw new Error("Source changed before dispatch.");
         Object.assign(report, { outcome: "dispatching_unconfirmed", inferenceRequests: 1, requestSha256: hash(options.body) });
         await save(); attempts++;
