@@ -99,11 +99,29 @@ it("offers exact source titles without tab-bound dates or private contacts and k
   expect(checkStructuredRewrite(wire(), base).sections[2].entries[0].title).toBe("Visitor support");
 });
 
-it("resolves a selected source title locally and refuses uncited or private title IDs", () => {
+it("resolves an explicitly selected title citation locally and refuses private title IDs", () => {
  const value = wire(); value.sections[2].entries[0].title = "source:b9";
  expect(checkStructuredRewrite(value, base).sections[2].entries[0].title).toBe("Visitor support");
- value.sections[2].entries[0].title = "source:b7";
- expect(() => checkStructuredRewrite(value, base)).toThrow(expect.objectContaining({fieldPath:"sections[2].entries[0].title"}));
+ value.sections[2].entries[0].sourceIds = ["b10", "b11"];
+ expect(checkStructuredRewrite(value, base).sections[2].entries[0].title).toBe("Visitor support");
  value.sections[2].entries[0].title = "source:b3";
  expect(() => checkStructuredRewrite(value, base)).toThrow();
+});
+
+it.each([
+ ["number_added", (value: ReturnType<typeof wire>) => {value.sections[2].entries[0].bullets = ["Maintained 200 records."]; }],
+ ["number_omitted", (value: ReturnType<typeof wire>) => {value.sections[2].entries[0].bullets = ["Maintained records."]; }],
+ ["protected_meaning", (value: ReturnType<typeof wire>) => {value.sections[2].entries[0].paragraphs = ["I approved payments."]; }],
+ ["unsupported_qualification", (value: ReturnType<typeof wire>) => {value.sections[2].entries[0].bullets.push("Certified manager."); }],
+ ["placeholder", (value: ReturnType<typeof wire>) => {value.sections[2].entries[0].bullets.push("[insert achievement]"); }],
+ ["punctuation_only", (value: ReturnType<typeof wire>) => {value.sections[2].entries[0].bullets.push("."); }],
+] as const)("retains the entry guard while reporting the precise content-free reason %s", (constraint, mutate) => {
+ const value = wire(); mutate(value);
+ expect(() => checkStructuredRewrite(value, base)).toThrow(expect.objectContaining({
+   fieldPath:"sections[2].entries[0]",constraint
+ }));
+});
+it("rejects unknown selected title IDs even when other citations are valid", () => {
+ const value = wire(); value.sections[2].entries[0].title = "source:b999";
+ expect(() => checkStructuredRewrite(value, base)).toThrow(expect.objectContaining({constraint:"source_reference"}));
 });
