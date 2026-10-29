@@ -5,10 +5,7 @@ import { input, parseScan } from "./domain";
 import { checkStructuredRewrite, structuredProviderSources, structuredSources, structuredRewriteInstructions, structuredRewriteResult, structuredRewriteSchema } from "./structured-rewrite";
 export const rewriteSchema = structuredRewriteSchema;
 export function rewriteSchemaFor(base: string) {
-  const titles = ["", ...new Set(structuredSources(base)
-    .filter(source => !source.private)
-    .map(source => source.text.split("\t")[0].trim())
-    .filter(text => text.length <= 300 && !/^[•*-]/u.test(text)))];
+  const titles = ["", ...structuredSources(base).filter(source => !source.private).map(source => `source:${source.id}`)];
   const schema = structuredClone(rewriteSchema);
   // Constrain generated identity text without exposing private header values.
   // The runtime still checks that the chosen title belongs to this entry's
@@ -26,6 +23,6 @@ export async function performRewrite(payload: unknown, provider: Provider, signa
   if (b.scanCV !== source.cv || b.scanJD !== source.jd) throw new Error("Scan this CV and job description again.");
   const scan = parseScan(b.scan, source); const base = str(b.base, 24000); const instructions = str(b.instructions, 4000); const language = b.language;
   if (language !== "English" && language !== "Vietnamese") throw new Error("Choose an output language.");
-  const cv = checkStructuredRewrite(await provider("ownpath_rewrite", `${safety} ${structuredRewriteInstructions} For each entry title choose an exact value allowed by the schema and cite the source containing that value. Never paraphrase an entry title. For Summary use an empty title and put the supported summary in paragraphs. If no source title applies, use an empty title; do not invent a label. Preserve research titles and official award names exactly; do not polish or translate them. Keep each research sentence with its quoted title and closing punctuation in one bullet. Never emit punctuation-only bullets or split a sentence into independent title fragments.`, { base: structuredProviderSources(base), jd: source.jd, scan, instructions, outputLanguage: language }, rewriteSchemaFor(base), signal), base);
+  const cv = checkStructuredRewrite(await provider("ownpath_rewrite", `${safety} ${structuredRewriteInstructions} For each entry title select source:bN from the allowed schema IDs and include bN in that entry sourceIds. The server copies the untouched title from that source, excluding any tab-separated date. Never generate or paraphrase an entry title. For Summary use an empty title and put the supported summary in paragraphs. If no source title applies, use an empty title; do not invent a label. Preserve research titles and official award names exactly; do not polish or translate them. Keep each research sentence with its quoted title and closing punctuation in one bullet. Never emit punctuation-only bullets or split a sentence into independent title fragments.`, { base: structuredProviderSources(base), jd: source.jd, scan, instructions, outputLanguage: language }, rewriteSchemaFor(base), signal), base);
   return structuredRewriteResult(cv);
 }
