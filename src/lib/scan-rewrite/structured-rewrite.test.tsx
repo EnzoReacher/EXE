@@ -89,11 +89,21 @@ it("offers exact source titles without tab-bound dates or private contacts and k
   const schema = rewriteSchemaFor(base) as unknown as {properties:{sections:{items:{properties:{entries:{items:{properties:{title:{enum:string[]}}}}}}}}};
   const titles = schema.properties.sections.items.properties.entries.items.properties.title.enum;
   expect(titles).toContain("");
-  expect(titles).toContain("Visitor support");
+  expect(titles).toContain("source:b9");
+  expect(titles).not.toContain("Visitor support");
   expect(titles).not.toContain("Visitor support\tMarch 16, 2025");
   expect(titles).not.toContain("person@example.test");
   expect(titles).not.toContain("Senior manager");
   const value = wire(); value.sections[2].entries[0].title = "Visitor assistance";
   expect(() => checkStructuredRewrite(value, base)).toThrow(expect.objectContaining({fieldPath:"sections[2].entries[0].title"}));
   expect(checkStructuredRewrite(wire(), base).sections[2].entries[0].title).toBe("Visitor support");
+});
+
+it("resolves a selected source title locally and refuses uncited or private title IDs", () => {
+ const value = wire(); value.sections[2].entries[0].title = "source:b9";
+ expect(checkStructuredRewrite(value, base).sections[2].entries[0].title).toBe("Visitor support");
+ value.sections[2].entries[0].title = "source:b7";
+ expect(() => checkStructuredRewrite(value, base)).toThrow(expect.objectContaining({fieldPath:"sections[2].entries[0].title"}));
+ value.sections[2].entries[0].title = "source:b3";
+ expect(() => checkStructuredRewrite(value, base)).toThrow();
 });
