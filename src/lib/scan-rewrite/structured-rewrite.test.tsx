@@ -5,7 +5,7 @@ import { CVBody, printDocument } from "@/components/ownpath/cv-document";
 import { templateHTML } from "@/lib/cv-templates";
 import { checkStructuredRewrite, structuredRewriteSchema } from "./structured-rewrite";
 import { parseStructuredCV, parseStructuredResponse, structuredText } from "./structured-cv";
-import { performRewrite } from "./rewrite-workflow";
+import { performRewrite, rewriteSchemaFor } from "./rewrite-workflow";
 import { createClaudeProvider } from "./claude";
 import { validateSave } from "@/lib/cv-review/persistence";
 import { parseSnapshot } from "./saved";
@@ -21,7 +21,8 @@ it("dispatches a whole-CV schema through controlled native Claude once, preservi
   const request = vi.fn().mockResolvedValue(Response.json({ type: "message", role: "assistant", stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify(wire()) }] }));
   const result = await performRewrite(payload, createClaudeProvider({ key: "synthetic-only", model: "claude-haiku-4-5-20251001", origin: "http://127.0.0.1:4318" }, request), new AbortController().signal);
   expect(request).toHaveBeenCalledOnce(); const sent = JSON.parse(request.mock.calls[0][1].body);
-  expect(sent.output_config.format.schema).toEqual(structuredRewriteSchema);
+  expect(sent.output_config.format.schema).toEqual(rewriteSchemaFor(base));
+  expect(structuredRewriteSchema).not.toEqual(rewriteSchemaFor(base));
   expect(Object.keys(sent.output_config.format.schema.properties)).toEqual(["header", "sections"]);
   expect(JSON.stringify(sent.output_config.format.schema)).not.toMatch(/replacements|original|pattern|maxLength|minLength|maxItems/);
   expect(sent.messages[0].content).not.toContain("person@example.test"); expect(sent.system).toContain("COMPLETE CV");
@@ -82,4 +83,17 @@ it("preserves unknown meaningful source sections; omits empty fields and section
 it("refuses over-limit complete documents rather than truncating or shrinking away content", () => {
   const e = { title: "", context: "", date: "", paragraphs: Array(5).fill("x".repeat(5000)), bullets: [] };
   expect(() => parseStructuredCV({ version: 1, header: { name: "", title: "", contacts: [] }, sections: [{ heading: "Summary", entries: [e] }] })).toThrow(expect.objectContaining({ fieldPath: "document", constraint: "max_length" }));
+});
+
+it("offers exact source titles without tab-bound dates or private contacts and keeps title grounding strict", () => {
+  const schema = rewriteSchemaFor(base) as unknown as {properties:{sections:{items:{properties:{entries:{items:{properties:{title:{enum:string[]}}}}}}}}};
+  const titles = schema.properties.sections.items.properties.entries.items.properties.title.enum;
+  expect(titles).toContain("");
+  expect(titles).toContain("Visitor support");
+  expect(titles).not.toContain("Visitor support\\tMarch 16, 2025");
+  expect(titles).not.toContain("person@example.test");
+  expect(titles).not.toContain("Senior manager");
+  const value = wire(); value.sections[2].entries[0].title = "Visitor assistance";
+  expect(() => checkStructuredRewrite(value, base)).toThrow(expect.objectContaining({fieldPath:"sections[2].entries[0].title"}));
+  expect(checkStructuredRewrite(wire(), base).sections[2].entries[0].title).toBe("Visitor support");
 });
