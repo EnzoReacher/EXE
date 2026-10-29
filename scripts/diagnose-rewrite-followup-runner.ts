@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { configuration, type Configuration } from "@/lib/scan-rewrite/provider";
 import { createClaudeProvider, type ClaudeUsage } from "@/lib/scan-rewrite/claude";
-import { performRewrite, rewriteSchema } from "@/lib/scan-rewrite/rewrite-workflow";
+import { performRewrite, rewriteSchemaFor } from "@/lib/scan-rewrite/rewrite-workflow";
 import { parseScan, scanSources, OutputValidationError } from "@/lib/scan-rewrite/domain";
 import { operationDiagnostics, diagnosticStage, diagnosticField, diagnosticSnapshot } from "@/lib/scan-rewrite/diagnostics";
 import { syntheticRewritePayload } from "./diagnose-claude-rewrite-runner";
@@ -56,9 +56,9 @@ export async function runRewriteFollowup({ args, getConfig = configuration, requ
       const oneRequest: typeof fetch = async (url, options) => {
         if (attempts || url !== "https://api.anthropic.com/v1/messages" || options?.method !== "POST" || typeof options.body !== "string" || Buffer.byteLength(options.body) > 32000 || options.redirect !== "error") throw new Error("Diagnostic boundary rejected.");
         const body = JSON.parse(options.body);
-        if (body.model !== config.model || body.max_tokens !== 8000 || body.stream !== false || body.thinking?.type !== "disabled" || body.tools || body.cache_control || JSON.stringify(body.output_config?.format?.schema) !== JSON.stringify(rewriteSchema)) throw new Error("Diagnostic boundary rejected.");
+        if (body.model !== config.model || body.max_tokens !== 8000 || body.stream !== false || body.thinking?.type !== "disabled" || body.tools || body.cache_control || JSON.stringify(body.output_config?.format?.schema) !== JSON.stringify(rewriteSchemaFor(syntheticRewritePayload().base))) throw new Error("Diagnostic boundary rejected.");
         if ((await sourceIdentity()).sha256 !== source.sha256) throw new Error("Source changed before dispatch.");
-        Object.assign(report, { outcome: "dispatching_unconfirmed", inferenceRequests: 1, requestSha256: digest(options.body), schemaSha256: digest(JSON.stringify(rewriteSchema)), systemSha256: digest(body.system), payloadSha256: digest(body.messages[0].content) });
+        Object.assign(report, { outcome: "dispatching_unconfirmed", inferenceRequests: 1, requestSha256: digest(options.body), schemaSha256: digest(JSON.stringify(rewriteSchemaFor(syntheticRewritePayload().base))), systemSha256: digest(body.system), payloadSha256: digest(body.messages[0].content) });
         await save(); attempts++;
         return request(url, options);
       };
