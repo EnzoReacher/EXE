@@ -40,7 +40,13 @@ export function checkStructuredRewrite(value: unknown, base: string): Structured
       const p = `${path}.entries[${j}]`, e = responseObject(p, value, ["title", "context", "date", "paragraphs", "bullets", "sourceIds"]);
       const evidence = responseList(`${p}.sourceIds`, e.sourceIds, 500).map((id, k) => { const key = responseText(`${p}.sourceIds[${k}]`, id, 20), item = sources.find(s => s.id === key); if (!item || item.private) return referenceError(`${p}.sourceIds`); used.add(key); return item.text; });
       if (!evidence.length) reject(`${p}.sourceIds`);
-      const entry = parseCVEntry({ title: e.title, context: e.context, date: e.date, paragraphs: e.paragraphs, bullets: e.bullets }, p);
+      let title = e.title;
+      if (typeof title === "string" && title.startsWith("source:")) {
+        const id = title.slice(7), selected = sources.find(source => source.id === id);
+        if (!selected || selected.private || !(e.sourceIds as unknown[]).includes(id)) return referenceError(`${p}.title`);
+        title = selected.text.split("\t")[0].trim();
+      }
+      const entry = parseCVEntry({ title, context: e.context, date: e.date, paragraphs: e.paragraphs, bullets: e.bullets }, p);
       entry.bullets = joinSourceFragments(entry.bullets, evidence);
       entry.paragraphs = joinSourceFragments(entry.paragraphs, evidence);
       if ([...entry.bullets, ...entry.paragraphs].some(text => !/[\p{L}\p{N}]/u.test(text))) reject(p);
