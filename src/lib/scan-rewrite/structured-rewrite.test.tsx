@@ -90,7 +90,7 @@ it("offers exact source titles without tab-bound dates or private contacts and k
   const titles = schema.properties.sections.items.properties.entries.items.properties.title.enum;
   expect(titles).toContain("");
   expect(titles).toContain("Visitor support");
-  expect(titles).not.toContain("Visitor support\\tMarch 16, 2025");
+  expect(titles).not.toContain("Visitor support\tMarch 16, 2025");
   expect(titles).not.toContain("person@example.test");
   expect(titles).not.toContain("Senior manager");
   const value = wire(); value.sections[2].entries[0].title = "Visitor assistance";
