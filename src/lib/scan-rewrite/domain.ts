@@ -23,7 +23,7 @@ export function protectedMeaning(text: string) { return /\b(?:not|never|no|unsur
 export type OutputRule = "field_shape" | "enum" | "jd_quote" | "cv_quote" | "supported_context" | "not_found_excerpt" | "line_reference" | "line_original" | "rewrite_guard";
 export const jsonTypes = ["missing", "null", "array", "object", "string", "number", "boolean"] as const;
 export type JsonType = typeof jsonTypes[number];
-export const outputConstraints = ["required", "type", "non_blank", "max_length", "max_items", "exact_source_match", "source_reference", "category_evidence", "allowed_fields", "enum", "concise_shape"] as const;
+export const outputConstraints = ["required", "type", "non_blank", "max_length", "max_items", "exact_source_match", "source_reference", "category_evidence", "number_added", "number_omitted", "protected_meaning", "unsupported_qualification", "placeholder", "punctuation_only", "empty_output", "allowed_fields", "enum", "concise_shape"] as const;
 export type OutputConstraint = typeof outputConstraints[number];
 export class OutputValidationError extends Error {
   constructor(public stage: "output_schema" | "grounding", public fieldPath: string, public rule: OutputRule = "field_shape", public actualType?: JsonType, public constraint?: OutputConstraint) { super("The response could not be checked. Your work is kept."); }
