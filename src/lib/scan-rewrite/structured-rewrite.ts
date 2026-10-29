@@ -1,6 +1,6 @@
 import "server-only";
 import { shape } from "./provider";
-import { OutputValidationError, protectedMeaning, responseList, responseObject, responseText, sharedLines } from "./domain";
+import { OutputValidationError, protectedMeaning, responseList, responseObject, responseText, sharedLines, type OutputConstraint } from "./domain";
 import { parseCVEntry, parseStructuredCV, structuredText, type StructuredCV } from "./structured-cv";
 import { sectionLabel } from "@/lib/cv-templates/structure";
 import { contactLine } from "@/lib/cv-templates/assignments";
@@ -12,7 +12,7 @@ const string = { type: "string" }, array = (items: Record<string, unknown>) => (
 export const structuredRewriteSchema = shape({ header: shape({ nameSourceId: string, titleSourceId: string, contactSourceIds: array(string) }), sections: array(shape({ heading: string, entries: array(shape({ title: string, context: string, date: string, paragraphs: array(string), bullets: array(string), sourceIds: array(string) })) })) });
 const normalize = (s: string) => s.normalize("NFC").replace(/\s+/gu, " ").trim();
 const numbers = (s: string): string[] => s.match(/\d+(?:[.,/%–-]\d+)*/gu) ?? [];
-const reject = (path: string): never => { throw new OutputValidationError("grounding", path, "rewrite_guard", "string", "category_evidence"); };
+const reject = (path: string, constraint: OutputConstraint = "category_evidence"): never => { throw new OutputValidationError("grounding", path, "rewrite_guard", "string", constraint); };
 const referenceError = (path: string): never => { throw new OutputValidationError("grounding", path, "line_reference", "string", "source_reference"); };
 export function structuredSources(base: string) {
   const shared = new Set(sharedLines(base).map(line => line.id));
@@ -39,27 +39,33 @@ export function checkStructuredRewrite(value: unknown, base: string): Structured
     return { heading, entries: responseList(`${path}.entries`, s.entries, 100).map((value, j) => {
       const p = `${path}.entries[${j}]`, e = responseObject(p, value, ["title", "context", "date", "paragraphs", "bullets", "sourceIds"]);
       const evidence = responseList(`${p}.sourceIds`, e.sourceIds, 500).map((id, k) => { const key = responseText(`${p}.sourceIds[${k}]`, id, 20), item = sources.find(s => s.id === key); if (!item || item.private) return referenceError(`${p}.sourceIds`); used.add(key); return item.text; });
-      if (!evidence.length) reject(`${p}.sourceIds`);
       let title = e.title;
       if (typeof title === "string" && title.startsWith("source:")) {
         const id = title.slice(7), selected = sources.find(source => source.id === id);
-        if (!selected || selected.private || !(e.sourceIds as unknown[]).includes(id)) return referenceError(`${p}.title`);
+        if (!selected || selected.private) return referenceError(`${p}.title`);
+        // Selecting a source title is itself an explicit citation. Do not require
+        // the model to repeat that same reference in a separate metadata array.
+        if (!(e.sourceIds as unknown[]).includes(id)) evidence.push(selected.text);
+        used.add(id);
         title = selected.text.split("\t")[0].trim();
       }
+      if (!evidence.length) reject(`${p}.sourceIds`);
       const entry = parseCVEntry({ title, context: e.context, date: e.date, paragraphs: e.paragraphs, bullets: e.bullets }, p);
       entry.bullets = joinSourceFragments(entry.bullets, evidence);
       entry.paragraphs = joinSourceFragments(entry.paragraphs, evidence);
-      if ([...entry.bullets, ...entry.paragraphs].some(text => !/[\p{L}\p{N}]/u.test(text))) reject(p);
+      if ([...entry.bullets, ...entry.paragraphs].some(text => !/[\p{L}\p{N}]/u.test(text))) reject(p, "punctuation_only");
       const input = normalize(evidence.join(" ")), output = normalize([entry.title, entry.context, entry.date, ...entry.paragraphs, ...entry.bullets].join(" "));
-      if (!output || /\[(?:insert|add|your|tbd)|<[^>]+>/iu.test(output)) reject(p);
+      if (!output) reject(p, "empty_output");
+      if (/\[(?:insert|add|your|tbd)|<[^>]+>/iu.test(output)) reject(p, "placeholder");
       // Identity/date/context fields are copied from cited source facts, not
       // invented prose. Whitespace joining supports actual PDF line wraps only.
       const identityEvidence = normalize(evidence.map(line => line.includes("\t") ? line.split("\t")[0] : line).join(" "));
       for (const [key, text] of Object.entries({ title: entry.title, context: entry.context, date: entry.date })) if (text && !(key === "date" ? input : identityEvidence).includes(normalize(text))) reject(`${p}.${key}`);
       const inputNumbers = numbers(input), outputNumbers = numbers(output);
-      if (outputNumbers.some(n => !inputNumbers.includes(n)) || inputNumbers.some(n => !outputNumbers.includes(n))) reject(p);
-      for (const source of evidence.filter(protectedMeaning)) if (!output.includes(normalize(source))) reject(p);
-      for (const term of [/\bExcel\b/iu, /\bmarket[\s-]+research\b/iu, /\bimport(?:[\s/&-]+(?:and[\s-]+)?)export\b/iu, /\b(?:PhD|MBA|certified|certification|bachelor|master|award|winner)\b/iu]) if (term.test(output) && !term.test(input)) reject(p);
+      if (outputNumbers.some(n => !inputNumbers.includes(n))) reject(p, "number_added");
+      if (inputNumbers.some(n => !outputNumbers.includes(n))) reject(p, "number_omitted");
+      for (const source of evidence.filter(protectedMeaning)) if (!output.includes(normalize(source))) reject(p, "protected_meaning");
+      for (const term of [/\bExcel\b/iu, /\bmarket[\s-]+research\b/iu, /\bimport(?:[\s/&-]+(?:and[\s-]+)?)export\b/iu, /\b(?:PhD|MBA|certified|certification|bachelor|master|award|winner)\b/iu]) if (term.test(output) && !term.test(input)) reject(p, "unsupported_qualification");
       // A date may accompany a title only when a source layout row explicitly
       // binds them (tab/column separator). Detached dates stay standalone text.
       if (entry.date && entry.title && !evidence.some(line => {
